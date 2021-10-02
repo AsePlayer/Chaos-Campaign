@@ -35,7 +35,7 @@ package com.brockw.stickwar.singleplayer
       
       private var stoneSpell:StoneCommand;
       
-      private var giantGrowth:int = 1;
+      private var giantGrowth:int = 0;
       
       private var giantGrowthTimer = -1;
       
