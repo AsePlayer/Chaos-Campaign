@@ -233,22 +233,6 @@ package com.brockw.stickwar.engine.units
                this.team.removeUnit(this,game);
                isDead = true;
             }
-            this.convertBomber("Default");
-            this.poisonRN = false;
-            this.timeToRun = false;
-            maxHealth = game.xml.xml.Chaos.Units.bomber.health;
-            this.WEAPON_REACH = game.xml.xml.Chaos.Units.bomber.weaponReach;
-            population = game.xml.xml.Chaos.Units.bomber.population;
-            _mass = game.xml.xml.Chaos.Units.bomber.mass;
-            _maxForce = game.xml.xml.Chaos.Units.bomber.maxForce;
-            _dragForce = game.xml.xml.Chaos.Units.bomber.dragForce;
-            _scale = game.xml.xml.Chaos.Units.bomber.scale;
-            _maxVelocity = game.xml.xml.Chaos.Units.bomber.maxVelocity;
-            damageToDeal = game.xml.xml.Chaos.Units.bomber.baseDamage;
-            this.explosionDamage = game.xml.xml.Chaos.Units.bomber.explosionDamage;
-            this.createTime = game.xml.xml.Chaos.Units.bomber.cooldown;
-            maxHealth = health = game.xml.xml.Chaos.Units.bomber.health;
-            loadDamage(game.xml.xml.Chaos.Units.bomber);
          }
          Util.animateMovieClipBasic(mc.mc);
          if(isDead)
@@ -282,19 +266,9 @@ package com.brockw.stickwar.engine.units
       {
          var randomNumber:int = 0;
          var randomNumber2:int = 0;
-         if(this.didIBlowUp)
+         if(this.bomberType == "minerTargeter")
          {
-            this.comment = "no double detonate for u";
-            trace("Bomber tried to detonate again.");
-            this.didIBlowUp = false;
-         }
-         else if(this.bomberType == "minerTargeter")
-         {
-            team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
             team.game.projectileManager.initPoisonPool(px,py,this,5);
-            this.damage(0,this.maxHealth,null);
-            team.game.projectileManager.initNuke(px,py,this,this.explosionDamage / 2);
-            this.didIBlowUp = true;
          }
          else if(this.bomberType == "clusterBoi" && !this.detonated)
          {
@@ -324,19 +298,12 @@ package com.brockw.stickwar.engine.units
             this.clusterLad.py = py;
             this.clusterLad.stun(randomNumber2 * 10);
             this.clusterLad.applyVelocity(1 * randomNumber * Util.sgn(mc.scaleX));
-            team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
-            this.damage(0,this.maxHealth,null);
-            team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
             team.population += 3;
-            this.didIBlowUp = true;
          }
-         else
-         {
-            team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
-            this.damage(0,this.maxHealth,null);
-            team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
-            this.didIBlowUp = true;
-         }
+         team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
+         this.damage(0,this.maxHealth,null);
+         team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
+         trace("Bomber detonated");
       }
       
       override public function get damageToArmour() : Number

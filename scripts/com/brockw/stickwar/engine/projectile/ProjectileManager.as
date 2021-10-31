@@ -402,7 +402,10 @@ package com.brockw.stickwar.engine.projectile
          if(n.inflictor.type == Unit.U_BOMBER)
          {
             n.whoNuked = n.inflictor.bomberType;
-            trace(n.inflictor.bomberType + " blew up");
+         }
+         if(n.whoNuked == "minerTargeter")
+         {
+            damage /= 2;
          }
          n.px = x;
          n.py = y;

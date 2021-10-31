@@ -22,7 +22,7 @@ package com.brockw.stickwar.engine.Ai
          var target:Unit = this.getClosestTarget();
          if(currentCommand.type == UnitCommand.BOMBER_DETONATE)
          {
-            Bomber(unit).detonate();
+            Bomber(unit).damage(0,1000,null);
          }
          if(mayAttack && unit.mayAttack(target))
          {
