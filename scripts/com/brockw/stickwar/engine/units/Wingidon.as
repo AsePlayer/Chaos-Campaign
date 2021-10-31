@@ -151,10 +151,6 @@ package com.brockw.stickwar.engine.units
          this.wingidonSpeedSpell.update();
          super.update(game);
          updateCommon(game);
-         if(Math.abs(this.prevpx - px) < 3)
-         {
-            forceFaceDirection(ai.getClosestTarget().px - px);
-         }
          if(this.pxCounter <= 0)
          {
             this.prevpx = px;
@@ -166,6 +162,8 @@ package com.brockw.stickwar.engine.units
          }
          if(this.isWingSpell)
          {
+            aim(null);
+            aimedAtUnit(null,0);
             if(this.wingidonSpeedSpell.inEffect() && _maxVelocity > this.increasedVelocity)
             {
                _maxVelocity += 0.025;
