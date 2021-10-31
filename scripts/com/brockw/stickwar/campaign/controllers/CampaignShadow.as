@@ -33,7 +33,7 @@ package com.brockw.stickwar.campaign.controllers
       
       private static const S_START_MINING:int = 6;
       
-      private static const CRAWLER_REGROUP_TIME:int = 600;
+      private static const CRAWLER_REGROUP_TIME:int = 1200;
        
       
       private var poisonCheck:Boolean = false;
@@ -120,6 +120,10 @@ package com.brockw.stickwar.campaign.controllers
       
       private var bossSpawned:Boolean = false;
       
+      private var firstAlphaSpawned:Boolean = false;
+      
+      private var amountOfSpawn:int = 0;
+      
       var bomberTypes:Array;
       
       var bomberTypesForDifficulty:Array;
@@ -138,6 +142,8 @@ package com.brockw.stickwar.campaign.controllers
       
       public function CampaignShadow(gameScreen:GameScreen)
       {
+         this.bomberFrequencyIncreaseAt = 3;
+         this.bomberFrequencyIncreaseAt = 3;
          this.bomberFrequencyIncreaseAt = 3;
          this.bomberFrequencyIncreaseAt = 3;
          this.bomberFrequencyIncreaseAt = 3;
@@ -288,15 +294,15 @@ package com.brockw.stickwar.campaign.controllers
                }
                else if(this.difficulty == 1)
                {
-                  this.messageOpening.setMessage("That\'s all the levels for now! Replay on HARD Mode for a tougher challenge.","",0,"voiceTutorial1");
+                  this.messageOpening.setMessage("That\'s all the levels for now! Replay on HARD Mode for a tougher challenge.","",0,"Pain14");
                }
                else if(this.difficulty == 2)
                {
-                  this.messageOpening.setMessage("That\'s all the levels for now! Replay on INSANE Mode for the toughest challenge.","",0,"voiceTutorial1");
+                  this.messageOpening.setMessage("That\'s all the levels for now! Replay on INSANE Mode for the toughest challenge.","",0,"Pain14");
                }
                else if(this.difficulty == 3)
                {
-                  this.messageOpening.setMessage("That\'s all the levels for now! Congrats on beating INSANE Mode!","",0,"voiceTutorial1");
+                  this.messageOpening.setMessage("That\'s all the levels for now! Congrats on beating INSANE Mode!","",0,"Pain14");
                }
                this.frames = 0;
                this.openingMessageSent = true;
@@ -407,25 +413,30 @@ package com.brockw.stickwar.campaign.controllers
                      {
                         ++this.timeSinceLastCat;
                      }
-                     if(gameScreen.team.enemyTeam.getNumberOfCats() >= int(2 + int(this.difficulty)) && this.crawlerRegroupTimer >= CRAWLER_REGROUP_TIME)
+                     if(gameScreen.team.enemyTeam.getNumberOfCats() >= int(2 + int(this.difficulty)) && this.crawlerRegroupTimer > CRAWLER_REGROUP_TIME)
                      {
-                        gameScreen.team.enemyTeam.attack(true);
+                        this.comment = "gameScreen.team.enemyTeam.attack(true)";
+                        CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.75);
                         this.comment = "stop defending";
                      }
                      else if(gameScreen.team.enemyTeam.getNumberOfCats() >= int(2 + int(this.difficulty)) && this.crawlerRegroupTimer != CRAWLER_REGROUP_TIME)
                      {
                         this.crawlerRegroupTimer += gameScreen.team.enemyTeam.getNumberOfCats();
-                        gameScreen.team.enemyTeam.defend(true);
+                        this.comment = "gameScreen.team.enemyTeam.defend(true)";
+                        CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(2);
                      }
                      else if(gameScreen.team.enemyTeam.forwardUnit && gameScreen.team.enemyTeam.forwardUnit.px > gameScreen.team.forwardUnit.px + 750 || gameScreen.team.enemyTeam.forwardUnit && gameScreen.team.forwardUnit.px < gameScreen.team.enemyTeam.statue.px - 900)
                      {
                         this.crawlerRegroupTimer = 0;
-                        gameScreen.team.enemyTeam.defend(true);
+                        this.comment = "gameScreen.team.enemyTeam.defend(true)";
+                        CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(2);
                      }
                   }
                   else if(this.crawlerRegroupTimer >= CRAWLER_REGROUP_TIME)
                   {
                      this.comment = "stop defending";
+                     this.comment = "gameScreen.team.enemyTeam.attack(true)";
+                     CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.5);
                   }
                   else
                   {
@@ -490,6 +501,20 @@ package com.brockw.stickwar.campaign.controllers
                      ++gameScreen.team.enemyTeam.population;
                      this.counter = 0;
                      trace("Spawning alphaSpawn with alphaCount " + this.alphaCount + " and random number " + this.randomNumber);
+                     ++this.amountOfSpawn;
+                     if(this.amountOfSpawn > 4 && !this.firstAlphaSpawned)
+                     {
+                        this.firstAlphaSpawned = true;
+                        this.message5 = new InGameMessage("",gameScreen.game);
+                        this.message5.x = gameScreen.game.stage.stageWidth / 2;
+                        this.message5.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                        this.message5.scaleX *= 1.3;
+                        this.message5.scaleY *= 1.3;
+                        gameScreen.addChild(this.message5);
+                        this.message5.setMessage("The Alpha\'s \'spawn\' will continue to join the battle as long as he remains...","");
+                        this.firstAlphaSpawned = true;
+                        this.frames = 0;
+                     }
                   }
                }
             }
