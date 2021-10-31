@@ -37,6 +37,8 @@ package com.brockw.stickwar.engine.units
       
       public var detonated:Boolean = false;
       
+      public var comment:String;
+      
       public function Bomber(game:StickWar)
       {
          super(game);
@@ -280,12 +282,19 @@ package com.brockw.stickwar.engine.units
       {
          var randomNumber:int = 0;
          var randomNumber2:int = 0;
-         if(this.bomberType == "minerTargeter")
+         if(this.didIBlowUp)
+         {
+            this.comment = "no double detonate for u";
+            trace("Bomber tried to detonate again.");
+            this.didIBlowUp = false;
+         }
+         else if(this.bomberType == "minerTargeter")
          {
             team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
             team.game.projectileManager.initPoisonPool(px,py,this,5);
             this.damage(0,this.maxHealth,null);
             team.game.projectileManager.initNuke(px,py,this,this.explosionDamage / 2);
+            this.didIBlowUp = true;
          }
          else if(this.bomberType == "clusterBoi" && !this.detonated)
          {
@@ -319,12 +328,14 @@ package com.brockw.stickwar.engine.units
             this.damage(0,this.maxHealth,null);
             team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
             team.population += 3;
+            this.didIBlowUp = true;
          }
          else
          {
             team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
             this.damage(0,this.maxHealth,null);
             team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
+            this.didIBlowUp = true;
          }
       }
       
