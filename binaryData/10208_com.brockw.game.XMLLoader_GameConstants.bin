@@ -648,7 +648,7 @@
 <toArmour>0</toArmour>
 <toNotArmour>5</toNotArmour>
 <armoured>0</armoured>
-<health>125</health>
+<health>100</health>
 <mass>75</mass>
 <maxForce>70</maxForce>
 <dragForce>0.89</dragForce>
