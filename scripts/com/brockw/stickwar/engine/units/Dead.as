@@ -3,12 +3,9 @@ package com.brockw.stickwar.engine.units
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.ActionInterface;
    import com.brockw.stickwar.engine.Ai.DeadAi;
-   import com.brockw.stickwar.engine.Ai.UnitAi;
    import com.brockw.stickwar.engine.Ai.command.UnitCommand;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.Team.Building;
    import com.brockw.stickwar.engine.Team.Tech;
-   import com.brockw.stickwar.market.MarketItem;
    import flash.display.MovieClip;
    import flash.geom.Point;
    
@@ -270,9 +267,13 @@ package com.brockw.stickwar.engine.units
          {
             Dead.setItem(mc,"Default","Wrapped Helmet","Default");
          }
-         else if(!hasDefaultLoadout)
+         else if(hasDefaultLoadout)
          {
-            Dead.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+            Dead.setItem(mc,"Default","Default","Default");
+         }
+         else if(1 == 2)
+         {
+            Dead.setItem(mc,"Default","Bomb Dead","Default");
          }
       }
       
