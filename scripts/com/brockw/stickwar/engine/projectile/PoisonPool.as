@@ -62,8 +62,11 @@ package com.brockw.stickwar.engine.projectile
          {
             if(Math.pow(unit.px - this.px,2) + Math.pow(unit.py - this.py,2) < Math.pow(this.explosionRadius,2))
             {
-               this.comment = "d = dx = dy = 0";
-               unit.poison(this.poisonDamage);
+               if(!unit.isFlying() || this.spellMc.currentFrame < 60 && unit.isFlying())
+               {
+                  this.comment = "d = dx = dy = 0";
+                  unit.poison(this.poisonDamage);
+               }
             }
          }
       }
