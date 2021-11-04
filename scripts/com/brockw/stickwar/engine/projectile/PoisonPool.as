@@ -19,6 +19,8 @@ package com.brockw.stickwar.engine.projectile
       
       var timeToLive:int;
       
+      public var comment:String;
+      
       public function PoisonPool(game:StickWar)
       {
          super();
@@ -60,7 +62,7 @@ package com.brockw.stickwar.engine.projectile
          {
             if(Math.pow(unit.px - this.px,2) + Math.pow(unit.py - this.py,2) < Math.pow(this.explosionRadius,2))
             {
-               dz = dx = dy = 0;
+               this.comment = "d = dx = dy = 0";
                unit.poison(this.poisonDamage);
             }
          }

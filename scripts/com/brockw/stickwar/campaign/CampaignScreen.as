@@ -74,6 +74,7 @@ package com.brockw.stickwar.campaign
          this.mc.bottomPanel.campaignButtons.autoSaveDisabled.addEventListener(MouseEvent.CLICK,this.enableSave);
          this.mc.bottomPanel.campaignButtons.playOnline.addEventListener(MouseEvent.CLICK,this.playOnlineClick);
          this.mc.bottomPanel.campaignButtons.strategyGuide.addEventListener(MouseEvent.CLICK,this.strategyGuideClick);
+         this.mc.bottomPanel.campaignButtons.MainMenu.addEventListener(MouseEvent.CLICK,this.MainMenuClick);
          this.mc.saveGamePrompt.visible = false;
          this.mc.saveGamePrompt.okButton.addEventListener(MouseEvent.CLICK,this.okButton);
          this.mc.text.mouseEnabled = false;
@@ -111,6 +112,13 @@ package com.brockw.stickwar.campaign
             this.main.tracker.trackEvent("link","https://www.paypal.com/paypalme/aseplayer");
          }
          this.main.soundManager.playSoundFullVolume("clickButton");
+      }
+      
+      private function MainMenuClick(e:Event) : void
+      {
+         this.main.soundManager.playSoundFullVolume("clickButton");
+         this.main.showScreen("mainMenu",true);
+         this.main.showScreen("mainMenu",false,true);
       }
       
       private function okButton(even:Event) : void
