@@ -35,6 +35,14 @@ package com.brockw.stickwar.engine.units
       
       private var deezNuts:int;
       
+      public var deadType:String;
+      
+      private var scaleOffset:Number;
+      
+      private var setupComplete:Boolean;
+      
+      private var poisonTriggers:int;
+      
       public function Dead(game:StickWar)
       {
          super(game);
@@ -46,6 +54,8 @@ package com.brockw.stickwar.engine.units
          firstInit();
          this.isPoisonedToggled = false;
          this.lastShotFrame = 0;
+         this.deadType = "Default";
+         this.scaleOffset = Math.random();
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
@@ -162,6 +172,40 @@ package com.brockw.stickwar.engine.units
          var realPoisonToggle:Boolean = false;
          super.update(game);
          updateCommon(game);
+         if(this.deadType == "Bomber" && !this.setupComplete)
+         {
+            Dead.setItem(mc,"Default","Bomb Dead","Default");
+            this._maximumRange = 5;
+            this.setupComplete = true;
+         }
+         else if(this.deadType == "Toxic" && !this.setupComplete)
+         {
+            Dead.setItem(mc,"Default","Wrapped Helmet","Default");
+            noAutoCure = true;
+            this._scale += this.scaleOffset;
+            this.maxHealth *= 1.75 + this.scaleOffset;
+            this.health = this.maxHealth;
+            this.healthBar.totalHealth = this._maxHealth;
+            this.setupComplete = true;
+         }
+         else if(this.deadType == "Default")
+         {
+            Dead.setItem(mc,"Default","Default","Default");
+         }
+         if(this.deadType == "Toxic" && this.poisonTriggers == 0 && this.health < this.maxHealth * 0.66)
+         {
+            team.game.projectileManager.initPoisonPool(px,py,this,5);
+            ++this.poisonTriggers;
+         }
+         else if(this.deadType == "Toxic" && this.poisonTriggers == 1 && this.health < this.maxHealth * 0.33)
+         {
+            team.game.projectileManager.initPoisonPool(px,py,this,5);
+            ++this.poisonTriggers;
+         }
+         else if(this.deadType == "Toxic")
+         {
+            poison(25);
+         }
          if(!isDieing)
          {
             updateMotion(game);
@@ -247,6 +291,16 @@ package com.brockw.stickwar.engine.units
          }
          else if(isDead == false)
          {
+            if(this.deadType == "Toxic" && this.poisonTriggers == 2)
+            {
+               team.game.projectileManager.initPoisonPool(px,py,this,5);
+               ++this.poisonTriggers;
+            }
+            if(this.deadType == "Bomber")
+            {
+               team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
+               team.game.projectileManager.initNuke(px,py,this,50);
+            }
             isDead = true;
             if(_isDualing)
             {
@@ -263,15 +317,11 @@ package com.brockw.stickwar.engine.units
             MovieClip(_mc.mc).gotoAndStop(1);
          }
          Util.animateMovieClip(_mc,0);
-         if(this.isCastleArcher)
+         if(this.isCastleArcher || this.deadType == "Toxic")
          {
             Dead.setItem(mc,"Default","Wrapped Helmet","Default");
          }
-         else if(hasDefaultLoadout)
-         {
-            Dead.setItem(mc,"Default","Default","Default");
-         }
-         else if(1 == 2)
+         else if(this.deadType == "Bomber")
          {
             Dead.setItem(mc,"Default","Bomb Dead","Default");
          }

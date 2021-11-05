@@ -296,6 +296,8 @@ package com.brockw.stickwar.engine.units
       
       public var specialTimeOver:Boolean = false;
       
+      public var noAutoCure:Boolean = false;
+      
       public function Unit(game:StickWar)
       {
          this.hasDefaultLoadout = false;
@@ -864,7 +866,10 @@ package com.brockw.stickwar.engine.units
          ++this.framesPoisoned;
          if(this.team.type == Team.T_CHAOS && this.framesPoisoned > this.chaosPoisonedFrames)
          {
-            this.cure();
+            if(!this.noAutoCure)
+            {
+               this.cure();
+            }
          }
          var c:ColorTransform = this.mc.transform.colorTransform;
          if(this.isGodmoded && !this.isTowerSpawned)
@@ -916,7 +921,7 @@ package com.brockw.stickwar.engine.units
          {
             this.isHome = true;
          }
-         if(this.team.direction * px < this.team.direction * (this.team.homeX - this.team.direction * 25))
+         if(this.team.direction * px < this.team.direction * (this.team.homeX - this.team.direction * 25) && !this.noAutoCure)
          {
             this.cure();
             this.heal(this.garrisonHealRate,1);
