@@ -211,6 +211,10 @@ package com.brockw.stickwar.engine.Ai
             unit.mayWalkThrough = false;
             unit.walk((goalX - unit.px) / 20,(goalY - unit.py) / 20,intendedX);
          }
+         else if(currentCommand.type == UnitCommand.HOLD)
+         {
+            this.timeUnassigned = 0;
+         }
          else if(this.timeUnassigned > TIME_TO_AUTOMINE && this.canAutoMine)
          {
             this.isUnassigned = false;

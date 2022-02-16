@@ -172,9 +172,10 @@ package com.brockw.stickwar.engine.units
          var realPoisonToggle:Boolean = false;
          super.update(game);
          updateCommon(game);
+         this.deadType = "Default";
          if(this.deadType == "Bomber" && !this.setupComplete)
          {
-            Dead.setItem(mc,"Default","Bomb Dead","Default");
+            Dead.setItem(mc,"Default","boomboomhead","Default");
             this._maximumRange = 5;
             this.setupComplete = true;
          }
@@ -323,7 +324,7 @@ package com.brockw.stickwar.engine.units
          }
          else if(this.deadType == "Bomber")
          {
-            Dead.setItem(mc,"Default","Bomb Dead","Default");
+            Dead.setItem(mc,"Default","boomboomhead","Default");
          }
       }
       
