@@ -1,7 +1,7 @@
 package flashx.textLayout.conversion
 {
    [ExcludeClass]
-   class SingletonAttributeImporter implements IFormatImporter
+   internal class SingletonAttributeImporter implements IFormatImporter
    {
        
       
@@ -9,7 +9,7 @@ package flashx.textLayout.conversion
       
       private var _rslt:String = null;
       
-      function SingletonAttributeImporter(key:String)
+      public function SingletonAttributeImporter(key:String)
       {
          super();
          this._keyToMatch = key;

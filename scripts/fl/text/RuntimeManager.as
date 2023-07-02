@@ -28,13 +28,11 @@ package fl.text
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class RuntimeManager extends TimelineManager
    {
       
-      private static var singleton:RuntimeManager = new RuntimeManager();
+      private static var singleton:fl.text.RuntimeManager = new fl.text.RuntimeManager();
       
       private static var globalConfig:Object;
        
@@ -47,6 +45,7 @@ package fl.text
       
       public static function checkTLFFontsLoaded(e:Event, fontName:String = null, fn:Function = null) : Boolean
       {
+         var loaded:Boolean;
          var fontClass:Class = null;
          if(fontName == null && e != null)
          {
@@ -54,7 +53,7 @@ package fl.text
             {
                if(e.target.hasOwnProperty("__checkFontName_"))
                {
-                  var fontName:String = e.target["__checkFontName_"];
+                  fontName = String(e.target["__checkFontName_"]);
                }
             }
             catch(te1:TypeError)
@@ -70,7 +69,7 @@ package fl.text
             }
             return false;
          }
-         var loaded:Boolean = true;
+         loaded = true;
          try
          {
             fontClass = Class(getDefinitionByName(fontName));
@@ -122,7 +121,7 @@ package fl.text
          return globalConfig;
       }
       
-      public static function getSingleton() : RuntimeManager
+      public static function getSingleton() : fl.text.RuntimeManager
       {
          return singleton;
       }
@@ -144,7 +143,7 @@ package fl.text
             return;
          }
          var flow:TextFlow = e.element.getTextFlow();
-         if(flow && (e.status == InlineGraphicElementStatus.SIZE_PENDING || e.status == InlineGraphicElementStatus.READY))
+         if(Boolean(flow) && (e.status == InlineGraphicElementStatus.SIZE_PENDING || e.status == InlineGraphicElementStatus.READY))
          {
             flow.flowComposer.updateAllControllers();
             flow.removeEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,recomposeOnLoadComplete);
@@ -200,8 +199,8 @@ package fl.text
          var computedFormat:ITextLayoutFormat = null;
          TLFRuntimeTabManager.InitTabHandler(drawSprite);
          GlobalSettings.fontMapperFunction = RuntimeFontMapper.fontMapper;
-         drawSprite.contentWidth = 0;
-         drawSprite.contentHeight = 0;
+         drawSprite.tlf_internal::contentWidth = 0;
+         drawSprite.tlf_internal::contentHeight = 0;
          var xmlTree:XML = ii.data;
          var typeTextStr:String = xmlTree.@type;
          var editPolicy:String = xmlTree.@editPolicy;
@@ -224,7 +223,7 @@ package fl.text
          if(ii.prev != null)
          {
             textFlow = TextFlow(TLFTextField(firstII.content).textFlow);
-            TLFTextField(ii.prev.content).addNextField(drawSprite);
+            TLFTextField(ii.prev.content).tlf_internal::addNextField(drawSprite);
          }
          else
          {
@@ -232,15 +231,15 @@ package fl.text
             setEditManager = true;
          }
          var leaf:FlowLeafElement = textFlow.getFirstLeaf();
-         while(leaf)
+         while(Boolean(leaf))
          {
-            if(leaf as InlineGraphicElement)
+            if(Boolean(leaf as InlineGraphicElement))
             {
                styles = leaf.userStyles;
                customSource = styles["customSource"];
                tempII = firstII;
                found = false;
-               while(tempII && !found)
+               while(Boolean(tempII) && !found)
                {
                   if(tempII.extraInfo != undefined && tempII.extraInfo[customSource] != null)
                   {
@@ -253,18 +252,18 @@ package fl.text
             }
             leaf = leaf.getNextLeaf();
          }
-         var linkedContainers:Boolean = ii.prev || ii.next;
+         var linkedContainers:Boolean = Boolean(ii.prev) || Boolean(ii.next);
          var hasTCY:Boolean = false;
          var hasAnchor:Boolean = false;
          var hasILG:Boolean = false;
          var firstFormat:ITextLayoutFormat = textFlow.getFirstLeaf().computedFormat;
-         var multipleFormats:Boolean = textFlow.direction == undefined ? Boolean(firstFormat.direction == Direction.RTL) : Boolean(textFlow.direction != firstFormat.direction);
+         var multipleFormats:Boolean = textFlow.direction == undefined ? firstFormat.direction == Direction.RTL : textFlow.direction != firstFormat.direction;
          var curLeaf:FlowLeafElement = textFlow.getFirstLeaf();
          var p:ParagraphElement = textFlow.getChildAt(0) as ParagraphElement;
          var multipleParagraphs:Boolean = p.getNextParagraph() != null;
          if(!multipleFormats && !linkedContainers && !multipleParagraphs)
          {
-            while(curLeaf)
+            while(Boolean(curLeaf))
             {
                computedFormat = curLeaf.computedFormat;
                multipleFormats = !TextLayoutFormat.isEqual(computedFormat,firstFormat) || computedFormat.backgroundColor != undefined && computedFormat.backgroundColor != BackgroundColor.TRANSPARENT;
@@ -285,8 +284,8 @@ package fl.text
          else
          {
             drawSprite.text = textFlow.getText(0,-1,"\n");
-            drawSprite.hostFormat = textFlow.getFirstLeaf().computedFormat;
-            drawSprite.wordWrap = textFlow.computedFormat.lineBreak == LineBreak.TO_FIT ? Boolean(true) : Boolean(false);
+            drawSprite.tlf_internal::hostFormat = textFlow.getFirstLeaf().computedFormat;
+            drawSprite.wordWrap = textFlow.computedFormat.lineBreak == LineBreak.TO_FIT ? true : false;
          }
          if(setEditManager)
          {
@@ -305,15 +304,15 @@ package fl.text
          }
          if(typeTextStr == "Paragraph")
          {
-            drawSprite.isPointText = false;
+            drawSprite.tlf_internal::isPointText = false;
             drawSprite.width = ii.bounds.width;
             drawSprite.height = ii.bounds.height;
-            drawSprite.setCompositionSize(ii.bounds.width,ii.bounds.height);
+            drawSprite.tlf_internal::setCompositionSize(ii.bounds.width,ii.bounds.height);
          }
          else
          {
-            drawSprite.isPointText = true;
-            drawSprite.setCompositionSize(NaN,NaN);
+            drawSprite.tlf_internal::isPointText = true;
+            drawSprite.tlf_internal::setCompositionSize(NaN,NaN);
          }
          drawSprite.direction = textFlow.direction;
          var attr:String = xmlTree.@columnCount;
@@ -369,7 +368,7 @@ package fl.text
          attr = xmlTree.@paddingLock;
          if(attr != null && attr.length > 0)
          {
-            drawSprite.paddingLock = attr.toLowerCase() == "true";
+            drawSprite.tlf_internal::paddingLock = attr.toLowerCase() == "true";
          }
          attr = xmlTree.@paddingLeft;
          if(attr != null && attr.length > 0)
@@ -427,11 +426,12 @@ package fl.text
             drawSprite.text = attr;
          }
          drawSprite.alwaysShowSelection = false;
-         drawSprite.repaint();
+         drawSprite.tlf_internal::repaint();
       }
       
       override protected function getInstanceForInfo(ii:InstanceInfo, instance:DisplayObject = null) : DisplayObject
       {
+         var drawSprite:TLFTextField;
          try
          {
             if(getDefinitionByName("flashx.textLayout.elements.TextFlow") == null || getDefinitionByName("fl.text.container.TLFContainerController") == null)
@@ -443,7 +443,7 @@ package fl.text
          {
             return null;
          }
-         var drawSprite:TLFTextField = instance == null ? new TLFTextField() : TLFTextField(instance);
+         drawSprite = instance == null ? new TLFTextField() : TLFTextField(instance);
          this.configureInstance(drawSprite,ii);
          return drawSprite;
       }

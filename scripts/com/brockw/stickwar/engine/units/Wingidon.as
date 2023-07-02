@@ -20,7 +20,7 @@ package com.brockw.stickwar.engine.units
       private static var RAGE_EFFECT:int;
        
       
-      private var wingidonSpeedSpell:SpellCooldown;
+      private var wingidonSpeedSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var normalVelocity:Number;
       
@@ -28,7 +28,7 @@ package com.brockw.stickwar.engine.units
       
       private var windStrength:Number;
       
-      private var rageSpell:SpellCooldown;
+      private var rageSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var rageSpellGlow:GlowFilter;
       
@@ -99,7 +99,7 @@ package com.brockw.stickwar.engine.units
          maxHealth = health = game.xml.xml.Chaos.Units.wingidon.health;
          type = Unit.U_WINGIDON;
          flyingHeight = 250 * 1;
-         this.wingidonSpeedSpell = new SpellCooldown(game.xml.xml.Chaos.Units.wingidon.wingidonSpeed.effect,game.xml.xml.Chaos.Units.wingidon.wingidonSpeed.cooldown,game.xml.xml.Chaos.Units.wingidon.wingidonSpeed.mana);
+         this.wingidonSpeedSpell = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Chaos.Units.wingidon.wingidonSpeed.effect,game.xml.xml.Chaos.Units.wingidon.wingidonSpeed.cooldown,game.xml.xml.Chaos.Units.wingidon.wingidonSpeed.mana);
          this.loadDamage(game.xml.xml.Chaos.Units.wingidon);
          _mc.stop();
          _mc.width *= _scale;

@@ -27,7 +27,7 @@ package com.smartfoxserver.v2.bitswarm
       
       private var _bbClient:BBClient;
       
-      private var _ioHandler:IoHandler;
+      private var _ioHandler:com.smartfoxserver.v2.bitswarm.IoHandler;
       
       private var _controllers:Object;
       
@@ -55,7 +55,7 @@ package com.smartfoxserver.v2.bitswarm
       
       private var _extController:ExtensionController;
       
-      private var _udpManager:IUDPManager;
+      private var _udpManager:com.smartfoxserver.v2.bitswarm.IUDPManager;
       
       private var _controllersInited:Boolean = false;
       
@@ -88,12 +88,12 @@ package com.smartfoxserver.v2.bitswarm
          return this._connectionMode;
       }
       
-      public function get ioHandler() : IoHandler
+      public function get ioHandler() : com.smartfoxserver.v2.bitswarm.IoHandler
       {
          return this._ioHandler;
       }
       
-      public function set ioHandler(value:IoHandler) : void
+      public function set ioHandler(value:com.smartfoxserver.v2.bitswarm.IoHandler) : void
       {
          this._ioHandler = value;
       }
@@ -314,12 +314,12 @@ package com.smartfoxserver.v2.bitswarm
          this.onSocketClose(new Event(Event.CLOSE));
       }
       
-      public function get udpManager() : IUDPManager
+      public function get udpManager() : com.smartfoxserver.v2.bitswarm.IUDPManager
       {
          return this._udpManager;
       }
       
-      public function set udpManager(manager:IUDPManager) : void
+      public function set udpManager(manager:com.smartfoxserver.v2.bitswarm.IUDPManager) : void
       {
          this._udpManager = manager;
       }
@@ -362,9 +362,11 @@ package com.smartfoxserver.v2.bitswarm
       
       private function onSocketClose(evt:Event) : void
       {
+         var isRegularDisconnection:Boolean;
+         var isManualDisconnection:Boolean;
          this._connected = false;
-         var isRegularDisconnection:Boolean = !this._attemptingReconnection && this.sfs.getReconnectionSeconds() == 0;
-         var isManualDisconnection:Boolean = evt is BitSwarmEvent && (evt as BitSwarmEvent).params.reason == ClientDisconnectionReason.MANUAL;
+         isRegularDisconnection = !this._attemptingReconnection && this.sfs.getReconnectionSeconds() == 0;
+         isManualDisconnection = evt is BitSwarmEvent && (evt as BitSwarmEvent).params.reason == ClientDisconnectionReason.MANUAL;
          if(this._attemptingReconnection || isRegularDisconnection || isManualDisconnection)
          {
             this._udpManager.reset();

@@ -3,6 +3,7 @@ package com.brockw.stickwar.engine
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.Team.Team;
    import com.brockw.stickwar.engine.units.Unit;
+   import flash.display.*;
    
    public class Hill extends Entity
    {
@@ -18,7 +19,7 @@ package com.brockw.stickwar.engine
       
       private var hillMc:_hillMc;
       
-      private var hillControlBar:HillControlBar;
+      private var hillControlBar:com.brockw.stickwar.engine.HillControlBar;
       
       private var teamAThisTurn:int;
       
@@ -34,7 +35,7 @@ package com.brockw.stickwar.engine
       {
          super();
          this.addChild(this.hillMc = new _hillMc());
-         this.hillControlBar = new HillControlBar();
+         this.hillControlBar = new com.brockw.stickwar.engine.HillControlBar();
          addChild(this.hillControlBar);
          this.lastTeamBar = this.teamBar = 50;
          this.collectionRate = game.xml.xml.hill.goldCollectionRate;
@@ -49,7 +50,7 @@ package com.brockw.stickwar.engine
          this.y = y;
          this.px = x;
          this.py = y;
-         var mapHeight:Number = game.xml.xml.battlefieldHeight;
+         var mapHeight:Number = Number(game.xml.xml.battlefieldHeight);
          this.hillMc.scaleX = scale * (game.backScale + y / mapHeight * (game.frontScale - game.backScale));
          this.hillMc.scaleY = scale * (game.backScale + y / mapHeight * (game.frontScale - game.backScale));
          this.hillControlBar.y = -this.hillMc.height * 1.1;
@@ -77,18 +78,18 @@ package com.brockw.stickwar.engine
       
       public function update(game:StickWar) : void
       {
-         var _loc2_:Number = NaN;
-         var _loc3_:Number = NaN;
+         var rate:Number = NaN;
+         var scale:Number = NaN;
          game.teamA.register = game.teamB.register = 0;
          game.spatialHash.mapInArea(px - statueArea / 2,py - statueArea / 2,px + statueArea / 2,py + statueArea / 2,this.registerUnit,false);
          if((game.teamA.register == 1 || game.teamB.register == 1) && game.teamA.register + game.teamB.register != 2)
          {
-            _loc2_ = 50 / this.hillCaptureTime;
+            rate = 50 / this.hillCaptureTime;
             if(game.teamA.register != 0)
             {
-               _loc2_ *= -1;
+               rate *= -1;
             }
-            this.teamBar += _loc2_;
+            this.teamBar += rate;
             if(this.teamBar < 0)
             {
                this.teamBar = 0;
@@ -105,22 +106,22 @@ package com.brockw.stickwar.engine
          else if(this.teamBar < 50 && game.team == game.teamA || this.teamBar > 50 && game.team == game.teamB)
          {
             this.hillMc.flame.transform.colorTransform.redOffset = 0;
-            _loc3_ = this.teamBar;
-            if(_loc3_ > 50)
+            scale = this.teamBar;
+            if(scale > 50)
             {
-               _loc3_ = 100 - _loc3_;
+               scale = 100 - scale;
             }
-            this.hillMc.flame.alpha = (50 - _loc3_) / 50;
+            this.hillMc.flame.alpha = (50 - scale) / 50;
             this.hillMc.flame.visible = true;
          }
          else
          {
-            _loc3_ = this.teamBar;
-            if(_loc3_ > 50)
+            scale = this.teamBar;
+            if(scale > 50)
             {
-               _loc3_ = 100 - _loc3_;
+               scale = 100 - scale;
             }
-            this.hillMc.flame.alpha = (50 - _loc3_) / 50;
+            this.hillMc.flame.alpha = (50 - scale) / 50;
             this.hillMc.flame.transform.colorTransform.redOffset = 255;
             this.hillMc.flame.visible = true;
          }

@@ -9,11 +9,11 @@ package com.brockw.stickwar.engine.multiplayer.adds
    {
        
       
-      var adds:Array;
+      internal var adds:Array;
       
-      var main:BaseMain;
+      internal var main:BaseMain;
       
-      var currentAdd:Add;
+      internal var currentAdd:Add;
       
       public function AddManager(main:BaseMain)
       {
@@ -26,7 +26,7 @@ package com.brockw.stickwar.engine.multiplayer.adds
       
       public function update() : void
       {
-         if(this.currentAdd)
+         if(Boolean(this.currentAdd))
          {
             this.currentAdd.update();
          }
@@ -50,7 +50,7 @@ package com.brockw.stickwar.engine.multiplayer.adds
       
       public function showAdd() : void
       {
-         if(this.currentAdd)
+         if(Boolean(this.currentAdd))
          {
             this.adds.push(this.currentAdd);
          }
@@ -61,7 +61,7 @@ package com.brockw.stickwar.engine.multiplayer.adds
       
       public function hideAdd() : void
       {
-         if(this.currentAdd)
+         if(Boolean(this.currentAdd))
          {
             this.currentAdd.leave();
             this.adds.push(this.currentAdd);

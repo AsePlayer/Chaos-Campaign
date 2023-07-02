@@ -4,6 +4,6 @@ package com.brockw.ds
    {
        
       
-      function compare(other:Object) : int;
+      function compare(param1:Object) : int;
    }
 }

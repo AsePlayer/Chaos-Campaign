@@ -2,10 +2,11 @@ package com.brockw.stickwar.engine.multiplayer
 {
    import com.brockw.stickwar.RegisterMain;
    import com.smartfoxserver.v2.core.SFSEvent;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
+   import com.smartfoxserver.v2.entities.*;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
+   import com.smartfoxserver.v2.requests.buddylist.*;
+   import flash.events.*;
    import flash.text.TextField;
    
    public class SignUpForm extends signUpScreenMc
@@ -251,7 +252,7 @@ package com.brockw.stickwar.engine.multiplayer
       public function update(evt:Event) : void
       {
          y += (0 - this.y) * 1;
-         if(!this.tryingToConnect)
+         if(this.tryingToConnect)
          {
          }
       }

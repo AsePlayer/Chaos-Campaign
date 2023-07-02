@@ -2,8 +2,8 @@ package com.brockw.stickwar.engine.units
 {
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.ActionInterface;
-   import com.brockw.stickwar.engine.Ai.ArcherAi;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.engine.Ai.*;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Tech;
    import com.brockw.stickwar.market.MarketItem;
@@ -18,7 +18,7 @@ package com.brockw.stickwar.engine.units
       
       private var isFire:Boolean;
       
-      private var archerFireSpellCooldown:SpellCooldown;
+      private var archerFireSpellCooldown:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var arrowDamage:Number;
       
@@ -41,20 +41,20 @@ package com.brockw.stickwar.engine.units
          ai = new ArcherAi(this);
          initSync();
          firstInit();
-         this.archerFireSpellCooldown = new SpellCooldown(0,game.xml.xml.Order.Units.archer.fire.cooldown,game.xml.xml.Order.Units.archer.fire.mana);
+         this.archerFireSpellCooldown = new com.brockw.stickwar.engine.units.SpellCooldown(0,game.xml.xml.Order.Units.archer.fire.cooldown,game.xml.xml.Order.Units.archer.fire.mana);
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
       {
          var m:_archer = _archer(mc);
-         if(m.mc.archerBag)
+         if(Boolean(m.mc.archerBag))
          {
             if(misc != "")
             {
                m.mc.archerBag.gotoAndStop(misc);
             }
          }
-         if(m.mc.head)
+         if(Boolean(m.mc.head))
          {
             if(armor != "")
             {
@@ -116,19 +116,19 @@ package com.brockw.stickwar.engine.units
       
       override protected function loadDamage(unitXml:XMLList) : void
       {
-         var _loc2_:Number = NaN;
-         this.isArmoured = unitXml.armoured == 1 ? Boolean(true) : Boolean(false);
+         var _damage:Number = NaN;
+         this.isArmoured = unitXml.armoured == 1 ? true : false;
          if(!this._isCastleArcher)
          {
-            _loc2_ = unitXml.damage;
-            this._damageToArmour = _loc2_ + Number(unitXml.toArmour);
-            this._damageToNotArmour = _loc2_ + Number(unitXml.toNotArmour);
+            _damage = Number(unitXml.damage);
+            this._damageToArmour = _damage + Number(unitXml.toArmour);
+            this._damageToNotArmour = _damage + Number(unitXml.toNotArmour);
          }
          else
          {
-            _loc2_ = unitXml.castleDamage;
-            this._damageToArmour = _loc2_ + Number(unitXml.castleToArmour);
-            this._damageToNotArmour = _loc2_ + Number(unitXml.castleToNotArmour);
+            _damage = Number(unitXml.castleDamage);
+            this._damageToArmour = _damage + Number(unitXml.castleToArmour);
+            this._damageToNotArmour = _damage + Number(unitXml.castleToNotArmour);
          }
       }
       
@@ -281,7 +281,7 @@ package com.brockw.stickwar.engine.units
             fireDamage = 0;
             if(this.isFire)
             {
-               fireDamage = game.xml.xml.Order.Units.archer.fire.damage;
+               fireDamage = Number(game.xml.xml.Order.Units.archer.fire.damage);
             }
             game.soundManager.playSoundRandom("launchArrow",5,px,py);
             if(mc.scaleX < 0)

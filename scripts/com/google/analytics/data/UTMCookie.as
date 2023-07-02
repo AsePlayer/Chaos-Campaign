@@ -35,7 +35,7 @@ package com.google.analytics.data
          var empty:int = 0;
          for(var i:int = 0; i < fields.length; i++)
          {
-            field = fields[i];
+            field = String(fields[i]);
             if(this[field] is Number && isNaN(this[field]))
             {
                empty++;
@@ -66,7 +66,7 @@ package com.google.analytics.data
       protected function update() : void
       {
          resetTimestamp();
-         if(proxy)
+         if(Boolean(proxy))
          {
             proxy.update(name,toSharedObject());
          }
@@ -77,7 +77,7 @@ package com.google.analytics.data
          var field:String = null;
          for(var i:int = 0; i < fields.length; i++)
          {
-            field = fields[i];
+            field = String(fields[i]);
             if(this[field] is Number)
             {
                this[field] = NaN;
@@ -94,20 +94,20 @@ package com.google.analytics.data
       public function fromSharedObject(data:Object) : void
       {
          var field:String = null;
-         var len:int = fields.length;
+         var len:int = int(fields.length);
          for(var i:int = 0; i < len; i++)
          {
-            field = fields[i];
-            if(data[field])
+            field = String(fields[i]);
+            if(Boolean(data[field]))
             {
                this[field] = data[field];
             }
          }
-         if(data.creation)
+         if(Boolean(data.creation))
          {
             this.creation = data.creation;
          }
-         if(data.expiration)
+         if(Boolean(data.expiration))
          {
             this.expiration = data.expiration;
          }
@@ -151,7 +151,7 @@ package com.google.analytics.data
          var data:Array = [];
          for(var i:int = 0; i < fields.length; i++)
          {
-            field = fields[i];
+            field = String(fields[i]);
             value = this[field];
             if(value is String)
             {
@@ -192,7 +192,7 @@ package com.google.analytics.data
       
       public function get expiration() : Date
       {
-         if(_expiration)
+         if(Boolean(_expiration))
          {
             return _expiration;
          }
@@ -206,7 +206,7 @@ package com.google.analytics.data
          var data:Object = {};
          for(var i:int = 0; i < fields.length; i++)
          {
-            field = fields[i];
+            field = String(fields[i]);
             value = this[field];
             if(value is String)
             {
@@ -231,10 +231,10 @@ package com.google.analytics.data
          var field:String = null;
          var value:* = undefined;
          var data:Array = [];
-         var len:int = fields.length;
+         var len:int = int(fields.length);
          for(var i:int = 0; i < len; i++)
          {
-            field = fields[i];
+            field = String(fields[i]);
             value = this[field];
             if(value is String)
             {

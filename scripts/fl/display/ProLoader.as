@@ -15,7 +15,7 @@ package fl.display
    {
        
       
-      private var _cli:ProLoaderInfo;
+      private var _cli:fl.display.ProLoaderInfo;
       
       private var _loader:Loader;
       
@@ -32,7 +32,7 @@ package fl.display
          this._loader.contentLoaderInfo.sharedEvents.addEventListener(ProLoaderRSLPreloaderSandboxEvent.PROLOADER_RSLPRELOADER_SANDBOX,this.handleProLoaderRSLPreloaderSandboxEvent,false,0,true);
          super.addChild(this._loader);
          this._realContentLoader = null;
-         this._cli = new ProLoaderInfo(this);
+         this._cli = new fl.display.ProLoaderInfo(this);
          this._loading = false;
          this._hasRequestedContentParentProp = false;
       }
@@ -73,7 +73,7 @@ package fl.display
          }
       }
       
-      function loadDoneCallback(param1:DisplayObject) : Boolean
+      internal function loadDoneCallback(param1:DisplayObject) : Boolean
       {
          var p:DisplayObjectContainer = null;
          var d:DisplayObject = param1;
@@ -115,7 +115,7 @@ package fl.display
                         super.addChild(d);
                      }
                   }
-                  else if(!this._hasRequestedContentParentProp || this._cli._lcRequestedContentParentSet && d.parent != this)
+                  else if(!this._hasRequestedContentParentProp || Boolean(this._cli._lcRequestedContentParentSet) && d.parent != this)
                   {
                      super.addChild(d);
                   }
@@ -158,14 +158,14 @@ package fl.display
          {
             return super.getChildAt(1);
          }
-         if(this._realContentLoader)
+         if(Boolean(this._realContentLoader))
          {
             return this._realContentLoader.content;
          }
          return this._loader.content;
       }
       
-      public function get contentLoaderInfo() : ProLoaderInfo
+      public function get contentLoaderInfo() : fl.display.ProLoaderInfo
       {
          return this._cli;
       }

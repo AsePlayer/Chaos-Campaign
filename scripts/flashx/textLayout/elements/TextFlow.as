@@ -16,8 +16,6 @@ package flashx.textLayout.elements
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [Event(name="updateComplete",type="flashx.textLayout.events.UpdateCompleteEvent")]
    [Event(name="damage",type="flashx.textLayout.events.DamageEvent")]
    [Event(name="scroll",type="flashx.textLayout.events.TextLayoutEvent")]
@@ -36,7 +34,7 @@ package flashx.textLayout.elements
    public class TextFlow extends ContainerFormattedElement implements IEventDispatcher
    {
       
-      public static var defaultConfiguration:Configuration = new Configuration();
+      public static var defaultConfiguration:flashx.textLayout.elements.Configuration = new flashx.textLayout.elements.Configuration();
       
       private static var _nextGeneration:uint = 1;
        
@@ -45,9 +43,9 @@ package flashx.textLayout.elements
       
       private var _interactionManager:ISelectionManager;
       
-      private var _configuration:IConfiguration;
+      private var _configuration:flashx.textLayout.elements.IConfiguration;
       
-      private var _backgroundManager:BackgroundManager;
+      private var _backgroundManager:flashx.textLayout.elements.BackgroundManager;
       
       private var normalizeStart:int = 0;
       
@@ -57,7 +55,7 @@ package flashx.textLayout.elements
       
       private var _generation:uint;
       
-      private var _formatResolver:IFormatResolver;
+      private var _formatResolver:flashx.textLayout.elements.IFormatResolver;
       
       private var _interactiveObjectCount:int;
       
@@ -67,21 +65,21 @@ package flashx.textLayout.elements
       
       private var _hostFormatHelper:HostFormatHelper;
       
-      public function TextFlow(config:IConfiguration = null)
+      public function TextFlow(config:flashx.textLayout.elements.IConfiguration = null)
       {
          super();
          this.initializeForConstructor(config);
       }
       
-      private function initializeForConstructor(config:IConfiguration) : void
+      private function initializeForConstructor(config:flashx.textLayout.elements.IConfiguration) : void
       {
          if(config == null)
          {
             config = defaultConfiguration;
          }
-         this._configuration = Configuration(config).getImmutableClone();
+         this._configuration = Configuration(config).tlf_internal::getImmutableClone();
          format = this._configuration.textFlowInitialFormat;
-         if(this._configuration.flowComposerClass)
+         if(Boolean(this._configuration.flowComposerClass))
          {
             this.flowComposer = new this._configuration.flowComposerClass();
          }
@@ -95,11 +93,11 @@ package flashx.textLayout.elements
          var retFlow:TextFlow = super.shallowCopy(startPos,endPos) as TextFlow;
          retFlow._configuration = this._configuration;
          retFlow._generation = _nextGeneration++;
-         if(this.formatResolver)
+         if(Boolean(this.formatResolver))
          {
             retFlow.formatResolver = this.formatResolver.getResolverForNewFlow(this,retFlow);
          }
-         if(retFlow.flowComposer && this.flowComposer)
+         if(Boolean(retFlow.flowComposer) && Boolean(this.flowComposer))
          {
             retFlow.flowComposer.swfContext = this.flowComposer.swfContext;
          }
@@ -136,7 +134,7 @@ package flashx.textLayout.elements
          --this._graphicObjectCount;
       }
       
-      public function get configuration() : IConfiguration
+      public function get configuration() : flashx.textLayout.elements.IConfiguration
       {
          return this._configuration;
       }
@@ -150,17 +148,17 @@ package flashx.textLayout.elements
       {
          if(this._interactionManager != newInteractionManager)
          {
-            if(this._interactionManager)
+            if(Boolean(this._interactionManager))
             {
                this._interactionManager.textFlow = null;
             }
             this._interactionManager = newInteractionManager;
-            if(this._interactionManager)
+            if(Boolean(this._interactionManager))
             {
                this._interactionManager.textFlow = this;
-               this.normalize();
+               this.tlf_internal::normalize();
             }
-            if(this.flowComposer)
+            if(Boolean(this.flowComposer))
             {
                this.flowComposer.interactionManagerChanged(newInteractionManager);
             }
@@ -174,7 +172,7 @@ package flashx.textLayout.elements
       
       public function set flowComposer(composer:IFlowComposer) : void
       {
-         this.changeFlowComposer(composer,true);
+         this.tlf_internal::changeFlowComposer(composer,true);
       }
       
       tlf_internal function changeFlowComposer(newComposer:IFlowComposer, okToUnloadGraphics:Boolean) : void
@@ -185,25 +183,25 @@ package flashx.textLayout.elements
          var origComposer:IFlowComposer = this._flowComposer;
          if(this._flowComposer != newComposer)
          {
-            oldSWFContext = FlowComposerBase.computeBaseSWFContext(Boolean(this._flowComposer) ? this._flowComposer.swfContext : null);
-            newSWFContext = FlowComposerBase.computeBaseSWFContext(Boolean(newComposer) ? newComposer.swfContext : null);
-            if(this._flowComposer)
+            oldSWFContext = FlowComposerBase.tlf_internal::computeBaseSWFContext(Boolean(this._flowComposer) ? this._flowComposer.swfContext : null);
+            newSWFContext = FlowComposerBase.tlf_internal::computeBaseSWFContext(Boolean(newComposer) ? newComposer.swfContext : null);
+            if(Boolean(this._flowComposer))
             {
                containerIter = 0;
                while(containerIter < this._flowComposer.numControllers)
                {
-                  this._flowComposer.getControllerAt(containerIter++).clearSelectionShapes();
+                  this._flowComposer.getControllerAt(containerIter++).tlf_internal::clearSelectionShapes();
                }
                this._flowComposer.setRootElement(null);
             }
             this._flowComposer = newComposer;
-            if(this._flowComposer)
+            if(Boolean(this._flowComposer))
             {
                this._flowComposer.setRootElement(this);
             }
-            if(textLength)
+            if(Boolean(textLength))
             {
-               this.damage(getAbsoluteStart(),textLength,TextLineValidity.INVALID,false);
+               this.tlf_internal::damage(getAbsoluteStart(),textLength,TextLineValidity.INVALID,false);
             }
             if(oldSWFContext != newSWFContext)
             {
@@ -213,25 +211,25 @@ package flashx.textLayout.elements
             {
                if(okToUnloadGraphics)
                {
-                  this.unloadGraphics();
+                  this.tlf_internal::unloadGraphics();
                }
             }
             else if(origComposer == null)
             {
-               this.prepareGraphicsForLoad();
+               this.tlf_internal::prepareGraphicsForLoad();
             }
          }
       }
       
       tlf_internal function unloadGraphics() : void
       {
-         if(this._graphicObjectCount)
+         if(Boolean(this._graphicObjectCount))
          {
-            applyFunctionToElements(function(elem:FlowElement):Boolean
+            tlf_internal::applyFunctionToElements(function(elem:FlowElement):Boolean
             {
                if(elem is InlineGraphicElement)
                {
-                  (elem as InlineGraphicElement).stop(true);
+                  (elem as InlineGraphicElement).tlf_internal::stop(true);
                }
                return false;
             });
@@ -240,16 +238,16 @@ package flashx.textLayout.elements
       
       tlf_internal function prepareGraphicsForLoad() : void
       {
-         if(this._graphicObjectCount)
+         if(Boolean(this._graphicObjectCount))
          {
-            appendElementsForDelayedUpdate(this,null);
+            tlf_internal::appendElementsForDelayedUpdate(this,null);
          }
       }
       
       public function getElementByID(idName:String) : FlowElement
       {
          var rslt:FlowElement = null;
-         applyFunctionToElements(function(elem:FlowElement):Boolean
+         tlf_internal::applyFunctionToElements(function(elem:FlowElement):Boolean
          {
             if(elem.id == idName)
             {
@@ -265,7 +263,7 @@ package flashx.textLayout.elements
       {
          var a:Array = null;
          a = new Array();
-         applyFunctionToElements(function(elem:FlowElement):Boolean
+         tlf_internal::applyFunctionToElements(function(elem:FlowElement):Boolean
          {
             if(elem.styleName == styleNameValue)
             {
@@ -280,7 +278,7 @@ package flashx.textLayout.elements
       {
          var a:Array = null;
          a = new Array();
-         applyFunctionToElements(function(elem:FlowElement):Boolean
+         tlf_internal::applyFunctionToElements(function(elem:FlowElement):Boolean
          {
             if(elem.typeName == typeNameValue)
             {
@@ -306,7 +304,7 @@ package flashx.textLayout.elements
          var newNormalizeStart:int = 0;
          if(this.normalizeStart != -1)
          {
-            newNormalizeStart = startIdx < this.normalizeStart ? int(startIdx) : int(this.normalizeStart);
+            newNormalizeStart = startIdx < this.normalizeStart ? startIdx : this.normalizeStart;
             if(newNormalizeStart < this.normalizeStart)
             {
                this.normalizeLen += this.normalizeStart - newNormalizeStart;
@@ -323,14 +321,14 @@ package flashx.textLayout.elements
          {
             this.normalizeLen = 0;
          }
-         if(updateLines && this._flowComposer)
+         if(updateLines && Boolean(this._flowComposer))
          {
             this._flowComposer.updateLengths(startIdx,len);
-            super.updateLengths(startIdx,len,false);
+            super.tlf_internal::updateLengths(startIdx,len,false);
          }
          else
          {
-            super.updateLengths(startIdx,len,updateLines);
+            super.tlf_internal::updateLengths(startIdx,len,updateLines);
          }
       }
       
@@ -338,20 +336,20 @@ package flashx.textLayout.elements
       override public function set mxmlChildren(array:Array) : void
       {
          super.mxmlChildren = array;
-         this.normalize();
-         applyWhiteSpaceCollapse(null);
+         this.tlf_internal::normalize();
+         tlf_internal::applyWhiteSpaceCollapse(null);
       }
       
       tlf_internal function applyUpdateElements(okToUnloadGraphics:Boolean) : Boolean
       {
          var hasController:Boolean = false;
-         var child:* = null;
-         if(this._elemsToUpdate)
+         var child:Object = null;
+         if(Boolean(this._elemsToUpdate))
          {
-            hasController = this.flowComposer && this.flowComposer.numControllers != 0;
+            hasController = Boolean(this.flowComposer) && this.flowComposer.numControllers != 0;
             for(child in this._elemsToUpdate)
             {
-               (child as FlowElement).applyDelayedElementUpdate(this,okToUnloadGraphics,hasController);
+               (child as FlowElement).tlf_internal::applyDelayedElementUpdate(this,okToUnloadGraphics,hasController);
             }
             if(hasController)
             {
@@ -366,9 +364,9 @@ package flashx.textLayout.elements
       {
          do
          {
-            this.normalize();
+            this.tlf_internal::normalize();
          }
-         while(this.applyUpdateElements(true));
+         while(this.tlf_internal::applyUpdateElements(true));
          
       }
       
@@ -384,11 +382,11 @@ package flashx.textLayout.elements
             }
             else if(damageStart < this.normalizeStart)
             {
-               newNormalizeLen = this.normalizeLen;
-               newNormalizeLen = this.normalizeStart + this.normalizeLen - damageStart;
+               newNormalizeLen = uint(this.normalizeLen);
+               newNormalizeLen = uint(this.normalizeStart + this.normalizeLen - damageStart);
                if(damageLen > newNormalizeLen)
                {
-                  newNormalizeLen = damageLen;
+                  newNormalizeLen = uint(damageLen);
                }
                this.normalizeStart = damageStart;
                this.normalizeLen = newNormalizeLen;
@@ -409,7 +407,7 @@ package flashx.textLayout.elements
                this.normalizeLen = textLength - this.normalizeStart;
             }
          }
-         if(this._flowComposer)
+         if(Boolean(this._flowComposer))
          {
             this._flowComposer.damage(damageStart,damageLen,damageType);
          }
@@ -487,7 +485,7 @@ package flashx.textLayout.elements
       
       tlf_internal function mustUseComposer() : Boolean
       {
-         var elem:* = null;
+         var elem:Object = null;
          if(this._interactiveObjectCount != 0)
          {
             return true;
@@ -496,11 +494,11 @@ package flashx.textLayout.elements
          {
             return false;
          }
-         this.normalize();
+         this.tlf_internal::normalize();
          var rslt:Boolean = false;
          for(elem in this._elemsToUpdate)
          {
-            if((elem as FlowElement).updateForMustUseComposer(this))
+            if((elem as FlowElement).tlf_internal::updateForMustUseComposer(this))
             {
                rslt = true;
             }
@@ -512,7 +510,7 @@ package flashx.textLayout.elements
       {
          if(elem is FlowElement)
          {
-            (elem as FlowElement).appendElementsForDelayedUpdate(this,changeType);
+            (elem as FlowElement).tlf_internal::appendElementsForDelayedUpdate(this,changeType);
          }
          if(bumpGeneration)
          {
@@ -520,9 +518,9 @@ package flashx.textLayout.elements
          }
          if(changeLen > 0 || changeType == ModelChange.ELEMENT_ADDED)
          {
-            this.damage(changeStart,changeLen,TextLineValidity.INVALID,needNormalize);
+            this.tlf_internal::damage(changeStart,changeLen,TextLineValidity.INVALID,needNormalize);
          }
-         if(this.formatResolver)
+         if(Boolean(this.formatResolver))
          {
             switch(changeType)
             {
@@ -547,9 +545,9 @@ package flashx.textLayout.elements
       
       tlf_internal function processAutoSizeImageLoaded(elem:InlineGraphicElement) : void
       {
-         if(this.flowComposer)
+         if(Boolean(this.flowComposer))
          {
-            elem.appendElementsForDelayedUpdate(this,null);
+            elem.tlf_internal::appendElementsForDelayedUpdate(this,null);
          }
       }
       
@@ -559,7 +557,7 @@ package flashx.textLayout.elements
          if(this.normalizeStart != -1)
          {
             normalizeEnd = this.normalizeStart + (this.normalizeLen == 0 ? 1 : this.normalizeLen);
-            normalizeRange(this.normalizeStart == 0 ? uint(this.normalizeStart) : uint(this.normalizeStart - 1),normalizeEnd);
+            tlf_internal::normalizeRange(this.normalizeStart == 0 ? uint(this.normalizeStart) : uint(this.normalizeStart - 1),normalizeEnd);
             this.normalizeStart = -1;
             this.normalizeLen = 0;
          }
@@ -584,13 +582,13 @@ package flashx.textLayout.elements
             }
             this._hostFormatHelper.format = value;
          }
-         formatChanged();
+         tlf_internal::formatChanged();
       }
       
       override tlf_internal function doComputeTextLayoutFormat() : TextLayoutFormat
       {
          var parentPrototype:TextLayoutFormat = Boolean(this._hostFormatHelper) ? this._hostFormatHelper.getComputedPrototypeFormat() : null;
-         return FlowElement.createTextLayoutFormatPrototype(formatForCascade,parentPrototype);
+         return FlowElement.tlf_internal::createTextLayoutFormatPrototype(tlf_internal::formatForCascade,parentPrototype);
       }
       
       tlf_internal function getTextLayoutFormatStyle(elem:Object) : TextLayoutFormat
@@ -608,7 +606,7 @@ package flashx.textLayout.elements
          return Boolean(tlfvh) ? tlfvh : new TextLayoutFormat(rslt);
       }
       
-      tlf_internal function get backgroundManager() : BackgroundManager
+      tlf_internal function get backgroundManager() : flashx.textLayout.elements.BackgroundManager
       {
          return this._backgroundManager;
       }
@@ -618,44 +616,44 @@ package flashx.textLayout.elements
          this._backgroundManager = null;
       }
       
-      tlf_internal function getBackgroundManager() : BackgroundManager
+      tlf_internal function getBackgroundManager() : flashx.textLayout.elements.BackgroundManager
       {
          if(!this._backgroundManager && this.flowComposer is StandardFlowComposer)
          {
-            this._backgroundManager = (this.flowComposer as StandardFlowComposer).createBackgroundManager();
+            this._backgroundManager = (this.flowComposer as StandardFlowComposer).tlf_internal::createBackgroundManager();
          }
          return this._backgroundManager;
       }
       
-      public function get formatResolver() : IFormatResolver
+      public function get formatResolver() : flashx.textLayout.elements.IFormatResolver
       {
          return this._formatResolver;
       }
       
-      public function set formatResolver(val:IFormatResolver) : void
+      public function set formatResolver(val:flashx.textLayout.elements.IFormatResolver) : void
       {
          if(this._formatResolver != val)
          {
-            if(this._formatResolver)
+            if(Boolean(this._formatResolver))
             {
                this._formatResolver.invalidateAll(this);
             }
             this._formatResolver = val;
-            if(this._formatResolver)
+            if(Boolean(this._formatResolver))
             {
                this._formatResolver.invalidateAll(this);
             }
-            formatChanged(true);
+            tlf_internal::formatChanged(true);
          }
       }
       
       public function invalidateAllFormats() : void
       {
-         if(this._formatResolver)
+         if(Boolean(this._formatResolver))
          {
             this._formatResolver.invalidateAll(this);
          }
-         formatChanged(true);
+         tlf_internal::formatChanged(true);
       }
    }
 }
@@ -665,8 +663,6 @@ import flashx.textLayout.formats.ITextLayoutFormat;
 import flashx.textLayout.formats.TextLayoutFormat;
 import flashx.textLayout.tlf_internal;
 
-use namespace tlf_internal;
-
 class HostFormatHelper
 {
     
@@ -675,7 +671,7 @@ class HostFormatHelper
    
    private var _computedPrototypeFormat:TextLayoutFormat;
    
-   function HostFormatHelper()
+   public function HostFormatHelper()
    {
       super();
    }
@@ -704,7 +700,7 @@ class HostFormatHelper
          {
             useFormat = new TextLayoutFormat(this._format);
          }
-         this._computedPrototypeFormat = FlowElement.createTextLayoutFormatPrototype(useFormat,null);
+         this._computedPrototypeFormat = FlowElement.tlf_internal::createTextLayoutFormatPrototype(useFormat,null);
       }
       return this._computedPrototypeFormat;
    }

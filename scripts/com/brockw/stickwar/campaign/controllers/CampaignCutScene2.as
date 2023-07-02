@@ -1,12 +1,12 @@
 package com.brockw.stickwar.campaign.controllers
 {
    import com.brockw.stickwar.GameScreen;
-   import com.brockw.stickwar.campaign.InGameMessage;
-   import com.brockw.stickwar.engine.Ai.command.StandCommand;
-   import com.brockw.stickwar.engine.units.Bomber;
-   import com.brockw.stickwar.engine.units.Medusa;
-   import com.brockw.stickwar.engine.units.Statue;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.campaign.*;
+   import com.brockw.stickwar.engine.Ai.*;
+   import com.brockw.stickwar.engine.Ai.command.*;
+   import com.brockw.stickwar.engine.Team.*;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.brockw.stickwar.engine.units.*;
    
    public class CampaignCutScene2 extends CampaignController
    {
@@ -50,13 +50,13 @@ package com.brockw.stickwar.campaign.controllers
       
       override public function update(gameScreen:GameScreen) : void
       {
-         var _loc2_:Unit = null;
-         var _loc3_:StandCommand = null;
-         var _loc4_:Number = NaN;
-         var _loc5_:Array = null;
-         var _loc6_:int = 0;
-         var _loc7_:int = 0;
-         if(this.message)
+         var u1:Unit = null;
+         var m:StandCommand = null;
+         var freezePoint:Number = NaN;
+         var spawn:Array = null;
+         var numToSpawn:int = 0;
+         var i:int = 0;
+         if(Boolean(this.message))
          {
             this.message.update();
          }
@@ -79,24 +79,24 @@ package com.brockw.stickwar.campaign.controllers
                gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 325;
                gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 325;
                gameScreen.userInterface.isSlowCamera = true;
-               _loc2_ = Medusa(gameScreen.game.unitFactory.getUnit(Unit.U_MEDUSA));
-               this.medusa = _loc2_;
-               gameScreen.team.enemyTeam.spawn(_loc2_,gameScreen.game);
-               Medusa(_loc2_).enableSuperMedusa();
-               _loc2_.pz = 0;
-               _loc2_.y = gameScreen.game.map.height / 2;
-               _loc2_.px = gameScreen.team.enemyTeam.homeX - 200;
-               _loc2_.x = _loc2_.px;
-               _loc3_ = new StandCommand(gameScreen.game);
-               _loc2_.ai.setCommand(gameScreen.game,_loc3_);
+               u1 = Medusa(gameScreen.game.unitFactory.getUnit(Unit.U_MEDUSA));
+               this.medusa = u1;
+               gameScreen.team.enemyTeam.spawn(u1,gameScreen.game);
+               Medusa(u1).enableSuperMedusa();
+               u1.pz = 0;
+               u1.y = gameScreen.game.map.height / 2;
+               u1.px = gameScreen.team.enemyTeam.homeX - 200;
+               u1.x = u1.px;
+               m = new StandCommand(gameScreen.game);
+               u1.ai.setCommand(gameScreen.game,m);
                this.state = S_ENTER_MEDUSA;
                this.counter = 0;
             }
          }
          else if(this.state == S_ENTER_MEDUSA)
          {
-            _loc3_ = new StandCommand(gameScreen.game);
-            this.medusa.ai.setCommand(gameScreen.game,_loc3_);
+            m = new StandCommand(gameScreen.game);
+            this.medusa.ai.setCommand(gameScreen.game,m);
             gameScreen.game.fogOfWar.isFogOn = false;
             gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 325;
             gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 325;
@@ -130,22 +130,22 @@ package com.brockw.stickwar.campaign.controllers
                gameScreen.game.targetScreenX = gameScreen.game.team.statue.px - 300;
             }
             this.scrollingStoneX -= 20;
-            _loc4_ = this.scrollingStoneX + gameScreen.game.map.screenWidth / 2;
-            gameScreen.game.spatialHash.mapInArea(_loc4_ - 100,0,_loc4_ + 100,gameScreen.game.map.height,this.freezeUnit);
-            if(_loc4_ < gameScreen.team.homeX)
+            freezePoint = this.scrollingStoneX + gameScreen.game.map.screenWidth / 2;
+            gameScreen.game.spatialHash.mapInArea(freezePoint - 100,0,freezePoint + 100,gameScreen.game.map.height,this.freezeUnit);
+            if(freezePoint < gameScreen.team.homeX)
             {
                this.state = S_DONE;
-               _loc5_ = [];
-               _loc5_.push(Unit.U_MINER);
-               _loc5_.push(Unit.U_MINER);
-               _loc5_.push(Unit.U_SPEARTON);
-               _loc5_.push(Unit.U_SPEARTON);
-               _loc5_.push(Unit.U_SPEARTON);
-               _loc5_.push(Unit.U_SPEARTON);
-               _loc5_.push(Unit.U_MAGIKILL);
-               _loc5_.push(Unit.U_MONK);
-               _loc5_.push(Unit.U_ENSLAVED_GIANT);
-               gameScreen.team.spawnUnitGroup(_loc5_);
+               spawn = [];
+               spawn.push(Unit.U_MINER);
+               spawn.push(Unit.U_MINER);
+               spawn.push(Unit.U_SPEARTON);
+               spawn.push(Unit.U_SPEARTON);
+               spawn.push(Unit.U_SPEARTON);
+               spawn.push(Unit.U_SPEARTON);
+               spawn.push(Unit.U_MAGIKILL);
+               spawn.push(Unit.U_MONK);
+               spawn.push(Unit.U_ENSLAVED_GIANT);
+               gameScreen.team.spawnUnitGroup(spawn);
                gameScreen.game.soundManager.playSoundFullVolumeRandom("Rage",3);
                gameScreen.game.soundManager.playSoundFullVolumeRandom("Rage",3);
                gameScreen.game.soundManager.playSoundFullVolumeRandom("Rage",3);
@@ -164,16 +164,16 @@ package com.brockw.stickwar.campaign.controllers
                gameScreen.game.team.enemyTeam.attack(true);
                if(gameScreen.game.frame % (30 * 10) == 0)
                {
-                  _loc6_ = Math.min(this.spawnNumber / 2,4);
-                  for(_loc7_ = 0; _loc7_ < _loc6_; _loc7_++)
+                  numToSpawn = Math.min(this.spawnNumber / 2,4);
+                  for(i = 0; i < numToSpawn; i++)
                   {
-                     _loc2_ = Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER));
-                     gameScreen.team.enemyTeam.spawn(_loc2_,gameScreen.game);
-                     _loc2_.px = this.medusa.px + 100;
-                     _loc2_.py = gameScreen.game.map.height / (_loc6_ * 2) + _loc7_ / _loc6_ * gameScreen.game.map.height;
-                     _loc2_.ai.setCommand(gameScreen.game,new StandCommand(gameScreen.game));
+                     u1 = Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER));
+                     gameScreen.team.enemyTeam.spawn(u1,gameScreen.game);
+                     u1.px = this.medusa.px + 100;
+                     u1.py = gameScreen.game.map.height / (numToSpawn * 2) + i / numToSpawn * gameScreen.game.map.height;
+                     u1.ai.setCommand(gameScreen.game,new StandCommand(gameScreen.game));
                      gameScreen.team.enemyTeam.population += 1;
-                     gameScreen.game.projectileManager.initTowerSpawn(this.medusa.px + 100,_loc2_.py,gameScreen.game.team.enemyTeam,0.6);
+                     gameScreen.game.projectileManager.initTowerSpawn(this.medusa.px + 100,u1.py,gameScreen.game.team.enemyTeam,0.6);
                   }
                   ++this.spawnNumber;
                }

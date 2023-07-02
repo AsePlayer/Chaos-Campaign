@@ -2,7 +2,7 @@ package fl.motion
 {
    import flash.filters.ColorMatrixFilter;
    import flash.geom.Matrix;
-   import flash.utils.Dictionary;
+   import flash.utils.*;
    
    public class KeyframeBase
    {
@@ -29,7 +29,7 @@ package fl.motion
       [ArrayElementType("flash.filters.BitmapFilter")]
       public var filters:Array;
       
-      public var color:Color;
+      public var color:fl.motion.Color;
       
       public var label:String = "";
       
@@ -79,7 +79,7 @@ package fl.motion
       
       public function set index(param1:int) : void
       {
-         this._index = param1 < 0 ? int(0) : int(param1);
+         this._index = param1 < 0 ? 0 : param1;
          if(this._index == 0)
          {
             this.setDefaults();
@@ -140,7 +140,7 @@ package fl.motion
          }
          if(!this.color)
          {
-            this.color = new Color();
+            this.color = new fl.motion.Color();
          }
       }
       
@@ -195,10 +195,10 @@ package fl.motion
          if(_loc4_.AllValuesAreSet())
          {
             _loc5_ = this.filters[param1] as ColorMatrixFilter;
-            if(_loc5_)
+            if(Boolean(_loc5_))
             {
                _loc6_ = _loc4_.CalculateFinalFlatArray();
-               if(_loc6_)
+               if(Boolean(_loc6_))
                {
                   _loc5_.matrix = _loc6_;
                }

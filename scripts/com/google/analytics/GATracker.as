@@ -7,6 +7,7 @@ package com.google.analytics
    import com.google.analytics.core.ServerOperationMode;
    import com.google.analytics.core.TrackerCache;
    import com.google.analytics.core.TrackerMode;
+   import com.google.analytics.core.ga_internal;
    import com.google.analytics.debug.DebugConfiguration;
    import com.google.analytics.debug.Layout;
    import com.google.analytics.events.AnalyticsEvent;
@@ -92,9 +93,9 @@ package com.google.analytics
          _tracker.link(targetUrl,useHash);
       }
       
-      public function addOrganic(newOrganicEngine:String, newOrganicKeyword:String) : void
+      public function addOrganic(param1:String, param2:String) : void
       {
-         _tracker.addOrganic(newOrganicEngine,newOrganicKeyword);
+         _tracker.addOrganic(param1,param2);
       }
       
       public function setAllowLinker(enable:Boolean) : void
@@ -102,9 +103,9 @@ package com.google.analytics
          _tracker.setAllowLinker(enable);
       }
       
-      public function trackEvent(category:String, action:String, label:String = null, value:Number = NaN) : Boolean
+      public function trackEvent(param1:String, param2:String, param3:String = null, param4:Number = NaN) : Boolean
       {
-         return _tracker.trackEvent(category,action,label,value);
+         return _tracker.trackEvent(param1,param2,param3,param4);
       }
       
       public function setCookieTimeout(newDefaultTimeout:int) : void
@@ -127,9 +128,9 @@ package com.google.analytics
          _tracker.trackPageview(pageURL);
       }
       
-      public function setClientInfo(enable:Boolean) : void
+      public function setClientInfo(param1:Boolean) : void
       {
-         _tracker.setClientInfo(enable);
+         _tracker.setClientInfo(param1);
       }
       
       public function get account() : String
@@ -167,9 +168,9 @@ package com.google.analytics
          _eventDispatcher.removeEventListener(type,listener,useCapture);
       }
       
-      public function setDetectFlash(enable:Boolean) : void
+      public function setDetectFlash(param1:Boolean) : void
       {
-         _tracker.setDetectFlash(enable);
+         _tracker.setDetectFlash(param1);
       }
       
       public function resetSession() : void
@@ -231,9 +232,9 @@ package com.google.analytics
          _tracker.setDomainName(newDomainName);
       }
       
-      public function createEventTracker(objName:String) : EventTracker
+      public function createEventTracker(param1:String) : EventTracker
       {
-         return _tracker.createEventTracker(objName);
+         return _tracker.createEventTracker(param1);
       }
       
       public function setCampSourceKey(newCampSrcKey:String) : void
@@ -296,9 +297,9 @@ package com.google.analytics
          _debug = value;
       }
       
-      public function setLocalGifPath(newLocalGifPath:String) : void
+      public function setLocalGifPath(param1:String) : void
       {
-         _tracker.setLocalGifPath(newLocalGifPath);
+         _tracker.setLocalGifPath(param1);
       }
       
       public function getVersion() : String
@@ -321,9 +322,9 @@ package com.google.analytics
          _tracker.setAllowHash(enable);
       }
       
-      public function addIgnoredOrganic(newIgnoredOrganicKeyword:String) : void
+      public function addIgnoredOrganic(param1:String) : void
       {
-         _tracker.addIgnoredOrganic(newIgnoredOrganicKeyword);
+         _tracker.addIgnoredOrganic(param1);
       }
       
       public function setLocalRemoteServerMode() : void
@@ -380,7 +381,7 @@ package com.google.analytics
          _buffer = new Buffer(config,debug,false);
          _gifRequest = new GIFRequest(config,debug,_buffer,_env);
          _idleTimer = new IdleTimer(config,debug,_display,_buffer);
-         _env.url = _display.stage.loaderInfo.url;
+         _env.ga_internal::url = _display.stage.loaderInfo.url;
          return new Tracker(account,config,debug,_env,_buffer,_gifRequest,_adSense);
       }
       
@@ -389,9 +390,9 @@ package com.google.analytics
          _tracker.setCampNOKey(newCampNOKey);
       }
       
-      public function setDetectTitle(enable:Boolean) : void
+      public function setDetectTitle(param1:Boolean) : void
       {
-         _tracker.setDetectTitle(enable);
+         _tracker.setDetectTitle(param1);
       }
       
       public function getServiceMode() : ServerOperationMode
@@ -409,9 +410,9 @@ package com.google.analytics
          _tracker.setCampaignTrack(enable);
       }
       
-      public function addIgnoredRef(newIgnoredReferrer:String) : void
+      public function addIgnoredRef(param1:String) : void
       {
-         _tracker.addIgnoredRef(newIgnoredReferrer);
+         _tracker.addIgnoredRef(param1);
       }
       
       public function set visualDebug(value:Boolean) : void

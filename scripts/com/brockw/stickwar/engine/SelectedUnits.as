@@ -1,7 +1,7 @@
 package com.brockw.stickwar.engine
 {
    import com.brockw.stickwar.GameScreen;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.units.*;
    import flash.display.DisplayObject;
    import flash.display.MovieClip;
    import flash.utils.Dictionary;
@@ -100,11 +100,11 @@ package com.brockw.stickwar.engine
             return;
          }
          this._hasChanged = true;
-         if(this._interactsWith & Unit.I_IS_BUILDING || unit.interactsWith & Unit.I_IS_BUILDING)
+         if(Boolean(this._interactsWith & Unit.I_IS_BUILDING) || Boolean(unit.interactsWith & Unit.I_IS_BUILDING))
          {
             this.clear();
          }
-         if(unit.interactsWith & Unit.I_IS_BUILDING)
+         if(Boolean(unit.interactsWith & Unit.I_IS_BUILDING))
          {
             this.gameScreen.game.soundManager.playSoundFullVolume("MouseoverStructure");
          }

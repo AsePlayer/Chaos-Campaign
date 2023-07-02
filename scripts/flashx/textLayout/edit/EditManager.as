@@ -60,8 +60,6 @@ package flashx.textLayout.edit
    import flashx.undo.IOperation;
    import flashx.undo.IUndoManager;
    
-   use namespace tlf_internal;
-   
    public class EditManager extends SelectionManager implements IEditManager
    {
       
@@ -153,7 +151,7 @@ package flashx.textLayout.edit
          {
             return;
          }
-         if(this.redrawListener)
+         if(Boolean(this.redrawListener))
          {
             this.updateAllControllers();
          }
@@ -169,7 +167,7 @@ package flashx.textLayout.edit
                switch(event.charCode)
                {
                   case 122:
-                     if(!Configuration.versionIsAtLeast(10,1) && Capabilities.os.search("Mac OS") > -1)
+                     if(!Configuration.tlf_internal::versionIsAtLeast(10,1) && Capabilities.os.search("Mac OS") > -1)
                      {
                         ignoreNextTextEvent = true;
                      }
@@ -182,7 +180,7 @@ package flashx.textLayout.edit
                      event.preventDefault();
                      break;
                   case Keyboard.BACKSPACE:
-                     if(this._imeSession)
+                     if(Boolean(this._imeSession))
                      {
                         this._imeSession.compositionAbandoned();
                      }
@@ -191,7 +189,7 @@ package flashx.textLayout.edit
                }
                if(event.keyCode == Keyboard.DELETE)
                {
-                  if(this._imeSession)
+                  if(Boolean(this._imeSession))
                   {
                      this._imeSession.compositionAbandoned();
                   }
@@ -202,7 +200,7 @@ package flashx.textLayout.edit
                {
                   if(event.charCode == 95)
                   {
-                     if(this._imeSession)
+                     if(Boolean(this._imeSession))
                      {
                         this._imeSession.compositionAbandoned();
                      }
@@ -256,15 +254,15 @@ package flashx.textLayout.edit
                   {
                      firstLeaf = textFlow.findLeaf(absoluteStart);
                      listItem = firstLeaf.getParentByType(ListItemElement) as ListItemElement;
-                     if(listItem && firstLeaf.getParentByType(ListElement) != listItem.getParentByType(ListElement))
+                     if(Boolean(listItem) && firstLeaf.getParentByType(ListElement) != listItem.getParentByType(ListElement))
                      {
                         listItem = null;
                      }
-                     if(listItem && !event.shiftKey)
+                     if(Boolean(listItem) && !event.shiftKey)
                      {
                         if(listItem.textLength == 1 && listItem.parent.getChildIndex(listItem) == listItem.parent.numChildren - 1)
                         {
-                           operationState = this.defaultOperationState();
+                           operationState = this.tlf_internal::defaultOperationState();
                            if(!operationState)
                            {
                               return;
@@ -290,9 +288,9 @@ package flashx.textLayout.edit
                   if(textFlow.configuration.manageTabKey)
                   {
                      listItem = textFlow.findLeaf(absoluteStart).getParentByType(ListItemElement) as ListItemElement;
-                     if(listItem && listItem.getAbsoluteStart() == absoluteStart)
+                     if(Boolean(listItem) && listItem.getAbsoluteStart() == absoluteStart)
                      {
-                        operationState = this.defaultOperationState();
+                        operationState = this.tlf_internal::defaultOperationState();
                         if(!operationState)
                         {
                            return;
@@ -340,7 +338,7 @@ package flashx.textLayout.edit
             return;
          }
          super.keyUpHandler(event);
-         if(textFlow.configuration.manageEnterKey && event.charCode == Keyboard.ENTER || textFlow.configuration.manageTabKey && event.charCode == Keyboard.TAB)
+         if(Boolean(textFlow.configuration.manageEnterKey) && event.charCode == Keyboard.ENTER || Boolean(textFlow.configuration.manageTabKey) && event.charCode == Keyboard.TAB)
          {
             event.stopImmediatePropagation();
          }
@@ -356,7 +354,7 @@ package flashx.textLayout.edit
       
       override public function mouseDownHandler(event:MouseEvent) : void
       {
-         if(this.redrawListener)
+         if(Boolean(this.redrawListener))
          {
             this.updateAllControllers();
          }
@@ -387,7 +385,7 @@ package flashx.textLayout.edit
       override public function focusOutHandler(event:FocusEvent) : void
       {
          super.focusOutHandler(event);
-         if(this._imeSession && selectionFormatState != SelectionFormatState.FOCUSED)
+         if(Boolean(this._imeSession) && tlf_internal::selectionFormatState != SelectionFormatState.FOCUSED)
          {
             this._imeSession.compositionAbandoned();
          }
@@ -396,7 +394,7 @@ package flashx.textLayout.edit
       override public function deactivateHandler(event:Event) : void
       {
          super.deactivateHandler(event);
-         if(this._imeSession)
+         if(Boolean(this._imeSession))
          {
             this._imeSession.compositionAbandoned();
          }
@@ -419,7 +417,7 @@ package flashx.textLayout.edit
          if(this._imeSession && flowComposer && flowComposer.numControllers > 1)
          {
             this._imeSession.setFocus();
-            setSelectionFormatState(SelectionFormatState.FOCUSED);
+            tlf_internal::setSelectionFormatState(SelectionFormatState.FOCUSED);
          }
          else
          {
@@ -431,7 +429,7 @@ package flashx.textLayout.edit
       {
          this._imeSession = null;
          var flowComposer:IFlowComposer = Boolean(textFlow) ? textFlow.flowComposer : null;
-         if(flowComposer && flowComposer.numControllers > 1)
+         if(Boolean(flowComposer) && flowComposer.numControllers > 1)
          {
             this.setFocus();
          }
@@ -451,23 +449,23 @@ package flashx.textLayout.edit
       
       override public function doOperation(operation:FlowOperation) : void
       {
-         if(this._imeSession && !this._imeOperationInProgress)
+         if(Boolean(this._imeSession) && !this._imeOperationInProgress)
          {
             this._imeSession.compositionAbandoned();
          }
          this.flushPendingOperations();
          try
          {
-            ++this.captureLevel;
-            var operation:FlowOperation = this.doInternal(operation);
+            ++this.tlf_internal::captureLevel;
+            operation = this.doInternal(operation);
          }
          catch(e:Error)
          {
-            --captureLevel;
+            --tlf_internal::captureLevel;
             throw e;
          }
-         --this.captureLevel;
-         if(operation)
+         --this.tlf_internal::captureLevel;
+         if(Boolean(operation))
          {
             this.finalizeDo(operation);
          }
@@ -480,30 +478,30 @@ package flashx.textLayout.edit
          var lastOp:FlowOperation = null;
          var combinedOp:FlowOperation = null;
          var opEvent:FlowOperationEvent = null;
-         if(this.parentStack && this.parentStack.length > 0)
+         if(Boolean(this.parentStack) && this.parentStack.length > 0)
          {
             parent = this.parentStack[this.parentStack.length - 1];
-            if(parent.captureLevel == this.captureLevel)
+            if(parent.captureLevel == this.tlf_internal::captureLevel)
             {
                parentOperation = parent.operation as CompositeOperation;
             }
          }
-         if(parentOperation)
+         if(Boolean(parentOperation))
          {
             parentOperation.addOperation(op);
          }
-         else if(this.captureLevel == 0)
+         else if(this.tlf_internal::captureLevel == 0)
          {
             this.captureOperations.length = 0;
-            if(this._undoManager)
+            if(Boolean(this._undoManager))
             {
-               if(this._undoManager.canUndo() && allowOperationMerge)
+               if(Boolean(this._undoManager.canUndo()) && allowOperationMerge)
                {
                   lastOp = this._undoManager.peekUndo() as FlowOperation;
-                  if(lastOp)
+                  if(Boolean(lastOp))
                   {
-                     combinedOp = lastOp.merge(op);
-                     if(combinedOp)
+                     combinedOp = lastOp.tlf_internal::merge(op);
+                     if(Boolean(combinedOp))
                      {
                         this._undoManager.popUndo();
                         op = combinedOp;
@@ -528,36 +526,37 @@ package flashx.textLayout.edit
       
       private function doInternal(op:FlowOperation) : FlowOperation
       {
+         var opError:Error;
          var opEvent:FlowOperationEvent = null;
          var beforeGeneration:uint = 0;
          var index:int = 0;
-         var captureStart:int = this.captureOperations.length;
+         var captureStart:int = int(this.captureOperations.length);
          var success:Boolean = false;
          if(!this._imeSession)
          {
-            opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_BEGIN,false,true,op,this.captureLevel - 1,null);
+            opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_BEGIN,false,true,op,this.tlf_internal::captureLevel - 1,null);
             textFlow.dispatchEvent(opEvent);
             if(opEvent.isDefaultPrevented())
             {
                return null;
             }
-            var op:FlowOperation = opEvent.operation;
+            op = opEvent.operation;
             if(op is UndoOperation || op is RedoOperation)
             {
                throw new IllegalOperationError(GlobalSettings.resourceStringFunction("illegalOperation",[getQualifiedClassName(op)]));
             }
          }
-         var opError:Error = null;
+         opError = null;
          try
          {
             beforeGeneration = textFlow.generation;
-            op.setGenerations(beforeGeneration,0);
+            op.tlf_internal::setGenerations(beforeGeneration,0);
             this.captureOperations.push(op);
             success = op.doOperation();
             if(success)
             {
-               textFlow.normalize();
-               op.setGenerations(beforeGeneration,textFlow.generation);
+               textFlow.tlf_internal::normalize();
+               op.tlf_internal::setGenerations(beforeGeneration,textFlow.generation);
             }
             else
             {
@@ -574,28 +573,28 @@ package flashx.textLayout.edit
          }
          if(!this._imeSession)
          {
-            opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_END,false,true,op,this.captureLevel - 1,opError);
+            opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_END,false,true,op,this.tlf_internal::captureLevel - 1,opError);
             textFlow.dispatchEvent(opEvent);
-            opError = !!opEvent.isDefaultPrevented() ? null : opEvent.error;
+            opError = opEvent.isDefaultPrevented() ? null : opEvent.error;
          }
-         if(opError)
+         if(Boolean(opError))
          {
             throw opError;
          }
          if(this.captureOperations.length - captureStart > 1)
          {
             op = new CompositeOperation(this.captureOperations.slice(captureStart));
-            op.setGenerations(FlowOperation(CompositeOperation(op).operations[0]).beginGeneration,textFlow.generation);
+            op.tlf_internal::setGenerations(FlowOperation(CompositeOperation(op).operations[0]).beginGeneration,textFlow.generation);
             allowOperationMerge = false;
             this.captureOperations.length = captureStart;
          }
-         return !!success ? op : null;
+         return success ? op : null;
       }
       
       override public function set textFlow(value:TextFlow) : void
       {
          this.flushPendingOperations();
-         if(this.redrawListener)
+         if(Boolean(this.redrawListener))
          {
             this.updateAllControllers();
          }
@@ -621,24 +620,24 @@ package flashx.textLayout.edit
       {
          var controllerIndex:int = 0;
          this.flushPendingOperations();
-         if(this.redrawListener)
+         if(Boolean(this.redrawListener))
          {
             this.redrawListener.removeEventListener(Event.ENTER_FRAME,this.redrawHandler);
             this.redrawListener = null;
          }
-         if(textFlow.flowComposer)
+         if(Boolean(textFlow.flowComposer))
          {
             textFlow.flowComposer.updateAllControllers();
             if(hasSelection())
             {
-               controllerIndex = textFlow.flowComposer.findControllerIndexAtPosition(activePosition);
+               controllerIndex = int(textFlow.flowComposer.findControllerIndexAtPosition(activePosition));
                if(controllerIndex >= 0)
                {
                   textFlow.flowComposer.getControllerAt(controllerIndex).scrollToRange(activePosition,anchorPosition);
                }
             }
          }
-         this.selectionChanged(true,false);
+         this.tlf_internal::selectionChanged(true,false);
       }
       
       private function handleUpdate() : void
@@ -649,10 +648,10 @@ package flashx.textLayout.edit
             if(!this.redrawListener)
             {
                controller = textFlow.flowComposer.getControllerAt(0);
-               if(controller)
+               if(Boolean(controller))
                {
                   this.redrawListener = controller.container;
-                  if(this.redrawListener)
+                  if(Boolean(this.redrawListener))
                   {
                      this.redrawListener.addEventListener(Event.ENTER_FRAME,this.redrawHandler,false,1,true);
                   }
@@ -683,11 +682,11 @@ package flashx.textLayout.edit
       {
          var pi0:InsertTextOperation = null;
          super.flushPendingOperations();
-         if(this.pendingInsert)
+         if(Boolean(this.pendingInsert))
          {
             pi0 = this.pendingInsert;
             this.pendingInsert = null;
-            if(this.enterFrameListener)
+            if(Boolean(this.enterFrameListener))
             {
                this.enterFrameListener.removeEventListener(Event.ENTER_FRAME,enterFrameHandler);
                this.enterFrameListener = null;
@@ -698,11 +697,11 @@ package flashx.textLayout.edit
       
       public function undo() : void
       {
-         if(this._imeSession)
+         if(Boolean(this._imeSession))
          {
             this._imeSession.compositionAbandoned();
          }
-         if(this.undoManager)
+         if(Boolean(this.undoManager))
          {
             this.undoManager.undo();
          }
@@ -710,6 +709,7 @@ package flashx.textLayout.edit
       
       public function performUndo(theop:IOperation) : void
       {
+         var opError:Error;
          var undoPsuedoOp:UndoOperation = null;
          var opEvent:FlowOperationEvent = null;
          var rslt:SelectionState = null;
@@ -739,12 +739,12 @@ package flashx.textLayout.edit
          {
             return;
          }
-         var opError:Error = null;
+         opError = null;
          try
          {
             rslt = operation.undo();
             setSelectionState(rslt);
-            if(this._undoManager)
+            if(Boolean(this._undoManager))
             {
                this._undoManager.pushRedo(operation);
             }
@@ -757,14 +757,14 @@ package flashx.textLayout.edit
          {
             opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_END,false,true,undoPsuedoOp,0,opError);
             textFlow.dispatchEvent(opEvent);
-            opError = !!opEvent.isDefaultPrevented() ? null : opEvent.error;
+            opError = opEvent.isDefaultPrevented() ? null : opEvent.error;
          }
-         if(opError)
+         if(Boolean(opError))
          {
             throw opError;
          }
          this.handleUpdate();
-         textFlow.setGeneration(operation.beginGeneration);
+         textFlow.tlf_internal::setGeneration(operation.beginGeneration);
          if(!this._imeSession)
          {
             opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_COMPLETE,false,false,undoPsuedoOp,0,null);
@@ -774,11 +774,11 @@ package flashx.textLayout.edit
       
       public function redo() : void
       {
-         if(this._imeSession)
+         if(Boolean(this._imeSession))
          {
             this._imeSession.compositionAbandoned();
          }
-         if(this.undoManager)
+         if(Boolean(this.undoManager))
          {
             this.undoManager.redo();
          }
@@ -786,6 +786,7 @@ package flashx.textLayout.edit
       
       public function performRedo(theop:IOperation) : void
       {
+         var opError:Error;
          var opEvent:FlowOperationEvent = null;
          var redoPsuedoOp:RedoOperation = null;
          var rslt:SelectionState = null;
@@ -800,7 +801,7 @@ package flashx.textLayout.edit
             redoPsuedoOp = new RedoOperation(op);
             opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_BEGIN,false,true,redoPsuedoOp,0,null);
             textFlow.dispatchEvent(opEvent);
-            if(opEvent.isDefaultPrevented() && this._undoManager)
+            if(opEvent.isDefaultPrevented() && Boolean(this._undoManager))
             {
                this._undoManager.pushRedo(op);
                return;
@@ -816,12 +817,12 @@ package flashx.textLayout.edit
          {
             return;
          }
-         var opError:Error = null;
+         opError = null;
          try
          {
             rslt = op.redo();
             setSelectionState(rslt);
-            if(this._undoManager)
+            if(Boolean(this._undoManager))
             {
                this._undoManager.pushUndo(op);
             }
@@ -834,17 +835,17 @@ package flashx.textLayout.edit
          {
             opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_END,false,true,redoPsuedoOp,0,opError);
             textFlow.dispatchEvent(opEvent);
-            opError = !!opEvent.isDefaultPrevented() ? null : opEvent.error;
+            opError = opEvent.isDefaultPrevented() ? null : opEvent.error;
          }
-         if(opError)
+         if(Boolean(opError))
          {
             throw opError;
          }
          this.handleUpdate();
-         textFlow.setGeneration(op.endGeneration);
+         textFlow.tlf_internal::setGeneration(op.endGeneration);
          if(hasSelection())
          {
-            controllerIndex = textFlow.flowComposer.findControllerIndexAtPosition(activePosition);
+            controllerIndex = int(textFlow.flowComposer.findControllerIndexAtPosition(activePosition));
             if(controllerIndex >= 0)
             {
                textFlow.flowComposer.getControllerAt(controllerIndex).scrollToRange(activePosition,anchorPosition);
@@ -866,10 +867,10 @@ package flashx.textLayout.edit
       {
          var markActive:Mark = null;
          var markAnchor:Mark = null;
-         if(operationState)
+         if(Boolean(operationState))
          {
-            markActive = createMark();
-            markAnchor = createMark();
+            markActive = tlf_internal::createMark();
+            markAnchor = tlf_internal::createMark();
             try
             {
                markActive.position = operationState.activePosition;
@@ -878,8 +879,8 @@ package flashx.textLayout.edit
             }
             finally
             {
-               removeMark(markActive);
-               removeMark(markAnchor);
+               tlf_internal::removeMark(markActive);
+               tlf_internal::removeMark(markAnchor);
                operationState.activePosition = markActive.position;
                operationState.anchorPosition = markAnchor.position;
             }
@@ -889,8 +890,8 @@ package flashx.textLayout.edit
             this.flushPendingOperations();
             if(hasSelection())
             {
-               var operationState:SelectionState = getSelectionState();
-               operationState.selectionManagerOperationState = true;
+               operationState = getSelectionState();
+               operationState.tlf_internal::selectionManagerOperationState = true;
             }
          }
          return operationState;
@@ -898,7 +899,7 @@ package flashx.textLayout.edit
       
       public function splitParagraph(operationState:SelectionState = null) : ParagraphElement
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return null;
@@ -910,7 +911,7 @@ package flashx.textLayout.edit
       
       public function splitElement(target:FlowGroupElement, operationState:SelectionState = null) : FlowGroupElement
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return null;
@@ -922,7 +923,7 @@ package flashx.textLayout.edit
       
       public function createDiv(parent:FlowGroupElement = null, format:ITextLayoutFormat = null, operationState:SelectionState = null) : DivElement
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return null;
@@ -934,7 +935,7 @@ package flashx.textLayout.edit
       
       public function createList(parent:FlowGroupElement = null, format:ITextLayoutFormat = null, operationState:SelectionState = null) : ListElement
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return null;
@@ -946,7 +947,7 @@ package flashx.textLayout.edit
       
       public function moveChildren(source:FlowGroupElement, sourceIndex:int, numChildren:int, destination:FlowGroupElement, destinationIndex:int, selectionState:SelectionState = null) : void
       {
-         selectionState = this.defaultOperationState(selectionState);
+         selectionState = this.tlf_internal::defaultOperationState(selectionState);
          if(!selectionState)
          {
             return;
@@ -957,7 +958,7 @@ package flashx.textLayout.edit
       
       public function createSubParagraphGroup(parent:FlowGroupElement = null, format:ITextLayoutFormat = null, operationState:SelectionState = null) : SubParagraphGroupElement
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return null;
@@ -969,7 +970,7 @@ package flashx.textLayout.edit
       
       public function deleteText(operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -981,7 +982,7 @@ package flashx.textLayout.edit
       {
          var deleteOp:DeleteTextOperation = null;
          var nextPosition:int = 0;
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1000,7 +1001,7 @@ package flashx.textLayout.edit
       
       public function deleteNextWord(operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState || operationState.anchorPosition == operationState.activePosition && operationState.anchorPosition >= textFlow.textLength - 1)
          {
             return;
@@ -1066,7 +1067,7 @@ package flashx.textLayout.edit
          var numElementsToMove:int = 0;
          var targetIndex:int = 0;
          var beginPrevious:int = 0;
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1128,7 +1129,7 @@ package flashx.textLayout.edit
       
       public function deletePreviousWord(operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1203,20 +1204,20 @@ package flashx.textLayout.edit
       {
          var operationState:SelectionState = null;
          var controller:ContainerController = null;
-         if(origOperationState == null && this.pendingInsert)
+         if(origOperationState == null && Boolean(this.pendingInsert))
          {
             this.pendingInsert.text += text;
          }
          else
          {
-            operationState = this.defaultOperationState(origOperationState);
+            operationState = this.tlf_internal::defaultOperationState(origOperationState);
             if(!operationState)
             {
                return;
             }
             this.pendingInsert = new InsertTextOperation(operationState,text);
             controller = textFlow.flowComposer.getControllerAt(0);
-            if(this.captureLevel == 0 && origOperationState == null && controller && controller.container && this.allowDelayedOperations)
+            if(this.tlf_internal::captureLevel == 0 && origOperationState == null && controller && controller.container && this.allowDelayedOperations)
             {
                this.enterFrameListener = controller.container;
                this.enterFrameListener.addEventListener(Event.ENTER_FRAME,enterFrameHandler,false,1,true);
@@ -1230,7 +1231,7 @@ package flashx.textLayout.edit
       
       public function overwriteText(text:String, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1242,7 +1243,7 @@ package flashx.textLayout.edit
       
       public function insertInlineGraphic(source:Object, width:Object, height:Object, options:Object = null, operationState:SelectionState = null) : InlineGraphicElement
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return null;
@@ -1254,7 +1255,7 @@ package flashx.textLayout.edit
       
       public function modifyInlineGraphic(source:Object, width:Object, height:Object, options:Object = null, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1264,7 +1265,7 @@ package flashx.textLayout.edit
       
       public function applyFormat(leafFormat:ITextLayoutFormat, paragraphFormat:ITextLayoutFormat, containerFormat:ITextLayoutFormat, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1274,7 +1275,7 @@ package flashx.textLayout.edit
       
       public function clearFormat(leafFormat:ITextLayoutFormat, paragraphFormat:ITextLayoutFormat, containerFormat:ITextLayoutFormat, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1299,7 +1300,7 @@ package flashx.textLayout.edit
       
       public function applyFormatToElement(targetElement:FlowElement, format:ITextLayoutFormat, relativeStart:int = 0, relativeEnd:int = -1, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1309,7 +1310,7 @@ package flashx.textLayout.edit
       
       public function clearFormatOnElement(targetElement:FlowElement, format:ITextLayoutFormat, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1319,7 +1320,7 @@ package flashx.textLayout.edit
       
       public function cutTextScrap(operationState:SelectionState = null) : TextScrap
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return null;
@@ -1340,7 +1341,7 @@ package flashx.textLayout.edit
       
       public function pasteTextScrap(scrapToPaste:TextScrap, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1350,7 +1351,7 @@ package flashx.textLayout.edit
       
       public function applyTCY(tcyOn:Boolean, operationState:SelectionState = null) : TCYElement
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return null;
@@ -1362,7 +1363,7 @@ package flashx.textLayout.edit
       
       public function applyLink(href:String, targetString:String = null, extendToLinkBoundary:Boolean = false, operationState:SelectionState = null) : LinkElement
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return null;
@@ -1378,7 +1379,7 @@ package flashx.textLayout.edit
       
       public function changeElementID(newID:String, targetElement:FlowElement, relativeStart:int = 0, relativeEnd:int = -1, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1393,7 +1394,7 @@ package flashx.textLayout.edit
       [Deprecated(replacement="applyFormatToElement",deprecatedSince="2.0")]
       public function changeStyleName(newName:String, targetElement:FlowElement, relativeStart:int = 0, relativeEnd:int = -1, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1405,7 +1406,7 @@ package flashx.textLayout.edit
       
       public function changeTypeName(newName:String, targetElement:FlowElement, relativeStart:int = 0, relativeEnd:int = -1, operationState:SelectionState = null) : void
       {
-         operationState = this.defaultOperationState(operationState);
+         operationState = this.tlf_internal::defaultOperationState(operationState);
          if(!operationState)
          {
             return;
@@ -1424,39 +1425,39 @@ package flashx.textLayout.edit
          var operation:CompositeOperation = new CompositeOperation();
          if(!this._imeSession)
          {
-            opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_BEGIN,false,false,operation,this.captureLevel,null);
+            opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_BEGIN,false,false,operation,this.tlf_internal::captureLevel,null);
             textFlow.dispatchEvent(opEvent);
          }
-         operation.setGenerations(textFlow.generation,0);
-         ++this.captureLevel;
+         operation.tlf_internal::setGenerations(textFlow.generation,0);
+         ++this.tlf_internal::captureLevel;
          var parent:Object = new Object();
          parent.operation = operation;
-         parent.captureLevel = this.captureLevel;
+         parent.captureLevel = this.tlf_internal::captureLevel;
          this.parentStack.push(parent);
       }
       
       public function endCompositeOperation() : void
       {
          var opEvent:FlowOperationEvent = null;
-         --this.captureLevel;
+         --this.tlf_internal::captureLevel;
          var parent:Object = this.parentStack.pop();
          var operation:FlowOperation = parent.operation;
          if(!this._imeSession)
          {
-            opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_END,false,false,operation,this.captureLevel,null);
+            opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_END,false,false,operation,this.tlf_internal::captureLevel,null);
             textFlow.dispatchEvent(opEvent);
          }
-         operation.setGenerations(operation.beginGeneration,textFlow.generation);
+         operation.tlf_internal::setGenerations(operation.beginGeneration,textFlow.generation);
          this.finalizeDo(operation);
       }
       
       override tlf_internal function selectionChanged(doDispatchEvent:Boolean = true, resetPointFormat:Boolean = true) : void
       {
-         if(this._imeSession)
+         if(Boolean(this._imeSession))
          {
             this._imeSession.selectionChanged();
          }
-         super.selectionChanged(doDispatchEvent,resetPointFormat);
+         super.tlf_internal::selectionChanged(doDispatchEvent,resetPointFormat);
       }
    }
 }

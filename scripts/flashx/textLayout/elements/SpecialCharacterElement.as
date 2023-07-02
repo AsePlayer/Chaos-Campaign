@@ -20,7 +20,7 @@ package flashx.textLayout.elements
          var newSib:SpanElement = null;
          var sib:SpanElement = null;
          var siblingInsertPosition:int = 0;
-         if(parent)
+         if(Boolean(parent))
          {
             myidx = parent.getChildIndex(this);
             if(myidx != 0)
@@ -38,7 +38,7 @@ package flashx.textLayout.elements
             newSib.text = this.text;
             newSib.format = format;
             parent.replaceChildren(myidx,myidx + 1,newSib);
-            newSib.normalizeRange(0,newSib.textLength);
+            newSib.tlf_internal::normalizeRange(0,newSib.textLength);
             return false;
          }
          return false;

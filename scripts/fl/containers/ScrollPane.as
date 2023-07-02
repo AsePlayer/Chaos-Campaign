@@ -19,7 +19,7 @@ package fl.containers
    import flash.system.LoaderContext;
    import flash.ui.Keyboard;
    
-   [Style(name="contentPadding",format="Length",type="Number")]
+   [Style(name="contentPadding",type="Number",format="Length")]
    [Style(name="upSkin",type="Class")]
    [Style(name="disabledSkin",type="Class")]
    [Event("securityError",type="flash.events.SecurityErrorEvent")]
@@ -69,7 +69,7 @@ package fl.containers
          return mergeStyles(defaultStyles,BaseScrollPane.getStyleDefinition());
       }
       
-      [Inspectable(defaultValue="false",type="Boolean")]
+      [Inspectable(type="Boolean",defaultValue="false")]
       public function get scrollDrag() : Boolean
       {
          return _scrollDrag;
@@ -92,12 +92,12 @@ package fl.containers
       
       public function get bytesLoaded() : Number
       {
-         return loader == null || loader.contentLoaderInfo == null ? Number(0) : Number(loader.contentLoaderInfo.bytesLoaded);
+         return loader == null || loader.contentLoaderInfo == null ? 0 : loader.contentLoaderInfo.bytesLoaded;
       }
       
       public function get bytesTotal() : Number
       {
-         return loader == null || loader.contentLoaderInfo == null ? Number(0) : Number(loader.contentLoaderInfo.bytesTotal);
+         return loader == null || loader.contentLoaderInfo == null ? 0 : loader.contentLoaderInfo.bytesTotal;
       }
       
       public function refreshPane() : void
@@ -125,7 +125,7 @@ package fl.containers
          return _loc1_ as DisplayObject;
       }
       
-      [Inspectable(defaultValue="",type="String")]
+      [Inspectable(type="String",defaultValue="")]
       public function get source() : Object
       {
          return _source;
@@ -199,7 +199,7 @@ package fl.containers
          update();
          var _loc2_:* = calculateAvailableHeight();
          calculateAvailableSize();
-         horizontalScrollBar.setScrollProperties(availableWidth,0,!!useFixedHorizontalScrolling ? Number(_maxHorizontalScrollPosition) : Number(contentWidth - availableWidth),availableWidth);
+         horizontalScrollBar.setScrollProperties(availableWidth,0,useFixedHorizontalScrolling ? _maxHorizontalScrollPosition : contentWidth - availableWidth,availableWidth);
          verticalScrollBar.setScrollProperties(_loc2_,0,contentHeight - _loc2_,_loc2_);
          passEvent(param1);
       }
@@ -312,7 +312,7 @@ package fl.containers
       override protected function drawBackground() : void
       {
          var _loc1_:DisplayObject = background;
-         background = getDisplayObjectInstance(getStyleValue(!!enabled ? "upSkin" : "disabledSkin"));
+         background = getDisplayObjectInstance(getStyleValue(enabled ? "upSkin" : "disabledSkin"));
          background.width = width;
          background.height = height;
          addChildAt(background,0);

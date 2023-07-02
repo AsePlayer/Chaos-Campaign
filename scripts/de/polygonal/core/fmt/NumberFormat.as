@@ -10,27 +10,27 @@ package de.polygonal.core.fmt
       {
       }
       
-      public static function toBin(x:int, byteDelimiter:String = undefined, leadingZeros:Boolean = false) : String
+      public static function toBin(param1:int, param2:String = undefined, param3:Boolean = false) : String
       {
          var _loc5_:int = 0;
          var _loc6_:int = 0;
          var _loc8_:int = 0;
-         if(byteDelimiter == null)
+         if(param2 == null)
          {
-            byteDelimiter = "";
+            param2 = "";
          }
-         _loc5_ = x;
+         _loc5_ = param1;
          var _loc4_:int = 32 - (_loc5_ < 0 ? 0 : (_loc5_ |= _loc5_ >> 1, _loc5_ |= _loc5_ >> 2, _loc5_ |= _loc5_ >> 4, _loc5_ |= _loc5_ >> 8, _loc5_ |= _loc5_ >> 16, _loc6_ = _loc5_, _loc6_ -= _loc6_ >> 1 & 1431655765, _loc6_ = (_loc6_ >> 2 & 858993459) + (_loc6_ & 858993459), _loc6_ = (_loc6_ >> 4) + _loc6_ & 252645135, _loc6_ += _loc6_ >> 8, _loc6_ += _loc6_ >> 16, 32 - (_loc6_ & 63)));
-         var _loc7_:String = (x & 1) > 0 ? "1" : "0";
-         x >>= 1;
+         var _loc7_:String = (param1 & 1) > 0 ? "1" : "0";
+         param1 >>= 1;
          _loc5_ = 1;
          while(_loc5_ < _loc4_)
          {
             _loc6_ = _loc5_++;
-            _loc7_ = ((x & 1) > 0 ? "1" : "0") + ((_loc6_ & 7) == 0 ? byteDelimiter : "") + _loc7_;
-            x >>= 1;
+            _loc7_ = ((param1 & 1) > 0 ? "1" : "0") + ((_loc6_ & 7) == 0 ? param2 : "") + _loc7_;
+            param1 >>= 1;
          }
-         if(leadingZeros)
+         if(param3)
          {
             _loc5_ = 0;
             _loc6_ = 32 - _loc4_;
@@ -43,23 +43,23 @@ package de.polygonal.core.fmt
          return _loc7_;
       }
       
-      public static function toHex(x:int) : String
+      public static function toHex(param1:int) : String
       {
          var _loc2_:String = "";
          var _loc3_:Array = NumberFormat._hexLUT;
-         while(x != 0)
+         while(param1 != 0)
          {
-            _loc2_ = _loc3_[x & 15] + _loc2_;
-            x >>>= 4;
+            _loc2_ = String(_loc3_[param1 & 15]) + _loc2_;
+            param1 >>>= 4;
          }
          return _loc2_;
       }
       
-      public static function toOct(x:int) : String
+      public static function toOct(param1:int) : String
       {
          var _loc4_:int = 0;
          var _loc2_:String = "";
-         var _loc3_:int = x;
+         var _loc3_:int = param1;
          while(_loc3_ > 0)
          {
             _loc4_ = _loc3_ & 7;
@@ -69,21 +69,21 @@ package de.polygonal.core.fmt
          return _loc2_;
       }
       
-      public static function toRadix(x:int, radix:int) : String
+      public static function toRadix(param1:int, param2:int) : String
       {
          var _loc5_:int = 0;
          var _loc3_:String = "";
-         var _loc4_:int = x;
+         var _loc4_:int = param1;
          while(_loc4_ > 0)
          {
-            _loc5_ = int(_loc4_ % radix);
+            _loc5_ = int(_loc4_ % param2);
             _loc3_ = _loc5_ + _loc3_;
-            _loc4_ /= radix;
+            _loc4_ /= param2;
          }
          return _loc3_;
       }
       
-      public static function toFixed(x:Number, decimalPlaces:int) : String
+      public static function toFixed(param1:Number, param2:int) : String
       {
          var _loc3_:int = 0;
          var _loc4_:int = 0;
@@ -91,12 +91,12 @@ package de.polygonal.core.fmt
          var _loc6_:int = 0;
          var _loc7_:int = 0;
          var _loc8_:* = null as String;
-         if(Math.isNaN(x))
+         if(Boolean(Math.isNaN(param1)))
          {
             return "NaN";
          }
          _loc4_ = 10;
-         _loc5_ = decimalPlaces;
+         _loc5_ = param2;
          _loc6_ = 1;
          _loc7_ = 0;
          while(true)
@@ -114,12 +114,12 @@ package de.polygonal.core.fmt
             _loc4_ *= _loc4_;
          }
          _loc3_ = _loc7_;
-         _loc8_ = Std.string(int(x * _loc3_) / _loc3_);
-         _loc4_ = int(_loc8_.indexOf("."));
+         _loc8_ = Std.string(int(param1 * _loc3_) / _loc3_);
+         _loc4_ = _loc8_.indexOf(".");
          if(_loc4_ != -1)
          {
             _loc5_ = _loc8_.substr(_loc4_ + 1).length;
-            while(_loc5_ < decimalPlaces)
+            while(_loc5_ < param2)
             {
                _loc6_ = _loc5_++;
                _loc8_ += "0";
@@ -129,7 +129,7 @@ package de.polygonal.core.fmt
          {
             _loc8_ += ".";
             _loc5_ = 0;
-            while(_loc5_ < decimalPlaces)
+            while(_loc5_ < param2)
             {
                _loc6_ = _loc5_++;
                _loc8_ += "0";
@@ -138,24 +138,24 @@ package de.polygonal.core.fmt
          return _loc8_;
       }
       
-      public static function toMMSS(x:int) : String
+      public static function toMMSS(param1:int) : String
       {
-         var _loc2_:int = int(x % 1000);
-         var _loc3_:Number = (x - _loc2_) / 1000;
+         var _loc2_:int = int(param1 % 1000);
+         var _loc3_:Number = (param1 - _loc2_) / 1000;
          var _loc4_:Number = _loc3_ % 60;
          return ("0" + (_loc3_ - _loc4_) / 60).substr(-2) + ":" + ("0" + _loc4_).substr(-2);
       }
       
-      public static function groupDigits(x:int, thousandsSeparator:String = undefined) : String
+      public static function groupDigits(param1:int, param2:String = undefined) : String
       {
          var _loc6_:* = null as String;
          var _loc7_:int = 0;
          var _loc8_:int = 0;
-         if(thousandsSeparator == null)
+         if(param2 == null)
          {
-            thousandsSeparator = ".";
+            param2 = ".";
          }
-         var _loc3_:Number = x;
+         var _loc3_:Number = param1;
          var _loc4_:int = 0;
          while(_loc3_ > 1)
          {
@@ -163,7 +163,7 @@ package de.polygonal.core.fmt
             _loc4_++;
          }
          _loc4_ /= 3;
-         var _loc5_:String = Std.string(x);
+         var _loc5_:String = Std.string(param1);
          if(_loc4_ == 0)
          {
             return _loc5_;
@@ -175,7 +175,7 @@ package de.polygonal.core.fmt
          {
             if(_loc7_ == 3)
             {
-               _loc6_ = _loc5_.charAt(_loc8_--) + thousandsSeparator + _loc6_;
+               _loc6_ = _loc5_.charAt(_loc8_--) + param2 + _loc6_;
                _loc7_ = 0;
                _loc4_--;
             }
@@ -188,37 +188,37 @@ package de.polygonal.core.fmt
          return _loc6_;
       }
       
-      public static function centToEuro(x:int, decimalSeparator:String = undefined, thousandsSeparator:String = undefined) : String
+      public static function centToEuro(param1:int, param2:String = undefined, param3:String = undefined) : String
       {
          var _loc5_:* = null as String;
          var _loc6_:int = 0;
          var _loc7_:int = 0;
          var _loc8_:int = 0;
-         if(decimalSeparator == null)
+         if(param2 == null)
          {
-            decimalSeparator = ",";
+            param2 = ",";
          }
-         if(thousandsSeparator == null)
+         if(param3 == null)
          {
-            thousandsSeparator = ".";
+            param3 = ".";
          }
-         var _loc4_:int = int(x / 100);
+         var _loc4_:int = int(param1 / 100);
          if(_loc4_ == 0)
          {
-            if(x < 10)
+            if(param1 < 10)
             {
-               return "0" + decimalSeparator + "0" + x;
+               return "0" + param2 + "0" + param1;
             }
-            return "0" + decimalSeparator + x;
+            return "0" + param2 + param1;
          }
-         _loc6_ = x - _loc4_ * 100;
+         _loc6_ = param1 - _loc4_ * 100;
          if(_loc6_ < 10)
          {
-            _loc5_ = decimalSeparator + "0" + _loc6_;
+            _loc5_ = param2 + "0" + _loc6_;
          }
          else
          {
-            _loc5_ = decimalSeparator + _loc6_;
+            _loc5_ = param2 + _loc6_;
          }
          if(_loc4_ >= 1000)
          {
@@ -229,15 +229,15 @@ package de.polygonal.core.fmt
                _loc8_ = _loc4_ - _loc7_ * 1000;
                if(_loc8_ < 10)
                {
-                  _loc5_ = thousandsSeparator + "00" + _loc8_ + _loc5_;
+                  _loc5_ = param3 + "00" + _loc8_ + _loc5_;
                }
                else if(_loc8_ < 100)
                {
-                  _loc5_ = thousandsSeparator + "0" + _loc8_ + _loc5_;
+                  _loc5_ = param3 + "0" + _loc8_ + _loc5_;
                }
                else
                {
-                  _loc5_ = thousandsSeparator + _loc8_ + _loc5_;
+                  _loc5_ = param3 + _loc8_ + _loc5_;
                }
                _loc4_ = _loc7_;
             }

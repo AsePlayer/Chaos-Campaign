@@ -7,21 +7,21 @@ package com.smartfoxserver.v2.entities.managers
    {
        
       
-      function containsUserName(userName:String) : Boolean;
+      function containsUserName(param1:String) : Boolean;
       
-      function containsUserId(userId:int) : Boolean;
+      function containsUserId(param1:int) : Boolean;
       
-      function containsUser(user:User) : Boolean;
+      function containsUser(param1:User) : Boolean;
       
-      function getUserByName(userName:String) : User;
+      function getUserByName(param1:String) : User;
       
-      function getUserById(userId:int) : User;
+      function getUserById(param1:int) : User;
       
-      function addUser(user:User) : void;
+      function addUser(param1:User) : void;
       
-      function removeUser(user:User) : void;
+      function removeUser(param1:User) : void;
       
-      function removeUserById(id:int) : void;
+      function removeUserById(param1:int) : void;
       
       function get userCount() : int;
       

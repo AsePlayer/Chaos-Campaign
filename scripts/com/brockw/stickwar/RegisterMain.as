@@ -2,15 +2,18 @@ package com.brockw.stickwar
 {
    import com.brockw.game.ScreenManager;
    import com.brockw.game.XMLLoader;
-   import com.brockw.stickwar.engine.multiplayer.SignUpScreen;
+   import com.brockw.stickwar.campaign.*;
+   import com.brockw.stickwar.engine.multiplayer.*;
+   import com.brockw.stickwar.engine.replay.*;
+   import com.brockw.stickwar.market.*;
+   import com.brockw.stickwar.singleplayer.*;
    import com.smartfoxserver.v2.SmartFox;
    import com.smartfoxserver.v2.core.SFSEvent;
    import com.smartfoxserver.v2.entities.Room;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.LoginRequest;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
-   import flash.events.TimerEvent;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
+   import flash.display.*;
+   import flash.events.*;
    import flash.net.URLRequest;
    import flash.net.navigateToURL;
    import flash.utils.Timer;
@@ -60,7 +63,7 @@ package com.brockw.stickwar
       
       private function onConnection(evt:SFSEvent) : void
       {
-         if(evt.params.success)
+         if(Boolean(evt.params.success))
          {
             trace("Connection Success!");
             this.connectRetryTimer.stop();

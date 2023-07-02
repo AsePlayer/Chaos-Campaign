@@ -42,7 +42,7 @@ package com.brockw.stickwar.market
       
       public var displayName:String;
       
-      private var card:ArmoryUnitCard;
+      private var card:com.brockw.stickwar.market.ArmoryUnitCard;
       
       public function MarketItem(s:SFSObject)
       {
@@ -68,7 +68,7 @@ package com.brockw.stickwar.market
          this.card.main.armourScreen.openEditCard(this);
       }
       
-      public function setCard(card:ArmoryUnitCard) : void
+      public function setCard(card:com.brockw.stickwar.market.ArmoryUnitCard) : void
       {
          this.card = card;
       }

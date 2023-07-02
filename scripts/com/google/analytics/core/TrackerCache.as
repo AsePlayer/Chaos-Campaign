@@ -38,7 +38,7 @@ package com.google.analytics.core
          }
          if(size() > 0)
          {
-            for(l = _ar.length; i < l; )
+            for(l = int(_ar.length); i < l; )
             {
                o = _ar.shift();
                name = o.name as String;

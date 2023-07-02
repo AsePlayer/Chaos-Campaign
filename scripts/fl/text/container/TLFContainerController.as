@@ -19,8 +19,6 @@ package fl.text.container
    import flashx.textLayout.formats.BlockProgression;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class TLFContainerController extends ContainerController
    {
@@ -96,10 +94,10 @@ package fl.text.container
                      this._transparentBGButton.hitTestState = new Shape();
                      s.addChildAt(this._transparentBGButton,0);
                   }
-                  bgwidth = !!measureWidth ? Number(contentWidth) : Number(compositionWidth);
-                  bgheight = !!measureHeight ? Number(contentHeight) : Number(compositionHeight);
-                  adjustHorizontalScroll = effectiveBlockProgression == BlockProgression.RL && horizontalScrollPolicy != ScrollPolicy.OFF;
-                  bgx = !!adjustHorizontalScroll ? Number(horizontalScrollPosition - bgwidth) : Number(horizontalScrollPosition);
+                  bgwidth = !!tlf_internal::measureWidth ? Number(tlf_internal::contentWidth) : compositionWidth;
+                  bgheight = !!tlf_internal::measureHeight ? Number(tlf_internal::contentHeight) : compositionHeight;
+                  adjustHorizontalScroll = tlf_internal::effectiveBlockProgression == BlockProgression.RL && horizontalScrollPolicy != ScrollPolicy.OFF;
+                  bgx = adjustHorizontalScroll ? horizontalScrollPosition - bgwidth : horizontalScrollPosition;
                   bgy = verticalScrollPosition;
                   if(bgx != this._transparentBGButtonX || bgy != this._transparentBGButtonY || bgwidth != this._transparentBGButtonWidth || bgheight != this._transparentBGButtonHeight)
                   {
@@ -128,7 +126,7 @@ package fl.text.container
       
       override public function softKeyboardActivatingHandler(event:Event) : void
       {
-         if(Configuration.playerEnablesSpicyFeatures)
+         if(Configuration.tlf_internal::playerEnablesSpicyFeatures)
          {
             container.softKeyboardInputAreaOfInterest = this._owner.getBounds(this._owner.stage);
          }
@@ -185,10 +183,10 @@ package fl.text.container
             r = sdo.getBounds(inlineGraphicElement);
             if(this.has3D(sdo))
             {
-               if(ilg.elementWidth != r.width || ilg.elementHeight != r.height)
+               if(ilg.tlf_internal::elementWidth != r.width || ilg.tlf_internal::elementHeight != r.height)
                {
-                  ilg.elementWidth = Math.max(1,r.width);
-                  ilg.elementHeight = Math.max(1,r.height);
+                  ilg.tlf_internal::elementWidth = Math.max(1,r.width);
+                  ilg.tlf_internal::elementHeight = Math.max(1,r.height);
                }
             }
             sdo.x -= r.x;

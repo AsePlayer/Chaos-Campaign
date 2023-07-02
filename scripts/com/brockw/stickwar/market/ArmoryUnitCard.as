@@ -1,31 +1,12 @@
 package com.brockw.stickwar.market
 {
    import com.brockw.stickwar.Main;
-   import com.brockw.stickwar.engine.units.Archer;
-   import com.brockw.stickwar.engine.units.Bomber;
-   import com.brockw.stickwar.engine.units.Cat;
-   import com.brockw.stickwar.engine.units.Dead;
-   import com.brockw.stickwar.engine.units.EnslavedGiant;
-   import com.brockw.stickwar.engine.units.FlyingCrossbowman;
-   import com.brockw.stickwar.engine.units.Giant;
-   import com.brockw.stickwar.engine.units.Knight;
-   import com.brockw.stickwar.engine.units.Magikill;
-   import com.brockw.stickwar.engine.units.Medusa;
-   import com.brockw.stickwar.engine.units.Miner;
-   import com.brockw.stickwar.engine.units.MinerChaos;
-   import com.brockw.stickwar.engine.units.Monk;
-   import com.brockw.stickwar.engine.units.Ninja;
-   import com.brockw.stickwar.engine.units.Skelator;
-   import com.brockw.stickwar.engine.units.Spearton;
-   import com.brockw.stickwar.engine.units.Swordwrath;
-   import com.brockw.stickwar.engine.units.Unit;
-   import com.brockw.stickwar.engine.units.Wingidon;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
+   import com.brockw.stickwar.engine.units.*;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
    import flash.display.FrameLabel;
    import flash.display.MovieClip;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
+   import flash.events.*;
    import flash.utils.Dictionary;
    
    public class ArmoryUnitCard extends armoryCardMc
@@ -293,87 +274,87 @@ package com.brockw.stickwar.market
       
       private function changeItemList() : void
       {
-         var _loc1_:MarketItem = null;
-         var _loc2_:Array = null;
-         var _loc4_:MovieClip = null;
-         var _loc5_:FrameLabel = null;
-         var _loc6_:SFSObject = null;
+         var m:MarketItem = null;
+         var labels:Array = null;
+         var mc:MovieClip = null;
+         var label:FrameLabel = null;
+         var s:SFSObject = null;
          this.viewingIndex = 0;
          this.lastSentCount = 1000;
-         for each(_loc1_ in this.currentItems)
+         for each(m in this.currentItems)
          {
-            if(this.displayContainer.contains(_loc1_))
+            if(this.displayContainer.contains(m))
             {
-               displayContainer.removeChild(_loc1_);
+               displayContainer.removeChild(m);
             }
          }
          this.currentItems = [];
-         _loc2_ = [];
+         labels = [];
          if(this.currentItemType != MarketItem.T_MISC || !this.dontShowMisc())
          {
-            for each(_loc1_ in this.main.itemMap.getItems(this.unitType,this.currentItemType))
+            for each(m in this.main.itemMap.getItems(this.unitType,this.currentItemType))
             {
-               this.currentItems.push(_loc1_);
-               _loc2_.push(_loc1_.name);
-               _loc1_.setCard(this);
+               this.currentItems.push(m);
+               labels.push(m.name);
+               m.setCard(this);
             }
          }
-         var _loc3_:Array = [];
+         var miscLabels:Array = [];
          if(this.includeMisc())
          {
-            for each(_loc1_ in this.main.itemMap.getItems(this.unitType,MarketItem.T_MISC))
+            for each(m in this.main.itemMap.getItems(this.unitType,MarketItem.T_MISC))
             {
-               this.currentItems.push(_loc1_);
-               _loc3_.push(_loc1_.name);
-               _loc1_.setCard(this);
+               this.currentItems.push(m);
+               miscLabels.push(m.name);
+               m.setCard(this);
             }
          }
          this.currentItems.sort(this.sortOnCost);
          if(this.currentItemType != MarketItem.T_MISC || !this.dontShowMisc())
          {
-            _loc4_ = ItemMap.getWeaponMcFromId(this._currentItemType,this.unitType);
-            if(_loc4_ != null && this.main.sfs.mySelf.getVariable("isAdmin").getIntValue() == 1 && this.main.armourScreen.isEditMode)
+            mc = ItemMap.getWeaponMcFromId(this._currentItemType,this.unitType);
+            if(mc != null && this.main.sfs.mySelf.getVariable("isAdmin").getIntValue() == 1 && this.main.armourScreen.isEditMode)
             {
-               for each(_loc5_ in _loc4_.currentLabels)
+               for each(label in mc.currentLabels)
                {
-                  if(_loc2_.indexOf(_loc5_.name) == -1)
+                  if(labels.indexOf(label.name) == -1)
                   {
-                     _loc6_ = new SFSObject();
-                     _loc6_.putInt("id",-1);
-                     _loc6_.putUtfString("unit",ItemMap.unitTypeToName(this.unitType));
-                     _loc6_.putUtfString("name",_loc5_.name);
-                     _loc6_.putInt("type",this.currentItemType);
-                     _loc6_.putUtfString("description","");
-                     _loc6_.putUtfString("displayName",_loc5_.name);
-                     _loc6_.putInt("price",-1);
-                     trace(ItemMap.unitTypeToName(this.unitType),_loc5_.name);
-                     _loc1_ = new MarketItem(_loc6_);
-                     this.currentItems.unshift(_loc1_);
-                     _loc1_.setCard(this);
+                     s = new SFSObject();
+                     s.putInt("id",-1);
+                     s.putUtfString("unit",ItemMap.unitTypeToName(this.unitType));
+                     s.putUtfString("name",label.name);
+                     s.putInt("type",this.currentItemType);
+                     s.putUtfString("description","");
+                     s.putUtfString("displayName",label.name);
+                     s.putInt("price",-1);
+                     trace(ItemMap.unitTypeToName(this.unitType),label.name);
+                     m = new MarketItem(s);
+                     this.currentItems.unshift(m);
+                     m.setCard(this);
                   }
                }
             }
          }
          if(this.includeMisc())
          {
-            _loc4_ = ItemMap.getWeaponMcFromId(MarketItem.T_MISC,this.unitType);
-            if(_loc4_ != null && this.main.sfs.mySelf.getVariable("isAdmin").getIntValue() == 1 && this.main.armourScreen.isEditMode)
+            mc = ItemMap.getWeaponMcFromId(MarketItem.T_MISC,this.unitType);
+            if(mc != null && this.main.sfs.mySelf.getVariable("isAdmin").getIntValue() == 1 && this.main.armourScreen.isEditMode)
             {
-               for each(_loc5_ in _loc4_.currentLabels)
+               for each(label in mc.currentLabels)
                {
-                  if(_loc3_.indexOf(_loc5_.name) == -1)
+                  if(miscLabels.indexOf(label.name) == -1)
                   {
-                     _loc6_ = new SFSObject();
-                     _loc6_.putInt("id",-1);
-                     _loc6_.putUtfString("unit",ItemMap.unitTypeToName(this.unitType));
-                     _loc6_.putUtfString("name",_loc5_.name);
-                     _loc6_.putInt("type",MarketItem.T_MISC);
-                     _loc6_.putUtfString("description","");
-                     _loc6_.putUtfString("displayName",_loc5_.name);
-                     _loc6_.putInt("price",-1);
-                     _loc1_ = new MarketItem(_loc6_);
-                     this.currentItems.unshift(_loc1_);
-                     _loc1_.setCard(this);
+                     s = new SFSObject();
+                     s.putInt("id",-1);
+                     s.putUtfString("unit",ItemMap.unitTypeToName(this.unitType));
+                     s.putUtfString("name",label.name);
+                     s.putInt("type",MarketItem.T_MISC);
+                     s.putUtfString("description","");
+                     s.putUtfString("displayName",label.name);
+                     s.putInt("price",-1);
+                     m = new MarketItem(s);
+                     this.currentItems.unshift(m);
+                     m.setCard(this);
                   }
                }
             }

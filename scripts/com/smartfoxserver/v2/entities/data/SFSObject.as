@@ -47,7 +47,7 @@ package com.smartfoxserver.v2.entities.data
       
       public function containsKey(key:String) : Boolean
       {
-         var j:* = null;
+         var j:String = null;
          var found:Boolean = false;
          for(j in this.dataHolder)
          {
@@ -67,7 +67,7 @@ package com.smartfoxserver.v2.entities.data
       
       public function getKeys() : Array
       {
-         var j:* = null;
+         var j:String = null;
          var keyList:Array = [];
          for(j in this.dataHolder)
          {
@@ -78,7 +78,7 @@ package com.smartfoxserver.v2.entities.data
       
       public function size() : int
       {
-         var j:* = null;
+         var j:String = null;
          var count:int = 0;
          for(j in this.dataHolder)
          {
@@ -119,7 +119,7 @@ package com.smartfoxserver.v2.entities.data
       {
          var wrapper:SFSDataWrapper = null;
          var type:int = 0;
-         var key:* = null;
+         var key:String = null;
          var strDump:String = DefaultObjectDumpFormatter.TOKEN_INDENT_OPEN;
          for(key in this.dataHolder)
          {

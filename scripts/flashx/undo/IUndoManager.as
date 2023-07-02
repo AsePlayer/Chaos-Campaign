@@ -8,7 +8,7 @@ package flashx.undo
       
       function get undoAndRedoItemLimit() : int;
       
-      function set undoAndRedoItemLimit(value:int) : void;
+      function set undoAndRedoItemLimit(param1:int) : void;
       
       function canUndo() : Boolean;
       
@@ -16,7 +16,7 @@ package flashx.undo
       
       function popUndo() : IOperation;
       
-      function pushUndo(operation:IOperation) : void;
+      function pushUndo(param1:IOperation) : void;
       
       function clearRedo() : void;
       
@@ -26,7 +26,7 @@ package flashx.undo
       
       function popRedo() : IOperation;
       
-      function pushRedo(operation:IOperation) : void;
+      function pushRedo(param1:IOperation) : void;
       
       function undo() : void;
       

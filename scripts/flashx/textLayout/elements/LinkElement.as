@@ -3,15 +3,12 @@ package flashx.textLayout.elements
    import flash.events.Event;
    import flash.events.IEventDispatcher;
    import flash.events.MouseEvent;
-   import flash.net.URLRequest;
-   import flash.net.navigateToURL;
+   import flash.net.*;
    import flashx.textLayout.events.FlowElementMouseEventManager;
    import flashx.textLayout.events.ModelChange;
    import flashx.textLayout.formats.ITextLayoutFormat;
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
-   
-   use namespace tlf_internal;
    
    [Event(name="click",type="flashx.textLayout.events.FlowElementMouseEvent")]
    [Event(name="rollOut",type="flashx.textLayout.events.FlowElementMouseEvent")]
@@ -48,42 +45,42 @@ package flashx.textLayout.elements
       
       public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false) : void
       {
-         getEventMirror().addEventListener(type,listener,useCapture,priority,useWeakReference);
+         tlf_internal::getEventMirror().addEventListener(type,listener,useCapture,priority,useWeakReference);
       }
       
       public function dispatchEvent(evt:Event) : Boolean
       {
-         if(!hasActiveEventMirror())
+         if(!tlf_internal::hasActiveEventMirror())
          {
             return false;
          }
-         return _eventMirror.dispatchEvent(evt);
+         return tlf_internal::_eventMirror.dispatchEvent(evt);
       }
       
       public function hasEventListener(type:String) : Boolean
       {
-         if(!hasActiveEventMirror())
+         if(!tlf_internal::hasActiveEventMirror())
          {
             return false;
          }
-         return _eventMirror.hasEventListener(type);
+         return tlf_internal::_eventMirror.hasEventListener(type);
       }
       
       public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false) : void
       {
-         if(hasActiveEventMirror())
+         if(tlf_internal::hasActiveEventMirror())
          {
-            _eventMirror.removeEventListener(type,listener,useCapture);
+            tlf_internal::_eventMirror.removeEventListener(type,listener,useCapture);
          }
       }
       
       public function willTrigger(type:String) : Boolean
       {
-         if(!hasActiveEventMirror())
+         if(!tlf_internal::hasActiveEventMirror())
          {
             return false;
          }
-         return _eventMirror.willTrigger(type);
+         return tlf_internal::_eventMirror.willTrigger(type);
       }
       
       override protected function get abstract() : Boolean
@@ -104,7 +101,7 @@ package flashx.textLayout.elements
       public function set href(newUriString:String) : void
       {
          this._uriString = newUriString;
-         modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
+         tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
       }
       
       public function get target() : String
@@ -115,7 +112,7 @@ package flashx.textLayout.elements
       public function set target(newTargetString:String) : void
       {
          this._targetString = newTargetString;
-         modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
+         tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
       }
       
       public function get linkState() : String
@@ -139,7 +136,7 @@ package flashx.textLayout.elements
       {
          var myidx:int = 0;
          var sib:LinkElement = null;
-         if(parent && !bindableElement)
+         if(Boolean(parent) && !tlf_internal::bindableElement)
          {
             myidx = parent.getChildIndex(this);
             if(textLength == 0)
@@ -147,12 +144,12 @@ package flashx.textLayout.elements
                parent.replaceChildren(myidx,myidx + 1,null);
                return true;
             }
-            if(myidx != 0 && !hasActiveEventMirror())
+            if(myidx != 0 && !tlf_internal::hasActiveEventMirror())
             {
                sib = parent.getChildAt(myidx - 1) as LinkElement;
-               if(sib != null && !sib.hasActiveEventMirror())
+               if(sib != null && !sib.tlf_internal::hasActiveEventMirror())
                {
-                  if(this.href == sib.href && this.target == sib.target && equalStylesForMerge(sib))
+                  if(this.href == sib.href && this.target == sib.target && Boolean(tlf_internal::equalStylesForMerge(sib)))
                   {
                      parent.removeChildAt(myidx);
                      if(numChildren > 0)
@@ -170,11 +167,11 @@ package flashx.textLayout.elements
       private function computeLinkFormat(formatName:String) : ITextLayoutFormat
       {
          var tf:TextFlow = null;
-         var linkStyle:ITextLayoutFormat = getUserStyleWorker(formatName) as ITextLayoutFormat;
+         var linkStyle:ITextLayoutFormat = tlf_internal::getUserStyleWorker(formatName) as ITextLayoutFormat;
          if(linkStyle == null)
          {
             tf = getTextFlow();
-            if(tf)
+            if(Boolean(tf))
             {
                linkStyle = tf.configuration["defaultL" + formatName.substr(1)];
             }
@@ -185,40 +182,40 @@ package flashx.textLayout.elements
       tlf_internal function get effectiveLinkElementTextLayoutFormat() : ITextLayoutFormat
       {
          var cf:ITextLayoutFormat = null;
-         if(this._linkState == LinkState.SUPPRESSED)
+         if(this._linkState == LinkState.tlf_internal::SUPPRESSED)
          {
             return null;
          }
          if(this._linkState == LinkState.ACTIVE)
          {
-            cf = this.computeLinkFormat(LINK_ACTIVE_FORMAT_NAME);
-            if(cf)
+            cf = this.computeLinkFormat(tlf_internal::LINK_ACTIVE_FORMAT_NAME);
+            if(Boolean(cf))
             {
                return cf;
             }
          }
          else if(this._linkState == LinkState.HOVER)
          {
-            cf = this.computeLinkFormat(LINK_HOVER_FORMAT_NAME);
-            if(cf)
+            cf = this.computeLinkFormat(tlf_internal::LINK_HOVER_FORMAT_NAME);
+            if(Boolean(cf))
             {
                return cf;
             }
          }
-         return this.computeLinkFormat(LINK_NORMAL_FORMAT_NAME);
+         return this.computeLinkFormat(tlf_internal::LINK_NORMAL_FORMAT_NAME);
       }
       
       override tlf_internal function get formatForCascade() : ITextLayoutFormat
       {
          var resultingTextLayoutFormat:TextLayoutFormat = null;
          var superFormat:TextLayoutFormat = TextLayoutFormat(format);
-         var effectiveFormat:ITextLayoutFormat = this.effectiveLinkElementTextLayoutFormat;
-         if(effectiveFormat || superFormat)
+         var effectiveFormat:ITextLayoutFormat = this.tlf_internal::effectiveLinkElementTextLayoutFormat;
+         if(Boolean(effectiveFormat) || Boolean(superFormat))
          {
-            if(effectiveFormat && superFormat)
+            if(Boolean(effectiveFormat) && Boolean(superFormat))
             {
                resultingTextLayoutFormat = new TextLayoutFormat(effectiveFormat);
-               if(superFormat)
+               if(Boolean(superFormat))
                {
                   resultingTextLayoutFormat.concatInheritOnly(superFormat);
                }
@@ -236,14 +233,14 @@ package flashx.textLayout.elements
          var tf:TextFlow = null;
          if(this._linkState != linkState)
          {
-            oldCharAttrs = this.effectiveLinkElementTextLayoutFormat;
+            oldCharAttrs = this.tlf_internal::effectiveLinkElementTextLayoutFormat;
             this._linkState = linkState;
-            newCharAttrs = this.effectiveLinkElementTextLayoutFormat;
+            newCharAttrs = this.tlf_internal::effectiveLinkElementTextLayoutFormat;
             if(!TextLayoutFormat.isEqual(oldCharAttrs,newCharAttrs))
             {
-               formatChanged(true);
+               tlf_internal::formatChanged(true);
                tf = getTextFlow();
-               if(tf && tf.flowComposer)
+               if(Boolean(tf) && Boolean(tf.flowComposer))
                {
                   tf.flowComposer.updateAllControllers();
                }
@@ -256,38 +253,38 @@ package flashx.textLayout.elements
          if(this._linkState != linkState)
          {
             this._linkState = linkState;
-            formatChanged(false);
+            tlf_internal::formatChanged(false);
          }
       }
       
       tlf_internal function mouseDownHandler(mgr:FlowElementMouseEventManager, evt:MouseEvent) : void
       {
-         mgr.setHandCursor(true);
+         mgr.tlf_internal::setHandCursor(true);
          this.setToState(LinkState.ACTIVE);
          evt.stopImmediatePropagation();
       }
       
       tlf_internal function mouseMoveHandler(mgr:FlowElementMouseEventManager, evt:MouseEvent) : void
       {
-         mgr.setHandCursor(true);
-         this.setToState(!!evt.buttonDown ? LinkState.ACTIVE : LinkState.HOVER);
+         mgr.tlf_internal::setHandCursor(true);
+         this.setToState(evt.buttonDown ? LinkState.ACTIVE : LinkState.HOVER);
       }
       
       tlf_internal function mouseOutHandler(mgr:FlowElementMouseEventManager, evt:MouseEvent) : void
       {
-         mgr.setHandCursor(false);
+         mgr.tlf_internal::setHandCursor(false);
          this.setToState(LinkState.LINK);
       }
       
       tlf_internal function mouseOverHandler(mgr:FlowElementMouseEventManager, evt:MouseEvent) : void
       {
-         mgr.setHandCursor(true);
-         this.setToState(!!evt.buttonDown ? LinkState.ACTIVE : LinkState.HOVER);
+         mgr.tlf_internal::setHandCursor(true);
+         this.setToState(evt.buttonDown ? LinkState.ACTIVE : LinkState.HOVER);
       }
       
       tlf_internal function mouseUpHandler(mgr:FlowElementMouseEventManager, evt:MouseEvent) : void
       {
-         mgr.setHandCursor(true);
+         mgr.tlf_internal::setHandCursor(true);
          this.setToState(LinkState.HOVER);
          evt.stopImmediatePropagation();
       }
@@ -299,7 +296,7 @@ package flashx.textLayout.elements
          {
             if(this._uriString.length > 6 && this._uriString.substr(0,6) == "event:")
             {
-               mgr.dispatchFlowElementMouseEvent(this._uriString.substring(6,this._uriString.length),evt);
+               mgr.tlf_internal::dispatchFlowElementMouseEvent(this._uriString.substring(6,this._uriString.length),evt);
             }
             else
             {
@@ -324,13 +321,13 @@ package flashx.textLayout.elements
       {
          if(changeType == ModelChange.ELEMENT_ADDED)
          {
-            tf.incInteractiveObjectCount();
+            tf.tlf_internal::incInteractiveObjectCount();
          }
          else if(changeType == ModelChange.ELEMENT_REMOVAL)
          {
-            tf.decInteractiveObjectCount();
+            tf.tlf_internal::decInteractiveObjectCount();
          }
-         super.appendElementsForDelayedUpdate(tf,changeType);
+         super.tlf_internal::appendElementsForDelayedUpdate(tf,changeType);
       }
       
       override tlf_internal function updateForMustUseComposer(textFlow:TextFlow) : Boolean

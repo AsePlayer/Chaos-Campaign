@@ -7,12 +7,12 @@ package com.brockw.stickwar.engine.multiplayer
    {
        
       
-      public var signUpForm:SignUpForm;
+      public var signUpForm:com.brockw.stickwar.engine.multiplayer.SignUpForm;
       
       public function SignUpScreen(main:RegisterMain)
       {
          super();
-         addChild(this.signUpForm = new SignUpForm(main));
+         addChild(this.signUpForm = new com.brockw.stickwar.engine.multiplayer.SignUpForm(main));
       }
       
       override public function enter() : void

@@ -16,9 +16,7 @@ package flashx.textLayout.formats
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
-   public class TextLayoutFormat implements ITextLayoutFormat
+   public class TextLayoutFormat implements flashx.textLayout.formats.ITextLayoutFormat
    {
       
       public static const colorProperty:Property = Property.NewUintProperty("color",0,true,Vector.<String>([Category.CHARACTER]));
@@ -210,18 +208,18 @@ package flashx.textLayout.formats
          "listMarkerFormat":listMarkerFormatProperty
       };
       
-      private static var _emptyTextLayoutFormat:ITextLayoutFormat;
+      private static var _emptyTextLayoutFormat:flashx.textLayout.formats.ITextLayoutFormat;
       
       private static const _emptyStyles:Object = new Object();
       
-      private static var _defaults:TextLayoutFormat;
+      private static var _defaults:flashx.textLayout.formats.TextLayoutFormat;
        
       
       private var _styles:Object;
       
       private var _sharedStyles:Boolean;
       
-      public function TextLayoutFormat(initialValues:ITextLayoutFormat = null)
+      public function TextLayoutFormat(initialValues:flashx.textLayout.formats.ITextLayoutFormat = null)
       {
          super();
          this.copy(initialValues);
@@ -232,37 +230,37 @@ package flashx.textLayout.formats
          return _description;
       }
       
-      tlf_internal static function get emptyTextLayoutFormat() : ITextLayoutFormat
+      tlf_internal static function get emptyTextLayoutFormat() : flashx.textLayout.formats.ITextLayoutFormat
       {
          if(_emptyTextLayoutFormat == null)
          {
-            _emptyTextLayoutFormat = new TextLayoutFormat();
+            _emptyTextLayoutFormat = new flashx.textLayout.formats.TextLayoutFormat();
          }
          return _emptyTextLayoutFormat;
       }
       
-      public static function isEqual(p1:ITextLayoutFormat, p2:ITextLayoutFormat) : Boolean
+      public static function isEqual(p1:flashx.textLayout.formats.ITextLayoutFormat, p2:flashx.textLayout.formats.ITextLayoutFormat) : Boolean
       {
          var prop:Property = null;
          if(p1 == null)
          {
-            p1 = emptyTextLayoutFormat;
+            p1 = tlf_internal::emptyTextLayoutFormat;
          }
          if(p2 == null)
          {
-            p2 = emptyTextLayoutFormat;
+            p2 = tlf_internal::emptyTextLayoutFormat;
          }
          if(p1 == p2)
          {
             return true;
          }
-         var p1Holder:TextLayoutFormat = p1 as TextLayoutFormat;
-         var p2Holder:TextLayoutFormat = p2 as TextLayoutFormat;
-         if(p1Holder && p2Holder)
+         var p1Holder:flashx.textLayout.formats.TextLayoutFormat = p1 as TextLayoutFormat;
+         var p2Holder:flashx.textLayout.formats.TextLayoutFormat = p2 as TextLayoutFormat;
+         if(Boolean(p1Holder) && Boolean(p2Holder))
          {
-            return Property.equalStyles(p1Holder.getStyles(),p2Holder.getStyles(),TextLayoutFormat.description);
+            return Property.equalStyles(p1Holder.tlf_internal::getStyles(),p2Holder.tlf_internal::getStyles(),TextLayoutFormat.tlf_internal::description);
          }
-         for each(prop in TextLayoutFormat.description)
+         for each(prop in TextLayoutFormat.tlf_internal::description)
          {
             if(!prop.equalHelper(p1[prop.name],p2[prop.name]))
             {
@@ -272,11 +270,11 @@ package flashx.textLayout.formats
          return true;
       }
       
-      public static function get defaultFormat() : ITextLayoutFormat
+      public static function get defaultFormat() : flashx.textLayout.formats.ITextLayoutFormat
       {
          if(_defaults == null)
          {
-            _defaults = new TextLayoutFormat();
+            _defaults = new flashx.textLayout.formats.TextLayoutFormat();
             Property.defaultsAllHelper(_description,_defaults);
          }
          return _defaults;
@@ -338,12 +336,12 @@ package flashx.textLayout.formats
          }
       }
       
-      public static function createTextLayoutFormat(initialValues:Object) : TextLayoutFormat
+      public static function createTextLayoutFormat(initialValues:Object) : flashx.textLayout.formats.TextLayoutFormat
       {
-         var key:* = null;
-         var format:ITextLayoutFormat = initialValues as ITextLayoutFormat;
-         var rslt:TextLayoutFormat = new TextLayoutFormat(format);
-         if(format == null && initialValues)
+         var key:String = null;
+         var format:flashx.textLayout.formats.ITextLayoutFormat = initialValues as ITextLayoutFormat;
+         var rslt:flashx.textLayout.formats.TextLayoutFormat = new flashx.textLayout.formats.TextLayoutFormat(format);
+         if(format == null && Boolean(initialValues))
          {
             for(key in initialValues)
             {
@@ -384,12 +382,12 @@ package flashx.textLayout.formats
       
       public function get coreStyles() : Object
       {
-         return this._styles == _emptyStyles ? null : Property.shallowCopyInFilter(this._styles,description);
+         return this._styles == _emptyStyles ? null : Property.shallowCopyInFilter(this._styles,tlf_internal::description);
       }
       
       public function get userStyles() : Object
       {
-         return this._styles == _emptyStyles ? null : Property.shallowCopyNotInFilter(this._styles,description);
+         return this._styles == _emptyStyles ? null : Property.shallowCopyNotInFilter(this._styles,tlf_internal::description);
       }
       
       public function get styles() : Object
@@ -419,18 +417,18 @@ package flashx.textLayout.formats
       {
          var name:String = styleProp.name;
          newValue = styleProp.setHelper(this._styles[name],newValue);
-         this.setStyleByName(name,newValue);
+         this.tlf_internal::setStyleByName(name,newValue);
       }
       
       public function setStyle(styleProp:String, newValue:*) : void
       {
-         if(description.hasOwnProperty(styleProp))
+         if(tlf_internal::description.hasOwnProperty(styleProp))
          {
             this[styleProp] = newValue;
          }
          else
          {
-            this.setStyleByName(styleProp,newValue);
+            this.tlf_internal::setStyleByName(styleProp,newValue);
          }
       }
       
@@ -439,7 +437,7 @@ package flashx.textLayout.formats
          return this._styles[styleProp];
       }
       
-      public function copy(incoming:ITextLayoutFormat) : void
+      public function copy(incoming:flashx.textLayout.formats.ITextLayoutFormat) : void
       {
          var prop:Property = null;
          var val:* = undefined;
@@ -447,8 +445,8 @@ package flashx.textLayout.formats
          {
             return;
          }
-         var holder:TextLayoutFormat = incoming as TextLayoutFormat;
-         if(holder)
+         var holder:flashx.textLayout.formats.TextLayoutFormat = incoming as TextLayoutFormat;
+         if(Boolean(holder))
          {
             this._styles = holder._styles;
             this._sharedStyles = true;
@@ -457,9 +455,9 @@ package flashx.textLayout.formats
          }
          this._styles = _emptyStyles;
          this._sharedStyles = true;
-         if(incoming)
+         if(Boolean(incoming))
          {
-            for each(prop in TextLayoutFormat.description)
+            for each(prop in TextLayoutFormat.tlf_internal::description)
             {
                val = incoming[prop.name];
                if(val !== undefined)
@@ -470,73 +468,73 @@ package flashx.textLayout.formats
          }
       }
       
-      public function concat(incoming:ITextLayoutFormat) : void
+      public function concat(incoming:flashx.textLayout.formats.ITextLayoutFormat) : void
       {
          var prop:Property = null;
          var holderStyles:Object = null;
-         var key:* = null;
-         var holder:TextLayoutFormat = incoming as TextLayoutFormat;
-         if(holder)
+         var key:String = null;
+         var holder:flashx.textLayout.formats.TextLayoutFormat = incoming as TextLayoutFormat;
+         if(Boolean(holder))
          {
             holderStyles = holder._styles;
             for(key in holderStyles)
             {
-               prop = description[key];
-               if(prop)
+               prop = tlf_internal::description[key];
+               if(Boolean(prop))
                {
                   this.setStyleByProperty(prop,prop.concatHelper(this._styles[key],holderStyles[key]));
                }
                else
                {
-                  this.setStyleByName(key,Property.defaultConcatHelper(this._styles[key],holderStyles[key]));
+                  this.tlf_internal::setStyleByName(key,Property.defaultConcatHelper(this._styles[key],holderStyles[key]));
                }
             }
             return;
          }
-         for each(prop in TextLayoutFormat.description)
+         for each(prop in TextLayoutFormat.tlf_internal::description)
          {
             this.setStyleByProperty(prop,prop.concatHelper(this._styles[prop.name],incoming[prop.name]));
          }
       }
       
-      public function concatInheritOnly(incoming:ITextLayoutFormat) : void
+      public function concatInheritOnly(incoming:flashx.textLayout.formats.ITextLayoutFormat) : void
       {
          var prop:Property = null;
          var holderStyles:Object = null;
-         var key:* = null;
-         var holder:TextLayoutFormat = incoming as TextLayoutFormat;
-         if(holder)
+         var key:String = null;
+         var holder:flashx.textLayout.formats.TextLayoutFormat = incoming as TextLayoutFormat;
+         if(Boolean(holder))
          {
             holderStyles = holder._styles;
             for(key in holderStyles)
             {
-               prop = description[key];
-               if(prop)
+               prop = tlf_internal::description[key];
+               if(Boolean(prop))
                {
                   this.setStyleByProperty(prop,prop.concatInheritOnlyHelper(this._styles[key],holderStyles[key]));
                }
                else
                {
-                  this.setStyleByName(key,Property.defaultConcatHelper(this._styles[key],holderStyles[key]));
+                  this.tlf_internal::setStyleByName(key,Property.defaultConcatHelper(this._styles[key],holderStyles[key]));
                }
             }
             return;
          }
-         for each(prop in TextLayoutFormat.description)
+         for each(prop in TextLayoutFormat.tlf_internal::description)
          {
             this.setStyleByProperty(prop,prop.concatInheritOnlyHelper(this._styles[prop.name],incoming[prop.name]));
          }
       }
       
-      public function apply(incoming:ITextLayoutFormat) : void
+      public function apply(incoming:flashx.textLayout.formats.ITextLayoutFormat) : void
       {
          var val:* = undefined;
          var prop:Property = null;
          var holderStyles:Object = null;
-         var key:* = null;
+         var key:String = null;
          var name:String = null;
-         var holder:TextLayoutFormat = incoming as TextLayoutFormat;
-         if(holder)
+         var holder:flashx.textLayout.formats.TextLayoutFormat = incoming as TextLayoutFormat;
+         if(Boolean(holder))
          {
             holderStyles = holder._styles;
             for(key in holderStyles)
@@ -549,7 +547,7 @@ package flashx.textLayout.formats
             }
             return;
          }
-         for each(prop in TextLayoutFormat.description)
+         for each(prop in TextLayoutFormat.tlf_internal::description)
          {
             name = prop.name;
             val = incoming[name];
@@ -560,23 +558,23 @@ package flashx.textLayout.formats
          }
       }
       
-      public function removeMatching(incoming:ITextLayoutFormat) : void
+      public function removeMatching(incoming:flashx.textLayout.formats.ITextLayoutFormat) : void
       {
          var prop:Property = null;
          var holderStyles:Object = null;
-         var key:* = null;
+         var key:String = null;
          if(incoming == null)
          {
             return;
          }
-         var holder:TextLayoutFormat = incoming as TextLayoutFormat;
-         if(holder)
+         var holder:flashx.textLayout.formats.TextLayoutFormat = incoming as TextLayoutFormat;
+         if(Boolean(holder))
          {
             holderStyles = holder._styles;
             for(key in holderStyles)
             {
-               prop = description[key];
-               if(prop)
+               prop = tlf_internal::description[key];
+               if(Boolean(prop))
                {
                   if(prop.equalHelper(this._styles[key],holderStyles[key]))
                   {
@@ -590,7 +588,7 @@ package flashx.textLayout.formats
             }
             return;
          }
-         for each(prop in TextLayoutFormat.description)
+         for each(prop in TextLayoutFormat.tlf_internal::description)
          {
             if(prop.equalHelper(this._styles[prop.name],incoming[prop.name]))
             {
@@ -599,23 +597,23 @@ package flashx.textLayout.formats
          }
       }
       
-      public function removeClashing(incoming:ITextLayoutFormat) : void
+      public function removeClashing(incoming:flashx.textLayout.formats.ITextLayoutFormat) : void
       {
          var prop:Property = null;
          var holderStyles:Object = null;
-         var key:* = null;
+         var key:String = null;
          if(incoming == null)
          {
             return;
          }
-         var holder:TextLayoutFormat = incoming as TextLayoutFormat;
-         if(holder)
+         var holder:flashx.textLayout.formats.TextLayoutFormat = incoming as TextLayoutFormat;
+         if(Boolean(holder))
          {
             holderStyles = holder._styles;
             for(key in holderStyles)
             {
-               prop = description[key];
-               if(prop)
+               prop = tlf_internal::description[key];
+               if(Boolean(prop))
                {
                   if(!prop.equalHelper(this._styles[key],holderStyles[key]))
                   {
@@ -629,7 +627,7 @@ package flashx.textLayout.formats
             }
             return;
          }
-         for each(prop in TextLayoutFormat.description)
+         for each(prop in TextLayoutFormat.tlf_internal::description)
          {
             if(!prop.equalHelper(this._styles[prop.name],incoming[prop.name]))
             {

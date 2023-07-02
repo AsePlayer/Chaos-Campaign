@@ -1,47 +1,11 @@
 package com.brockw.stickwar.engine
 {
    import com.brockw.stickwar.GameScreen;
-   import com.brockw.stickwar.engine.Ai.command.ArcherFireCommand;
-   import com.brockw.stickwar.engine.Ai.command.AttackMoveCommand;
-   import com.brockw.stickwar.engine.Ai.command.BlockCommand;
-   import com.brockw.stickwar.engine.Ai.command.BomberDetonateCommand;
-   import com.brockw.stickwar.engine.Ai.command.CatFuryCommand;
-   import com.brockw.stickwar.engine.Ai.command.CatPackCommand;
-   import com.brockw.stickwar.engine.Ai.command.ChargeCommand;
-   import com.brockw.stickwar.engine.Ai.command.ConstructTowerCommand;
-   import com.brockw.stickwar.engine.Ai.command.ConstructWallCommand;
-   import com.brockw.stickwar.engine.Ai.command.CureCommand;
-   import com.brockw.stickwar.engine.Ai.command.DeadPoisonCommand;
-   import com.brockw.stickwar.engine.Ai.command.FistAttackCommand;
-   import com.brockw.stickwar.engine.Ai.command.GarrisonCommand;
-   import com.brockw.stickwar.engine.Ai.command.HealCommand;
-   import com.brockw.stickwar.engine.Ai.command.HoldCommand;
-   import com.brockw.stickwar.engine.Ai.command.MoveCommand;
-   import com.brockw.stickwar.engine.Ai.command.NinjaStackCommand;
-   import com.brockw.stickwar.engine.Ai.command.NukeCommand;
-   import com.brockw.stickwar.engine.Ai.command.PoisonDartCommand;
-   import com.brockw.stickwar.engine.Ai.command.PoisonPoolCommand;
-   import com.brockw.stickwar.engine.Ai.command.ReaperCommand;
-   import com.brockw.stickwar.engine.Ai.command.RemoveTowerCommand;
-   import com.brockw.stickwar.engine.Ai.command.RemoveWallCommand;
-   import com.brockw.stickwar.engine.Ai.command.SlowDartCommand;
-   import com.brockw.stickwar.engine.Ai.command.SpeartonShieldBashCommand;
-   import com.brockw.stickwar.engine.Ai.command.StandCommand;
-   import com.brockw.stickwar.engine.Ai.command.StealthCommand;
-   import com.brockw.stickwar.engine.Ai.command.StoneCommand;
-   import com.brockw.stickwar.engine.Ai.command.StunCommand;
-   import com.brockw.stickwar.engine.Ai.command.SwordwrathRageCommand;
-   import com.brockw.stickwar.engine.Ai.command.TechCommand;
-   import com.brockw.stickwar.engine.Ai.command.UnGarrisonCommand;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
-   import com.brockw.stickwar.engine.Ai.command.WingidonSpeedCommand;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.Team.Team;
    import com.brockw.stickwar.engine.Team.TechItem;
    import com.brockw.stickwar.engine.units.Unit;
-   import flash.display.Bitmap;
-   import flash.display.DisplayObject;
-   import flash.display.MovieClip;
-   import flash.display.Sprite;
+   import flash.display.*;
    import flash.ui.Mouse;
    import flash.utils.Dictionary;
    
@@ -73,7 +37,7 @@ package com.brockw.stickwar.engine
       
       private var _currentMove:UnitCommand;
       
-      private var _currentEntity:Entity;
+      private var _currentEntity:com.brockw.stickwar.engine.Entity;
       
       private var _currentCursor:MovieClip;
       
@@ -81,7 +45,7 @@ package com.brockw.stickwar.engine
       
       private var _clicked:Boolean;
       
-      private var _game:StickWar;
+      private var _game:com.brockw.stickwar.engine.StickWar;
       
       public function ActionInterface(game:UserInterface)
       {
@@ -99,7 +63,7 @@ package com.brockw.stickwar.engine
       public function refresh() : void
       {
          var c:Sprite = Sprite(this._game.cursorSprite);
-         if(this._currentMove)
+         if(Boolean(this._currentMove))
          {
             this._currentMove.cleanUpPreClick(c);
          }
@@ -222,31 +186,31 @@ package com.brockw.stickwar.engine
       
       public function update(gameScreen:GameScreen) : void
       {
-         var _loc2_:int = 0;
-         var _loc3_:MovieClip = null;
-         var _loc4_:Sprite = null;
-         var _loc5_:Number = NaN;
-         var _loc6_:int = 0;
-         var _loc7_:Number = NaN;
-         var _loc8_:int = 0;
-         var _loc9_:TechItem = null;
-         var _loc10_:UnitCommand = null;
-         var _loc11_:UnitCommand = null;
-         for(_loc2_ = 0; _loc2_ < gameScreen.game.postCursors.length; _loc2_++)
+         var i:int = 0;
+         var m:MovieClip = null;
+         var s:Sprite = null;
+         var min:Number = NaN;
+         var j:int = 0;
+         var v:Number = NaN;
+         var action:int = 0;
+         var t:TechItem = null;
+         var c:UnitCommand = null;
+         var candidate:UnitCommand = null;
+         for(i = 0; i < gameScreen.game.postCursors.length; i++)
          {
-            _loc3_ = gameScreen.game.postCursors[_loc2_];
-            if(_loc3_.currentFrame != _loc3_.totalFrames)
+            m = gameScreen.game.postCursors[i];
+            if(m.currentFrame != m.totalFrames)
             {
-               _loc3_.nextFrame();
+               m.nextFrame();
             }
             else
             {
-               _loc4_ = Sprite(gameScreen.game.cursorSprite);
-               if(_loc4_.contains(_loc3_))
+               s = Sprite(gameScreen.game.cursorSprite);
+               if(s.contains(m))
                {
-                  _loc4_.removeChild(_loc3_);
+                  s.removeChild(m);
                }
-               gameScreen.game.postCursors.splice(_loc2_,1);
+               gameScreen.game.postCursors.splice(i,1);
             }
          }
          if(gameScreen.userInterface.selectedUnits.hasChanged && this._currentMove != null)
@@ -255,54 +219,54 @@ package com.brockw.stickwar.engine
          }
          if(this.currentEntity != null)
          {
-            for(_loc2_ = 0; _loc2_ < this.currentActions.length; _loc2_++)
+            for(i = 0; i < this.currentActions.length; i++)
             {
-               if(this.currentActions[_loc2_] < 0)
+               if(this.currentActions[i] < 0)
                {
-                  if(this.team.tech.isResearching(this.currentActions[_loc2_]))
+                  if(this.team.tech.isResearching(this.currentActions[i]))
                   {
-                     this.drawCoolDown(this.actionsToButtonMap[this.currentActions[_loc2_]],this.team.tech.getResearchCooldown(this.currentActions[_loc2_]));
+                     this.drawCoolDown(this.actionsToButtonMap[this.currentActions[i]],this.team.tech.getResearchCooldown(this.currentActions[i]));
                   }
                   else
                   {
-                     this.drawCoolDown(this.actionsToButtonMap[this.currentActions[_loc2_]],0);
+                     this.drawCoolDown(this.actionsToButtonMap[this.currentActions[i]],0);
                   }
-                  if(!this.team.tech.getTechAllowed(this.currentActions[_loc2_]))
+                  if(!this.team.tech.getTechAllowed(this.currentActions[i]))
                   {
-                     MovieClip(this.actionsToButtonMap[this.currentActions[_loc2_]]).getChildByName("mc").alpha = 0.2;
+                     MovieClip(this.actionsToButtonMap[this.currentActions[i]]).getChildByName("mc").alpha = 0.2;
                   }
                   else
                   {
-                     MovieClip(this.actionsToButtonMap[this.currentActions[_loc2_]]).getChildByName("mc").alpha = 1;
+                     MovieClip(this.actionsToButtonMap[this.currentActions[i]]).getChildByName("mc").alpha = 1;
                   }
                }
                else
                {
-                  if(UnitCommand(this.actions[this.currentActions[_loc2_]]).hasCoolDown)
+                  if(UnitCommand(this.actions[this.currentActions[i]]).hasCoolDown)
                   {
                      if(gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type].length == 0)
                      {
                         continue;
                      }
-                     _loc5_ = UnitCommand(this.actions[this.currentActions[_loc2_]]).coolDownTime(gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type][0]);
-                     for(_loc6_ = 1; _loc6_ < gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type].length; _loc6_++)
+                     min = UnitCommand(this.actions[this.currentActions[i]]).coolDownTime(gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type][0]);
+                     for(j = 1; j < gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type].length; j++)
                      {
-                        _loc7_ = UnitCommand(this.actions[this.currentActions[_loc2_]]).coolDownTime(gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type][_loc6_]);
-                        if(_loc7_ < _loc5_)
+                        v = UnitCommand(this.actions[this.currentActions[i]]).coolDownTime(gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type][j]);
+                        if(v < min)
                         {
-                           _loc5_ = _loc7_;
+                           min = v;
                         }
                      }
-                     this.drawCoolDown(this.actionsToButtonMap[this.currentActions[_loc2_]],_loc5_);
+                     this.drawCoolDown(this.actionsToButtonMap[this.currentActions[i]],min);
                   }
-                  if(UnitCommand(this.actions[this.currentActions[_loc2_]]).isToggle)
+                  if(UnitCommand(this.actions[this.currentActions[i]]).isToggle)
                   {
-                     this.drawToggle(this.actionsToButtonMap[this.currentActions[_loc2_]],UnitCommand(this.actions[this.currentActions[_loc2_]]).isToggled(this.currentEntity));
+                     this.drawToggle(this.actionsToButtonMap[this.currentActions[i]],UnitCommand(this.actions[this.currentActions[i]]).isToggled(this.currentEntity));
                   }
-                  else if(!UnitCommand(this.actions[this.currentActions[_loc2_]]).hasCoolDown)
+                  else if(!UnitCommand(this.actions[this.currentActions[i]]).hasCoolDown)
                   {
-                     _loc4_ = Sprite(this.actionsToButtonMap[this.currentActions[_loc2_]].getChildByName("overlay"));
-                     _loc4_.graphics.clear();
+                     s = Sprite(this.actionsToButtonMap[this.currentActions[i]].getChildByName("overlay"));
+                     s.graphics.clear();
                   }
                }
             }
@@ -367,81 +331,81 @@ package com.brockw.stickwar.engine
          }
          if(this._currentMove == null || this._currentMove != null && !this.clicked || this._currentMove == UnitCommand(this.actions[UnitCommand.MOVE]) || this.clicked)
          {
-            for(_loc8_ = 0; _loc8_ < this.currentActions.length; _loc8_++)
+            for(action = 0; action < this.currentActions.length; action++)
             {
-               if(this.currentActions[_loc8_] < 0)
+               if(this.currentActions[action] < 0)
                {
-                  _loc9_ = this.team.tech.upgrades[this.currentActions[_loc8_]];
-                  if(MovieClip(this.actionsToButtonMap[this.currentActions[_loc8_]]).hitTestPoint(gameScreen.stage.mouseX,gameScreen.stage.mouseY,true))
+                  t = this.team.tech.upgrades[this.currentActions[action]];
+                  if(MovieClip(this.actionsToButtonMap[this.currentActions[action]]).hitTestPoint(gameScreen.stage.mouseX,gameScreen.stage.mouseY,true))
                   {
-                     gameScreen.game.team.updateButtonOver(gameScreen.game,_loc9_.name,_loc9_.tip,_loc9_.researchTime,_loc9_.cost,_loc9_.mana,0);
+                     gameScreen.game.team.updateButtonOver(gameScreen.game,t.name,t.tip,t.researchTime,t.cost,t.mana,0);
                   }
-                  if(gameScreen.userInterface.keyBoardState.isDownForAction(_loc9_.hotKey) || gameScreen.userInterface.mouseState.clicked && MovieClip(this.actionsToButtonMap[this.currentActions[_loc8_]]).hitTestPoint(gameScreen.stage.mouseX,gameScreen.stage.mouseY,false))
+                  if(gameScreen.userInterface.keyBoardState.isDownForAction(t.hotKey) || gameScreen.userInterface.mouseState.clicked && MovieClip(this.actionsToButtonMap[this.currentActions[action]]).hitTestPoint(gameScreen.stage.mouseX,gameScreen.stage.mouseY,false))
                   {
-                     MovieClip(this.actionsToButtonMap[this.currentActions[_loc8_]]).alpha = 0.2;
-                     _loc10_ = new TechCommand(gameScreen.game);
-                     _loc10_.goalX = this.currentActions[_loc8_];
-                     _loc10_.goalY = this.team.id;
-                     _loc10_.team = this.team;
-                     _loc10_.prepareNetworkedMove(gameScreen);
+                     MovieClip(this.actionsToButtonMap[this.currentActions[action]]).alpha = 0.2;
+                     c = new TechCommand(gameScreen.game);
+                     c.goalX = this.currentActions[action];
+                     c.goalY = this.team.id;
+                     c.team = this.team;
+                     c.prepareNetworkedMove(gameScreen);
                   }
                   else
                   {
-                     MovieClip(this.actionsToButtonMap[this.currentActions[_loc8_]]).alpha = 1;
+                     MovieClip(this.actionsToButtonMap[this.currentActions[action]]).alpha = 1;
                   }
                }
                else
                {
-                  if(MovieClip(this.actionsToButtonMap[this.currentActions[_loc8_]]).hitTestPoint(gameScreen.stage.mouseX,gameScreen.stage.mouseY,false))
+                  if(MovieClip(this.actionsToButtonMap[this.currentActions[action]]).hitTestPoint(gameScreen.stage.mouseX,gameScreen.stage.mouseY,false))
                   {
-                     gameScreen.game.team.updateButtonOverXML(gameScreen.game,UnitCommand(this.actions[this.currentActions[_loc8_]]).xmlInfo);
+                     gameScreen.game.team.updateButtonOverXML(gameScreen.game,UnitCommand(this.actions[this.currentActions[action]]).xmlInfo);
                   }
-                  if(UnitCommand(this.actions[this.currentActions[_loc8_]]).isActivatable)
+                  if(UnitCommand(this.actions[this.currentActions[action]]).isActivatable)
                   {
-                     _loc11_ = UnitCommand(this.actions[this.currentActions[_loc8_]]);
-                     if(gameScreen.userInterface.keyBoardState.isDownForAction(UnitCommand(this.actions[this.currentActions[_loc8_]]).hotKey) || gameScreen.userInterface.mouseState.clicked && MovieClip(this.actionsToButtonMap[this.currentActions[_loc8_]]).hitTestPoint(gameScreen.stage.mouseX,gameScreen.stage.mouseY,false))
+                     candidate = UnitCommand(this.actions[this.currentActions[action]]);
+                     if(gameScreen.userInterface.keyBoardState.isDownForAction(UnitCommand(this.actions[this.currentActions[action]]).hotKey) || gameScreen.userInterface.mouseState.clicked && MovieClip(this.actionsToButtonMap[this.currentActions[action]]).hitTestPoint(gameScreen.stage.mouseX,gameScreen.stage.mouseY,false))
                      {
                         gameScreen.userInterface.mouseState.clicked = false;
-                        _loc5_ = _loc11_.coolDownTime(gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type][0]);
-                        for(_loc6_ = 1; _loc6_ < gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type].length; _loc6_++)
+                        min = candidate.coolDownTime(gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type][0]);
+                        for(j = 1; j < gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type].length; j++)
                         {
-                           _loc7_ = _loc11_.coolDownTime(gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type][_loc6_]);
-                           if(_loc7_ < _loc5_)
+                           v = candidate.coolDownTime(gameScreen.userInterface.selectedUnits.unitTypes[this.currentEntity.type][j]);
+                           if(v < min)
                            {
-                              _loc5_ = _loc7_;
+                              min = v;
                            }
                         }
-                        if(_loc11_.getGoldRequired() > this.team.gold)
+                        if(candidate.getGoldRequired() > this.team.gold)
                         {
                            gameScreen.userInterface.helpMessage.showMessage("Not enough gold to cast ");
                         }
-                        else if(_loc11_.getManaRequired() > this.team.mana)
+                        else if(candidate.getManaRequired() > this.team.mana)
                         {
                            gameScreen.userInterface.helpMessage.showMessage("Not enough mana to cast ");
                         }
-                        else if(_loc5_ != 0)
+                        else if(min != 0)
                         {
                            gameScreen.userInterface.helpMessage.showMessage("Ability is on cooldown");
                         }
-                        else if(!UnitCommand(this.actions[this.currentActions[_loc8_]]).requiresMouseInput)
+                        else if(!UnitCommand(this.actions[this.currentActions[action]]).requiresMouseInput)
                         {
-                           UnitCommand(this.actions[this.currentActions[_loc8_]]).prepareNetworkedMove(gameScreen);
-                           if(this.actionsToButtonMap[this.currentActions[_loc8_]] != null)
+                           UnitCommand(this.actions[this.currentActions[action]]).prepareNetworkedMove(gameScreen);
+                           if(this.actionsToButtonMap[this.currentActions[action]] != null)
                            {
-                              MovieClip(this.actionsToButtonMap[this.currentActions[_loc8_]]).alpha = 0.2;
+                              MovieClip(this.actionsToButtonMap[this.currentActions[action]]).alpha = 0.2;
                            }
                         }
                         else
                         {
                            this.refresh();
-                           this._currentMove = UnitCommand(this.actions[this.currentActions[_loc8_]]);
+                           this._currentMove = UnitCommand(this.actions[this.currentActions[action]]);
                            Mouse.hide();
                            this.clicked = false;
                         }
                      }
                      else
                      {
-                        MovieClip(this.actionsToButtonMap[this.currentActions[_loc8_]]).alpha = 1;
+                        MovieClip(this.actionsToButtonMap[this.currentActions[action]]).alpha = 1;
                      }
                   }
                }
@@ -451,7 +415,7 @@ package com.brockw.stickwar.engine
          {
             if(this.clicked)
             {
-               if(this._currentMove)
+               if(Boolean(this._currentMove))
                {
                   this._currentMove.cleanUpPreClick(Sprite(gameScreen.game.cursorSprite));
                }
@@ -475,7 +439,7 @@ package com.brockw.stickwar.engine
       
       public function clear() : void
       {
-         var key:* = null;
+         var key:String = null;
          var x:int = 0;
          var s:Sprite = null;
          var c:DisplayObject = null;
@@ -500,7 +464,7 @@ package com.brockw.stickwar.engine
          this.currentActions.splice(0,this.currentActions.length);
       }
       
-      public function setEntity(entity:Entity) : void
+      public function setEntity(entity:com.brockw.stickwar.engine.Entity) : void
       {
          if(entity == null)
          {
@@ -516,19 +480,19 @@ package com.brockw.stickwar.engine
       
       public function setAction(x:int, y:int, type:int) : void
       {
-         var _loc6_:TechItem = null;
-         var _loc7_:Bitmap = null;
+         var t:TechItem = null;
+         var b:Bitmap = null;
          if(type < 0)
          {
             if(type in this.team.tech.upgrades)
             {
-               _loc6_ = this.team.tech.upgrades[type];
+               t = this.team.tech.upgrades[type];
                MovieClip(this.boxes[y * COLS + x]).visible = true;
-               _loc7_ = _loc6_.mc;
-               _loc7_.x = -_loc7_.width / 2;
-               _loc7_.y = -_loc7_.height / 2;
-               _loc7_.name = "mc";
-               MovieClip(this.boxes[y * COLS + x]).addChild(_loc7_);
+               b = t.mc;
+               b.x = -b.width / 2;
+               b.y = -b.height / 2;
+               b.name = "mc";
+               MovieClip(this.boxes[y * COLS + x]).addChild(b);
                this.actionsToButtonMap[type] = MovieClip(this.boxes[y * COLS + x]);
                this.currentActions.push(type);
             }
@@ -540,18 +504,18 @@ package com.brockw.stickwar.engine
          else
          {
             MovieClip(this.boxes[y * COLS + x]).visible = true;
-            _loc7_ = UnitCommand(this.actions[type]).buttonBitmap;
-            _loc7_.x = -_loc7_.width / 2;
-            _loc7_.y = -_loc7_.height / 2;
-            _loc7_.name = "mc";
-            MovieClip(this.boxes[y * COLS + x]).addChild(_loc7_);
+            b = UnitCommand(this.actions[type]).buttonBitmap;
+            b.x = -b.width / 2;
+            b.y = -b.height / 2;
+            b.name = "mc";
+            MovieClip(this.boxes[y * COLS + x]).addChild(b);
             this.actionsToButtonMap[type] = MovieClip(this.boxes[y * COLS + x]);
             this.currentActions.push(type);
          }
-         var _loc4_:Sprite = Sprite(MovieClip(this.boxes[y * COLS + x]).getChildByName("overlay"));
-         var _loc5_:DisplayObject = MovieClip(this.boxes[y * COLS + x]).getChildByName("mc");
-         MovieClip(this.boxes[y * COLS + x]).removeChild(_loc4_);
-         MovieClip(this.boxes[y * COLS + x]).addChild(_loc4_);
+         var s:Sprite = Sprite(MovieClip(this.boxes[y * COLS + x]).getChildByName("overlay"));
+         var mc:DisplayObject = MovieClip(this.boxes[y * COLS + x]).getChildByName("mc");
+         MovieClip(this.boxes[y * COLS + x]).removeChild(s);
+         MovieClip(this.boxes[y * COLS + x]).addChild(s);
       }
       
       private function setUpActions() : void
@@ -603,12 +567,12 @@ package com.brockw.stickwar.engine
          this._currentMove = value;
       }
       
-      public function get currentEntity() : Entity
+      public function get currentEntity() : com.brockw.stickwar.engine.Entity
       {
          return this._currentEntity;
       }
       
-      public function set currentEntity(value:Entity) : void
+      public function set currentEntity(value:com.brockw.stickwar.engine.Entity) : void
       {
          this._currentEntity = value;
       }

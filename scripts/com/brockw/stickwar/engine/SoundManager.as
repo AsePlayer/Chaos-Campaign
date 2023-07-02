@@ -15,15 +15,15 @@ package com.brockw.stickwar.engine
       private static const globalSoundModifier:Number = 1.4;
        
       
-      var sounds:Dictionary;
+      internal var sounds:Dictionary;
       
-      var volumeMap:Dictionary;
+      internal var volumeMap:Dictionary;
       
       private var main:BaseMain;
       
-      var playing:Array;
+      internal var playing:Array;
       
-      var waiting:Array;
+      internal var waiting:Array;
       
       private var lastX:Number;
       
@@ -90,7 +90,7 @@ package com.brockw.stickwar.engine
             this.backgroundVolume += (0 - this.backgroundVolume) * 0.2;
          }
          s.volume = this.backgroundVolume;
-         if(this.backgroundLoop)
+         if(Boolean(this.backgroundLoop))
          {
             this.backgroundLoop.soundTransform = s;
          }

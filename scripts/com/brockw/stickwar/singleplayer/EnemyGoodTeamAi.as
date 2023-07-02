@@ -103,7 +103,7 @@ package com.brockw.stickwar.singleplayer
          var numHealers:int = 0;
          if(Unit.U_MONK in unitComposition)
          {
-            numHealers = unitComposition[Unit.U_MONK];
+            numHealers = int(unitComposition[Unit.U_MONK]);
          }
          if(numHealers * team.game.xml.xml.Order.Units.monk.population == team.attackingForcePopulation)
          {
@@ -119,7 +119,7 @@ package com.brockw.stickwar.singleplayer
          var _loc5_:TechItem = null;
          if(!enemyIsAttacking() && (team.population < 6 || enemyIsWeak()))
          {
-            _loc4_ = team.unitGroups[Unit.U_MINER].length;
+            _loc4_ = int(team.unitGroups[Unit.U_MINER].length);
             if(_loc4_ < unitComposition[Unit.U_MINER] && team.unitProductionQueue[team.unitInfo[Unit.U_MINER][2]].length == 0)
             {
                param1.requestToSpawn(team.id,Unit.U_MINER);
@@ -129,7 +129,7 @@ package com.brockw.stickwar.singleplayer
          _loc3_ = 0;
          while(_loc3_ < this.buildOrder.length)
          {
-            _loc4_ = team.unitGroups[this.buildOrder[_loc3_]].length;
+            _loc4_ = int(team.unitGroups[this.buildOrder[_loc3_]].length);
             if(_loc4_ >= unitComposition[this.buildOrder[_loc3_]])
             {
                _loc2_++;
@@ -145,7 +145,7 @@ package com.brockw.stickwar.singleplayer
             _loc3_ = 0;
             while(_loc3_ < this.buildOrder.length)
             {
-               _loc4_ = team.unitGroups[this.buildOrder[_loc3_]].length;
+               _loc4_ = int(team.unitGroups[this.buildOrder[_loc3_]].length);
                if(team.unitProductionQueue[team.unitInfo[this.buildOrder[_loc3_]][2]].length == 0)
                {
                   param1.requestToSpawn(team.id,this.buildOrder[_loc3_]);

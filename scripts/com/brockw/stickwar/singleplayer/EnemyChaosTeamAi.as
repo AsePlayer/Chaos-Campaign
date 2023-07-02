@@ -120,10 +120,10 @@ package com.brockw.stickwar.singleplayer
          var _loc3_:int = 0;
          var _loc4_:int = 0;
          var _loc5_:TechItem = null;
-         _loc4_ = team.unitGroups[Unit.U_CHAOS_MINER].length;
+         _loc4_ = int(team.unitGroups[Unit.U_CHAOS_MINER].length);
          if(!enemyIsAttacking() && (team.population < 16 || this.enemyAtHome() || this.enemyAtMiddle()))
          {
-            if((_loc4_ = team.unitGroups[Unit.U_CHAOS_MINER].length) < unitComposition[Unit.U_CHAOS_MINER] && team.unitProductionQueue[team.unitInfo[Unit.U_CHAOS_MINER][2]].length == 0)
+            if((_loc4_ = int(team.unitGroups[Unit.U_CHAOS_MINER].length)) < unitComposition[Unit.U_CHAOS_MINER] && team.unitProductionQueue[team.unitInfo[Unit.U_CHAOS_MINER][2]].length == 0)
             {
                param1.requestToSpawn(team.id,Unit.U_CHAOS_MINER);
             }
@@ -132,7 +132,7 @@ package com.brockw.stickwar.singleplayer
          _loc3_ = 0;
          while(_loc3_ < this.buildOrder.length)
          {
-            _loc4_ = team.unitGroups[this.buildOrder[_loc3_]].length;
+            _loc4_ = int(team.unitGroups[this.buildOrder[_loc3_]].length);
             if(!(this.buildOrder[_loc3_] == Unit.U_BOMBER && team.attackingForcePopulation < 6))
             {
                if(_loc4_ >= unitComposition[this.buildOrder[_loc3_]])
@@ -151,7 +151,7 @@ package com.brockw.stickwar.singleplayer
             _loc3_ = 0;
             while(_loc3_ < this.buildOrder.length)
             {
-               _loc4_ = team.unitGroups[this.buildOrder[_loc3_]].length;
+               _loc4_ = int(team.unitGroups[this.buildOrder[_loc3_]].length);
                if(team.unitProductionQueue[team.unitInfo[this.buildOrder[_loc3_]][2]].length == 0)
                {
                   param1.requestToSpawn(team.id,this.buildOrder[_loc3_]);
@@ -378,7 +378,7 @@ package com.brockw.stickwar.singleplayer
          var wingidon:Wingidon = null;
          var closestEnemyUnit:Unit = null;
          var moving:Boolean = false;
-         var randomNumber:int = null;
+         var randomNumber:int = int(null);
          for each(wingidon in team.unitGroups[Unit.U_WINGIDON])
          {
             randomNumber = Math.floor(Math.random() * 100) + 25;

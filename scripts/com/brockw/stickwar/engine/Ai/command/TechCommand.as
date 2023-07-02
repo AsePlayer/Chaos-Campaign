@@ -2,8 +2,8 @@ package com.brockw.stickwar.engine.Ai.command
 {
    import com.brockw.stickwar.GameScreen;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.multiplayer.moves.UnitMove;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.brockw.stickwar.engine.units.*;
    
    public class TechCommand extends UnitCommand
    {
@@ -19,7 +19,7 @@ package com.brockw.stickwar.engine.Ai.command
       
       override public function prepareNetworkedMove(gameScreen:GameScreen) : *
       {
-         var unit:* = null;
+         var unit:String = null;
          var u:UnitMove = new UnitMove();
          u.moveType = this.type;
          for(unit in gameScreen.team.units)

@@ -9,6 +9,6 @@ package flashx.textLayout.conversion
       
       function get result() : Object;
       
-      function importOneFormat(key:String, val:String) : Boolean;
+      function importOneFormat(param1:String, param2:String) : Boolean;
    }
 }

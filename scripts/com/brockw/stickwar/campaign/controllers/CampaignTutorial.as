@@ -1,21 +1,14 @@
 package com.brockw.stickwar.campaign.controllers
 {
    import com.brockw.stickwar.GameScreen;
-   import com.brockw.stickwar.campaign.Campaign;
-   import com.brockw.stickwar.campaign.CampaignGameScreen;
-   import com.brockw.stickwar.campaign.InGameMessage;
-   import com.brockw.stickwar.engine.Ai.MinerAi;
-   import com.brockw.stickwar.engine.Ai.command.StandCommand;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.campaign.*;
+   import com.brockw.stickwar.engine.Ai.*;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.Hill;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.Team.Team;
-   import com.brockw.stickwar.engine.Team.Tech;
-   import com.brockw.stickwar.engine.multiplayer.moves.UnitMove;
-   import com.brockw.stickwar.engine.units.Miner;
-   import com.brockw.stickwar.engine.units.Spearton;
-   import com.brockw.stickwar.engine.units.Swordwrath;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.Team.*;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.brockw.stickwar.engine.units.*;
    import flash.events.Event;
    import flash.events.MouseEvent;
    
@@ -97,7 +90,7 @@ package com.brockw.stickwar.campaign.controllers
       
       private var spearton1:Spearton;
       
-      var popBefore:int;
+      internal var popBefore:int;
       
       private var counter:int;
       
@@ -173,17 +166,17 @@ package com.brockw.stickwar.campaign.controllers
       
       override public function update(gameScreen:GameScreen) : void
       {
-         var _loc2_:Hill = null;
-         var _loc3_:StickWar = null;
-         var _loc4_:Swordwrath = null;
-         var _loc5_:Swordwrath = null;
-         var _loc6_:Unit = null;
-         var _loc7_:UnitMove = null;
-         var _loc8_:Unit = null;
-         var _loc9_:UnitMove = null;
-         var _loc10_:Spearton = null;
-         var _loc11_:Boolean = false;
-         var _loc12_:Boolean = false;
+         var hill:Hill = null;
+         var game:StickWar = null;
+         var u1:Swordwrath = null;
+         var u2:Swordwrath = null;
+         var unit:Unit = null;
+         var holdUnits:UnitMove = null;
+         var g:Unit = null;
+         var u:UnitMove = null;
+         var spearton2:Spearton = null;
+         var notGarrisoned:Boolean = false;
+         var notDefending:Boolean = false;
          super.update(gameScreen);
          if(gameScreen.game.showGameOverAnimation)
          {
@@ -191,14 +184,14 @@ package com.brockw.stickwar.campaign.controllers
          }
          if(gameScreen.game.map.hills.length != 0)
          {
-            _loc2_ = gameScreen.game.map.hills.pop();
-            _loc2_.parent.removeChild(_loc2_);
+            hill = gameScreen.game.map.hills.pop();
+            hill.parent.removeChild(hill);
          }
-         if(this.message)
+         if(Boolean(this.message))
          {
             this.message.update();
          }
-         if(this.miniMessage)
+         if(Boolean(this.miniMessage))
          {
             this.miniMessage.update();
          }
@@ -238,36 +231,36 @@ package com.brockw.stickwar.campaign.controllers
             gameScreen.team.gold = 0;
             gameScreen.team.mana = 0;
             gameScreen.team.enemyTeam.gold = 0;
-            _loc3_ = gameScreen.game;
-            _loc4_ = Swordwrath(_loc3_.unitFactory.getUnit(Unit.U_SWORDWRATH));
-            _loc5_ = Swordwrath(_loc3_.unitFactory.getUnit(Unit.U_SWORDWRATH));
-            gameScreen.team.spawn(_loc4_,_loc3_);
-            gameScreen.team.spawn(_loc5_,_loc3_);
-            _loc4_.px = gameScreen.team.homeX + 2000 * gameScreen.team.direction;
-            _loc5_.px = gameScreen.team.homeX + 2000 * gameScreen.team.direction;
-            _loc4_.py = _loc3_.map.height / 3;
-            _loc5_.py = _loc3_.map.height / 3 * 2;
-            _loc4_.ai.setCommand(_loc3_,new StandCommand(_loc3_));
-            _loc5_.ai.setCommand(_loc3_,new StandCommand(_loc3_));
+            game = gameScreen.game;
+            u1 = Swordwrath(game.unitFactory.getUnit(Unit.U_SWORDWRATH));
+            u2 = Swordwrath(game.unitFactory.getUnit(Unit.U_SWORDWRATH));
+            gameScreen.team.spawn(u1,game);
+            gameScreen.team.spawn(u2,game);
+            u1.px = gameScreen.team.homeX + 2000 * gameScreen.team.direction;
+            u2.px = gameScreen.team.homeX + 2000 * gameScreen.team.direction;
+            u1.py = game.map.height / 3;
+            u2.py = game.map.height / 3 * 2;
+            u1.ai.setCommand(game,new StandCommand(game));
+            u2.ai.setCommand(game,new StandCommand(game));
             gameScreen.team.population += 1;
             gameScreen.team.population += 1;
-            delete _loc3_.team.unitsAvailable[Unit.U_SWORDWRATH];
-            delete _loc3_.team.unitsAvailable[Unit.U_MINER];
-            this.s1 = _loc4_;
-            this.s2 = _loc5_;
+            delete game.team.unitsAvailable[Unit.U_SWORDWRATH];
+            delete game.team.unitsAvailable[Unit.U_MINER];
+            this.s1 = u1;
+            this.s2 = u2;
             this.message = new InGameMessage("",gameScreen.game);
-            this.message.x = _loc3_.stage.stageWidth / 2;
-            this.message.y = _loc3_.stage.stageHeight / 4 - 75;
+            this.message.x = game.stage.stageWidth / 2;
+            this.message.y = game.stage.stageHeight / 4 - 75;
             this.message.scaleX *= 1.3;
             this.message.scaleY *= 1.3;
             gameScreen.addChild(this.message);
             this.arrow = new tutorialArrow();
             gameScreen.addChild(this.arrow);
-            this.m1 = Miner(_loc3_.unitFactory.getUnit(Unit.U_MINER));
-            gameScreen.team.spawn(this.m1,_loc3_);
+            this.m1 = Miner(game.unitFactory.getUnit(Unit.U_MINER));
+            gameScreen.team.spawn(this.m1,game);
             this.m1.px = gameScreen.team.homeX + 400;
-            this.m1.py = _loc3_.map.height / 2;
-            this.m1.ai.setCommand(_loc3_,new StandCommand(_loc3_));
+            this.m1.py = game.map.height / 2;
+            this.m1.ai.setCommand(game,new StandCommand(game));
             gameScreen.team.population += 2;
          }
          else if(this.state == S_BOX_UNITS)
@@ -341,9 +334,9 @@ package com.brockw.stickwar.campaign.controllers
                this.s1.selected = true;
                this.s2.selected = true;
             }
-            for each(_loc6_ in gameScreen.team.units)
+            for each(unit in gameScreen.team.units)
             {
-               _loc6_.health = _loc6_.maxHealth;
+               unit.health = unit.maxHealth;
             }
             gameScreen.game.targetScreenX = 2800;
             this.message.setMessage("Right click on this enemy unit to attack.","Step #4",0,"voiceTutorial4",true);
@@ -364,14 +357,14 @@ package com.brockw.stickwar.campaign.controllers
             this.arrow.visible = true;
             this.arrow.x = gameScreen.game.stage.stageWidth / 2 - 90;
             this.arrow.y = gameScreen.game.stage.stageHeight - 115;
-            _loc7_ = new UnitMove();
-            _loc7_.owner = gameScreen.game.team.id;
-            _loc7_.moveType = UnitCommand.HOLD;
-            _loc7_.arg0 = gameScreen.game.team.homeX + 1000;
-            _loc7_.arg1 = gameScreen.game.map.height / 2;
-            _loc7_.units.push(this.s1.id);
-            _loc7_.units.push(this.s2.id);
-            _loc7_.execute(gameScreen.game);
+            holdUnits = new UnitMove();
+            holdUnits.owner = gameScreen.game.team.id;
+            holdUnits.moveType = UnitCommand.HOLD;
+            holdUnits.arg0 = gameScreen.game.team.homeX + 1000;
+            holdUnits.arg1 = gameScreen.game.map.height / 2;
+            holdUnits.units.push(this.s1.id);
+            holdUnits.units.push(this.s2.id);
+            holdUnits.execute(gameScreen.game);
          }
          else if(this.state == S_SELECT_MINER)
          {
@@ -387,14 +380,14 @@ package com.brockw.stickwar.campaign.controllers
             this.arrow.visible = true;
             this.arrow.x = this.m1.x + gameScreen.game.battlefield.x;
             this.arrow.y = this.m1.y - this.m1.pheight * 0.8 + gameScreen.game.battlefield.y;
-            _loc7_ = new UnitMove();
-            _loc7_.owner = gameScreen.game.team.id;
-            _loc7_.moveType = UnitCommand.MOVE;
-            _loc7_.arg0 = gameScreen.game.team.homeX + 1000;
-            _loc7_.arg1 = gameScreen.game.map.height / 2;
-            _loc7_.units.push(this.s1.id);
-            _loc7_.units.push(this.s2.id);
-            _loc7_.execute(gameScreen.game);
+            holdUnits = new UnitMove();
+            holdUnits.owner = gameScreen.game.team.id;
+            holdUnits.moveType = UnitCommand.MOVE;
+            holdUnits.arg0 = gameScreen.game.team.homeX + 1000;
+            holdUnits.arg1 = gameScreen.game.map.height / 2;
+            holdUnits.units.push(this.s1.id);
+            holdUnits.units.push(this.s2.id);
+            holdUnits.execute(gameScreen.game);
          }
          else if(this.state == S_PRAY)
          {
@@ -499,9 +492,9 @@ package com.brockw.stickwar.campaign.controllers
             gameScreen.userInterface.isSlowCamera = true;
             gameScreen.game.targetScreenX = gameScreen.team.forwardUnit.px - gameScreen.game.map.screenWidth / 2;
             gameScreen.userInterface.isGlobalsEnabled = true;
-            for each(_loc8_ in gameScreen.team.units)
+            for each(g in gameScreen.team.units)
             {
-               _loc8_.selected = false;
+               g.selected = false;
             }
             this.message.setMessage("Click here to garrison your units inside the castle.","Step #10",0,"voiceTutorial14",true);
             this.arrow.x = gameScreen.game.stage.stageWidth / 2 - 90;
@@ -519,9 +512,9 @@ package com.brockw.stickwar.campaign.controllers
             gameScreen.userInterface.isGlobalsEnabled = false;
             gameScreen.userInterface.isSlowCamera = true;
             gameScreen.game.targetScreenX = gameScreen.team.forwardUnit.px - gameScreen.game.map.screenWidth / 2;
-            for each(_loc8_ in gameScreen.team.units)
+            for each(g in gameScreen.team.units)
             {
-               _loc8_.selected = false;
+               g.selected = false;
             }
          }
          else if(this.state == S_CLICK_ON_ARCHERY_RANGE)
@@ -554,13 +547,13 @@ package com.brockw.stickwar.campaign.controllers
             gameScreen.userInterface.isGlobalsEnabled = true;
             gameScreen.userInterface.isSlowCamera = true;
             gameScreen.game.targetScreenX = this.spearton1.px - gameScreen.game.map.screenWidth / 2;
-            _loc9_ = new UnitMove();
-            _loc9_.moveType = UnitCommand.ATTACK_MOVE;
-            _loc9_.units.push(this.spearton1);
-            _loc9_.owner = gameScreen.team.id;
-            _loc9_.arg0 = gameScreen.team.homeX;
-            _loc9_.arg1 = gameScreen.team.game.map.height / 2;
-            _loc9_.execute(gameScreen.team.game);
+            u = new UnitMove();
+            u.moveType = UnitCommand.ATTACK_MOVE;
+            u.units.push(this.spearton1);
+            u.owner = gameScreen.team.id;
+            u.arg0 = gameScreen.team.homeX;
+            u.arg1 = gameScreen.team.game.map.height / 2;
+            u.execute(gameScreen.team.game);
             this.message.setMessage("Hit the defend button below to send out your units.","Step #13",0,"voiceTutorial19",true);
             this.message.visible = true;
             this.arrow.visible = true;
@@ -579,13 +572,13 @@ package com.brockw.stickwar.campaign.controllers
             this.arrow.visible = true;
             this.arrow.x = this.spearton1.x + gameScreen.game.battlefield.x;
             this.arrow.y = this.spearton1.y - this.spearton1.pheight * 0.8 + gameScreen.game.battlefield.y;
-            _loc9_ = new UnitMove();
-            _loc9_.moveType = UnitCommand.ATTACK_MOVE;
-            _loc9_.units.push(this.spearton1);
-            _loc9_.owner = gameScreen.team.id;
-            _loc9_.arg0 = gameScreen.team.homeX;
-            _loc9_.arg1 = gameScreen.team.game.map.height / 2;
-            _loc9_.execute(gameScreen.team.game);
+            u = new UnitMove();
+            u.moveType = UnitCommand.ATTACK_MOVE;
+            u.units.push(this.spearton1);
+            u.owner = gameScreen.team.id;
+            u.arg0 = gameScreen.team.homeX;
+            u.arg1 = gameScreen.team.game.map.height / 2;
+            u.execute(gameScreen.team.game);
          }
          else if(this.state == S_KILL_SPEARTON)
          {
@@ -613,11 +606,11 @@ package com.brockw.stickwar.campaign.controllers
          }
          if(!this.hasSpawnedSpearton && gameScreen.game.team.enemyTeam.statue.health / gameScreen.game.team.enemyTeam.statue.maxHealth < 0.75)
          {
-            _loc10_ = Spearton(gameScreen.game.unitFactory.getUnit(Unit.U_SPEARTON));
-            gameScreen.team.enemyTeam.spawn(_loc10_,gameScreen.game);
+            spearton2 = Spearton(gameScreen.game.unitFactory.getUnit(Unit.U_SPEARTON));
+            gameScreen.team.enemyTeam.spawn(spearton2,gameScreen.game);
             gameScreen.team.enemyTeam.population += 3;
-            _loc10_.x = _loc10_.px = _loc10_.team.homeX;
-            _loc10_.y = _loc10_.py = gameScreen.game.map.height / 2;
+            spearton2.x = spearton2.px = spearton2.team.homeX;
+            spearton2.y = spearton2.py = gameScreen.game.map.height / 2;
             this.hasSpawnedSpearton = true;
          }
          if(this.state != S_ALL_DONE)
@@ -625,7 +618,7 @@ package com.brockw.stickwar.campaign.controllers
          }
          if(this.o1 != null)
          {
-            this.o1.ai.setCommand(_loc3_,new StandCommand(_loc3_));
+            this.o1.ai.setCommand(game,new StandCommand(game));
          }
          if(this.state == S_SET_UP)
          {
@@ -753,15 +746,15 @@ package com.brockw.stickwar.campaign.controllers
          }
          else if(this.state == S_SPEARTON_ATTACKING)
          {
-            _loc11_ = false;
-            for each(_loc8_ in gameScreen.team.units)
+            notGarrisoned = false;
+            for each(g in gameScreen.team.units)
             {
-               if(!_loc8_.isGarrisoned)
+               if(!g.isGarrisoned)
                {
-                  _loc11_ = true;
+                  notGarrisoned = true;
                }
             }
-            if(!_loc11_)
+            if(!notGarrisoned)
             {
                this.state = S_GARRISON;
             }
@@ -798,15 +791,15 @@ package com.brockw.stickwar.campaign.controllers
          }
          else if(this.state == S_SEND_IN_SPEARTON)
          {
-            _loc12_ = false;
-            for each(_loc8_ in gameScreen.team.units)
+            notDefending = false;
+            for each(g in gameScreen.team.units)
             {
-               if(_loc8_.isGarrisoned)
+               if(g.isGarrisoned)
                {
-                  _loc12_ = true;
+                  notDefending = true;
                }
             }
-            if(!_loc12_)
+            if(!notDefending)
             {
                this.state = S_HIT_DEFEND;
             }
@@ -826,11 +819,11 @@ package com.brockw.stickwar.campaign.controllers
                this.popBefore = gameScreen.team.population;
                gameScreen.team.gold = 150;
                gameScreen.team.game.team.unitsAvailable[Unit.U_MINER] = 1;
-               _loc3_ = gameScreen.game;
-               _loc3_.team.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER]);
-               _loc3_.team.enemyTeam.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER,Unit.U_SPEARTON]);
-               _loc3_.team.gold = 500;
-               _loc3_.team.defend(true);
+               game = gameScreen.game;
+               game.team.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER]);
+               game.team.enemyTeam.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER,Unit.U_SPEARTON]);
+               game.team.gold = 500;
+               game.team.defend(true);
             }
          }
          else if(this.state == S_GOOD_LUCK)
@@ -860,10 +853,10 @@ package com.brockw.stickwar.campaign.controllers
             if(this.counter > 30 * 30)
             {
                this.state = S_PRESS_ATTACK;
-               _loc3_ = gameScreen.game;
+               game = gameScreen.game;
                this.miniMessage = new InGameMessage("",gameScreen.game);
-               this.miniMessage.x = _loc3_.stage.stageWidth / 2;
-               this.miniMessage.y = _loc3_.stage.stageHeight / 4 - 75;
+               this.miniMessage.x = game.stage.stageWidth / 2;
+               this.miniMessage.y = game.stage.stageHeight / 4 - 75;
                this.miniMessage.scaleX *= 0.8;
                this.miniMessage.scaleY *= 0.8;
                gameScreen.addChild(this.miniMessage);
@@ -926,11 +919,11 @@ package com.brockw.stickwar.campaign.controllers
                this.arrow.visible = false;
             }
          }
-         if(this.message)
+         if(Boolean(this.message))
          {
             if(!this.message.isMessageShowing() || this.miniMessage && !this.miniMessage.isMessageShowing())
             {
-               if(this.arrow)
+               if(Boolean(this.arrow))
                {
                   this.arrow.visible = false;
                }

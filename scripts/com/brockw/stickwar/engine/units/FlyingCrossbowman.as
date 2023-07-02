@@ -1,7 +1,7 @@
 package com.brockw.stickwar.engine.units
 {
    import com.brockw.game.Util;
-   import com.brockw.stickwar.engine.Ai.FlyingCrossbowmanAi;
+   import com.brockw.stickwar.engine.Ai.*;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Tech;
    import com.brockw.stickwar.market.MarketItem;
@@ -31,16 +31,16 @@ package com.brockw.stickwar.engine.units
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
       {
          var m:_flyingcrossbowmanMc = _flyingcrossbowmanMc(mc);
-         if(m.mc.body)
+         if(Boolean(m.mc.body))
          {
-            if(m.mc.body.head)
+            if(Boolean(m.mc.body.head))
             {
                if(armor != "")
                {
                   m.mc.body.head.gotoAndStop(armor);
                }
             }
-            if(m.mc.body.quiver)
+            if(Boolean(m.mc.body.quiver))
             {
                if(weapon != "")
                {
@@ -48,14 +48,14 @@ package com.brockw.stickwar.engine.units
                }
             }
          }
-         if(m.mc.head)
+         if(Boolean(m.mc.head))
          {
             if(armor != "")
             {
                m.mc.head.gotoAndStop(armor);
             }
          }
-         if(m.mc.wings)
+         if(Boolean(m.mc.wings))
          {
             if(misc != "")
             {
@@ -112,7 +112,7 @@ package com.brockw.stickwar.engine.units
          {
             _mc.mc.bow.rotation = bowAngle + 12;
          }
-         else if(_mc.mc.body != null && _mc.mc.body.arms)
+         else if(_mc.mc.body != null && Boolean(_mc.mc.body.arms))
          {
             _mc.mc.body.arms.rotation = bowAngle + 12;
          }
@@ -162,7 +162,7 @@ package com.brockw.stickwar.engine.units
             }
             else if(_state == S_RUN)
             {
-               if(!isFeetMoving())
+               if(isFeetMoving())
                {
                }
             }
@@ -224,7 +224,7 @@ package com.brockw.stickwar.engine.units
       
       override public function get damageToArmour() : Number
       {
-         if(team.tech.isResearchedMap[Tech.CROSSBOW_FIRE])
+         if(Boolean(team.tech.isResearchedMap[Tech.CROSSBOW_FIRE]))
          {
             return _damageToArmour + int(team.game.xml.xml.Order.Units.flyingCrossbowman.fireDamageToArmour);
          }
@@ -233,7 +233,7 @@ package com.brockw.stickwar.engine.units
       
       override public function get damageToNotArmour() : Number
       {
-         if(team.tech.isResearchedMap[Tech.CROSSBOW_FIRE])
+         if(Boolean(team.tech.isResearchedMap[Tech.CROSSBOW_FIRE]))
          {
             return _damageToArmour + int(team.game.xml.xml.Order.Units.flyingCrossbowman.fireDamageToNotArmour);
          }

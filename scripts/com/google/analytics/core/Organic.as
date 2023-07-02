@@ -46,7 +46,7 @@ package com.google.analytics.core
             }
             path = path.split("+").join("%20");
             vars = new Variables(path);
-            value = vars[keyword];
+            value = String(vars[keyword]);
          }
          return value;
       }
@@ -170,7 +170,7 @@ package com.google.analytics.core
          var index:int = 0;
          if(match(name))
          {
-            index = _sourcesEngine[name][0];
+            index = int(_sourcesEngine[name][0]);
             return _sources[index];
          }
          return null;

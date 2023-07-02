@@ -29,7 +29,7 @@ package com.brockw.stickwar.engine.units
       
       private var clusterTimer:Number;
       
-      private var clusterLad:Bomber;
+      private var clusterLad:com.brockw.stickwar.engine.units.Bomber;
       
       private var timeToRun:Boolean = false;
       
@@ -137,7 +137,7 @@ package com.brockw.stickwar.engine.units
       
       override public function update(game:StickWar) : void
       {
-         var clusterLad:Bomber = null;
+         var clusterLad:com.brockw.stickwar.engine.units.Bomber = null;
          updateCommon(game);
          if(this.bomberType == "minerTargeter")
          {
@@ -242,23 +242,23 @@ package com.brockw.stickwar.engine.units
          }
          if(this.bomberType == "medusaTargeter" && !specialTimeOver && !stoned)
          {
-            Bomber.setItem(_bomber(mc),"C4","Red Bike Helmet","");
+            com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"C4","Red Bike Helmet","");
          }
          else if(this.bomberType == "statueTargeter" && !specialTimeOver && !stoned)
          {
-            Bomber.setItem(_bomber(mc),"Rocket","Flash","");
+            com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"Rocket","Flash","");
          }
          else if(this.bomberType == "minerTargeter" && !specialTimeOver && !stoned)
          {
-            Bomber.setItem(_bomber(mc),"Flask","Scientist","");
+            com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"Flask","Scientist","");
          }
          else if(this.bomberType == "clusterBoi" && !specialTimeOver && !stoned)
          {
-            Bomber.setItem(_bomber(mc),"Round Cluster Bomb","Round Bomb","");
+            com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"Round Cluster Bomb","Round Bomb","");
          }
          else if(this.bomberType == "Default")
          {
-            Bomber.setItem(_bomber(mc),"Default","Default","");
+            com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"Default","Default","");
          }
       }
       

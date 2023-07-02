@@ -31,10 +31,8 @@ package fl.text
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
-   class CommonTextContainerManager
+   internal class CommonTextContainerManager
    {
        
       
@@ -42,9 +40,9 @@ package fl.text
       
       protected var _controller:ContainerController;
       
-      protected var _ownerField:TLFTextField;
+      protected var _ownerField:fl.text.TLFTextField;
       
-      function CommonTextContainerManager()
+      public function CommonTextContainerManager()
       {
          super();
       }
@@ -60,7 +58,7 @@ package fl.text
          var arrTabStops:Array = null;
          var tabStop:String = null;
          var tabStopFmt:TabStopFormat = null;
-         if(this.textFlow && this.textFlow.formatResolver != null)
+         if(Boolean(this.textFlow) && this.textFlow.formatResolver != null)
          {
             throw new Error("This method cannot be used on a text field with a style sheet.");
          }
@@ -146,7 +144,7 @@ package fl.text
          {
             charFormat.textDecoration = Boolean(format.underline) ? TextDecoration.UNDERLINE : TextDecoration.NONE;
          }
-         var priorEditingMode:String = this._ownerField.getEditingMode(this.textFlow.interactionManager);
+         var priorEditingMode:String = String(this._ownerField.tlf_internal::getEditingMode(this.textFlow.interactionManager));
          if(priorEditingMode != EditingMode.READ_ONLY && priorEditingMode != null)
          {
             if(this.textFlow.interactionManager.hasSelection())
@@ -156,7 +154,7 @@ package fl.text
          }
          if(priorEditingMode != EditingMode.READ_WRITE)
          {
-            this._ownerField.switchToEditingMode(this.textFlow,EditingMode.READ_WRITE);
+            this._ownerField.tlf_internal::switchToEditingMode(this.textFlow,EditingMode.READ_WRITE);
          }
          var editManager:EditManager = EditManager(this.textFlow.interactionManager);
          editManager.beginCompositeOperation();
@@ -195,9 +193,9 @@ package fl.text
             }
          }
          editManager.endCompositeOperation();
-         if(this.textFlow.interactionManager)
+         if(Boolean(this.textFlow.interactionManager))
          {
-            if(tmpSelectionState)
+            if(Boolean(tmpSelectionState))
             {
                this.textFlow.interactionManager.selectRange(tmpSelectionState.anchorPosition,tmpSelectionState.activePosition);
             }
@@ -208,7 +206,7 @@ package fl.text
          }
          if(priorEditingMode != EditingMode.READ_WRITE)
          {
-            this._ownerField.switchToEditingMode(this.textFlow,priorEditingMode);
+            this._ownerField.tlf_internal::switchToEditingMode(this.textFlow,priorEditingMode);
          }
       }
       
@@ -223,15 +221,15 @@ package fl.text
          {
             beginIndex = 0;
          }
-         var priorEditingMode:String = this._ownerField.getEditingMode(this.textFlow.interactionManager);
-         this._ownerField.switchToEditingMode(this.textFlow,EditingMode.READ_WRITE);
+         var priorEditingMode:String = String(this._ownerField.tlf_internal::getEditingMode(this.textFlow.interactionManager));
+         this._ownerField.tlf_internal::switchToEditingMode(this.textFlow,EditingMode.READ_WRITE);
          var editManager:EditManager = EditManager(this.textFlow.interactionManager);
          editManager.beginCompositeOperation();
          editManager.selectRange(beginIndex,endIndex);
-         this._ownerField.insertWithParagraphs(editManager,newText);
+         this._ownerField.tlf_internal::insertWithParagraphs(editManager,newText);
          editManager.endCompositeOperation();
          this.update();
-         this._ownerField.switchToEditingMode(this.textFlow,priorEditingMode);
+         this._ownerField.tlf_internal::switchToEditingMode(this.textFlow,priorEditingMode);
       }
       
       public function update() : void
@@ -280,15 +278,15 @@ package fl.text
       public function set text(value:String) : void
       {
          var leaf:FlowLeafElement = null;
-         var tf:TextFlow = !!this.isTextStringAndFormat() ? null : this.textFlow;
+         var tf:TextFlow = this.isTextStringAndFormat() ? null : this.textFlow;
          if(!tf)
          {
-            this._ownerField.doImport(TextConverter.PLAIN_TEXT_FORMAT,value);
+            this._ownerField.tlf_internal::doImport(TextConverter.PLAIN_TEXT_FORMAT,value);
          }
          else
          {
             leaf = tf.getFirstLeaf();
-            if(leaf)
+            if(Boolean(leaf))
             {
                tf.hostFormat = leaf.computedFormat;
             }
@@ -316,7 +314,7 @@ package fl.text
          {
             this.textFlow = new TextFlow();
          }
-         this.textFlow.fontLookup = !!value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE;
+         this.textFlow.fontLookup = value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE;
       }
       
       public function appendText(newText:String) : void
@@ -329,7 +327,7 @@ package fl.text
          }
          else
          {
-            priorEditingMode = this.textFlow.interactionManager.editingMode;
+            priorEditingMode = String(this.textFlow.interactionManager.editingMode);
             tmpSelectionState = null;
          }
          if(priorEditingMode != EditingMode.READ_ONLY && priorEditingMode != null)
@@ -341,17 +339,17 @@ package fl.text
          }
          if(priorEditingMode != EditingMode.READ_WRITE)
          {
-            this._ownerField.switchToEditingMode(this.textFlow,EditingMode.READ_WRITE);
+            this._ownerField.tlf_internal::switchToEditingMode(this.textFlow,EditingMode.READ_WRITE);
          }
          var editManager:EditManager = EditManager(this.textFlow.interactionManager);
          editManager.selectRange(int.MAX_VALUE,int.MAX_VALUE);
          editManager.beginCompositeOperation();
-         this._ownerField.insertWithParagraphs(editManager,newText);
+         this._ownerField.tlf_internal::insertWithParagraphs(editManager,newText);
          editManager.endCompositeOperation();
          this.update();
-         if(this.textFlow.interactionManager)
+         if(Boolean(this.textFlow.interactionManager))
          {
-            if(tmpSelectionState)
+            if(Boolean(tmpSelectionState))
             {
                this.textFlow.interactionManager.selectRange(tmpSelectionState.anchorPosition,tmpSelectionState.activePosition);
             }
@@ -362,13 +360,13 @@ package fl.text
          }
          if(priorEditingMode != EditingMode.READ_WRITE && priorEditingMode != null)
          {
-            this._ownerField.switchToEditingMode(this.textFlow,priorEditingMode);
+            this._ownerField.tlf_internal::switchToEditingMode(this.textFlow,priorEditingMode);
          }
       }
       
       public function get embedFonts() : Boolean
       {
-         if(this.textFlow)
+         if(Boolean(this.textFlow))
          {
             return this.textFlow.fontLookup == FontLookup.EMBEDDED_CFF;
          }
@@ -390,7 +388,7 @@ package fl.text
       
       public function get blockProgression() : Object
       {
-         if(this.textFlow && this.textFlow.computedFormat.blockProgression)
+         if(Boolean(this.textFlow) && Boolean(this.textFlow.computedFormat.blockProgression))
          {
             return this.textFlow.computedFormat.blockProgression;
          }
@@ -399,7 +397,7 @@ package fl.text
       
       public function get lineBreak() : String
       {
-         if(this.textFlow)
+         if(Boolean(this.textFlow))
          {
             return this.textFlow.lineBreak;
          }
@@ -432,7 +430,7 @@ package fl.text
          var linkEl:LinkElement = null;
          var textFormat:TextFormat = new TextFormat();
          var tmpSelectionState:SelectionState = null;
-         var priorEditingMode:String = this._ownerField.getEditingMode(this.textFlow.interactionManager);
+         var priorEditingMode:String = String(this._ownerField.tlf_internal::getEditingMode(this.textFlow.interactionManager));
          if(priorEditingMode != EditingMode.READ_ONLY && priorEditingMode != null)
          {
             if(this.textFlow.interactionManager.hasSelection())
@@ -442,7 +440,7 @@ package fl.text
          }
          else
          {
-            this._ownerField.switchToEditingMode(this.textFlow,EditingMode.READ_SELECT);
+            this._ownerField.tlf_internal::switchToEditingMode(this.textFlow,EditingMode.READ_SELECT);
          }
          if(beginIndex < 0)
          {
@@ -462,7 +460,7 @@ package fl.text
          this._ownerField.setSelection(iStart,iEnd);
          var charFormat:TextLayoutFormat = TextLayoutFormat(this.textFlow.interactionManager.getCommonCharacterFormat());
          var paraFormat:TextLayoutFormat = TextLayoutFormat(this.textFlow.interactionManager.getCommonParagraphFormat());
-         if(tmpSelectionState)
+         if(Boolean(tmpSelectionState))
          {
             this.textFlow.interactionManager.selectRange(tmpSelectionState.anchorPosition,tmpSelectionState.activePosition);
          }
@@ -472,7 +470,7 @@ package fl.text
          }
          if(priorEditingMode == EditingMode.READ_ONLY)
          {
-            this._ownerField.switchToEditingMode(this.textFlow,priorEditingMode);
+            this._ownerField.tlf_internal::switchToEditingMode(this.textFlow,priorEditingMode);
          }
          if(paraFormat.textAlign == TextFormatAlign.LEFT || paraFormat.textAlign == TextFormatAlign.CENTER || paraFormat.textAlign == TextFormatAlign.RIGHT || paraFormat.textAlign == TextFormatAlign.JUSTIFY)
          {
@@ -525,7 +523,7 @@ package fl.text
          {
             leading = Number.NaN;
             str = charFormat.lineHeight;
-            if(str)
+            if(Boolean(str))
             {
                if(str.indexOf("%") == -1)
                {
@@ -533,7 +531,7 @@ package fl.text
                }
                else
                {
-                  leafFontSize = this.textFlow.findLeaf(iStart).computedFormat.fontSize;
+                  leafFontSize = Number(this.textFlow.findLeaf(iStart).computedFormat.fontSize);
                   leading = Number(str.replace(/%/,"")) * leafFontSize / 100;
                }
             }
@@ -555,7 +553,7 @@ package fl.text
             arrTabStops = [];
             if(paraFormat.tabStops != null)
             {
-               arrLength = paraFormat.tabStops.length;
+               arrLength = int(paraFormat.tabStops.length);
                for(i = 0; i < arrLength; i++)
                {
                   tabStopFmt = paraFormat.tabStops[i];
@@ -582,7 +580,7 @@ package fl.text
          {
             elementRange = ElementRange.createElementRange(this.textFlow,iStart,iEnd);
             leafIter = elementRange.firstLeaf;
-            while(leafIter)
+            while(Boolean(leafIter))
             {
                linkEl = leafIter.getParentByType(LinkElement) as LinkElement;
                if(linkEl != null)
@@ -635,7 +633,7 @@ package fl.text
       
       public function get textColor() : uint
       {
-         if(this.textFlow)
+         if(Boolean(this.textFlow))
          {
             return uint(this.textFlow.getFirstLeaf().computedFormat.color);
          }
@@ -656,7 +654,7 @@ package fl.text
          var fmt:TextLayoutFormat = new TextLayoutFormat();
          fmt.direction = value;
          var p:ParagraphElement = this.textFlow.getFirstLeaf().getParagraph();
-         while(p)
+         while(Boolean(p))
          {
             p.direction = value;
             p = p.getNextParagraph();

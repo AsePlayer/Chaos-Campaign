@@ -6,9 +6,9 @@ package com.brockw.stickwar.engine
       
       private var changeFrame:int;
       
-      private var game:StickWar;
+      private var game:com.brockw.stickwar.engine.StickWar;
       
-      public function HelpMessage(game:StickWar)
+      public function HelpMessage(game:com.brockw.stickwar.engine.StickWar)
       {
          super();
          this.game = game;
@@ -22,7 +22,7 @@ package com.brockw.stickwar.engine
          this.changeFrame = this.game.frame;
       }
       
-      public function update(game:StickWar) : void
+      public function update(game:com.brockw.stickwar.engine.StickWar) : void
       {
          if(game.frame - this.changeFrame > 30 * 2.5)
          {

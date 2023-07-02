@@ -175,7 +175,7 @@ package com.google.analytics.v4
       public function trackEvent(category:String, action:String, label:String = null, value:Number = NaN) : Boolean
       {
          var param:int = 2;
-         if(label && label != "")
+         if(Boolean(label) && label != "")
          {
             param = 3;
          }

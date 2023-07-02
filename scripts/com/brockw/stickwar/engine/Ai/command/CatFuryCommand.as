@@ -1,8 +1,9 @@
 package com.brockw.stickwar.engine.Ai.command
 {
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.units.Unit;
-   import flash.display.Bitmap;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.brockw.stickwar.engine.units.*;
+   import flash.display.*;
    
    public class CatFuryCommand extends UnitCommand
    {

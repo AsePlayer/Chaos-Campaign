@@ -90,7 +90,7 @@ package com.brockw.stickwar.engine.Team
       
       private var _deadUnits:Array;
       
-      private var _enemyTeam:Team;
+      private var _enemyTeam:com.brockw.stickwar.engine.Team.Team;
       
       private var _ai:TeamAi;
       
@@ -124,9 +124,9 @@ package com.brockw.stickwar.engine.Team
       
       protected var _buildings:Dictionary;
       
-      protected var _tech:Tech;
+      protected var _tech:com.brockw.stickwar.engine.Team.Tech;
       
-      private var _castleDefence:CastleDefence;
+      private var _castleDefence:com.brockw.stickwar.engine.Team.CastleDefence;
       
       private var _hit:Boolean;
       
@@ -224,7 +224,7 @@ package com.brockw.stickwar.engine.Team
          this.passiveManaUpgraded1 = game.xml.xml.passiveManaUpgraded1;
          this.passiveManaUpgraded2 = game.xml.xml.passiveManaUpgraded2;
          this.passiveManaUpgraded3 = game.xml.xml.passiveManaUpgraded3;
-         this.currentAttackState = Team.G_DEFEND;
+         this.currentAttackState = com.brockw.stickwar.engine.Team.Team.G_DEFEND;
          this.populationLimit = game.xml.xml.populationLimit;
          this.healthModifier = 1;
          this._isMember = true;
@@ -234,19 +234,19 @@ package com.brockw.stickwar.engine.Team
          this._originalType = 0;
       }
       
-      public static function getTeamFromId(id:int, game:StickWar, health:int, techAllowed:Dictionary, handicap:* = 1.0, healthModifier:Number = 1.0) : Team
+      public static function getTeamFromId(id:int, game:StickWar, health:int, techAllowed:Dictionary, handicap:* = 1, healthModifier:Number = 1) : com.brockw.stickwar.engine.Team.Team
       {
          var original:* = id;
-         if(id == Team.T_RANDOM)
+         if(id == com.brockw.stickwar.engine.Team.Team.T_RANDOM)
          {
             id = game.random.nextInt() % 2;
          }
-         var team:Team = null;
-         if(id == Team.T_GOOD)
+         var team:com.brockw.stickwar.engine.Team.Team = null;
+         if(id == com.brockw.stickwar.engine.Team.Team.T_GOOD)
          {
             team = new TeamGood(game,health,techAllowed,handicap,healthModifier);
          }
-         else if(id == Team.T_CHAOS)
+         else if(id == com.brockw.stickwar.engine.Team.Team.T_CHAOS)
          {
             team = new TeamChaos(game,health,techAllowed,handicap,healthModifier);
          }
@@ -262,34 +262,34 @@ package com.brockw.stickwar.engine.Team
       {
          if(name == "Order")
          {
-            return Team.T_GOOD;
+            return com.brockw.stickwar.engine.Team.Team.T_GOOD;
          }
          if(name == "Chaos")
          {
-            return Team.T_CHAOS;
+            return com.brockw.stickwar.engine.Team.Team.T_CHAOS;
          }
          if(name == "Elemental")
          {
-            return Team.T_ELEMENTAL;
+            return com.brockw.stickwar.engine.Team.Team.T_ELEMENTAL;
          }
          return -1;
       }
       
       public static function getRaceNameFromId(id:int) : String
       {
-         if(id == Team.T_GOOD)
+         if(id == com.brockw.stickwar.engine.Team.Team.T_GOOD)
          {
             return "Order";
          }
-         if(id == Team.T_CHAOS)
+         if(id == com.brockw.stickwar.engine.Team.Team.T_CHAOS)
          {
             return "Chaos";
          }
-         if(id == Team.T_ELEMENTAL)
+         if(id == com.brockw.stickwar.engine.Team.Team.T_ELEMENTAL)
          {
             return "Elemental";
          }
-         if(id == Team.T_RANDOM)
+         if(id == com.brockw.stickwar.engine.Team.Team.T_RANDOM)
          {
             return "Random";
          }
@@ -426,7 +426,7 @@ package com.brockw.stickwar.engine.Team
          {
             u.execute(this.game);
          }
-         this.currentAttackState = Team.G_GARRISON;
+         this.currentAttackState = com.brockw.stickwar.engine.Team.Team.G_GARRISON;
       }
       
       public function getMinerType() : int
@@ -489,7 +489,7 @@ package com.brockw.stickwar.engine.Team
             moveUnits.execute(this.game);
             attackMoveUnits.execute(this.game);
          }
-         this.currentAttackState = Team.G_DEFEND;
+         this.currentAttackState = com.brockw.stickwar.engine.Team.Team.G_DEFEND;
       }
       
       public function attack(param1:Boolean = false, param2:Boolean = false, param3:Number = 0) : void
@@ -567,7 +567,7 @@ package com.brockw.stickwar.engine.Team
          {
             _loc4_.execute(this.game);
          }
-         this.currentAttackState = Team.G_ATTACK;
+         this.currentAttackState = com.brockw.stickwar.engine.Team.Team.G_ATTACK;
       }
       
       public function cleanUpUnits() : void
@@ -585,7 +585,7 @@ package com.brockw.stickwar.engine.Team
          }
          this.population = 0;
          this.castleDefence.cleanUpUnits();
-         delete this.tech.isResearchedMap[Tech.CASTLE_ARCHER_1];
+         delete this.tech.isResearchedMap[com.brockw.stickwar.engine.Team.Tech.CASTLE_ARCHER_1];
          for each(unit in this._units)
          {
             this.removeUnitCompletely(unit,this.game);
@@ -675,7 +675,7 @@ package com.brockw.stickwar.engine.Team
       {
          var _loc5_:int = 0;
          var _loc6_:Unit = null;
-         var _loc3_:int = this.unitInfo[param1][2];
+         var _loc3_:int = int(this.unitInfo[param1][2]);
          var _loc4_:Unit = null;
          if(param2)
          {
@@ -805,7 +805,7 @@ package com.brockw.stickwar.engine.Team
                {
                   _loc9_.visible = false;
                }
-               _loc13_ = this.unitInfo[_loc6_][2];
+               _loc13_ = int(this.unitInfo[_loc6_][2]);
                if(this._unitProductionQueue[_loc13_].length != 0 && Unit(this._unitProductionQueue[_loc13_][0][0]).type == int(_loc6_))
                {
                   this.drawTimerOverlay(this.buttonInfoMap[_loc6_][6],_loc7_,this._unitProductionQueue[_loc13_][0][1] / Unit(this._unitProductionQueue[_loc13_][0][0]).createTime);
@@ -1040,7 +1040,7 @@ package com.brockw.stickwar.engine.Team
                game.main.kongregateReportStatistic("maxPopulation",1);
             }
          }
-         if(this.currentAttackState == Team.G_GARRISON)
+         if(this.currentAttackState == com.brockw.stickwar.engine.Team.Team.G_GARRISON)
          {
             this.garrison(true,unit);
          }
@@ -1104,7 +1104,7 @@ package com.brockw.stickwar.engine.Team
          {
             game.battlefield.removeChild(unit);
          }
-         var index:int = this.unitGroups[unit.type].indexOf(unit);
+         var index:int = int(this.unitGroups[unit.type].indexOf(unit));
          if(index != -1)
          {
             this.unitGroups[unit.type].splice(index,1);
@@ -1213,7 +1213,7 @@ package com.brockw.stickwar.engine.Team
          attackMoveCommand.realY = game.map.height / 2;
          newUnit.ai.setCommand(game,attackMoveCommand);
          var scale:Number = 1;
-         if(this.tech.isResearched(Tech.TOWER_SPAWN_II))
+         if(this.tech.isResearched(com.brockw.stickwar.engine.Team.Tech.TOWER_SPAWN_II))
          {
             scale = 1.5;
          }
@@ -1240,13 +1240,13 @@ package com.brockw.stickwar.engine.Team
          var _loc4_:Array = null;
          var _loc5_:Number = NaN;
          var _loc6_:* = null;
-         var _loc8_:Team = null;
+         var _loc8_:com.brockw.stickwar.engine.Team.Team = null;
          if(param1.map.hills.length != 0)
          {
             _loc8_ = param1.map.hills[0].getControllingTeam(param1);
             if(_loc8_ == this)
             {
-               if(this.tech.isResearched(Tech.TOWER_SPAWN_I))
+               if(this.tech.isResearched(com.brockw.stickwar.engine.Team.Tech.TOWER_SPAWN_I))
                {
                   if(this.spawnedUnit != null)
                   {
@@ -1265,17 +1265,17 @@ package com.brockw.stickwar.engine.Team
          }
          if(param1.frame % (30 * 5) == 0)
          {
-            if(this.tech.isResearched(Tech.BANK_PASSIVE_3))
+            if(this.tech.isResearched(com.brockw.stickwar.engine.Team.Tech.BANK_PASSIVE_3))
             {
                this.gold += this.passiveIncomeAmountUpgraded3;
                this.mana += this.passiveManaUpgraded3;
             }
-            else if(this.tech.isResearched(Tech.BANK_PASSIVE_2))
+            else if(this.tech.isResearched(com.brockw.stickwar.engine.Team.Tech.BANK_PASSIVE_2))
             {
                this.gold += this.passiveIncomeAmountUpgraded2;
                this.mana += this.passiveManaUpgraded2;
             }
-            else if(this.tech.isResearched(Tech.BANK_PASSIVE_1))
+            else if(this.tech.isResearched(com.brockw.stickwar.engine.Team.Tech.BANK_PASSIVE_1))
             {
                this.gold += this.passiveIncomeAmountUpgraded1;
                this.mana += this.passiveManaUpgraded1;
@@ -1456,12 +1456,12 @@ package com.brockw.stickwar.engine.Team
          }
       }
       
-      public function get enemyTeam() : Team
+      public function get enemyTeam() : com.brockw.stickwar.engine.Team.Team
       {
          return this._enemyTeam;
       }
       
-      public function set enemyTeam(value:Team) : void
+      public function set enemyTeam(value:com.brockw.stickwar.engine.Team.Team) : void
       {
          this._enemyTeam = value;
       }
@@ -1616,22 +1616,22 @@ package com.brockw.stickwar.engine.Team
          this._buildings = value;
       }
       
-      public function get tech() : Tech
+      public function get tech() : com.brockw.stickwar.engine.Team.Tech
       {
          return this._tech;
       }
       
-      public function set tech(value:Tech) : void
+      public function set tech(value:com.brockw.stickwar.engine.Team.Tech) : void
       {
          this._tech = value;
       }
       
-      public function get castleDefence() : CastleDefence
+      public function get castleDefence() : com.brockw.stickwar.engine.Team.CastleDefence
       {
          return this._castleDefence;
       }
       
-      public function set castleDefence(value:CastleDefence) : void
+      public function set castleDefence(value:com.brockw.stickwar.engine.Team.CastleDefence) : void
       {
          this._castleDefence = value;
       }

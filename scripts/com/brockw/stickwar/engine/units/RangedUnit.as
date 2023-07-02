@@ -55,7 +55,7 @@ package com.brockw.stickwar.engine.units
             {
                _mc.mc.bow.rotation = this.bowAngle;
             }
-            else if(_mc.mc.body != null && _mc.mc.body.arms)
+            else if(_mc.mc.body != null && Boolean(_mc.mc.body.arms))
             {
                _mc.mc.body.arms.rotation = this.bowAngle;
             }
@@ -200,24 +200,24 @@ package com.brockw.stickwar.engine.units
             return 0;
          }
          v = this._projectileVelocity;
-         var _loc4_:Number = StickWar.GRAVITY;
-         var _loc5_:Number = Math.sqrt((target.px - this.px) * (target.px - this.px));
-         _loc5_ += this.aimXOffset * Util.sgn(mc.scaleX);
-         var _loc6_:Number = target.pheight - this.pheight;
-         _loc6_ = 0;
-         var _loc7_:Number = -(target.pz - pz) + _loc6_ + this.aimYOffset;
+         var g:Number = StickWar.GRAVITY;
+         var d:Number = Math.sqrt((target.px - this.px) * (target.px - this.px));
+         d += this.aimXOffset * Util.sgn(mc.scaleX);
+         var hDiff:Number = target.pheight - this.pheight;
+         hDiff = 0;
+         var zDiff:Number = -(target.pz - pz) + hDiff + this.aimYOffset;
          theta = -Math.PI / 180 * this.angleToBowSpace(theta);
-         var _loc8_:Number = v * v * Util.sin(theta) * Util.sin(theta) + 2 * _loc4_ * -_loc7_;
-         if(_loc8_ < 0)
+         var top:Number = v * v * Util.sin(theta) * Util.sin(theta) + 2 * g * -zDiff;
+         if(top < 0)
          {
-            _loc8_ = 0;
+            top = 0;
          }
-         var _loc9_:Number = (v * Util.sin(theta) + Math.sqrt(_loc8_)) / _loc4_;
-         if(Math.abs(_loc9_) < 0.001)
+         var t:Number = (v * Util.sin(theta) + Math.sqrt(top)) / g;
+         if(Math.abs(t) < 0.001)
          {
             return (target.py - py) / 5;
          }
-         return (target.py - py) / _loc9_;
+         return (target.py - py) / t;
       }
       
       public function get projectileVelocity() : Number

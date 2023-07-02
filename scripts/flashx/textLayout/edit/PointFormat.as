@@ -74,12 +74,12 @@ package flashx.textLayout.edit
          }
          var format:PointFormat = new PointFormat(element.format);
          var linkElement:LinkElement = element.getParentByType(LinkElement) as LinkElement;
-         if(linkElement)
+         if(Boolean(linkElement))
          {
             format.linkElement = linkElement.shallowCopy() as LinkElement;
          }
          var tcyElement:TCYElement = element.getParentByType(TCYElement) as TCYElement;
-         if(tcyElement)
+         if(Boolean(tcyElement))
          {
             format.tcyElement = tcyElement.shallowCopy() as TCYElement;
          }

@@ -20,7 +20,7 @@ package com.brockw.stickwar.engine.Team.Chaos
    {
        
       
-      public function TeamChaos(game:StickWar, health:int, techAllowed:Dictionary = null, handicap:* = 1.0, healthModifier:Number = 1.0)
+      public function TeamChaos(game:StickWar, health:int, techAllowed:Dictionary = null, handicap:* = 1, healthModifier:Number = 1)
       {
          var healthyCats:int = 0;
          var bulding:Building = null;

@@ -1,8 +1,8 @@
 package com.brockw.stickwar.engine.projectile
 {
    import com.brockw.game.Util;
-   import com.brockw.stickwar.engine.Entity;
-   import com.brockw.stickwar.engine.StickWar;
+   import com.brockw.stickwar.engine.*;
+   import com.brockw.stickwar.engine.Team.*;
    import com.brockw.stickwar.engine.units.Unit;
    import com.brockw.stickwar.engine.units.Wall;
    import flash.display.MovieClip;
@@ -163,7 +163,7 @@ package com.brockw.stickwar.engine.projectile
                {
                   Unit(unitNotToHit).applyVelocity(2 * Util.sgn(direction));
                }
-               Entity(unitNotToHit.damage(!!isFire ? int(1) : int(0),damageToDeal,_inflictor));
+               Entity(unitNotToHit.damage(isFire ? 1 : 0,damageToDeal,_inflictor));
             }
             lastDistanceToCentre = cDistance;
          }

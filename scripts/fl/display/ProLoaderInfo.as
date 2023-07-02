@@ -19,7 +19,7 @@ package fl.display
    {
        
       
-      private var _proLoader:ProLoader;
+      private var _proLoader:fl.display.ProLoader;
       
       private var _realLI:LoaderInfo;
       
@@ -31,9 +31,9 @@ package fl.display
       
       private var _numAdded:int;
       
-      var _lcRequestedContentParentSet:Boolean;
+      internal var _lcRequestedContentParentSet:Boolean;
       
-      public function ProLoaderInfo(param1:ProLoader)
+      public function ProLoaderInfo(param1:fl.display.ProLoader)
       {
          super();
          this._realContentLI = null;
@@ -54,7 +54,7 @@ package fl.display
          this._realLI.addEventListener(Event.UNLOAD,this.handleLoaderInfoEvent,false,0,true);
       }
       
-      function reset() : void
+      internal function reset() : void
       {
          this._realContentLI = null;
          this._rslPreloaderLoaded = false;
@@ -142,7 +142,7 @@ package fl.display
          return this._realLI.isURLInaccessible;
       }
       
-      public function get loader() : ProLoader
+      public function get loader() : fl.display.ProLoader
       {
          return this._proLoader;
       }
@@ -326,7 +326,7 @@ package fl.display
          }
       }
       
-      function set realContentLoaderInfo(param1:LoaderInfo) : void
+      internal function set realContentLoaderInfo(param1:LoaderInfo) : void
       {
          var obj:Object = null;
          var value:LoaderInfo = param1;
@@ -363,7 +363,7 @@ package fl.display
          }
       }
       
-      function get realContentLoaderInfo() : LoaderInfo
+      internal function get realContentLoaderInfo() : LoaderInfo
       {
          return this._realContentLI;
       }

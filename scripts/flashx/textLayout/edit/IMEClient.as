@@ -23,13 +23,11 @@ package flashx.textLayout.edit
    import flashx.textLayout.utils.GeometryUtil;
    import flashx.undo.UndoManager;
    
-   use namespace tlf_internal;
-   
-   class IMEClient implements IIMEClient
+   internal class IMEClient implements IIMEClient
    {
        
       
-      private var _editManager:EditManager;
+      private var _editManager:flashx.textLayout.edit.EditManager;
       
       private var _undoManager:UndoManager;
       
@@ -41,23 +39,23 @@ package flashx.textLayout.edit
       
       private var _closing:Boolean;
       
-      function IMEClient(editManager:EditManager)
+      public function IMEClient(editManager:flashx.textLayout.edit.EditManager)
       {
          var flowComposer:IFlowComposer = null;
          var controllerIndex:int = 0;
          super();
          this._editManager = editManager;
          this._imeAnchorPosition = this._editManager.absoluteStart;
-         if(this._editManager.textFlow)
+         if(Boolean(this._editManager.textFlow))
          {
             flowComposer = this._editManager.textFlow.flowComposer;
-            if(flowComposer)
+            if(Boolean(flowComposer))
             {
-               controllerIndex = flowComposer.findControllerIndexAtPosition(this._imeAnchorPosition);
+               controllerIndex = int(flowComposer.findControllerIndexAtPosition(this._imeAnchorPosition));
                this._controller = flowComposer.getControllerAt(controllerIndex);
-               if(this._controller)
+               if(Boolean(this._controller))
                {
-                  this._controller.setFocus();
+                  this._controller.tlf_internal::setFocus();
                }
             }
          }
@@ -65,7 +63,7 @@ package flashx.textLayout.edit
          if(this._editManager.undoManager == null)
          {
             this._undoManager = new UndoManager();
-            this._editManager.setUndoManager(this._undoManager);
+            this._editManager.tlf_internal::setUndoManager(this._undoManager);
          }
       }
       
@@ -124,7 +122,7 @@ package flashx.textLayout.edit
          var leafFormat:TextLayoutFormat = null;
          var absoluteStart:int = 0;
          var leaf:FlowLeafElement = textFlow.getFirstLeaf();
-         while(leaf)
+         while(Boolean(leaf))
          {
             if(leaf.getStyle(IMEStatus.IME_STATUS) !== undefined || leaf.getStyle(IMEStatus.IME_CLAUSE) !== undefined)
             {
@@ -148,7 +146,7 @@ package flashx.textLayout.edit
          var previousIMEOperation:FlowOperation = this._editManager.undoManager.peekUndo() as FlowOperation;
          if(this._imeLength > 0 && previousIMEOperation && previousIMEOperation.endGeneration == this._editManager.textFlow.generation && previousIMEOperation.canUndo())
          {
-            if(this._editManager.undoManager)
+            if(Boolean(this._editManager.undoManager))
             {
                this._editManager.undoManager.undo();
             }
@@ -181,7 +179,7 @@ package flashx.textLayout.edit
          {
             pointFormat = this._editManager.getSelectionState().pointFormat;
             selState = new SelectionState(this._editManager.textFlow,this._imeAnchorPosition,this._imeAnchorPosition + this._imeLength,pointFormat);
-            this._editManager.beginIMEOperation();
+            this._editManager.tlf_internal::beginIMEOperation();
             if(this._editManager.absoluteStart != this._editManager.absoluteEnd)
             {
                this._editManager.deleteText();
@@ -189,9 +187,9 @@ package flashx.textLayout.edit
             insertOp = new InsertTextOperation(selState,text);
             this._imeLength = text.length;
             this._editManager.doOperation(insertOp);
-            if(attributes && attributes.length > 0)
+            if(Boolean(attributes) && attributes.length > 0)
             {
-               attrLen = attributes.length;
+               attrLen = int(attributes.length);
                for(i = 0; i < attrLen; i++)
                {
                   attrRange = attributes[i];
@@ -212,7 +210,7 @@ package flashx.textLayout.edit
             {
                this._editManager.selectRange(this._imeAnchorPosition + compositionStartIndex,this._imeAnchorPosition + compositionEndIndex);
             }
-            this._editManager.endIMEOperation();
+            this._editManager.tlf_internal::endIMEOperation();
          }
       }
       
@@ -241,11 +239,11 @@ package flashx.textLayout.edit
          {
             this.rollBackIMEChanges();
          }
-         if(this._undoManager)
+         if(Boolean(this._undoManager))
          {
-            this._editManager.setUndoManager(null);
+            this._editManager.tlf_internal::setUndoManager(null);
          }
-         this._editManager.endIMESession();
+         this._editManager.tlf_internal::endIMESession();
          this._editManager = null;
       }
       
@@ -274,7 +272,7 @@ package flashx.textLayout.edit
                   textLine = boundsResult[0].textLine;
                   resultTopLeft = textLine.localToGlobal(bounds.topLeft);
                   resultBottomRight = textLine.localToGlobal(bounds.bottomRight);
-                  if(textLine.parent)
+                  if(Boolean(textLine.parent))
                   {
                      containerTopLeft = textLine.parent.globalToLocal(resultTopLeft);
                      containerBottomLeft = textLine.parent.globalToLocal(resultBottomRight);
@@ -285,7 +283,7 @@ package flashx.textLayout.edit
             else
             {
                flowComposer = this._editManager.textFlow.flowComposer;
-               lineIndex = flowComposer.findLineIndexAtPosition(startIndex);
+               lineIndex = int(flowComposer.findLineIndexAtPosition(startIndex));
                if(lineIndex == flowComposer.numLines)
                {
                   lineIndex--;
@@ -295,7 +293,7 @@ package flashx.textLayout.edit
                   line = flowComposer.getLineAt(lineIndex);
                   previousLine = lineIndex != 0 ? flowComposer.getLineAt(lineIndex - 1) : null;
                   nextLine = lineIndex != flowComposer.numLines - 1 ? flowComposer.getLineAt(lineIndex + 1) : null;
-                  return line.computePointSelectionRectangle(startIndex,this._controller.container,previousLine,nextLine,true);
+                  return line.tlf_internal::computePointSelectionRectangle(startIndex,this._controller.container,previousLine,nextLine,true);
                }
             }
          }
@@ -336,7 +334,7 @@ package flashx.textLayout.edit
       {
          if(this._controller && this._controller.container && this._controller.container.stage && this._controller.container.stage.focus != this._controller.container)
          {
-            this._controller.setFocus();
+            this._controller.tlf_internal::setFocus();
          }
       }
       

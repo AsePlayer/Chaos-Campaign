@@ -5,9 +5,9 @@ package com.brockw.stickwar.engine.multiplayer
    import com.brockw.stickwar.engine.multiplayer.adds.AddManager;
    import com.liamr.ui.dropDown.DropDown;
    import com.liamr.ui.dropDown.Events.DropDownEvent;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
-   import com.smartfoxserver.v2.requests.LogoutRequest;
+   import com.smartfoxserver.v2.core.*;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
    import fl.controls.ScrollPolicy;
    import flash.events.Event;
    import flash.events.MouseEvent;
@@ -20,15 +20,15 @@ package com.brockw.stickwar.engine.multiplayer
    {
        
       
-      var main:Main;
+      internal var main:Main;
       
-      var chatOverlay:chatOverlayMc;
+      internal var chatOverlay:chatOverlayMc;
       
-      var timer:Timer;
+      internal var timer:Timer;
       
       private var population:int;
       
-      private var _buddyList:BuddyList;
+      private var _buddyList:com.brockw.stickwar.engine.multiplayer.BuddyList;
       
       private var isUserListDisplayed:Boolean;
       
@@ -56,7 +56,7 @@ package com.brockw.stickwar.engine.multiplayer
          addChild(this.chatOverlay);
          this.main = main;
          this._isBuddyListInited = false;
-         this._buddyList = new BuddyList(this.chatOverlay,main);
+         this._buddyList = new com.brockw.stickwar.engine.multiplayer.BuddyList(this.chatOverlay,main);
          var s:Array = Buddy.getStatuses();
          this.statusSelect = new DropDown(s,"Select status",true,100);
          this.statusSelect.x = 12;
@@ -393,12 +393,12 @@ package com.brockw.stickwar.engine.multiplayer
          this.addManager.update();
       }
       
-      public function get buddyList() : BuddyList
+      public function get buddyList() : com.brockw.stickwar.engine.multiplayer.BuddyList
       {
          return this._buddyList;
       }
       
-      public function set buddyList(value:BuddyList) : void
+      public function set buddyList(value:com.brockw.stickwar.engine.multiplayer.BuddyList) : void
       {
          this._buddyList = value;
       }

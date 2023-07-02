@@ -1,11 +1,9 @@
 package com.brockw.stickwar.engine.Team.Chaos
 {
    import com.brockw.stickwar.engine.Ai.DeadAi;
-   import com.brockw.stickwar.engine.Ai.command.HoldCommand;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.Team.CastleDefence;
-   import com.brockw.stickwar.engine.Team.Team;
-   import com.brockw.stickwar.engine.Team.Tech;
+   import com.brockw.stickwar.engine.Team.*;
    import com.brockw.stickwar.engine.units.Dead;
    
    public class CastleDeads extends CastleDefence

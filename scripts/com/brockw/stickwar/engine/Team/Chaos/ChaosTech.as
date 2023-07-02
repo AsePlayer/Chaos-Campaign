@@ -1,9 +1,8 @@
 package com.brockw.stickwar.engine.Team.Chaos
 {
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.Team.Tech;
-   import com.brockw.stickwar.engine.Team.TechItem;
-   import flash.display.Bitmap;
+   import com.brockw.stickwar.engine.Team.*;
+   import flash.display.*;
    import flash.utils.Dictionary;
    
    public class ChaosTech extends Tech

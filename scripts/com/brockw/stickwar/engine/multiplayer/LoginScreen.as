@@ -2,13 +2,13 @@ package com.brockw.stickwar.engine.multiplayer
 {
    import AS.encryption.MD5;
    import com.brockw.game.Screen;
-   import com.brockw.stickwar.Main;
+   import com.brockw.stickwar.*;
    import com.smartfoxserver.v2.core.SFSEvent;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.JoinRoomRequest;
-   import com.smartfoxserver.v2.requests.LoginRequest;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
+   import com.smartfoxserver.v2.entities.*;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
+   import com.smartfoxserver.v2.requests.buddylist.*;
+   import flash.events.*;
    import flash.net.URLRequest;
    import flash.net.navigateToURL;
    
@@ -20,15 +20,15 @@ package com.brockw.stickwar.engine.multiplayer
       
       private var inputText:GenericTextInput;
       
-      var btnConnect:GenericButton;
+      internal var btnConnect:GenericButton;
       
-      var btnSingleplayer:GenericButton;
+      internal var btnSingleplayer:GenericButton;
       
-      var btnReplay:GenericButton;
+      internal var btnReplay:GenericButton;
       
-      var loginMc:loginMenuMc;
+      internal var loginMc:loginMenuMc;
       
-      public var forgotPasswordForm:ForgotPasswordForm;
+      public var forgotPasswordForm:com.brockw.stickwar.engine.multiplayer.ForgotPasswordForm;
       
       private var justFailed:Boolean;
       
@@ -40,7 +40,7 @@ package com.brockw.stickwar.engine.multiplayer
          this.main = main;
          this.loginMc = new loginMenuMc();
          addChild(this.loginMc);
-         this.forgotPasswordForm = new ForgotPasswordForm(main);
+         this.forgotPasswordForm = new com.brockw.stickwar.engine.multiplayer.ForgotPasswordForm(main);
          this.addChild(this.forgotPasswordForm);
          this.forgotPasswordForm.visible = false;
          this.loginMc.versionText.text = main.version;
@@ -202,7 +202,7 @@ package com.brockw.stickwar.engine.multiplayer
       
       private function loginUserEnterButton(evt:Event) : void
       {
-         var txt:String = evt.target.text;
+         var txt:String = String(evt.target.text);
          if(txt.charCodeAt(txt.length - 1) == 13)
          {
             txt = txt.slice(0,txt.length - 1);

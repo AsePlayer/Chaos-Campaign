@@ -1,5 +1,6 @@
 package fl.motion
 {
+   import flash.display.*;
    import flash.geom.ColorTransform;
    
    public class Color extends ColorTransform
@@ -10,7 +11,7 @@ package fl.motion
       
       private var _tintMultiplier:Number = 0;
       
-      public function Color(param1:Number = 1.0, param2:Number = 1.0, param3:Number = 1.0, param4:Number = 1.0, param5:Number = 0, param6:Number = 0, param7:Number = 0, param8:Number = 0)
+      public function Color(param1:Number = 1, param2:Number = 1, param3:Number = 1, param4:Number = 1, param5:Number = 0, param6:Number = 0, param7:Number = 0, param8:Number = 0)
       {
          super(param1,param2,param3,param4,param5,param6,param7,param8);
       }
@@ -29,14 +30,14 @@ package fl.motion
       public static function interpolateColor(param1:uint, param2:uint, param3:Number) : uint
       {
          var _loc4_:Number = 1 - param3;
-         var _loc5_:uint = param1 >> 24 & 255;
-         var _loc6_:uint = param1 >> 16 & 255;
-         var _loc7_:uint = param1 >> 8 & 255;
-         var _loc8_:uint = param1 & 255;
-         var _loc9_:uint = param2 >> 24 & 255;
-         var _loc10_:uint = param2 >> 16 & 255;
-         var _loc11_:uint = param2 >> 8 & 255;
-         var _loc12_:uint = param2 & 255;
+         var _loc5_:uint = uint(param1 >> 24 & 255);
+         var _loc6_:uint = uint(param1 >> 16 & 255);
+         var _loc7_:uint = uint(param1 >> 8 & 255);
+         var _loc8_:uint = uint(param1 & 255);
+         var _loc9_:uint = uint(param2 >> 24 & 255);
+         var _loc10_:uint = uint(param2 >> 16 & 255);
+         var _loc11_:uint = uint(param2 >> 8 & 255);
+         var _loc12_:uint = uint(param2 & 255);
          var _loc13_:uint = _loc5_ * _loc4_ + _loc9_ * param3;
          var _loc14_:uint = _loc6_ * _loc4_ + _loc10_ * param3;
          var _loc15_:uint = _loc7_ * _loc4_ + _loc11_ * param3;
@@ -46,7 +47,7 @@ package fl.motion
       
       public function get brightness() : Number
       {
-         return Boolean(this.redOffset) ? Number(1 - this.redMultiplier) : Number(this.redMultiplier - 1);
+         return Boolean(this.redOffset) ? 1 - this.redMultiplier : this.redMultiplier - 1;
       }
       
       public function set brightness(param1:Number) : void
@@ -74,9 +75,9 @@ package fl.motion
          this._tintColor = param1;
          this._tintMultiplier = param2;
          this.redMultiplier = this.greenMultiplier = this.blueMultiplier = 1 - param2;
-         var _loc3_:uint = param1 >> 16 & 255;
-         var _loc4_:uint = param1 >> 8 & 255;
-         var _loc5_:uint = param1 & 255;
+         var _loc3_:uint = uint(param1 >> 16 & 255);
+         var _loc4_:uint = uint(param1 >> 8 & 255);
+         var _loc5_:uint = uint(param1 & 255);
          this.redOffset = Math.round(_loc3_ * param2);
          this.greenOffset = Math.round(_loc4_ * param2);
          this.blueOffset = Math.round(_loc5_ * param2);
@@ -127,7 +128,7 @@ package fl.motion
          }
          for each(_loc3_ in _loc2_.attributes())
          {
-            _loc4_ = _loc3_.localName();
+            _loc4_ = String(_loc3_.localName());
             if(_loc4_ == "tintColor")
             {
                _loc5_ = Number(_loc3_.toString()) as uint;

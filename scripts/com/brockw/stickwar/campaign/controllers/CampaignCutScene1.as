@@ -1,17 +1,13 @@
 package com.brockw.stickwar.campaign.controllers
 {
    import com.brockw.stickwar.GameScreen;
-   import com.brockw.stickwar.campaign.CampaignGameScreen;
-   import com.brockw.stickwar.campaign.InGameMessage;
-   import com.brockw.stickwar.engine.Ai.command.HoldCommand;
-   import com.brockw.stickwar.engine.Ai.command.MoveCommand;
+   import com.brockw.stickwar.campaign.*;
+   import com.brockw.stickwar.engine.Ai.*;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.units.EnslavedGiant;
-   import com.brockw.stickwar.engine.units.Giant;
-   import com.brockw.stickwar.engine.units.Medusa;
-   import com.brockw.stickwar.engine.units.Spearton;
-   import com.brockw.stickwar.engine.units.Swordwrath;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.Team.*;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.brockw.stickwar.engine.units.*;
    import flash.display.MovieClip;
    import flash.geom.ColorTransform;
    
@@ -75,34 +71,34 @@ package com.brockw.stickwar.campaign.controllers
       
       override public function update(gameScreen:GameScreen) : void
       {
-         var _loc2_:Unit = null;
-         var _loc3_:ColorTransform = null;
-         var _loc4_:int = 0;
-         var _loc5_:Giant = null;
-         var _loc6_:StickWar = null;
-         var _loc7_:Unit = null;
-         var _loc8_:Number = NaN;
-         var _loc9_:MoveCommand = null;
-         var _loc10_:int = 0;
-         if(this.message)
+         var unit:Unit = null;
+         var c:ColorTransform = null;
+         var numGiants:int = 0;
+         var giant:Giant = null;
+         var game:StickWar = null;
+         var u1:Unit = null;
+         var frontPosition:Number = NaN;
+         var m:MoveCommand = null;
+         var r:int = 0;
+         if(Boolean(this.message))
          {
             this.message.update();
          }
          gameScreen.team.enemyTeam.statue.health = 180;
          gameScreen.team.enemyTeam.gold = 0;
-         if(this.medusa)
+         if(Boolean(this.medusa))
          {
             this.medusa.faceDirection(-1);
          }
          if(!this.rebelsAreEvil)
          {
-            for each(_loc2_ in this.rebels)
+            for each(unit in this.rebels)
             {
-               _loc3_ = _loc2_.mc.transform.colorTransform;
-               _loc3_.redOffset = 0;
-               _loc3_.blueOffset = 0;
-               _loc3_.greenOffset = 0;
-               _loc2_.mc.transform.colorTransform = _loc3_;
+               c = unit.mc.transform.colorTransform;
+               c.redOffset = 0;
+               c.blueOffset = 0;
+               c.greenOffset = 0;
+               unit.mc.transform.colorTransform = c;
             }
          }
          if(this.state != S_BEFORE_CUTSCENE)
@@ -116,13 +112,13 @@ package com.brockw.stickwar.campaign.controllers
          }
          if(this.state != S_BEFORE_CUTSCENE)
          {
-            for each(_loc2_ in gameScreen.game.team.units)
+            for each(unit in gameScreen.game.team.units)
             {
-               _loc2_.ai.mayAttack = false;
+               unit.ai.mayAttack = false;
             }
-            for each(_loc2_ in gameScreen.game.team.enemyTeam.units)
+            for each(unit in gameScreen.game.team.enemyTeam.units)
             {
-               _loc2_.ai.mayAttack = false;
+               unit.ai.mayAttack = false;
             }
             gameScreen.userInterface.selectedUnits.clear();
             CampaignGameScreen(gameScreen).doAiUpdates = false;
@@ -130,17 +126,17 @@ package com.brockw.stickwar.campaign.controllers
          }
          if(this.state == S_BEFORE_CUTSCENE)
          {
-            _loc4_ = 0;
-            if(gameScreen.team.enemyTeam.unitGroups[Unit.U_GIANT])
+            numGiants = 0;
+            if(Boolean(gameScreen.team.enemyTeam.unitGroups[Unit.U_GIANT]))
             {
-               _loc4_ = 1;
-               _loc5_ = gameScreen.team.enemyTeam.unitGroups[Unit.U_GIANT][0];
-               if(_loc5_ == null || _loc5_.health == 0)
+               numGiants = 1;
+               giant = gameScreen.team.enemyTeam.unitGroups[Unit.U_GIANT][0];
+               if(giant == null || giant.health == 0)
                {
-                  _loc4_ = 0;
+                  numGiants = 0;
                }
             }
-            if(_loc4_ == 0)
+            if(numGiants == 0)
             {
                this.state = S_FADE_OUT;
                this.counter = 0;
@@ -165,44 +161,44 @@ package com.brockw.stickwar.campaign.controllers
             {
                this.state = S_FADE_IN;
                this.counter = 0;
-               _loc6_ = gameScreen.game;
-               _loc7_ = EnslavedGiant(_loc6_.unitFactory.getUnit(Unit.U_ENSLAVED_GIANT));
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = gameScreen.team.enemyTeam.statue.x - 200;
-               _loc7_.py = _loc6_.map.height / 2;
-               _loc7_.ai.setCommand(_loc6_,new HoldCommand(_loc6_));
-               _loc7_.ai.mayAttack = false;
-               _loc7_ = Swordwrath(_loc6_.unitFactory.getUnit(Unit.U_SWORDWRATH));
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = gameScreen.team.enemyTeam.statue.x - 200 + 50;
-               _loc7_.py = _loc6_.map.height / 4;
-               _loc7_.ai.setCommand(_loc6_,new HoldCommand(_loc6_));
-               _loc7_ = Swordwrath(_loc6_.unitFactory.getUnit(Unit.U_SWORDWRATH));
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = gameScreen.team.enemyTeam.statue.x - 200 + 50;
-               _loc7_.py = 3 * _loc6_.map.height / 4;
-               _loc7_.ai.setCommand(_loc6_,new HoldCommand(_loc6_));
-               _loc7_ = Spearton(_loc6_.unitFactory.getUnit(Unit.U_SPEARTON));
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = gameScreen.team.enemyTeam.statue.x - 200 - 50;
-               _loc7_.py = _loc6_.map.height / 4;
-               _loc7_.ai.setCommand(_loc6_,new HoldCommand(_loc6_));
-               _loc7_ = Spearton(_loc6_.unitFactory.getUnit(Unit.U_SPEARTON));
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = gameScreen.team.enemyTeam.statue.x - 200 - 50;
-               _loc7_.py = 3 * _loc6_.map.height / 4;
-               _loc7_.ai.setCommand(_loc6_,new HoldCommand(_loc6_));
-               _loc7_ = Medusa(_loc6_.unitFactory.getUnit(Unit.U_MEDUSA));
-               gameScreen.team.enemyTeam.spawn(_loc7_,_loc6_);
-               this.medusa = _loc7_;
-               _loc7_.ai.setCommand(_loc6_,new HoldCommand(_loc6_));
-               _loc7_.flyingHeight = 380;
-               _loc7_.pz = -_loc7_.flyingHeight;
-               _loc7_.py = _loc6_.map.height / 2;
-               _loc7_.y = 0;
-               _loc7_.px = gameScreen.team.enemyTeam.homeX + gameScreen.team.enemyTeam.direction * 100;
-               _loc7_.x = _loc7_.px;
-               _loc7_.faceDirection(-1);
+               game = gameScreen.game;
+               u1 = EnslavedGiant(game.unitFactory.getUnit(Unit.U_ENSLAVED_GIANT));
+               gameScreen.team.spawn(u1,game);
+               u1.px = gameScreen.team.enemyTeam.statue.x - 200;
+               u1.py = game.map.height / 2;
+               u1.ai.setCommand(game,new HoldCommand(game));
+               u1.ai.mayAttack = false;
+               u1 = Swordwrath(game.unitFactory.getUnit(Unit.U_SWORDWRATH));
+               gameScreen.team.spawn(u1,game);
+               u1.px = gameScreen.team.enemyTeam.statue.x - 200 + 50;
+               u1.py = game.map.height / 4;
+               u1.ai.setCommand(game,new HoldCommand(game));
+               u1 = Swordwrath(game.unitFactory.getUnit(Unit.U_SWORDWRATH));
+               gameScreen.team.spawn(u1,game);
+               u1.px = gameScreen.team.enemyTeam.statue.x - 200 + 50;
+               u1.py = 3 * game.map.height / 4;
+               u1.ai.setCommand(game,new HoldCommand(game));
+               u1 = Spearton(game.unitFactory.getUnit(Unit.U_SPEARTON));
+               gameScreen.team.spawn(u1,game);
+               u1.px = gameScreen.team.enemyTeam.statue.x - 200 - 50;
+               u1.py = game.map.height / 4;
+               u1.ai.setCommand(game,new HoldCommand(game));
+               u1 = Spearton(game.unitFactory.getUnit(Unit.U_SPEARTON));
+               gameScreen.team.spawn(u1,game);
+               u1.px = gameScreen.team.enemyTeam.statue.x - 200 - 50;
+               u1.py = 3 * game.map.height / 4;
+               u1.ai.setCommand(game,new HoldCommand(game));
+               u1 = Medusa(game.unitFactory.getUnit(Unit.U_MEDUSA));
+               gameScreen.team.enemyTeam.spawn(u1,game);
+               this.medusa = u1;
+               u1.ai.setCommand(game,new HoldCommand(game));
+               u1.flyingHeight = 380;
+               u1.pz = -u1.flyingHeight;
+               u1.py = game.map.height / 2;
+               u1.y = 0;
+               u1.px = gameScreen.team.enemyTeam.homeX + gameScreen.team.enemyTeam.direction * 100;
+               u1.x = u1.px;
+               u1.faceDirection(-1);
             }
          }
          else if(this.state == S_FADE_IN)
@@ -267,75 +263,75 @@ package com.brockw.stickwar.campaign.controllers
             if(this.message.hasFinishedPlayingSound())
             {
                this.state = S_ENTER_REBELS;
-               for each(_loc2_ in gameScreen.game.team.units)
+               for each(unit in gameScreen.game.team.units)
                {
-                  _loc2_.forceFaceDirection(-1);
+                  unit.forceFaceDirection(-1);
                }
-               _loc8_ = gameScreen.team.enemyTeam.statue.x - 600 - 400;
-               _loc6_ = gameScreen.game;
-               _loc7_ = _loc6_.unitFactory.getUnit(Unit.U_NINJA);
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = _loc8_ - 75;
-               _loc7_.py = 3 * _loc6_.map.height / 4;
-               _loc9_ = new MoveCommand(_loc6_);
-               _loc9_.realX = _loc9_.goalX = _loc7_.px + 400;
-               _loc9_.realY = _loc9_.goalY = _loc7_.py;
-               _loc7_.ai.setCommand(_loc6_,_loc9_);
-               _loc7_.ai.mayAttack = false;
-               _loc7_.ai.mayMoveToAttack = false;
-               this.rebels.push(_loc7_);
-               _loc7_ = _loc6_.unitFactory.getUnit(Unit.U_MAGIKILL);
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = _loc8_;
-               _loc7_.py = _loc6_.map.height / 2;
-               _loc9_ = new MoveCommand(_loc6_);
-               _loc9_.goalX = _loc7_.px + 400;
-               _loc9_.goalY = _loc7_.py;
-               _loc7_.ai.setCommand(_loc6_,_loc9_);
-               _loc7_.ai.mayAttack = false;
-               _loc7_.ai.mayMoveToAttack = false;
-               this.rebels.push(_loc7_);
-               _loc7_ = _loc6_.unitFactory.getUnit(Unit.U_MONK);
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = _loc8_ - 75;
-               _loc7_.py = _loc6_.map.height / 4;
-               _loc9_ = new MoveCommand(_loc6_);
-               _loc9_.goalX = _loc7_.px + 400;
-               _loc9_.goalY = _loc7_.py;
-               _loc7_.ai.setCommand(_loc6_,_loc9_);
-               _loc7_.ai.mayAttack = false;
-               _loc7_.ai.mayMoveToAttack = false;
-               this.rebels.push(_loc7_);
-               _loc7_ = _loc6_.unitFactory.getUnit(Unit.U_ARCHER);
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = _loc8_ - 75;
-               _loc7_.py = 0;
-               _loc9_ = new MoveCommand(_loc6_);
-               _loc9_.goalX = _loc7_.px + 400;
-               _loc9_.goalY = _loc7_.py;
-               _loc7_.ai.setCommand(_loc6_,_loc9_);
-               _loc7_.ai.mayAttack = false;
-               _loc7_.ai.mayMoveToAttack = false;
-               this.rebels.push(_loc7_);
-               _loc7_ = _loc6_.unitFactory.getUnit(Unit.U_SPEARTON);
-               gameScreen.team.spawn(_loc7_,_loc6_);
-               _loc7_.px = _loc8_ - 75;
-               _loc7_.py = _loc6_.map.height;
-               _loc9_ = new MoveCommand(_loc6_);
-               _loc9_.goalX = _loc7_.px + 400;
-               _loc9_.goalY = _loc7_.py;
-               _loc7_.ai.setCommand(_loc6_,_loc9_);
-               _loc7_.ai.mayAttack = false;
-               _loc7_.ai.mayMoveToAttack = false;
-               this.rebels.push(_loc7_);
-               for each(_loc2_ in this.rebels)
+               frontPosition = gameScreen.team.enemyTeam.statue.x - 600 - 400;
+               game = gameScreen.game;
+               u1 = game.unitFactory.getUnit(Unit.U_NINJA);
+               gameScreen.team.spawn(u1,game);
+               u1.px = frontPosition - 75;
+               u1.py = 3 * game.map.height / 4;
+               m = new MoveCommand(game);
+               m.realX = m.goalX = u1.px + 400;
+               m.realY = m.goalY = u1.py;
+               u1.ai.setCommand(game,m);
+               u1.ai.mayAttack = false;
+               u1.ai.mayMoveToAttack = false;
+               this.rebels.push(u1);
+               u1 = game.unitFactory.getUnit(Unit.U_MAGIKILL);
+               gameScreen.team.spawn(u1,game);
+               u1.px = frontPosition;
+               u1.py = game.map.height / 2;
+               m = new MoveCommand(game);
+               m.goalX = u1.px + 400;
+               m.goalY = u1.py;
+               u1.ai.setCommand(game,m);
+               u1.ai.mayAttack = false;
+               u1.ai.mayMoveToAttack = false;
+               this.rebels.push(u1);
+               u1 = game.unitFactory.getUnit(Unit.U_MONK);
+               gameScreen.team.spawn(u1,game);
+               u1.px = frontPosition - 75;
+               u1.py = game.map.height / 4;
+               m = new MoveCommand(game);
+               m.goalX = u1.px + 400;
+               m.goalY = u1.py;
+               u1.ai.setCommand(game,m);
+               u1.ai.mayAttack = false;
+               u1.ai.mayMoveToAttack = false;
+               this.rebels.push(u1);
+               u1 = game.unitFactory.getUnit(Unit.U_ARCHER);
+               gameScreen.team.spawn(u1,game);
+               u1.px = frontPosition - 75;
+               u1.py = 0;
+               m = new MoveCommand(game);
+               m.goalX = u1.px + 400;
+               m.goalY = u1.py;
+               u1.ai.setCommand(game,m);
+               u1.ai.mayAttack = false;
+               u1.ai.mayMoveToAttack = false;
+               this.rebels.push(u1);
+               u1 = game.unitFactory.getUnit(Unit.U_SPEARTON);
+               gameScreen.team.spawn(u1,game);
+               u1.px = frontPosition - 75;
+               u1.py = game.map.height;
+               m = new MoveCommand(game);
+               m.goalX = u1.px + 400;
+               m.goalY = u1.py;
+               u1.ai.setCommand(game,m);
+               u1.ai.mayAttack = false;
+               u1.ai.mayMoveToAttack = false;
+               this.rebels.push(u1);
+               for each(unit in this.rebels)
                {
-                  _loc3_ = _loc2_.mc.transform.colorTransform;
-                  _loc10_ = _loc6_.random.nextInt();
-                  _loc3_.redOffset = 75;
-                  _loc3_.blueOffset = 0;
-                  _loc3_.greenOffset = 0;
-                  _loc2_.mc.transform.colorTransform = _loc3_;
+                  c = unit.mc.transform.colorTransform;
+                  r = game.random.nextInt();
+                  c.redOffset = 75;
+                  c.blueOffset = 0;
+                  c.greenOffset = 0;
+                  unit.mc.transform.colorTransform = c;
                }
                this.counter = 0;
             }
@@ -344,10 +340,10 @@ package com.brockw.stickwar.campaign.controllers
          {
             gameScreen.userInterface.isSlowCamera = true;
             gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 900;
-            for each(_loc2_ in gameScreen.game.team.units)
+            for each(unit in gameScreen.game.team.units)
             {
-               _loc2_.ai.mayAttack = false;
-               _loc2_.ai.mayMoveToAttack = false;
+               unit.ai.mayAttack = false;
+               unit.ai.mayMoveToAttack = false;
             }
             ++this.counter;
             if(this.counter > 100)
@@ -360,10 +356,10 @@ package com.brockw.stickwar.campaign.controllers
          {
             gameScreen.userInterface.isSlowCamera = true;
             gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 900;
-            for each(_loc2_ in gameScreen.game.team.units)
+            for each(unit in gameScreen.game.team.units)
             {
-               _loc2_.ai.mayAttack = false;
-               _loc2_.ai.mayMoveToAttack = false;
+               unit.ai.mayAttack = false;
+               unit.ai.mayMoveToAttack = false;
             }
             this.message.setMessage("Today we come together representing each of the rebel nations to offer a truce.","",0,"wizardVoiceOver1");
             if(this.message.hasFinishedPlayingSound())
@@ -375,10 +371,10 @@ package com.brockw.stickwar.campaign.controllers
          {
             gameScreen.userInterface.isSlowCamera = true;
             gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 900;
-            for each(_loc2_ in gameScreen.game.team.units)
+            for each(unit in gameScreen.game.team.units)
             {
-               _loc2_.ai.mayAttack = false;
-               _loc2_.ai.mayMoveToAttack = false;
+               unit.ai.mayAttack = false;
+               unit.ai.mayMoveToAttack = false;
             }
             this.message.setMessage("We wish to join your Order Empire. Clearly there is a bigger threat that we can not face alone.","",0,"wizardVoiceOver2");
             if(this.message.hasFinishedPlayingSound())
@@ -390,19 +386,19 @@ package com.brockw.stickwar.campaign.controllers
          {
             gameScreen.userInterface.isSlowCamera = true;
             gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 900;
-            for each(_loc2_ in gameScreen.game.team.units)
+            for each(unit in gameScreen.game.team.units)
             {
-               _loc2_.ai.mayAttack = false;
-               _loc2_.ai.mayMoveToAttack = false;
+               unit.ai.mayAttack = false;
+               unit.ai.mayMoveToAttack = false;
             }
             this.message.setMessage("That monster was right, all we\'ve been doing for years is making ourselves weak!","",0,"wizardVoiceOver3");
             if(this.message.hasFinishedPlayingSound())
             {
                this.state = S_REBELS_TALK_4;
                this.rebelsAreEvil = false;
-               for each(_loc2_ in this.rebels)
+               for each(unit in this.rebels)
                {
-                  _loc2_.team.game.projectileManager.initTowerSpawn(_loc2_.px,_loc2_.py,_loc2_.team);
+                  unit.team.game.projectileManager.initTowerSpawn(unit.px,unit.py,unit.team);
                }
             }
          }
@@ -410,10 +406,10 @@ package com.brockw.stickwar.campaign.controllers
          {
             gameScreen.userInterface.isSlowCamera = true;
             gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 900;
-            for each(_loc2_ in gameScreen.game.team.units)
+            for each(unit in gameScreen.game.team.units)
             {
-               _loc2_.ai.mayAttack = false;
-               _loc2_.ai.mayMoveToAttack = false;
+               unit.ai.mayAttack = false;
+               unit.ai.mayMoveToAttack = false;
             }
             this.message.setMessage("Today we can unite and share this new land so none shall live as rebels again!","",0,"wizardVoiceOver4");
             if(this.message.hasFinishedPlayingSound())

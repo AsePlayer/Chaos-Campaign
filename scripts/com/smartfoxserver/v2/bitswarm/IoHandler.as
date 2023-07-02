@@ -7,9 +7,9 @@ package com.smartfoxserver.v2.bitswarm
    {
        
       
-      function onDataRead(buffer:ByteArray) : void;
+      function onDataRead(param1:ByteArray) : void;
       
-      function onDataWrite(message:IMessage) : void;
+      function onDataWrite(param1:IMessage) : void;
       
       function get codec() : IProtocolCodec;
    }

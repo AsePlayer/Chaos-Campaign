@@ -1,10 +1,8 @@
 package com.brockw.simulationSync
 {
-   import com.brockw.game.Util;
+   import com.brockw.game.*;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.multiplayer.moves.Commands;
-   import com.brockw.stickwar.engine.multiplayer.moves.MoveFactory;
-   import com.brockw.stickwar.engine.multiplayer.moves.ReplaySyncCheckMove;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
    import com.smartfoxserver.v2.entities.data.SFSObject;
    
    public class GameReplay
@@ -56,23 +54,23 @@ package com.brockw.simulationSync
       
       public function play(simulation:SimulationSyncronizer) : void
       {
-         var _loc2_:Move = null;
+         var m:Move = null;
          while(this.moves.length != 0)
          {
-            _loc2_ = this.moves[0];
-            if(_loc2_.turn != simulation.turn - 1)
+            m = this.moves[0];
+            if(m.turn != simulation.turn - 1)
             {
                break;
             }
-            simulation.processMove(_loc2_);
+            simulation.processMove(m);
             this.moves.shift();
-            if(_loc2_.type == Move.END_OF_TURN)
+            if(m.type == Move.END_OF_TURN)
             {
-               _loc2_ = this.moves[0];
-               if(_loc2_ != null && _loc2_.type == Commands.REPLAY_SYNC_CHECK)
+               m = this.moves[0];
+               if(m != null && m.type == Commands.REPLAY_SYNC_CHECK)
                {
                   trace("replay check");
-                  simulation.processMove(_loc2_);
+                  simulation.processMove(m);
                   this.moves.shift();
                }
                break;
@@ -121,43 +119,43 @@ package com.brockw.simulationSync
       
       public function fromString(s:String) : Boolean
       {
-         var _loc8_:Move = null;
-         var _loc9_:Array = null;
-         var _loc2_:* = s.split("#");
-         var _loc3_:int = _loc2_[0];
-         if(_loc2_.length != 2)
+         var m:Move = null;
+         var d:Array = null;
+         var checkSumData:* = s.split("#");
+         var checkSum:int = int(checkSumData[0]);
+         if(checkSumData.length != 2)
          {
             return false;
          }
-         if(_loc3_ != _loc2_[1].length)
+         if(checkSum != checkSumData[1].length)
          {
-            trace("Replay broken",_loc3_,_loc2_[1].length);
+            trace("Replay broken",checkSum,checkSumData[1].length);
             return false;
          }
-         var _loc4_:Array = _loc2_[1].split("$");
-         var _loc5_:Array = _loc4_[0].split("&");
-         this.mapId = _loc5_.shift();
-         this.teamAId = _loc5_.shift();
-         this._teamAType = _loc5_.shift();
-         this._teamAName = _loc5_.shift();
-         this._teamALoadout = _loc5_.shift();
-         this.teamBId = _loc5_.shift();
-         this._teamBType = _loc5_.shift();
-         this._teamBName = _loc5_.shift();
-         this._teamBLoadout = _loc5_.shift();
-         if(_loc4_.length != 2)
+         var data:Array = checkSumData[1].split("$");
+         var teamIds:Array = data[0].split("&");
+         this.mapId = teamIds.shift();
+         this.teamAId = teamIds.shift();
+         this._teamAType = teamIds.shift();
+         this._teamAName = teamIds.shift();
+         this._teamALoadout = teamIds.shift();
+         this.teamBId = teamIds.shift();
+         this._teamBType = teamIds.shift();
+         this._teamBName = teamIds.shift();
+         this._teamBLoadout = teamIds.shift();
+         if(data.length != 2)
          {
             return false;
          }
-         var _loc6_:Array = _loc4_[1].split(":");
-         for(var _loc7_:* = 0; _loc7_ < _loc6_.length - 1; _loc7_++)
+         var mArray:Array = data[1].split(":");
+         for(var i:* = 0; i < mArray.length - 1; i++)
          {
-            _loc9_ = _loc6_[_loc7_].split(";");
-            _loc8_ = MoveFactory.createMoveFromString(_loc9_[0],_loc9_[1].split(" "));
-            this.moves.push(_loc8_);
+            d = mArray[i].split(";");
+            m = MoveFactory.createMoveFromString(d[0],d[1].split(" "));
+            this.moves.push(m);
          }
          this.moves.sort(this.turnOrder);
-         for each(_loc8_ in this.moves)
+         for each(m in this.moves)
          {
          }
          return true;

@@ -78,7 +78,7 @@ package com.smartfoxserver.v2.entities.data
       
       public function size() : int
       {
-         var j:* = null;
+         var j:String = null;
          var count:int = 0;
          for(j in this.dataHolder)
          {
@@ -120,7 +120,7 @@ package com.smartfoxserver.v2.entities.data
          var wrapper:SFSDataWrapper = null;
          var objDump:String = null;
          var type:int = 0;
-         var key:* = null;
+         var key:String = null;
          var strDump:String = DefaultObjectDumpFormatter.TOKEN_INDENT_OPEN;
          for(key in this.dataHolder)
          {
@@ -286,7 +286,7 @@ package com.smartfoxserver.v2.entities.data
       public function getBool(index:int) : Boolean
       {
          var wrapper:SFSDataWrapper = this.dataHolder[index];
-         return wrapper != null ? Boolean(wrapper.data as Boolean) : Boolean(undefined);
+         return wrapper != null ? wrapper.data as Boolean : Boolean(undefined);
       }
       
       public function getByte(index:int) : int
@@ -307,7 +307,7 @@ package com.smartfoxserver.v2.entities.data
       public function getInt(index:int) : int
       {
          var wrapper:SFSDataWrapper = this.dataHolder[index];
-         return wrapper != null ? int(wrapper.data as int) : int(undefined);
+         return wrapper != null ? wrapper.data as int : int(undefined);
       }
       
       public function getLong(index:int) : Number
@@ -323,7 +323,7 @@ package com.smartfoxserver.v2.entities.data
       public function getDouble(index:int) : Number
       {
          var wrapper:SFSDataWrapper = this.dataHolder[index];
-         return wrapper != null ? Number(wrapper.data as Number) : Number(undefined);
+         return wrapper != null ? wrapper.data as Number : Number(undefined);
       }
       
       public function getUtfString(index:int) : String

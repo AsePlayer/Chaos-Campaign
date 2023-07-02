@@ -6,8 +6,6 @@ package flashx.textLayout.operations
    import flashx.textLayout.elements.SpanElement;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class FlowElementOperation extends FlowTextOperation
    {
        
@@ -47,7 +45,7 @@ package flashx.textLayout.operations
          {
             relativeEnd = targetElement.textLength;
          }
-         if(targetElement is SpanElement && SpanElement(targetElement).hasParagraphTerminator && relativeEnd == targetElement.textLength - 1)
+         if(targetElement is SpanElement && Boolean(SpanElement(targetElement).tlf_internal::hasParagraphTerminator) && relativeEnd == targetElement.textLength - 1)
          {
             relativeEnd += 1;
          }
@@ -142,7 +140,7 @@ package flashx.textLayout.operations
             if(this.splitAtEnd)
             {
                workElem = targetElement.parent.getChildAt(targetIdx + 1) as FlowGroupElement;
-               while(workElem.numChildren)
+               while(Boolean(workElem.numChildren))
                {
                   child = workElem.getChildAt(0);
                   workElem.removeChildAt(0);
@@ -153,7 +151,7 @@ package flashx.textLayout.operations
             if(this.splitAtStart)
             {
                workElem = targetElement.parent.getChildAt(targetIdx - 1) as FlowGroupElement;
-               while(FlowGroupElement(targetElement).numChildren)
+               while(Boolean(FlowGroupElement(targetElement).numChildren))
                {
                   child = FlowGroupElement(targetElement).getChildAt(0);
                   FlowGroupElement(targetElement).removeChildAt(0);

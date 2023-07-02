@@ -153,8 +153,8 @@ package com.smartfoxserver.v2.bitswarm.bbox
             trace("[ BB-Receive ]: " + rawData);
          }
          var reqBits:Array = rawData.split(this.SEP);
-         var cmd:String = reqBits[0];
-         var data:String = reqBits[1];
+         var cmd:String = String(reqBits[0]);
+         var data:String = String(reqBits[1]);
          if(cmd == this.CMD_CONNECT)
          {
             this._sessId = data;

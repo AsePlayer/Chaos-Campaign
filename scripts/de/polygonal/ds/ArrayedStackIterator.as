@@ -8,17 +8,17 @@ package de.polygonal.ds
       
       public var _i:int;
       
-      public var _f:ArrayedStack;
+      public var _f:de.polygonal.ds.ArrayedStack;
       
       public var _a:Array;
       
-      public function ArrayedStackIterator(f:ArrayedStack = undefined)
+      public function ArrayedStackIterator(param1:de.polygonal.ds.ArrayedStack = undefined)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         _f = f;
+         _f = param1;
          _a = _f._a;
          _i = _f._top - 1;
          this;
@@ -43,14 +43,14 @@ package de.polygonal.ds
          return _i >= 0;
       }
       
-      public function __top(f:Object) : int
+      public function __top(param1:Object) : int
       {
-         return int(f._top);
+         return int(param1._top);
       }
       
-      public function __a(f:Object) : Array
+      public function __a(param1:Object) : Array
       {
-         return f._a;
+         return param1._a;
       }
    }
 }

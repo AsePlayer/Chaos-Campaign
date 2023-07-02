@@ -63,7 +63,7 @@ package com.smartfoxserver.v2.requests
       override public function execute(sfs:SmartFox) : void
       {
          _sfso.putUtfString(KEY_CMD,this._extCmd);
-         _sfso.putInt(KEY_ROOM,this._room == null ? int(-1) : int(this._room.id));
+         _sfso.putInt(KEY_ROOM,this._room == null ? -1 : int(this._room.id));
          _sfso.putSFSObject(KEY_PARAMS,this._params);
       }
    }

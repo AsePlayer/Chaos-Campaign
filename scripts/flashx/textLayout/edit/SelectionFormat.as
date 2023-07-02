@@ -18,7 +18,7 @@ package flashx.textLayout.edit
       
       private var _pointBlinkRate:Number;
       
-      public function SelectionFormat(rangeColor:uint = 16777215, rangeAlpha:Number = 1.0, rangeBlendMode:String = "difference", pointColor:uint = 16777215, pointAlpha:Number = 1.0, pointBlendMode:String = "difference", pointBlinkRate:Number = 500)
+      public function SelectionFormat(rangeColor:uint = 16777215, rangeAlpha:Number = 1, rangeBlendMode:String = "difference", pointColor:uint = 16777215, pointAlpha:Number = 1, pointBlendMode:String = "difference", pointBlinkRate:Number = 500)
       {
          super();
          this._rangeColor = rangeColor;

@@ -50,7 +50,7 @@ package com.brockw.stickwar.engine.multiplayer
       
       private function onConnection(evt:SFSEvent) : void
       {
-         if(evt.params.success)
+         if(Boolean(evt.params.success))
          {
             trace("Connection Success!");
             this.main.showScreen("login");

@@ -147,7 +147,7 @@ package com.brockw.stickwar.engine.Ai
                   }
                   if(this.targetOre.hasMiningSpot(Miner(unit)))
                   {
-                     _loc5_ = this.targetOre.getMiningSpot(Miner(unit));
+                     _loc5_ = Number(this.targetOre.getMiningSpot(Miner(unit)));
                      _loc4_ = this.targetOre.x - unit.team.direction * 50 - unit.x;
                      if(this.targetOre is Gold)
                      {
@@ -211,10 +211,6 @@ package com.brockw.stickwar.engine.Ai
             unit.mayWalkThrough = false;
             unit.walk((goalX - unit.px) / 20,(goalY - unit.py) / 20,intendedX);
          }
-         else if(currentCommand.type == UnitCommand.HOLD)
-         {
-            this.timeUnassigned = 0;
-         }
          else if(this.timeUnassigned > TIME_TO_AUTOMINE && this.canAutoMine)
          {
             this.isUnassigned = false;
@@ -266,7 +262,7 @@ package com.brockw.stickwar.engine.Ai
          }
          else
          {
-            _loc3_ = param2.map.gold.length - 1;
+            _loc3_ = int(param2.map.gold.length - 1);
             while(_loc3_ >= param2.map.gold.length / 2)
             {
                _loc4_ = param2.map.gold[_loc3_];

@@ -11,13 +11,13 @@ package com.google.analytics.debug
       
       private var _forcedWidth:uint;
       
-      public var margin:Margin;
+      public var margin:com.google.analytics.debug.Margin;
       
       protected var alignTarget:DisplayObject;
       
       protected var listenResize:Boolean;
       
-      public var alignement:Align;
+      public var alignement:com.google.analytics.debug.Align;
       
       private var _forcedHeight:uint;
       
@@ -27,14 +27,14 @@ package com.google.analytics.debug
          listenResize = false;
          alignement = Align.none;
          this.alignTarget = alignTarget;
-         margin = new Margin();
+         margin = new com.google.analytics.debug.Margin();
          addEventListener(Event.ADDED_TO_STAGE,_onAddedToStage);
          addEventListener(Event.REMOVED_FROM_STAGE,_onRemovedFromStage);
       }
       
       public function get forcedHeight() : uint
       {
-         if(_forcedHeight)
+         if(Boolean(_forcedHeight))
          {
             return _forcedHeight;
          }
@@ -53,7 +53,7 @@ package com.google.analytics.debug
          for(var i:int = 0; i < numChildren; i++)
          {
             d = getChildAt(i);
-            if(d)
+            if(Boolean(d))
             {
                removeChild(d);
             }
@@ -76,14 +76,14 @@ package com.google.analytics.debug
       
       public function get forcedWidth() : uint
       {
-         if(_forcedWidth)
+         if(Boolean(_forcedWidth))
          {
             return _forcedWidth;
          }
          return width;
       }
       
-      public function alignTo(alignement:Align, target:DisplayObject = null) : void
+      public function alignTo(alignement:com.google.analytics.debug.Align, target:DisplayObject = null) : void
       {
          var H:uint = 0;
          var W:uint = 0;
@@ -107,15 +107,15 @@ package com.google.analytics.debug
             {
                return;
             }
-            H = this.stage.stageHeight;
-            W = this.stage.stageWidth;
+            H = uint(this.stage.stageHeight);
+            W = uint(this.stage.stageWidth);
             X = 0;
             Y = 0;
          }
          else
          {
             t = target as UISprite;
-            if(t.forcedHeight)
+            if(Boolean(t.forcedHeight))
             {
                H = t.forcedHeight;
             }
@@ -123,7 +123,7 @@ package com.google.analytics.debug
             {
                H = t.height;
             }
-            if(t.forcedWidth)
+            if(Boolean(t.forcedWidth))
             {
                W = t.forcedWidth;
             }

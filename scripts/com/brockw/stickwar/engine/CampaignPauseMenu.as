@@ -70,7 +70,7 @@ package com.brockw.stickwar.engine
       {
          var url:URLRequest = new URLRequest("https://discord.gg/AK6rawdxav");
          navigateToURL(url,"_blank");
-         if(gameScreen.main.tracker)
+         if(Boolean(gameScreen.main.tracker))
          {
             gameScreen.main.tracker.trackEvent("link","https://discord.gg/AK6rawdxav");
          }
@@ -94,7 +94,7 @@ package com.brockw.stickwar.engine
             gameScreen.removeChild(this);
             gameScreen.addChild(this);
          }
-         if(gameScreen)
+         if(Boolean(gameScreen))
          {
             this.gameScreen.isPaused = true;
          }
@@ -105,7 +105,7 @@ package com.brockw.stickwar.engine
          isShowing = false;
          this.mouseChildren = false;
          this.mouseEnabled = false;
-         if(gameScreen)
+         if(Boolean(gameScreen))
          {
             this.gameScreen.isPaused = false;
          }

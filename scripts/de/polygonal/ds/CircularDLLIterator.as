@@ -6,21 +6,21 @@ package de.polygonal.ds
    {
        
       
-      public var _walker:DLLNode;
+      public var _walker:de.polygonal.ds.DLLNode;
       
       public var _s:int;
       
       public var _i:int;
       
-      public var _f:DLL;
+      public var _f:de.polygonal.ds.DLL;
       
-      public function CircularDLLIterator(f:DLL = undefined)
+      public function CircularDLLIterator(param1:de.polygonal.ds.DLL = undefined)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         _f = f;
+         _f = param1;
          _walker = _f.head;
          _s = _f._size;
          _i = 0;
@@ -39,7 +39,7 @@ package de.polygonal.ds
       {
          var _loc1_:Object = _walker.val;
          _walker = _walker.next;
-         _i = _i + 1;
+         ++_i;
          return _loc1_;
       }
       
@@ -48,9 +48,9 @@ package de.polygonal.ds
          return _i < _s;
       }
       
-      public function __size(f:Object) : int
+      public function __size(param1:Object) : int
       {
-         return int(f._size);
+         return int(param1._size);
       }
    }
 }

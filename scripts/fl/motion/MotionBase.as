@@ -1,10 +1,10 @@
 package fl.motion
 {
-   import flash.filters.BitmapFilter;
+   import flash.filters.*;
    import flash.geom.ColorTransform;
    import flash.geom.Matrix;
    import flash.geom.Point;
-   import flash.utils.getDefinitionByName;
+   import flash.utils.*;
    
    public class MotionBase
    {
@@ -111,7 +111,7 @@ package fl.motion
       {
          if(param1 < this.keyframes.length)
          {
-            param1 = this.keyframes.length;
+            param1 = int(this.keyframes.length);
          }
          this._duration = param1;
       }
@@ -149,7 +149,7 @@ package fl.motion
          while(_loc3_ > 0)
          {
             _loc4_ = this.keyframes[_loc3_];
-            if(_loc4_ && _loc4_.affectsTweenable(param2))
+            if(Boolean(_loc4_) && _loc4_.affectsTweenable(param2))
             {
                return _loc4_;
             }
@@ -169,7 +169,7 @@ package fl.motion
          while(_loc3_ < this.keyframes.length)
          {
             _loc4_ = this.keyframes[_loc3_];
-            if(_loc4_ && _loc4_.affectsTweenable(param2))
+            if(Boolean(_loc4_) && _loc4_.affectsTweenable(param2))
             {
                return _loc4_;
             }
@@ -226,7 +226,7 @@ package fl.motion
       public function useRotationConcat(param1:int) : Boolean
       {
          var _loc2_:KeyframeBase = this.getCurrentKeyframe(param1,"rotationConcat");
-         return Boolean(_loc2_) ? Boolean(_loc2_.useRotationConcat) : Boolean(false);
+         return Boolean(_loc2_) ? _loc2_.useRotationConcat : false;
       }
       
       public function getFilters(param1:Number) : Array
@@ -273,7 +273,7 @@ package fl.motion
          {
             return _loc5_;
          }
-         return Number(this.findTweenedValue(param1,param2,_loc4_,_loc6_,_loc5_));
+         return this.findTweenedValue(param1,param2,_loc4_,_loc6_,_loc5_);
       }
       
       public function addKeyframe(param1:KeyframeBase) : void
@@ -291,7 +291,7 @@ package fl.motion
          var _loc11_:* = undefined;
          var _loc12_:int = 0;
          var _loc13_:* = undefined;
-         var _loc5_:int = param2.length;
+         var _loc5_:int = int(param2.length);
          var _loc6_:* = null;
          var _loc7_:Boolean = true;
          var _loc8_:Number = 0;
@@ -325,7 +325,7 @@ package fl.motion
                _loc10_.index = _loc9_;
                this.addKeyframe(_loc10_);
             }
-            if(_loc10_.filters && _loc10_.filters.length == 0)
+            if(Boolean(_loc10_.filters) && _loc10_.filters.length == 0)
             {
                _loc10_.filters = null;
             }
@@ -333,7 +333,7 @@ package fl.motion
             _loc12_ = _loc9_ - param3;
             if(_loc12_ < param2.length)
             {
-               if(param2[_loc12_] || !_loc7_)
+               if(Boolean(param2[_loc12_]) || !_loc7_)
                {
                   _loc11_ = param2[_loc12_];
                }
@@ -460,24 +460,24 @@ package fl.motion
                   _loc8_.index = _loc7_;
                   this.addKeyframe(_loc8_);
                }
-               if(_loc8_ && _loc8_.filters == null)
+               if(Boolean(_loc8_) && _loc8_.filters == null)
                {
                   _loc8_.filters = new Array();
                }
-               if(_loc8_ && _loc8_.filters)
+               if(Boolean(_loc8_) && Boolean(_loc8_.filters))
                {
                   _loc9_ = null;
                   switch(param1[_loc5_])
                   {
                      case "flash.filters.GradientBevelFilter":
                      case "flash.filters.GradientGlowFilter":
-                        _loc10_ = param2[_loc5_];
+                        _loc10_ = int(param2[_loc5_]);
                         _loc9_ = BitmapFilter(new _loc6_(4,45,new Array(_loc10_),new Array(_loc10_),new Array(_loc10_)));
                         break;
                      default:
                         _loc9_ = BitmapFilter(new _loc6_());
                   }
-                  if(_loc9_)
+                  if(Boolean(_loc9_))
                   {
                      _loc8_.filters.push(_loc9_);
                   }
@@ -493,7 +493,7 @@ package fl.motion
          var _loc10_:KeyframeBase = null;
          var _loc11_:* = undefined;
          var _loc12_:int = 0;
-         var _loc6_:int = param3.length;
+         var _loc6_:int = int(param3.length);
          var _loc7_:* = null;
          var _loc8_:Boolean = true;
          if(_loc6_ > 0)
@@ -526,7 +526,7 @@ package fl.motion
             _loc12_ = _loc9_ - param4;
             if(_loc12_ < param3.length)
             {
-               if(param3[_loc12_] || !_loc8_)
+               if(Boolean(param3[_loc12_]) || !_loc8_)
                {
                   _loc11_ = param3[_loc12_];
                }

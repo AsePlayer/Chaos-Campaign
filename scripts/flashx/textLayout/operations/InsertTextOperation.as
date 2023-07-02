@@ -14,15 +14,13 @@ package flashx.textLayout.operations
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class InsertTextOperation extends FlowTextOperation
    {
        
       
       private var _deleteSelectionState:SelectionState;
       
-      private var delSelOp:DeleteTextOperation = null;
+      private var delSelOp:flashx.textLayout.operations.DeleteTextOperation = null;
       
       public var _text:String;
       
@@ -45,7 +43,7 @@ package flashx.textLayout.operations
          if(deleteSelectionState.anchorPosition != deleteSelectionState.activePosition)
          {
             this._deleteSelectionState = deleteSelectionState;
-            this.delSelOp = new DeleteTextOperation(this._deleteSelectionState);
+            this.delSelOp = new flashx.textLayout.operations.DeleteTextOperation(this._deleteSelectionState);
          }
       }
       
@@ -81,8 +79,8 @@ package flashx.textLayout.operations
       
       private function doDelete(leaf:FlowLeafElement) : ITextLayoutFormat
       {
-         var deleteFormat:PointFormat = PointFormat.createFromFlowElement(textFlow.findLeaf(absoluteStart));
-         var beforeDeleteFormat:PointFormat = absoluteStart == leaf.getParagraph().getAbsoluteStart() ? null : PointFormat.createFromFlowElement(textFlow.findLeaf(absoluteStart - 1));
+         var deleteFormat:PointFormat = PointFormat.tlf_internal::createFromFlowElement(textFlow.findLeaf(absoluteStart));
+         var beforeDeleteFormat:PointFormat = absoluteStart == leaf.getParagraph().getAbsoluteStart() ? null : PointFormat.tlf_internal::createFromFlowElement(textFlow.findLeaf(absoluteStart - 1));
          if(this.delSelOp.doOperation())
          {
             if(!this._pointFormat && absoluteStart < absoluteEnd && PointFormat.isEqual(deleteFormat,beforeDeleteFormat))
@@ -114,9 +112,9 @@ package flashx.textLayout.operations
          if(pointFormat is PointFormat)
          {
             pf = pointFormat as PointFormat;
-            if(pf.linkElement)
+            if(Boolean(pf.linkElement))
             {
-               if(pf.linkElement.href)
+               if(Boolean(pf.linkElement.href))
                {
                   TextFlowEdit.makeLink(textFlow,absoluteStart,absoluteStart + this._text.length,pf.linkElement.href,pf.linkElement.target);
                   linkLeaf = textFlow.findLeaf(absoluteStart);
@@ -124,14 +122,14 @@ package flashx.textLayout.operations
                   linkElement.format = pf.linkElement.format;
                }
             }
-            if(pf.tcyElement)
+            if(Boolean(pf.tcyElement))
             {
                TextFlowEdit.makeTCY(textFlow,absoluteStart,absoluteStart + this._text.length);
                tcyLeaf = textFlow.findLeaf(absoluteStart);
                tcyElement = tcyLeaf.getParentByType(TCYElement);
                tcyElement.format = pf.tcyElement.format;
             }
-            else if(span.getParentByType(TCYElement))
+            else if(Boolean(span.getParentByType(TCYElement)))
             {
                TextFlowEdit.removeTCY(textFlow,absoluteStart,absoluteStart + this._text.length);
             }
@@ -147,24 +145,24 @@ package flashx.textLayout.operations
             deleteFormat = this.doDelete(textFlow.findLeaf(absoluteStart));
          }
          var span:SpanElement = ParaEdit.insertText(textFlow,absoluteStart,this._text,this._pointFormat != null || deleteFormat != null);
-         if(textFlow.interactionManager)
+         if(Boolean(textFlow.interactionManager))
          {
             textFlow.interactionManager.notifyInsertOrDelete(absoluteStart,this._text.length);
          }
          if(span != null)
          {
-            if(deleteFormat)
+            if(Boolean(deleteFormat))
             {
                span.format = deleteFormat;
                this.applyPointFormat(span,deleteFormat);
-               if(deleteFormat is PointFormat && PointFormat(deleteFormat).linkElement && PointFormat(deleteFormat).linkElement.href && originalSelectionState.selectionManagerOperationState && textFlow.interactionManager)
+               if(deleteFormat is PointFormat && PointFormat(deleteFormat).linkElement && PointFormat(deleteFormat).linkElement.href && originalSelectionState.tlf_internal::selectionManagerOperationState && Boolean(textFlow.interactionManager))
                {
                   state = textFlow.interactionManager.getSelectionState();
-                  state.pointFormat = PointFormat.clone(deleteFormat as PointFormat);
+                  state.pointFormat = PointFormat.tlf_internal::clone(deleteFormat as PointFormat);
                   textFlow.interactionManager.setSelectionState(state);
                }
             }
-            if(this._pointFormat)
+            if(Boolean(this._pointFormat))
             {
                this.applyPointFormat(span,this._pointFormat);
             }
@@ -209,7 +207,7 @@ package flashx.textLayout.operations
          {
             insertOp = op2 as InsertTextOperation;
          }
-         if(insertOp)
+         if(Boolean(insertOp))
          {
             if(insertOp.deleteSelectionState != null || this.deleteSelectionState != null)
             {
@@ -230,8 +228,8 @@ package flashx.textLayout.operations
             if(originalSelectionState.pointFormat == null && insertOp.originalSelectionState.pointFormat == null || PointFormat.isEqual(originalSelectionState.pointFormat,insertOp.originalSelectionState.pointFormat))
             {
                this._text += insertOp.text;
-               setGenerations(beginGeneration,insertOp.endGeneration);
-               setGenerations(beginGeneration,insertOp.endGeneration);
+               tlf_internal::setGenerations(beginGeneration,insertOp.endGeneration);
+               tlf_internal::setGenerations(beginGeneration,insertOp.endGeneration);
                return this;
             }
             return null;

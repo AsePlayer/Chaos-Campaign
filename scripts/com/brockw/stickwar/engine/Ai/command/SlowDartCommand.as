@@ -2,8 +2,8 @@ package com.brockw.stickwar.engine.Ai.command
 {
    import com.brockw.stickwar.engine.Entity;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.units.Monk;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.brockw.stickwar.engine.units.*;
    
    public class SlowDartCommand extends DartCommand
    {

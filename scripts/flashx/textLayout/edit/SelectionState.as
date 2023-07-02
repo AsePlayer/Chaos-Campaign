@@ -16,7 +16,7 @@ package flashx.textLayout.edit
       public function SelectionState(root:TextFlow, anchorPosition:int, activePosition:int, format:ITextLayoutFormat = null)
       {
          super(root,anchorPosition,activePosition);
-         if(format)
+         if(Boolean(format))
          {
             this._pointFormat = format;
          }

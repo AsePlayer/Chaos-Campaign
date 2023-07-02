@@ -46,7 +46,7 @@ package flashx.textLayout.factory
       
       public function get lineCountLimit() : int
       {
-         return this._lineCountLimit < NO_LINE_COUNT_LIMIT ? int(0) : int(this._lineCountLimit);
+         return this._lineCountLimit < NO_LINE_COUNT_LIMIT ? 0 : this._lineCountLimit;
       }
       
       public function set lineCountLimit(val:int) : void

@@ -13,13 +13,11 @@ package flashx.textLayout.compose
    import flashx.textLayout.tlf_internal;
    import flashx.textLayout.utils.Twips;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class ComposeState extends BaseCompose
    {
       
-      private static var _sharedComposeState:ComposeState;
+      private static var _sharedComposeState:flashx.textLayout.compose.ComposeState;
        
       
       protected var _curLineIndex:int;
@@ -35,31 +33,31 @@ package flashx.textLayout.compose
          super();
       }
       
-      tlf_internal static function getComposeState() : ComposeState
+      tlf_internal static function getComposeState() : flashx.textLayout.compose.ComposeState
       {
-         var rslt:ComposeState = _sharedComposeState;
-         if(rslt)
+         var rslt:flashx.textLayout.compose.ComposeState = _sharedComposeState;
+         if(Boolean(rslt))
          {
             _sharedComposeState = null;
             return rslt;
          }
-         return new ComposeState();
+         return new flashx.textLayout.compose.ComposeState();
       }
       
-      tlf_internal static function releaseComposeState(state:ComposeState) : void
+      tlf_internal static function releaseComposeState(state:flashx.textLayout.compose.ComposeState) : void
       {
-         state.releaseAnyReferences();
+         state.tlf_internal::releaseAnyReferences();
          _sharedComposeState = state;
       }
       
       override protected function createParcelList() : ParcelList
       {
-         return ParcelList.getParcelList();
+         return ParcelList.tlf_internal::getParcelList();
       }
       
       override protected function releaseParcelList(list:ParcelList) : void
       {
-         ParcelList.releaseParcelList(list);
+         ParcelList.tlf_internal::releaseParcelList(list);
       }
       
       override public function composeTextFlow(textFlow:TextFlow, composeToPosition:int, controllerEndIndex:int) : int
@@ -77,7 +75,7 @@ package flashx.textLayout.compose
          _startComposePosition = composer.damageAbsoluteStart;
          if(controllerStartIndex == -1)
          {
-            controllerIndex = composer.findControllerIndexAtPosition(_startComposePosition);
+            controllerIndex = int(composer.findControllerIndexAtPosition(_startComposePosition));
             if(controllerIndex == -1)
             {
                controllerIndex = composer.numControllers - 1;
@@ -99,12 +97,12 @@ package flashx.textLayout.compose
       {
          var lineIndex:int = 0;
          super.composeInternal(composeRoot,absStart);
-         if(_curElement)
+         if(Boolean(_curElement))
          {
             lineIndex = this._curLineIndex;
             while(lineIndex < _flowComposer.numLines)
             {
-               _flowComposer.getLineAt(lineIndex++).setController(null,-1);
+               _flowComposer.getLineAt(lineIndex++).tlf_internal::setController(null,-1);
             }
          }
       }
@@ -122,13 +120,13 @@ package flashx.textLayout.compose
          if(canVerticalAlign && _curParcel && this.vjBeginLineIndex != this._curLineIndex && !this.vjDisableThisParcel)
          {
             controller = _curParcel.controller;
-            vjtype = controller.computedFormat.verticalAlign;
+            vjtype = String(controller.computedFormat.verticalAlign);
             if(vjtype == VerticalAlign.JUSTIFY)
             {
-               i = controller.numFloats - 1;
+               i = controller.tlf_internal::numFloats - 1;
                while(i >= 0 && canVerticalAlign)
                {
-                  floatInfo = controller.getFloatAt(i);
+                  floatInfo = controller.tlf_internal::getFloatAt(i);
                   if(floatInfo.floatType != Float.NONE)
                   {
                      canVerticalAlign = false;
@@ -138,16 +136,16 @@ package flashx.textLayout.compose
             }
             if(canVerticalAlign && vjtype != VerticalAlign.TOP)
             {
-               end = _flowComposer.findLineIndexAtPosition(_curElementStart + _curElementOffset);
+               end = int(_flowComposer.findLineIndexAtPosition(_curElementStart + _curElementOffset));
                if(this.vjBeginLineIndex < end)
                {
                   beginFloatIndex = 0;
                   endFloatIndex = 0;
                   lines = (_flowComposer as StandardFlowComposer).lines;
-                  if(controller.numFloats > 0)
+                  if(controller.tlf_internal::numFloats > 0)
                   {
-                     beginFloatIndex = controller.findFloatIndexAtOrAfter(lines[this.vjBeginLineIndex].absoluteStart);
-                     endFloatIndex = controller.findFloatIndexAfter(_curElementStart + _curElementOffset);
+                     beginFloatIndex = int(controller.tlf_internal::findFloatIndexAtOrAfter(lines[this.vjBeginLineIndex].absoluteStart));
+                     endFloatIndex = int(controller.tlf_internal::findFloatIndexAfter(_curElementStart + _curElementOffset));
                   }
                   this.applyVerticalAlignmentToColumn(controller,vjtype,lines,this.vjBeginLineIndex,end - this.vjBeginLineIndex,beginFloatIndex,endFloatIndex);
                }
@@ -162,10 +160,10 @@ package flashx.textLayout.compose
          var textLine:TextLine = null;
          var line:TextFlowLine = null;
          super.applyVerticalAlignmentToColumn(controller,vjType,lines,beginIndex,numLines,beginFloatIndex,endFloatIndex);
-         for each(textLine in controller.composedLines)
+         for each(textLine in controller.tlf_internal::composedLines)
          {
             line = textLine.userData as TextFlowLine;
-            line.createShape(_blockProgression,textLine);
+            line.tlf_internal::createShape(_blockProgression,textLine);
          }
       }
       
@@ -207,28 +205,28 @@ package flashx.textLayout.compose
          }
          else
          {
-            for(lineIndex = _flowComposer.findLineIndexAtPosition(_curParcelStart); lineIndex < this._curLineIndex; lineIndex++)
+            for(lineIndex = int(_flowComposer.findLineIndexAtPosition(_curParcelStart)); lineIndex < this._curLineIndex; lineIndex++)
             {
                line = _flowComposer.getLineAt(lineIndex);
                if(line.paragraph != curPara)
                {
                   curPara = line.paragraph;
                   curParaFormat = curPara.computedFormat;
-                  curParaDirection = curParaFormat.direction;
+                  curParaDirection = String(curParaFormat.direction);
                   if(curParaDirection != Direction.LTR)
                   {
-                     edgeAdjust = curParaFormat.paragraphEndIndent;
+                     edgeAdjust = Number(curParaFormat.paragraphEndIndent);
                   }
                }
                if(curParaDirection == Direction.LTR)
                {
                   edgeAdjust = Math.max(line.lineOffset,0);
                }
-               edgeAdjust = !!verticalText ? Number(line.y - edgeAdjust) : Number(line.x - edgeAdjust);
-               numberLine = TextFlowLine.findNumberLine(line.getTextLine(true));
-               if(numberLine)
+               edgeAdjust = verticalText ? line.y - edgeAdjust : line.x - edgeAdjust;
+               numberLine = TextFlowLine.tlf_internal::findNumberLine(line.getTextLine(true));
+               if(Boolean(numberLine))
                {
-                  numberLineStart = !!verticalText ? Number(numberLine.y + line.y) : Number(numberLine.x + line.x);
+                  numberLineStart = verticalText ? numberLine.y + line.y : numberLine.x + line.x;
                   edgeAdjust = Math.min(edgeAdjust,numberLineStart);
                }
                if(verticalText)
@@ -284,32 +282,32 @@ package flashx.textLayout.compose
          var newDepth:Number = NaN;
          var startCompose:int = _curElementStart + _curElementOffset - _curParaStart;
          var line:TextFlowLine = this._curLineIndex < _flowComposer.numLines ? (_flowComposer as StandardFlowComposer).lines[this._curLineIndex] : null;
-         var useExistingLine:Boolean = line && (!line.isDamaged() || line.validity == FlowDamageType.GEOMETRY);
-         if(_listItemElement && _listItemElement.getAbsoluteStart() == _curElementStart + _curElementOffset)
+         var useExistingLine:Boolean = Boolean(line) && (!line.tlf_internal::isDamaged() || line.validity == FlowDamageType.GEOMETRY);
+         if(Boolean(_listItemElement) && _listItemElement.getAbsoluteStart() == _curElementStart + _curElementOffset)
          {
-            if(useExistingLine && (peekLine = line.peekTextLine()) != null)
+            if(useExistingLine && (peekLine = line.tlf_internal::peekTextLine()) != null)
             {
-               numberLine = TextFlowLine.findNumberLine(peekLine);
+               numberLine = TextFlowLine.tlf_internal::findNumberLine(peekLine);
             }
             else
             {
                isRTL = _curParaElement.computedFormat.direction == Direction.RTL;
-               numberLine = TextFlowLine.createNumberLine(_listItemElement,_curParaElement,_flowComposer.swfContext,!!isRTL ? Number(_parcelList.rightMargin) : Number(_parcelList.leftMargin));
+               numberLine = TextFlowLine.tlf_internal::createNumberLine(_listItemElement,_curParaElement,_flowComposer.swfContext,isRTL ? _parcelList.rightMargin : _parcelList.leftMargin);
             }
             pushInsideListItemMargins(numberLine);
          }
          _parcelList.getLineSlug(_lineSlug,0,1,_textIndent,_curParaFormat.direction == Direction.LTR);
-         if(useExistingLine && Twips.to(_lineSlug.width) != line.outerTargetWidthTW)
+         if(useExistingLine && Twips.to(_lineSlug.width) != line.tlf_internal::outerTargetWidthTW)
          {
             useExistingLine = false;
          }
-         for(_curLine = !!useExistingLine ? line : null; true; )
+         for(_curLine = useExistingLine ? line : null; true; )
          {
             while(!_curLine)
             {
                useExistingLine = false;
                textLine = this.createTextLine(_lineSlug.width,!_lineSlug.wrapsKnockOut);
-               if(textLine)
+               if(Boolean(textLine))
                {
                   break;
                }
@@ -324,15 +322,14 @@ package flashx.textLayout.compose
                         continue;
                      }
                   }
+                  popInsideListItemMargins(numberLine);
+                  return null;
                }
                _parcelList.addTotalDepth(newDepth - _lineSlug.depth);
                if(!_parcelList.getLineSlug(_lineSlug,0,1,_textIndent,_curParaFormat.direction == Direction.LTR))
                {
                   return null;
                }
-               continue;
-               popInsideListItemMargins(numberLine);
-               return null;
             }
             if(!textLine)
             {
@@ -351,7 +348,7 @@ package flashx.textLayout.compose
          }
          if(_curLine.validity == FlowDamageType.GEOMETRY)
          {
-            _curLine.clearDamage();
+            _curLine.tlf_internal::clearDamage();
          }
          this._useExistingLine = useExistingLine;
          popInsideListItemMargins(numberLine);
@@ -362,7 +359,7 @@ package flashx.textLayout.compose
       {
          _curLine = new TextFlowLine(null,null);
          var textLine:TextLine = super.createTextLine(targetWidth,allowEmergencyBreaks);
-         if(textLine)
+         if(Boolean(textLine))
          {
             textLine.doubleClickEnabled = true;
          }

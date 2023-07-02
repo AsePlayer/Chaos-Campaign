@@ -12,8 +12,6 @@ package flashx.textLayout.elements
    import flashx.textLayout.tlf_internal;
    import flashx.textLayout.utils.CharacterUtil;
    
-   use namespace tlf_internal;
-   
    [DefaultProperty("mxmlChildren")]
    public class SpanElement extends FlowLeafElement
    {
@@ -36,13 +34,13 @@ package flashx.textLayout.elements
       
       override tlf_internal function createContentElement() : void
       {
-         if(_blockElement)
+         if(Boolean(_blockElement))
          {
             return;
          }
          computedFormat;
          _blockElement = new TextElement(_text,null);
-         super.createContentElement();
+         super.tlf_internal::createContentElement();
       }
       
       override public function shallowCopy(startPos:int = 0, endPos:int = -1) : FlowElement
@@ -54,9 +52,9 @@ package flashx.textLayout.elements
          var retFlow:SpanElement = super.shallowCopy(startPos,endPos) as SpanElement;
          var startSpan:int = 0;
          var endSpan:int = startSpan + textLength;
-         var leafElStartPos:int = startSpan >= startPos ? int(startSpan) : int(startPos);
-         var leafElEndPos:int = endSpan < endPos ? int(endSpan) : int(endPos);
-         if(leafElEndPos == textLength && this.hasParagraphTerminator)
+         var leafElStartPos:int = startSpan >= startPos ? startSpan : startPos;
+         var leafElEndPos:int = endSpan < endPos ? endSpan : endPos;
+         if(leafElEndPos == textLength && this.tlf_internal::hasParagraphTerminator)
          {
             leafElEndPos--;
          }
@@ -91,7 +89,7 @@ package flashx.textLayout.elements
          {
             return "";
          }
-         return !!this.hasParagraphTerminator ? _text.substr(0,textLength - 1) : _text;
+         return this.tlf_internal::hasParagraphTerminator ? _text.substr(0,textLength - 1) : _text;
       }
       
       public function set text(textValue:String) : void
@@ -105,7 +103,7 @@ package flashx.textLayout.elements
          {
             relativeEnd = textLength;
          }
-         if(textLength && relativeEnd == textLength && this.hasParagraphTerminator)
+         if(textLength && relativeEnd == textLength && this.tlf_internal::hasParagraphTerminator)
          {
             relativeEnd--;
          }
@@ -151,12 +149,12 @@ package flashx.textLayout.elements
       tlf_internal function get hasParagraphTerminator() : Boolean
       {
          var p:ParagraphElement = getParagraph();
-         return p && p.getLastLeaf() == this;
+         return Boolean(p) && p.getLastLeaf() == this;
       }
       
       override tlf_internal function applyWhiteSpaceCollapse(collapse:String) : void
       {
-         var ffc:ITextLayoutFormat = this.formatForCascade;
+         var ffc:ITextLayoutFormat = this.tlf_internal::formatForCascade;
          var wsc:* = Boolean(ffc) ? ffc.whiteSpaceCollapse : undefined;
          if(wsc !== undefined && wsc != FormatValue.INHERIT)
          {
@@ -166,7 +164,7 @@ package flashx.textLayout.elements
          var tempTxt:String = origTxt;
          if(!collapse || collapse == WhiteSpaceCollapse.COLLAPSE)
          {
-            if(impliedElement && parent != null)
+            if(Boolean(tlf_internal::impliedElement) && parent != null)
             {
                if(tempTxt.search(anyPrintChar) == -1)
                {
@@ -182,7 +180,7 @@ package flashx.textLayout.elements
          {
             this.replaceText(0,textLength,tempTxt);
          }
-         super.applyWhiteSpaceCollapse(collapse);
+         super.tlf_internal::applyWhiteSpaceCollapse(collapse);
       }
       
       public function replaceText(relativeStartPosition:int, relativeEndPosition:int, textValue:String) : void
@@ -195,7 +193,7 @@ package flashx.textLayout.elements
          {
             throw RangeError(GlobalSettings.resourceStringFunction("invalidSurrogatePairSplit"));
          }
-         if(this.hasParagraphTerminator)
+         if(this.tlf_internal::hasParagraphTerminator)
          {
             if(relativeStartPosition == textLength)
             {
@@ -208,29 +206,29 @@ package flashx.textLayout.elements
          }
          if(relativeEndPosition != relativeStartPosition)
          {
-            modelChanged(ModelChange.TEXT_DELETED,this,relativeStartPosition,relativeEndPosition - relativeStartPosition);
+            tlf_internal::modelChanged(ModelChange.TEXT_DELETED,this,relativeStartPosition,relativeEndPosition - relativeStartPosition);
          }
          this.replaceTextInternal(relativeStartPosition,relativeEndPosition,textValue);
-         if(textValue && textValue.length)
+         if(Boolean(textValue) && Boolean(textValue.length))
          {
-            modelChanged(ModelChange.TEXT_INSERTED,this,relativeStartPosition,textValue.length);
+            tlf_internal::modelChanged(ModelChange.TEXT_INSERTED,this,relativeStartPosition,textValue.length);
          }
       }
       
       private function replaceTextInternal(startPos:int, endPos:int, textValue:String) : void
       {
          var enclosingContainer:ContainerController = null;
-         var textValueLength:int = textValue == null ? int(0) : int(textValue.length);
+         var textValueLength:int = textValue == null ? 0 : textValue.length;
          var deleteTotal:int = endPos - startPos;
          var deltaChars:int = textValueLength - deleteTotal;
-         if(_blockElement)
+         if(Boolean(_blockElement))
          {
             (_blockElement as TextElement).replaceText(startPos,endPos,textValue);
             _text = _blockElement.rawText;
          }
-         else if(_text)
+         else if(Boolean(_text))
          {
-            if(textValue)
+            if(Boolean(textValue))
             {
                _text = _text.slice(0,startPos) + textValue + _text.slice(endPos,_text.length);
             }
@@ -245,14 +243,14 @@ package flashx.textLayout.elements
          }
          if(deltaChars != 0)
          {
-            updateLengths(getAbsoluteStart() + startPos,deltaChars,true);
-            deleteContainerText(endPos,deleteTotal);
+            tlf_internal::updateLengths(getAbsoluteStart() + startPos,deltaChars,true);
+            tlf_internal::deleteContainerText(endPos,deleteTotal);
             if(textValueLength != 0)
             {
-               enclosingContainer = getEnclosingController(startPos);
-               if(enclosingContainer)
+               enclosingContainer = tlf_internal::getEnclosingController(startPos);
+               if(Boolean(enclosingContainer))
                {
-                  ContainerController(enclosingContainer).setTextLength(enclosingContainer.textLength + textValueLength);
+                  ContainerController(enclosingContainer).tlf_internal::setTextLength(enclosingContainer.textLength + textValueLength);
                }
             }
          }
@@ -260,14 +258,14 @@ package flashx.textLayout.elements
       
       tlf_internal function addParaTerminator() : void
       {
-         this.replaceTextInternal(textLength,textLength,SpanElement.kParagraphTerminator);
-         modelChanged(ModelChange.TEXT_INSERTED,this,textLength - 1,1);
+         this.replaceTextInternal(textLength,textLength,SpanElement.tlf_internal::kParagraphTerminator);
+         tlf_internal::modelChanged(ModelChange.TEXT_INSERTED,this,textLength - 1,1);
       }
       
       tlf_internal function removeParaTerminator() : void
       {
          this.replaceTextInternal(textLength - 1,textLength,"");
-         modelChanged(ModelChange.TEXT_DELETED,this,textLength > 0 ? int(textLength - 1) : int(0),1);
+         tlf_internal::modelChanged(ModelChange.TEXT_DELETED,this,textLength > 0 ? textLength - 1 : 0,1);
       }
       
       override public function splitAtPosition(relativePosition:int) : FlowElement
@@ -288,12 +286,12 @@ package flashx.textLayout.elements
          var newSpan:SpanElement = new SpanElement();
          newSpan.id = this.id;
          newSpan.typeName = this.typeName;
-         if(parent)
+         if(Boolean(parent))
          {
             newSpanLength = textLength - relativePosition;
-            if(_blockElement)
+            if(Boolean(_blockElement))
             {
-               group = parent.createContentAsGroup();
+               group = parent.tlf_internal::createContentAsGroup();
                elementIndex = group.getElementIndex(_blockElement);
                group.splitTextElement(elementIndex,relativePosition);
                _blockElement = group.getElementAt(elementIndex);
@@ -305,13 +303,13 @@ package flashx.textLayout.elements
                newSpan.text = _text.substr(relativePosition);
                _text = _text.substring(0,relativePosition);
             }
-            modelChanged(ModelChange.TEXT_DELETED,this,relativePosition,newSpanLength);
-            newSpan.quickInitializeForSplit(this,newSpanLength,newBlockElement);
-            setTextLength(relativePosition);
-            parent.addChildAfterInternal(this,newSpan);
+            tlf_internal::modelChanged(ModelChange.TEXT_DELETED,this,relativePosition,newSpanLength);
+            newSpan.tlf_internal::quickInitializeForSplit(this,newSpanLength,newBlockElement);
+            tlf_internal::setTextLength(relativePosition);
+            parent.tlf_internal::addChildAfterInternal(this,newSpan);
             p = this.getParagraph();
-            p.updateTerminatorSpan(this,newSpan);
-            parent.modelChanged(ModelChange.ELEMENT_ADDED,newSpan,newSpan.parentRelativeStart,newSpan.textLength);
+            p.tlf_internal::updateTerminatorSpan(this,newSpan);
+            parent.tlf_internal::modelChanged(ModelChange.ELEMENT_ADDED,newSpan,newSpan.parentRelativeStart,newSpan.textLength);
          }
          else
          {
@@ -329,13 +327,13 @@ package flashx.textLayout.elements
       {
          var p:ParagraphElement = null;
          var prevLeaf:FlowLeafElement = null;
-         if(this.textLength == 1 && !bindableElement)
+         if(this.textLength == 1 && !tlf_internal::bindableElement)
          {
             p = getParagraph();
-            if(p && p.getLastLeaf() == this)
+            if(Boolean(p) && p.getLastLeaf() == this)
             {
                prevLeaf = getPreviousLeaf(p);
-               if(prevLeaf)
+               if(Boolean(prevLeaf))
                {
                   if(!TextLayoutFormat.isEqual(this.format,prevLeaf.format))
                   {
@@ -344,7 +342,7 @@ package flashx.textLayout.elements
                }
             }
          }
-         super.normalizeRange(normalizeStart,normalizeEnd);
+         super.tlf_internal::normalizeRange(normalizeStart,normalizeEnd);
       }
       
       override tlf_internal function mergeToPreviousIfPossible() : Boolean
@@ -355,19 +353,19 @@ package flashx.textLayout.elements
          var p:ParagraphElement = null;
          var prevLeaf:FlowLeafElement = null;
          var siblingInsertPosition:int = 0;
-         if(parent && !bindableElement)
+         if(Boolean(parent) && !tlf_internal::bindableElement)
          {
             myidx = parent.getChildIndex(this);
             if(myidx != 0)
             {
                sib = parent.getChildAt(myidx - 1) as SpanElement;
-               if(!sib && this.textLength == 1 && this.hasParagraphTerminator)
+               if(!sib && this.textLength == 1 && this.tlf_internal::hasParagraphTerminator)
                {
                   p = getParagraph();
-                  if(p)
+                  if(Boolean(p))
                   {
                      prevLeaf = getPreviousLeaf(p) as SpanElement;
-                     if(prevLeaf)
+                     if(Boolean(prevLeaf))
                      {
                         parent.removeChildAt(myidx);
                         return true;
@@ -378,16 +376,16 @@ package flashx.textLayout.elements
                {
                   return false;
                }
-               if(this.hasActiveEventMirror())
+               if(this.tlf_internal::hasActiveEventMirror())
                {
                   return false;
                }
-               thisIsSimpleTerminator = textLength == 1 && this.hasParagraphTerminator;
-               if(sib.hasActiveEventMirror() && !thisIsSimpleTerminator)
+               thisIsSimpleTerminator = textLength == 1 && this.tlf_internal::hasParagraphTerminator;
+               if(Boolean(sib.tlf_internal::hasActiveEventMirror()) && !thisIsSimpleTerminator)
                {
                   return false;
                }
-               if(thisIsSimpleTerminator || equalStylesForMerge(sib))
+               if(thisIsSimpleTerminator || Boolean(tlf_internal::equalStylesForMerge(sib)))
                {
                   siblingInsertPosition = sib.textLength;
                   sib.replaceText(siblingInsertPosition,siblingInsertPosition,this.text);

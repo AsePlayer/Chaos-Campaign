@@ -9,23 +9,23 @@ package com.google.analytics
    {
        
       
-      function set account(value:String) : void;
+      function set account(param1:String) : void;
       
       function get config() : Configuration;
       
       function get mode() : String;
       
-      function set config(value:Configuration) : void;
+      function set config(param1:Configuration) : void;
       
-      function set mode(value:String) : void;
+      function set mode(param1:String) : void;
       
-      function set debug(value:DebugConfiguration) : void;
+      function set debug(param1:DebugConfiguration) : void;
       
       function get visualDebug() : Boolean;
       
       function get account() : String;
       
-      function set visualDebug(value:Boolean) : void;
+      function set visualDebug(param1:Boolean) : void;
       
       function isReady() : Boolean;
       

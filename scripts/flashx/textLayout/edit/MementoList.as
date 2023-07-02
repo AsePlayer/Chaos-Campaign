@@ -16,7 +16,7 @@ package flashx.textLayout.edit
       
       public function push(memento:IMemento) : void
       {
-         if(memento)
+         if(Boolean(memento))
          {
             this.mementoList.push(memento);
          }
@@ -35,7 +35,7 @@ package flashx.textLayout.edit
       {
          var memento:IMemento = null;
          var retVal:Array = [];
-         if(this._mementoList)
+         if(Boolean(this._mementoList))
          {
             this._mementoList.reverse();
             for each(memento in this._mementoList)

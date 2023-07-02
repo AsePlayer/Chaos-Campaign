@@ -1,5 +1,6 @@
 package com.google.analytics.utils
 {
+   import com.google.analytics.core.ga_internal;
    import com.google.analytics.debug.DebugConfiguration;
    import com.google.analytics.external.HTMLDOM;
    import flash.system.Capabilities;
@@ -16,17 +17,17 @@ package com.google.analytics.utils
       
       private var _debug:DebugConfiguration;
       
-      private var _appVersion:Version;
+      private var _appVersion:com.google.analytics.utils.Version;
       
       private var _url:String;
       
-      private var _protocol:Protocols;
+      private var _protocol:com.google.analytics.utils.Protocols;
       
-      private var _userAgent:UserAgent;
+      private var _userAgent:com.google.analytics.utils.UserAgent;
       
       public function Environment(url:String = "", app:String = "", version:String = "", debug:DebugConfiguration = null, dom:HTMLDOM = null)
       {
-         var v:Version = null;
+         var v:com.google.analytics.utils.Version = null;
          super();
          if(app == "")
          {
@@ -72,14 +73,14 @@ package com.google.analytics.utils
       public function get locationSearch() : String
       {
          var _search:String = _dom.search;
-         if(_search)
+         if(Boolean(_search))
          {
             return _search;
          }
          return "";
       }
       
-      public function get protocol() : Protocols
+      public function get protocol() : com.google.analytics.utils.Protocols
       {
          if(!_protocol)
          {
@@ -88,16 +89,16 @@ package com.google.analytics.utils
          return _protocol;
       }
       
-      public function get flashVersion() : Version
+      public function get flashVersion() : com.google.analytics.utils.Version
       {
          return Version.fromString(Capabilities.version.split(" ")[1],",");
       }
       
-      public function get userAgent() : UserAgent
+      public function get userAgent() : com.google.analytics.utils.UserAgent
       {
          if(!_userAgent)
          {
-            _userAgent = new UserAgent(this,appName,appVersion.toString(4));
+            _userAgent = new com.google.analytics.utils.UserAgent(this,appName,appVersion.toString(4));
          }
          return _userAgent;
       }
@@ -108,7 +109,7 @@ package com.google.analytics.utils
          if(System.useCodePage)
          {
             _charset = _dom.characterSet;
-            if(_charset)
+            if(Boolean(_charset))
             {
                return _charset;
             }
@@ -138,7 +139,7 @@ package com.google.analytics.utils
                color = "24";
          }
          var _colorDepth:String = _dom.colorDepth;
-         if(_colorDepth)
+         if(Boolean(_colorDepth))
          {
             color = _colorDepth;
          }
@@ -149,7 +150,7 @@ package com.google.analytics.utils
       {
          var URL:String = null;
          var test:String = null;
-         var p:Protocols = Protocols.none;
+         var p:com.google.analytics.utils.Protocols = Protocols.none;
          if(_url != "")
          {
             URL = _url.toLowerCase();
@@ -174,7 +175,7 @@ package com.google.analytics.utils
          }
          var _proto:String = _dom.protocol;
          var proto:String = (p.toString() + ":").toLowerCase();
-         if(_proto && _proto != proto && _debug)
+         if(_proto && _proto != proto && Boolean(_debug))
          {
             _debug.warning("Protocol mismatch: SWF=" + proto + ", DOM=" + _proto);
          }
@@ -203,7 +204,7 @@ package com.google.analytics.utils
          userAgent.applicationProduct = value;
       }
       
-      function set url(value:String) : void
+      ga_internal function set url(value:String) : void
       {
          _url = value;
       }
@@ -211,7 +212,7 @@ package com.google.analytics.utils
       public function get referrer() : String
       {
          var _referrer:String = _dom.referrer;
-         if(_referrer)
+         if(Boolean(_referrer))
          {
             return _referrer;
          }
@@ -231,7 +232,7 @@ package com.google.analytics.utils
       {
          var _lang:String = _dom.language;
          var lang:String = Capabilities.language;
-         if(_lang)
+         if(Boolean(_lang))
          {
             if(_lang.length > lang.length && _lang.substr(0,lang.length) == lang)
             {
@@ -271,12 +272,12 @@ package com.google.analytics.utils
          return "";
       }
       
-      public function set userAgent(custom:UserAgent) : void
+      public function set userAgent(custom:com.google.analytics.utils.UserAgent) : void
       {
          _userAgent = custom;
       }
       
-      public function set appVersion(value:Version) : void
+      public function set appVersion(value:com.google.analytics.utils.Version) : void
       {
          _appVersion = value;
          userAgent.applicationVersion = value.toString(4);
@@ -290,7 +291,7 @@ package com.google.analytics.utils
       public function get locationPath() : String
       {
          var _pathname:String = _dom.pathname;
-         if(_pathname)
+         if(Boolean(_pathname))
          {
             return _pathname;
          }
@@ -300,14 +301,14 @@ package com.google.analytics.utils
       public function get documentTitle() : String
       {
          var _title:String = _dom.title;
-         if(_title)
+         if(Boolean(_title))
          {
             return _title;
          }
          return "";
       }
       
-      public function get appVersion() : Version
+      public function get appVersion() : com.google.analytics.utils.Version
       {
          return _appVersion;
       }

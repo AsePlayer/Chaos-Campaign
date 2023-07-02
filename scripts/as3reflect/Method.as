@@ -6,17 +6,17 @@ package as3reflect
    {
        
       
-      private var _declaringType:Type;
+      private var _declaringType:as3reflect.Type;
       
       private var _parameters:Array;
       
       private var _name:String;
       
-      private var _returnType:Type;
+      private var _returnType:as3reflect.Type;
       
       private var _isStatic:Boolean;
       
-      public function Method(declaringType:Type, name:String, isStatic:Boolean, parameters:Array, returnType:*, metaData:Array = null)
+      public function Method(declaringType:as3reflect.Type, name:String, isStatic:Boolean, parameters:Array, returnType:*, metaData:Array = null)
       {
          super(metaData);
          _declaringType = declaringType;
@@ -26,7 +26,7 @@ package as3reflect
          _returnType = returnType;
       }
       
-      public function get declaringType() : Type
+      public function get declaringType() : as3reflect.Type
       {
          return _declaringType;
       }
@@ -41,7 +41,7 @@ package as3reflect
          return "[Method(name:\'" + name + "\', isStatic:" + isStatic + ")]";
       }
       
-      public function get returnType() : Type
+      public function get returnType() : as3reflect.Type
       {
          return _returnType;
       }

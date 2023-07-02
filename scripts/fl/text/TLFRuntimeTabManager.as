@@ -26,7 +26,7 @@ package fl.text
          var field:Object = null;
          var textFlow:TextFlow = null;
          var controller:ContainerController = null;
-         if(e.relatedObject)
+         if(Boolean(e.relatedObject))
          {
             obj = e.relatedObject;
             if(obj.parent.hasOwnProperty("textFlow"))
@@ -59,7 +59,7 @@ package fl.text
       private static function onAddedToStage(e:Event) : void
       {
          var displayObject:DisplayObject = e.target as DisplayObject;
-         if(displayObject)
+         if(Boolean(displayObject))
          {
             displayObject.removeEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
             if(!sTabHandlerInited)
@@ -74,7 +74,7 @@ package fl.text
       {
          if(!sTabHandlerInited)
          {
-            if(inDisplayObject.stage)
+            if(Boolean(inDisplayObject.stage))
             {
                inDisplayObject.stage.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,onKeyFocusChange);
                sTabHandlerInited = true;

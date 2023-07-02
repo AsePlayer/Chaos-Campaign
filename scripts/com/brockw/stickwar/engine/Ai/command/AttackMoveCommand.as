@@ -4,8 +4,7 @@ package com.brockw.stickwar.engine.Ai.command
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Team;
    import com.brockw.stickwar.engine.units.Unit;
-   import flash.display.Bitmap;
-   import flash.display.Sprite;
+   import flash.display.*;
    import flash.geom.Point;
    
    public class AttackMoveCommand extends UnitCommand

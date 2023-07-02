@@ -9,8 +9,6 @@ package flashx.textLayout.elements
    import flashx.textLayout.formats.Suffix;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class ListElement extends ContainerFormattedElement
    {
       
@@ -84,39 +82,39 @@ package flashx.textLayout.elements
       tlf_internal static const upperGreekData:Vector.<int> = Vector.<int>([913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,931,932,933,934,935,936,937]);
       
       tlf_internal static const algorithmicListStyles:Object = {
-         "upperRoman":upperRomanString,
-         "lowerRoman":lowerRomanString
+         "upperRoman":tlf_internal::upperRomanString,
+         "lowerRoman":tlf_internal::lowerRomanString
       };
       
       tlf_internal static const numericListStyles:Object = {
-         "arabicIndic":arabicIndicString,
-         "bengali":bengaliString,
-         "decimal":decimalString,
-         "decimalLeadingZero":decimalLeadingZeroString,
-         "devanagari":devanagariString,
-         "gujarati":gujaratiString,
-         "gurmukhi":gurmukhiString,
-         "kannada":kannadaString,
-         "persian":persianString,
-         "thai":thaiString,
-         "urdu":urduString
+         "arabicIndic":tlf_internal::arabicIndicString,
+         "bengali":tlf_internal::bengaliString,
+         "decimal":tlf_internal::decimalString,
+         "decimalLeadingZero":tlf_internal::decimalLeadingZeroString,
+         "devanagari":tlf_internal::devanagariString,
+         "gujarati":tlf_internal::gujaratiString,
+         "gurmukhi":tlf_internal::gurmukhiString,
+         "kannada":tlf_internal::kannadaString,
+         "persian":tlf_internal::persianString,
+         "thai":tlf_internal::thaiString,
+         "urdu":tlf_internal::urduString
       };
       
       tlf_internal static const alphabeticListStyles:Object = {
-         "upperAlpha":upperAlphaString,
-         "lowerAlpha":lowerAlphaString,
-         "cjkEarthlyBranch":cjkEarthlyBranchString,
-         "cjkHeavenlyStem":cjkHeavenlyStemString,
-         "hangul":hangulString,
-         "hangulConstant":hangulConstantString,
-         "hiragana":hiraganaString,
-         "hiraganaIroha":hiraganaIrohaString,
-         "katakana":katakanaString,
-         "katakanaIroha":katakanaIrohaString,
-         "lowerGreek":lowerGreekString,
-         "lowerLatin":lowerLatinString,
-         "upperGreek":upperGreekString,
-         "upperLatin":upperLatinString
+         "upperAlpha":tlf_internal::upperAlphaString,
+         "lowerAlpha":tlf_internal::lowerAlphaString,
+         "cjkEarthlyBranch":tlf_internal::cjkEarthlyBranchString,
+         "cjkHeavenlyStem":tlf_internal::cjkHeavenlyStemString,
+         "hangul":tlf_internal::hangulString,
+         "hangulConstant":tlf_internal::hangulConstantString,
+         "hiragana":tlf_internal::hiraganaString,
+         "hiraganaIroha":tlf_internal::hiraganaIrohaString,
+         "katakana":tlf_internal::katakanaString,
+         "katakanaIroha":tlf_internal::katakanaIrohaString,
+         "lowerGreek":tlf_internal::lowerGreekString,
+         "lowerLatin":tlf_internal::lowerLatinString,
+         "upperGreek":tlf_internal::upperGreekString,
+         "upperLatin":tlf_internal::upperLatinString
       };
       
       tlf_internal static const listSuffixes:Object = {
@@ -170,17 +168,17 @@ package flashx.textLayout.elements
       {
          if(n <= 0)
          {
-            return decimalString(n);
+            return tlf_internal::decimalString(n);
          }
          if(n <= 1000)
          {
-            return createRomanString(n,upperRomanData);
+            return tlf_internal::createRomanString(n,upperRomanData);
          }
          if(n >= 40000)
          {
-            return decimalString(n);
+            return tlf_internal::decimalString(n);
          }
-         var lowerString:String = createRomanString(n % 1000,upperRomanData);
+         var lowerString:String = tlf_internal::createRomanString(n % 1000,upperRomanData);
          var highString:String = "";
          n -= n % 1000;
          while(n >= 10000)
@@ -214,7 +212,7 @@ package flashx.textLayout.elements
       
       tlf_internal static function lowerRomanString(n:int) : String
       {
-         return n > 0 && n < 4000 ? createRomanString(n,lowerRomanData) : decimalString(n);
+         return n > 0 && n < 4000 ? tlf_internal::createRomanString(n,lowerRomanData) : tlf_internal::decimalString(n);
       }
       
       tlf_internal static function decimalString(n:int) : String
@@ -244,47 +242,47 @@ package flashx.textLayout.elements
       
       tlf_internal static function arabicIndicString(n:int) : String
       {
-         return createNumericBaseTenString(n,1632);
+         return tlf_internal::createNumericBaseTenString(n,1632);
       }
       
       tlf_internal static function bengaliString(n:int) : String
       {
-         return createNumericBaseTenString(n,2534);
+         return tlf_internal::createNumericBaseTenString(n,2534);
       }
       
       tlf_internal static function devanagariString(n:int) : String
       {
-         return createNumericBaseTenString(n,2406);
+         return tlf_internal::createNumericBaseTenString(n,2406);
       }
       
       tlf_internal static function gujaratiString(n:int) : String
       {
-         return createNumericBaseTenString(n,2790);
+         return tlf_internal::createNumericBaseTenString(n,2790);
       }
       
       tlf_internal static function gurmukhiString(n:int) : String
       {
-         return createNumericBaseTenString(n,2662);
+         return tlf_internal::createNumericBaseTenString(n,2662);
       }
       
       tlf_internal static function kannadaString(n:int) : String
       {
-         return createNumericBaseTenString(n,3302);
+         return tlf_internal::createNumericBaseTenString(n,3302);
       }
       
       tlf_internal static function persianString(n:int) : String
       {
-         return createNumericBaseTenString(n,1776);
+         return tlf_internal::createNumericBaseTenString(n,1776);
       }
       
       tlf_internal static function thaiString(n:int) : String
       {
-         return createNumericBaseTenString(n,3664);
+         return tlf_internal::createNumericBaseTenString(n,3664);
       }
       
       tlf_internal static function urduString(n:int) : String
       {
-         return createNumericBaseTenString(n,1776);
+         return tlf_internal::createNumericBaseTenString(n,1776);
       }
       
       tlf_internal static function createContinuousAlphaString(n:int, first:int, base:int) : String
@@ -300,28 +298,28 @@ package flashx.textLayout.elements
       
       tlf_internal static function lowerAlphaString(n:int) : String
       {
-         return createContinuousAlphaString(n,97,26);
+         return tlf_internal::createContinuousAlphaString(n,97,26);
       }
       
       tlf_internal static function upperAlphaString(n:int) : String
       {
-         return createContinuousAlphaString(n,65,26);
+         return tlf_internal::createContinuousAlphaString(n,65,26);
       }
       
       tlf_internal static function lowerLatinString(n:int) : String
       {
-         return createContinuousAlphaString(n,97,26);
+         return tlf_internal::createContinuousAlphaString(n,97,26);
       }
       
       tlf_internal static function upperLatinString(n:int) : String
       {
-         return createContinuousAlphaString(n,65,26);
+         return tlf_internal::createContinuousAlphaString(n,65,26);
       }
       
       tlf_internal static function createTableAlphaString(n:int, table:Vector.<int>) : String
       {
          var rslt:String = "";
-         var base:int = table.length;
+         var base:int = int(table.length);
          while(n > 0)
          {
             rslt = String.fromCharCode(table[(n - 1) % base]) + rslt;
@@ -332,52 +330,52 @@ package flashx.textLayout.elements
       
       tlf_internal static function cjkEarthlyBranchString(n:int) : String
       {
-         return createTableAlphaString(n,cjkEarthlyBranchData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::cjkEarthlyBranchData);
       }
       
       tlf_internal static function cjkHeavenlyStemString(n:int) : String
       {
-         return createTableAlphaString(n,cjkHeavenlyStemData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::cjkHeavenlyStemData);
       }
       
       tlf_internal static function hangulString(n:int) : String
       {
-         return createTableAlphaString(n,hangulData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::hangulData);
       }
       
       tlf_internal static function hangulConstantString(n:int) : String
       {
-         return createTableAlphaString(n,hangulConstantData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::hangulConstantData);
       }
       
       tlf_internal static function hiraganaString(n:int) : String
       {
-         return createTableAlphaString(n,hiraganaData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::hiraganaData);
       }
       
       tlf_internal static function hiraganaIrohaString(n:int) : String
       {
-         return createTableAlphaString(n,hiraganaIrohaData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::hiraganaIrohaData);
       }
       
       tlf_internal static function katakanaString(n:int) : String
       {
-         return createTableAlphaString(n,katakanaData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::katakanaData);
       }
       
       tlf_internal static function katakanaIrohaString(n:int) : String
       {
-         return createTableAlphaString(n,katakanaIrohaData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::katakanaIrohaData);
       }
       
       tlf_internal static function lowerGreekString(n:int) : String
       {
-         return createTableAlphaString(n,lowerGreekData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::lowerGreekData);
       }
       
       tlf_internal static function upperGreekString(n:int) : String
       {
-         return createTableAlphaString(n,upperGreekData);
+         return tlf_internal::createTableAlphaString(n,tlf_internal::upperGreekData);
       }
       
       override protected function get abstract() : Boolean
@@ -397,12 +395,12 @@ package flashx.textLayout.elements
       
       override tlf_internal function modelChanged(changeType:String, elem:FlowElement, changeStart:int, changeLen:int, needNormalize:Boolean = true, bumpGeneration:Boolean = true) : void
       {
-         if((changeType == ModelChange.ELEMENT_ADDED || changeType == ModelChange.ELEMENT_REMOVAL) && elem is ListItemElement && this.isNumberedList())
+         if((changeType == ModelChange.ELEMENT_ADDED || changeType == ModelChange.ELEMENT_REMOVAL) && elem is ListItemElement && this.tlf_internal::isNumberedList())
          {
             changeStart = elem.parentRelativeStart;
             changeLen = textLength - elem.parentRelativeStart;
          }
-         super.modelChanged(changeType,elem,changeStart,changeLen,needNormalize,bumpGeneration);
+         super.tlf_internal::modelChanged(changeType,elem,changeStart,changeLen,needNormalize,bumpGeneration);
       }
       
       override tlf_internal function getEffectivePaddingLeft() : Number
@@ -468,22 +466,22 @@ package flashx.textLayout.elements
          var suffixOverride:String = null;
          var list:ListElement = null;
          var childListMarkerFormat:IListMarkerFormat = null;
-         if(listMarkerFormat.content && listMarkerFormat.content.hasOwnProperty("counters"))
+         if(Boolean(listMarkerFormat.content) && Boolean(listMarkerFormat.content.hasOwnProperty("counters")))
          {
             rslt = "";
-            listStyleType = listMarkerFormat.content.ordered;
-            suffixOverride = listMarkerFormat.content.suffix;
+            listStyleType = String(listMarkerFormat.content.ordered);
+            suffixOverride = String(listMarkerFormat.content.suffix);
             list = this;
             for(childListMarkerFormat = listMarkerFormat; true; )
             {
-               rslt = list.computeListItemTextSpecified(child,childListMarkerFormat,listStyleType == null ? list.computedFormat.listStyleType : listStyleType,suffixOverride) + rslt;
+               rslt = list.tlf_internal::computeListItemTextSpecified(child,childListMarkerFormat,listStyleType == null ? String(list.computedFormat.listStyleType) : listStyleType,suffixOverride) + rslt;
                child = list.getParentByType(ListItemElement) as ListItemElement;
                if(!child)
                {
                   break;
                }
                list = child.parent as ListElement;
-               childListMarkerFormat = child.computedListMarkerFormat();
+               childListMarkerFormat = child.tlf_internal::computedListMarkerFormat();
             }
          }
          else
@@ -496,17 +494,17 @@ package flashx.textLayout.elements
                }
                else
                {
-                  listStyleType = listMarkerFormat.content.ordered;
+                  listStyleType = String(listMarkerFormat.content.ordered);
                }
             }
             if(listStyleType == null)
             {
-               listStyleType = computedFormat.listStyleType;
+               listStyleType = String(computedFormat.listStyleType);
             }
-            rslt = this.computeListItemTextSpecified(child,listMarkerFormat,listStyleType,null);
+            rslt = this.tlf_internal::computeListItemTextSpecified(child,listMarkerFormat,listStyleType,null);
          }
-         var beforeContent:String = Boolean(listMarkerFormat.beforeContent) ? listMarkerFormat.beforeContent : "";
-         var afterContent:String = Boolean(listMarkerFormat.afterContent) ? listMarkerFormat.afterContent : "";
+         var beforeContent:String = Boolean(listMarkerFormat.beforeContent) ? String(listMarkerFormat.beforeContent) : "";
+         var afterContent:String = Boolean(listMarkerFormat.afterContent) ? String(listMarkerFormat.afterContent) : "";
          return beforeContent + rslt + afterContent;
       }
       
@@ -515,33 +513,33 @@ package flashx.textLayout.elements
          var rslt:String = null;
          var n:int = 0;
          var f:Function = null;
-         var val:* = constantListStyles[listStyleType];
+         var val:* = tlf_internal::constantListStyles[listStyleType];
          if(val !== undefined)
          {
             rslt = val as String;
          }
          else
          {
-            n = child.getListItemNumber(listMarkerFormat);
-            f = numericListStyles[listStyleType];
+            n = int(child.tlf_internal::getListItemNumber(listMarkerFormat));
+            f = tlf_internal::numericListStyles[listStyleType];
             if(f != null)
             {
                rslt = n < 0 ? "-" + f(-n) : f(n);
             }
             else if(n <= 0)
             {
-               rslt = n == 0 ? "0" : "-" + decimalString(-n);
+               rslt = n == 0 ? "0" : "-" + tlf_internal::decimalString(-n);
             }
             else
             {
-               f = alphabeticListStyles[listStyleType];
+               f = tlf_internal::alphabeticListStyles[listStyleType];
                if(f != null)
                {
                   rslt = f(n);
                }
                else
                {
-                  rslt = algorithmicListStyles[listStyleType](n);
+                  rslt = String(tlf_internal::algorithmicListStyles[listStyleType](n));
                }
             }
             if(suffixOverride != null)
@@ -550,7 +548,7 @@ package flashx.textLayout.elements
             }
             else if(listMarkerFormat.suffix != Suffix.NONE)
             {
-               rslt += listSuffixes[listStyleType];
+               rslt += tlf_internal::listSuffixes[listStyleType];
             }
          }
          return rslt;
@@ -558,7 +556,7 @@ package flashx.textLayout.elements
       
       tlf_internal function isNumberedList() : Boolean
       {
-         return constantListStyles[computedFormat.listStyleType] === undefined;
+         return tlf_internal::constantListStyles[computedFormat.listStyleType] === undefined;
       }
    }
 }

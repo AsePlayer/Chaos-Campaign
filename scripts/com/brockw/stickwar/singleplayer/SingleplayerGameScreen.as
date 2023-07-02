@@ -19,7 +19,7 @@ package com.brockw.stickwar.singleplayer
    {
        
       
-      private var enemyTeamAi:EnemyTeamAi;
+      private var enemyTeamAi:com.brockw.stickwar.singleplayer.EnemyTeamAi;
       
       public function SingleplayerGameScreen(main:Main)
       {

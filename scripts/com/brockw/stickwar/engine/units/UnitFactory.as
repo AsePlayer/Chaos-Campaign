@@ -2,6 +2,8 @@ package com.brockw.stickwar.engine.units
 {
    import com.brockw.game.Pool;
    import com.brockw.stickwar.engine.StickWar;
+   import com.brockw.stickwar.engine.Team.Chaos.*;
+   import com.brockw.stickwar.engine.Team.Order.*;
    import flash.display.MovieClip;
    import flash.utils.Dictionary;
    

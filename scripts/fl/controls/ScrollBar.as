@@ -7,8 +7,8 @@ package fl.controls
    import flash.display.DisplayObjectContainer;
    import flash.events.MouseEvent;
    
-   [Style(name="repeatInterval",format="Time",type="Number")]
-   [Style(name="repeatDelay",format="Time",type="Number")]
+   [Style(name="repeatInterval",type="Number",format="Time")]
+   [Style(name="repeatDelay",type="Number",format="Time")]
    [Style(name="thumbIcon",type="Class")]
    [Style(name="upArrowUpSkin",type="Class")]
    [Style(name="upArrowOverSkin",type="Class")]
@@ -109,13 +109,13 @@ package fl.controls
       
       protected var inDrag:Boolean = false;
       
-      protected var upArrow:BaseButton;
+      protected var upArrow:fl.controls.BaseButton;
       
-      protected var downArrow:BaseButton;
+      protected var downArrow:fl.controls.BaseButton;
       
-      protected var thumb:LabelButton;
+      protected var thumb:fl.controls.LabelButton;
       
-      protected var track:BaseButton;
+      protected var track:fl.controls.BaseButton;
       
       public function ScrollBar()
       {
@@ -143,12 +143,12 @@ package fl.controls
       
       override public function get width() : Number
       {
-         return _direction == ScrollBarDirection.HORIZONTAL ? Number(super.height) : Number(super.width);
+         return _direction == ScrollBarDirection.HORIZONTAL ? super.height : super.width;
       }
       
       override public function get height() : Number
       {
-         return _direction == ScrollBarDirection.HORIZONTAL ? Number(super.width) : Number(super.height);
+         return _direction == ScrollBarDirection.HORIZONTAL ? super.width : super.height;
       }
       
       override public function get enabled() : Boolean
@@ -222,7 +222,7 @@ package fl.controls
       
       public function get pageScrollSize() : Number
       {
-         return _pageScrollSize == 0 ? Number(_pageSize) : Number(_pageScrollSize);
+         return _pageScrollSize == 0 ? _pageSize : _pageScrollSize;
       }
       
       public function set pageScrollSize(param1:Number) : void
@@ -292,24 +292,24 @@ package fl.controls
       override protected function configUI() : void
       {
          super.configUI();
-         track = new BaseButton();
+         track = new fl.controls.BaseButton();
          track.move(0,14);
          track.useHandCursor = false;
          track.autoRepeat = true;
          track.focusEnabled = false;
          addChild(track);
-         thumb = new LabelButton();
+         thumb = new fl.controls.LabelButton();
          thumb.label = "";
          thumb.setSize(WIDTH,15);
          thumb.move(0,15);
          thumb.focusEnabled = false;
          addChild(thumb);
-         downArrow = new BaseButton();
+         downArrow = new fl.controls.BaseButton();
          downArrow.setSize(WIDTH,14);
          downArrow.autoRepeat = true;
          downArrow.focusEnabled = false;
          addChild(downArrow);
-         upArrow = new BaseButton();
+         upArrow = new fl.controls.BaseButton();
          upArrow.setSize(WIDTH,14);
          upArrow.move(0,0);
          upArrow.autoRepeat = true;
@@ -359,7 +359,7 @@ package fl.controls
          else
          {
             _loc2_ = track.mouseY / track.height * (_maxScrollPosition - _minScrollPosition) + _minScrollPosition;
-            _loc3_ = pageScrollSize == 0 ? Number(pageSize) : Number(pageScrollSize);
+            _loc3_ = pageScrollSize == 0 ? pageSize : pageScrollSize;
             if(_scrollPosition < _loc2_)
             {
                setScrollPosition(Math.min(_loc2_,_scrollPosition + _loc3_));

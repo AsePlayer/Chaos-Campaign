@@ -172,7 +172,7 @@ package com.google.analytics.v4
          }
          catch(e:Error)
          {
-            if(_debug && _debug.active)
+            if(Boolean(_debug) && _debug.active)
             {
                _debug.warning(e.message);
             }

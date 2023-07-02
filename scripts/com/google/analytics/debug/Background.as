@@ -15,7 +15,7 @@ package com.google.analytics.debug
       {
          var W:uint = 0;
          var H:uint = 0;
-         var R:uint = Style.roundedCorner;
+         var R:uint = uint(Style.roundedCorner);
          if(width > 0 && height > 0)
          {
             W = width;
@@ -23,10 +23,10 @@ package com.google.analytics.debug
          }
          else
          {
-            W = target.width;
-            H = target.height;
+            W = uint(target.width);
+            H = uint(target.height);
          }
-         if(target.stickToEdge && target.alignement != Align.none)
+         if(Boolean(target.stickToEdge) && target.alignement != Align.none)
          {
             switch(target.alignement)
             {

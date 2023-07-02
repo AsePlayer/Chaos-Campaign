@@ -17,13 +17,13 @@ package com.brockw.game
       
       private var currentOverlayScreenName:String;
       
-      private var currentOverlay:Screen;
+      private var currentOverlay:com.brockw.game.Screen;
       
       private var fadeTransitionMc:Sprite;
       
       private var isFade:Boolean;
       
-      var timer:Timer;
+      internal var timer:Timer;
       
       public function ScreenManager()
       {
@@ -71,7 +71,7 @@ package com.brockw.game
          return this.currentScreenName;
       }
       
-      public function getScreen(name:String) : Screen
+      public function getScreen(name:String) : com.brockw.game.Screen
       {
          if(name in this.screens)
          {
@@ -80,7 +80,7 @@ package com.brockw.game
          return null;
       }
       
-      public function addScreen(name:String, screen:Screen) : Boolean
+      public function addScreen(name:String, screen:com.brockw.game.Screen) : Boolean
       {
          this.screens[name] = screen;
          return true;
@@ -94,7 +94,7 @@ package com.brockw.game
       
       public function showScreen(name:String, force:Boolean = false, isFade:Boolean = false) : Boolean
       {
-         var nextScreen:Screen = null;
+         var nextScreen:com.brockw.game.Screen = null;
          if(name == this.currentScreenName && force == true)
          {
             this.screens[this.currentScreenName].leave();
@@ -132,8 +132,8 @@ package com.brockw.game
          {
             return false;
          }
-         var nextScreen:Screen = this.screens[this.nextScreenName];
-         var currentScreen:Screen = this.screens[this.currentScreenName];
+         var nextScreen:com.brockw.game.Screen = this.screens[this.nextScreenName];
+         var currentScreen:com.brockw.game.Screen = this.screens[this.currentScreenName];
          if(currentScreen != null)
          {
             currentScreen.x = 0;
@@ -151,8 +151,8 @@ package com.brockw.game
       
       private function update(evt:TimerEvent) : void
       {
-         var nextScreen:Screen = this.screens[this.nextScreenName];
-         var currentScreen:Screen = this.screens[this.currentScreenName];
+         var nextScreen:com.brockw.game.Screen = this.screens[this.nextScreenName];
+         var currentScreen:com.brockw.game.Screen = this.screens[this.currentScreenName];
          if(this.contains(this.fadeTransitionMc))
          {
             if(currentScreen != nextScreen && nextScreen != null)

@@ -7,15 +7,15 @@ package com.smartfoxserver.v2.bitswarm
    {
        
       
-      function initialize(udpAddr:String, udpPort:int) : void;
+      function initialize(param1:String, param2:int) : void;
       
       function get inited() : Boolean;
       
-      function set sfs(sfs:SmartFox) : void;
+      function set sfs(param1:SmartFox) : void;
       
       function nextUdpPacketId() : Number;
       
-      function send(binaryData:ByteArray) : void;
+      function send(param1:ByteArray) : void;
       
       function reset() : void;
    }

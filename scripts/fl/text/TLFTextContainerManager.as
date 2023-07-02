@@ -14,8 +14,6 @@ package fl.text
    import flashx.textLayout.elements.InlineGraphicElement;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class TLFTextContainerManager extends TextContainerManager
    {
@@ -44,7 +42,7 @@ package fl.text
       
       override public function softKeyboardActivatingHandler(event:Event) : void
       {
-         if(Configuration.playerEnablesSpicyFeatures)
+         if(Configuration.tlf_internal::playerEnablesSpicyFeatures)
          {
             container.softKeyboardInputAreaOfInterest = container.parent.getBounds(container.stage);
          }
@@ -74,7 +72,7 @@ package fl.text
       
       override tlf_internal function factoryUpdateContainerChildren() : void
       {
-         super.factoryUpdateContainerChildren();
+         super.tlf_internal::factoryUpdateContainerChildren();
          if(this._transparentBGButton != null)
          {
             container.addChildAt(this._transparentBGButton,0);
@@ -138,7 +136,7 @@ package fl.text
       
       override tlf_internal function clearContainerChildren(recycle:Boolean) : void
       {
-         super.clearContainerChildren(recycle);
+         super.tlf_internal::clearContainerChildren(recycle);
          if(this._transparentBGButton != null)
          {
             container.addChildAt(this._transparentBGButton,0);
@@ -166,16 +164,16 @@ package fl.text
             r = sdo.getBounds(inlineGraphicElement);
             if(this.has3D(sdo))
             {
-               if(ilg.elementWidth != r.width || ilg.elementHeight != r.height)
+               if(ilg.tlf_internal::elementWidth != r.width || ilg.tlf_internal::elementHeight != r.height)
                {
-                  ilg.elementWidth = Math.max(1,r.width);
-                  ilg.elementHeight = Math.max(1,r.height);
+                  ilg.tlf_internal::elementWidth = Math.max(1,r.width);
+                  ilg.tlf_internal::elementHeight = Math.max(1,r.height);
                }
             }
             sdo.x -= r.x;
             sdo.y -= r.y;
          }
-         super.addInlineGraphicElement(parent,inlineGraphicElement,index);
+         super.tlf_internal::addInlineGraphicElement(parent,inlineGraphicElement,index);
       }
    }
 }

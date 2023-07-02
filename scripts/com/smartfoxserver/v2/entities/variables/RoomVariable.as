@@ -8,8 +8,8 @@ package com.smartfoxserver.v2.entities.variables
       
       function get isPersistent() : Boolean;
       
-      function set isPrivate(value:Boolean) : void;
+      function set isPrivate(param1:Boolean) : void;
       
-      function set isPersistent(value:Boolean) : void;
+      function set isPersistent(param1:Boolean) : void;
    }
 }

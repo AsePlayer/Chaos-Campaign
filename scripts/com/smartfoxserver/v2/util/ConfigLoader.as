@@ -38,11 +38,11 @@ package com.smartfoxserver.v2.util
          cfgData.zone = xmlDoc.zone;
          if(xmlDoc.debug != undefined)
          {
-            cfgData.debug = xmlDoc.debug.toLowerCase() == "true" ? Boolean(true) : Boolean(false);
+            cfgData.debug = xmlDoc.debug.toLowerCase() == "true" ? true : false;
          }
          if(xmlDoc.useBlueBox != undefined)
          {
-            cfgData.useBlueBox = xmlDoc.useBlueBox.toLowerCase() == "true" ? Boolean(true) : Boolean(false);
+            cfgData.useBlueBox = xmlDoc.useBlueBox.toLowerCase() == "true" ? true : false;
          }
          if(xmlDoc.httpPort != undefined)
          {

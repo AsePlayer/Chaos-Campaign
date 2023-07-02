@@ -9,7 +9,7 @@ package com.brockw.stickwar.engine.units
    import com.brockw.stickwar.market.MarketItem;
    import flash.display.MovieClip;
    
-   public class Knight extends Unit
+   public class Knight extends com.brockw.stickwar.engine.units.Unit
    {
       
       private static var WEAPON_REACH:int;
@@ -19,7 +19,7 @@ package com.brockw.stickwar.engine.units
       
       private var normalVelocity:Number;
       
-      private var chargeSpell:SpellCooldown;
+      private var chargeSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var isChargeSet:Boolean;
       
@@ -31,7 +31,7 @@ package com.brockw.stickwar.engine.units
       
       private var hasCharged:Boolean;
       
-      private var stunned:Unit;
+      private var stunned:com.brockw.stickwar.engine.units.Unit;
       
       private var stunDamage:Number;
       
@@ -133,8 +133,8 @@ package com.brockw.stickwar.engine.units
          this.stunEffect = game.xml.xml.Chaos.Units.knight.charge.stun;
          this.chargeVelocity = game.xml.xml.Chaos.Units.knight.charge.velocity;
          loadDamage(game.xml.xml.Chaos.Units.knight);
-         type = Unit.U_KNIGHT;
-         this.chargeSpell = new SpellCooldown(game.xml.xml.Chaos.Units.knight.charge.effect,game.xml.xml.Chaos.Units.knight.charge.cooldown,game.xml.xml.Chaos.Units.knight.charge.mana);
+         type = com.brockw.stickwar.engine.units.Unit.U_KNIGHT;
+         this.chargeSpell = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Chaos.Units.knight.charge.effect,game.xml.xml.Chaos.Units.knight.charge.cooldown,game.xml.xml.Chaos.Units.knight.charge.mana);
          _mc.stop();
          _mc.width *= _scale;
          _mc.height *= _scale;
@@ -172,11 +172,11 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      private function getStunnedUnit(unit:Unit) : void
+      private function getStunnedUnit(unit:com.brockw.stickwar.engine.units.Unit) : void
       {
          if(this.stunned == null && unit.team != this.team && unit.pz == 0)
          {
-            if(unit.type == Unit.U_WALL && Math.abs(unit.px - px) < 20)
+            if(unit.type == com.brockw.stickwar.engine.units.Unit.U_WALL && Math.abs(unit.px - px) < 20)
             {
                this.stunned = unit;
             }
@@ -373,7 +373,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      override public function mayAttack(target:Unit) : Boolean
+      override public function mayAttack(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(framesInAttack > team.game.frame - attackStartFrame)
          {

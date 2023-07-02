@@ -10,7 +10,7 @@ package fl.managers
    public class StyleManager
    {
       
-      private static var _instance:StyleManager;
+      private static var _instance:fl.managers.StyleManager;
        
       
       private var styleToClassesHash:Object;
@@ -37,7 +37,7 @@ package fl.managers
       {
          if(_instance == null)
          {
-            _instance = new StyleManager();
+            _instance = new fl.managers.StyleManager();
          }
          return _instance;
       }
@@ -49,7 +49,7 @@ package fl.managers
          var styleToClasses:Object = null;
          var n:String = null;
          var instance:UIComponent = param1;
-         var inst:StyleManager = getInstance();
+         var inst:fl.managers.StyleManager = getInstance();
          var classDef:Class = getClassDef(instance);
          if(classDef == null)
          {
@@ -104,8 +104,8 @@ package fl.managers
       
       private static function setSharedStyles(param1:UIComponent) : void
       {
-         var _loc5_:* = null;
-         var _loc2_:StyleManager = getInstance();
+         var _loc5_:String = null;
+         var _loc2_:fl.managers.StyleManager = getInstance();
          var _loc3_:Class = getClassDef(param1);
          var _loc4_:Object = _loc2_.classToDefaultStylesDict[_loc3_];
          for(_loc5_ in _loc4_)
@@ -117,7 +117,7 @@ package fl.managers
       private static function getSharedStyle(param1:UIComponent, param2:String) : Object
       {
          var _loc3_:Class = getClassDef(param1);
-         var _loc4_:StyleManager = getInstance();
+         var _loc4_:fl.managers.StyleManager = getInstance();
          var _loc5_:Object = _loc4_.classToStylesDict[_loc3_][param2];
          if(_loc5_ != null)
          {
@@ -194,7 +194,7 @@ package fl.managers
       
       private static function invalidateStyle(param1:String) : void
       {
-         var _loc3_:* = null;
+         var _loc3_:Object = null;
          var _loc2_:Dictionary = getInstance().styleToClassesHash[param1];
          if(_loc2_ == null)
          {
@@ -208,7 +208,7 @@ package fl.managers
       
       private static function invalidateComponentStyle(param1:Class, param2:String) : void
       {
-         var _loc4_:* = null;
+         var _loc4_:Object = null;
          var _loc5_:UIComponent = null;
          var _loc3_:Dictionary = getInstance().classToInstancesDict[param1];
          if(_loc3_ == null)

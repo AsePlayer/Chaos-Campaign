@@ -22,7 +22,7 @@ package com.brockw.stickwar.engine.units
       
       private var bowFrame:int;
       
-      private var target:Unit;
+      private var target:com.brockw.stickwar.engine.units.Unit;
       
       private var _isPoisonedToggled:Boolean;
       
@@ -67,7 +67,7 @@ package com.brockw.stickwar.engine.units
          _scale = game.xml.xml.Chaos.Units.tower.scale;
          _maxVelocity = game.xml.xml.Chaos.Units.tower.maxVelocity;
          loadDamage(game.xml.xml.Chaos.Units.tower);
-         type = Unit.U_CHAOS_TOWER;
+         type = com.brockw.stickwar.engine.units.Unit.U_CHAOS_TOWER;
          if(this.isCastleArcher)
          {
             this._maximumRange = game.xml.xml.Chaos.Units.tower.castleRange;
@@ -79,7 +79,7 @@ package com.brockw.stickwar.engine.units
          _state = S_RUN;
          isStationary = true;
          this.healthBar.y = -190;
-         _interactsWith = Unit.I_IS_BUILDING;
+         _interactsWith = com.brockw.stickwar.engine.units.Unit.I_IS_BUILDING;
          isDead = false;
          isDieing = false;
       }
@@ -165,7 +165,7 @@ package com.brockw.stickwar.engine.units
          a.setAction(0,0,UnitCommand.REMOVE_TOWER_COMMAND);
       }
       
-      override public function aim(target:Unit) : void
+      override public function aim(target:com.brockw.stickwar.engine.units.Unit) : void
       {
          var a:Number = angleToTarget(target);
          if(Math.abs(normalise(angleToBowSpace(a) - bowAngle)) < 10)
@@ -178,7 +178,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      override public function aimedAtUnit(target:Unit, angleToTarget:Number) : Boolean
+      override public function aimedAtUnit(target:com.brockw.stickwar.engine.units.Unit, angleToTarget:Number) : Boolean
       {
          if(target == null)
          {
@@ -191,7 +191,7 @@ package com.brockw.stickwar.engine.units
          return normalise(Math.abs((bowAngle - angleToBowSpace(angleToTarget)) % 360)) < 0.5;
       }
       
-      override public function shoot(game:StickWar, target:Unit) : void
+      override public function shoot(game:StickWar, target:com.brockw.stickwar.engine.units.Unit) : void
       {
          var p:Point = null;
          if(this.lastShotCounter > this.shotRate && this.isConstructed)
@@ -204,7 +204,7 @@ package com.brockw.stickwar.engine.units
             if(mc.scaleX < 0)
             {
             }
-            if(!(target.type == Unit.U_BOMBER && target.bomberType == "Intro"))
+            if(!(target.type == com.brockw.stickwar.engine.units.Unit.U_BOMBER && target.bomberType == "Intro"))
             {
                game.projectileManager.initTowerDart(p.x,p.y,0,this,target);
             }

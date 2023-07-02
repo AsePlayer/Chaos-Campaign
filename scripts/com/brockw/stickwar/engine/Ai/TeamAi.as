@@ -18,7 +18,7 @@ package com.brockw.stickwar.engine.Ai
       
       public function update(game:StickWar) : void
       {
-         var unit:* = null;
+         var unit:String = null;
          for(unit in this.team.units)
          {
             if(Unit(this.team.units[unit]).isAlive())
@@ -33,7 +33,7 @@ package com.brockw.stickwar.engine.Ai
       
       public function cleanUp() : void
       {
-         var unit:* = null;
+         var unit:String = null;
          for(unit in this.team.units)
          {
             this.team.units[unit].ai.cleanUp();

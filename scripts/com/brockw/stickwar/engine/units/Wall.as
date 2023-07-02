@@ -2,15 +2,13 @@ package com.brockw.stickwar.engine.units
 {
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.ActionInterface;
-   import com.brockw.stickwar.engine.Ai.WallAi;
-   import com.brockw.stickwar.engine.Ai.command.StandCommand;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.engine.Ai.*;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.Entity;
    import com.brockw.stickwar.engine.HealthBar;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Team;
-   import flash.display.MovieClip;
-   import flash.display.Sprite;
+   import flash.display.*;
    import flash.geom.Point;
    
    public class Wall extends Unit

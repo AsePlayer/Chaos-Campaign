@@ -10,8 +10,6 @@ package flashx.textLayout.compose
    import flashx.textLayout.formats.LineBreak;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class ParcelList
    {
@@ -20,10 +18,10 @@ package flashx.textLayout.compose
       
       private static const MAX_WIDTH:Number = 900000000;
       
-      private static var _sharedParcelList:ParcelList;
+      private static var _sharedParcelList:flashx.textLayout.compose.ParcelList;
        
       
-      protected var _flowComposer:IFlowComposer;
+      protected var _flowComposer:flashx.textLayout.compose.IFlowComposer;
       
       protected var _totalDepth:Number;
       
@@ -33,11 +31,11 @@ package flashx.textLayout.compose
       
       protected var _numParcels:int;
       
-      protected var _singleParcel:Parcel;
+      protected var _singleParcel:flashx.textLayout.compose.Parcel;
       
       protected var _currentParcelIndex:int;
       
-      protected var _currentParcel:Parcel;
+      protected var _currentParcel:flashx.textLayout.compose.Parcel;
       
       protected var _insideListItemMargin:Number;
       
@@ -55,21 +53,21 @@ package flashx.textLayout.compose
          this._numParcels = 0;
       }
       
-      tlf_internal static function getParcelList() : ParcelList
+      tlf_internal static function getParcelList() : flashx.textLayout.compose.ParcelList
       {
-         var rslt:ParcelList = Boolean(_sharedParcelList) ? _sharedParcelList : new ParcelList();
+         var rslt:flashx.textLayout.compose.ParcelList = Boolean(_sharedParcelList) ? _sharedParcelList : new flashx.textLayout.compose.ParcelList();
          _sharedParcelList = null;
          return rslt;
       }
       
-      tlf_internal static function releaseParcelList(list:ParcelList) : void
+      tlf_internal static function releaseParcelList(list:flashx.textLayout.compose.ParcelList) : void
       {
          if(_sharedParcelList == null)
          {
             _sharedParcelList = list as ParcelList;
-            if(_sharedParcelList)
+            if(Boolean(_sharedParcelList))
             {
-               _sharedParcelList.releaseAnyReferences();
+               _sharedParcelList.tlf_internal::releaseAnyReferences();
             }
          }
       }
@@ -79,13 +77,13 @@ package flashx.textLayout.compose
          this._flowComposer = null;
          this._numParcels = 0;
          this._parcelArray = null;
-         if(this._singleParcel)
+         if(Boolean(this._singleParcel))
          {
-            this._singleParcel.releaseAnyReferences();
+            this._singleParcel.tlf_internal::releaseAnyReferences();
          }
       }
       
-      public function getParcelAt(idx:int) : Parcel
+      public function getParcelAt(idx:int) : flashx.textLayout.compose.Parcel
       {
          return this._numParcels <= 1 ? this._singleParcel : this._parcelArray[idx];
       }
@@ -111,7 +109,7 @@ package flashx.textLayout.compose
             return false;
          }
          var controller:ContainerController = this._currentParcel.controller;
-         return !!this._verticalText ? Boolean(controller.measureHeight) : Boolean(controller.measureWidth);
+         return this._verticalText ? Boolean(controller.tlf_internal::measureHeight) : Boolean(controller.tlf_internal::measureWidth);
       }
       
       private function get measureLogicalHeight() : Boolean
@@ -121,7 +119,7 @@ package flashx.textLayout.compose
             return false;
          }
          var controller:ContainerController = this._currentParcel.controller;
-         return !!this._verticalText ? Boolean(controller.measureWidth) : Boolean(controller.measureHeight);
+         return this._verticalText ? Boolean(controller.tlf_internal::measureWidth) : Boolean(controller.tlf_internal::measureHeight);
       }
       
       public function get totalDepth() : Number
@@ -148,7 +146,7 @@ package flashx.textLayout.compose
       
       private function addParcel(column:Rectangle, controller:ContainerController, columnIndex:int) : void
       {
-         var newParcel:Parcel = this._numParcels == 0 && this._singleParcel ? this._singleParcel.initialize(this._verticalText,column.x,column.y,column.width,column.height,controller,columnIndex) : new Parcel(this._verticalText,column.x,column.y,column.width,column.height,controller,columnIndex);
+         var newParcel:flashx.textLayout.compose.Parcel = this._numParcels == 0 && Boolean(this._singleParcel) ? this._singleParcel.initialize(this._verticalText,column.x,column.y,column.width,column.height,controller,columnIndex) : new flashx.textLayout.compose.Parcel(this._verticalText,column.x,column.y,column.width,column.height,controller,columnIndex);
          if(this._numParcels == 0)
          {
             this._singleParcel = newParcel;
@@ -178,7 +176,7 @@ package flashx.textLayout.compose
          }
       }
       
-      public function beginCompose(composer:IFlowComposer, controllerStartIndex:int, controllerEndIndex:int, composeToPosition:Boolean) : void
+      public function beginCompose(composer:flashx.textLayout.compose.IFlowComposer, controllerStartIndex:int, controllerEndIndex:int, composeToPosition:Boolean) : void
       {
          var idx:int = 0;
          this._flowComposer = composer;
@@ -214,16 +212,16 @@ package flashx.textLayout.compose
       {
          var horizontalPaddingAmount:Number = NaN;
          var right:Number = NaN;
-         var p:Parcel = null;
+         var p:flashx.textLayout.compose.Parcel = null;
          var verticalPaddingAmount:Number = NaN;
          if(this._verticalText)
          {
             if(containerToInitialize.horizontalScrollPolicy != ScrollPolicy.OFF)
             {
                p = this.getParcelAt(this._numParcels - 1);
-               if(p)
+               if(Boolean(p))
                {
-                  horizontalPaddingAmount = containerToInitialize.getTotalPaddingRight() + containerToInitialize.getTotalPaddingLeft();
+                  horizontalPaddingAmount = containerToInitialize.tlf_internal::getTotalPaddingRight() + containerToInitialize.tlf_internal::getTotalPaddingLeft();
                   right = p.right;
                   p.x = containerToInitialize.horizontalScrollPosition - p.width - horizontalPaddingAmount;
                   p.width = right - p.x;
@@ -235,9 +233,9 @@ package flashx.textLayout.compose
          else if(containerToInitialize.verticalScrollPolicy != ScrollPolicy.OFF)
          {
             p = this.getParcelAt(this._numParcels - 1);
-            if(p)
+            if(Boolean(p))
             {
-               verticalPaddingAmount = containerToInitialize.getTotalPaddingBottom() + containerToInitialize.getTotalPaddingTop();
+               verticalPaddingAmount = containerToInitialize.tlf_internal::getTotalPaddingBottom() + containerToInitialize.tlf_internal::getTotalPaddingTop();
                p.height = containerToInitialize.verticalScrollPosition + p.height + verticalPaddingAmount - p.y;
                p.fitAny = true;
                p.composeToPosition = composeToPosition;
@@ -292,7 +290,7 @@ package flashx.textLayout.compose
       
       public function getComposeXCoord(o:Rectangle) : Number
       {
-         return !!this._verticalText ? Number(o.right) : Number(o.left);
+         return this._verticalText ? o.right : o.left;
       }
       
       public function getComposeYCoord(o:Rectangle) : Number
@@ -306,7 +304,7 @@ package flashx.textLayout.compose
          {
             return TextLine.MAX_LINE_WIDTH;
          }
-         return !!this._verticalText ? Number(o.height) : Number(o.width);
+         return this._verticalText ? o.height : o.width;
       }
       
       public function getComposeHeight(o:Rectangle) : Number
@@ -315,7 +313,7 @@ package flashx.textLayout.compose
          {
             return TextLine.MAX_LINE_WIDTH;
          }
-         return !!this._verticalText ? Number(o.width) : Number(o.height);
+         return this._verticalText ? o.width : o.height;
       }
       
       public function atLast() : Boolean
@@ -346,14 +344,14 @@ package flashx.textLayout.compose
          return nextParcelIsValid;
       }
       
-      public function get currentParcel() : Parcel
+      public function get currentParcel() : flashx.textLayout.compose.Parcel
       {
          return this._currentParcel;
       }
       
       public function getLineSlug(slug:Slug, height:Number, minWidth:Number, textIndent:Number, directionLTR:Boolean) : Boolean
       {
-         if(this.currentParcel.getLineSlug(slug,this._totalDepth,height,minWidth,!!this.currentParcel.fitAny ? Number(1) : Number(int(height)),this._leftMargin,this._rightMargin,textIndent + this._insideListItemMargin,directionLTR,this._explicitLineBreaks))
+         if(this.currentParcel.getLineSlug(slug,this._totalDepth,height,minWidth,this.currentParcel.fitAny ? 1 : int(height),this._leftMargin,this._rightMargin,textIndent + this._insideListItemMargin,directionLTR,this._explicitLineBreaks))
          {
             if(this.totalDepth != slug.depth)
             {
@@ -366,7 +364,7 @@ package flashx.textLayout.compose
       
       public function fitFloat(slug:Slug, totalDepth:Number, width:Number, height:Number) : Boolean
       {
-         return this.currentParcel.getLineSlug(slug,totalDepth,height,width,!!this.currentParcel.fitAny ? Number(1) : Number(int(height)),this._leftMargin,this._rightMargin,0,true,this._explicitLineBreaks);
+         return this.currentParcel.getLineSlug(slug,totalDepth,height,width,this.currentParcel.fitAny ? 1 : int(height),this._leftMargin,this._rightMargin,0,true,this._explicitLineBreaks);
       }
    }
 }

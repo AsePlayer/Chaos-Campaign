@@ -1,14 +1,14 @@
 package com.brockw.stickwar.engine.projectile
 {
    import com.brockw.game.Util;
-   import com.brockw.stickwar.engine.StickWar;
-   import flash.display.MovieClip;
+   import com.brockw.stickwar.engine.*;
+   import flash.display.*;
    
    public class SpawnDrip extends Projectile
    {
        
       
-      var spellMc:MovieClip;
+      internal var spellMc:MovieClip;
       
       public function SpawnDrip(game:StickWar)
       {

@@ -15,8 +15,6 @@ package flashx.textLayout.edit
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class TextFlowEdit
    {
@@ -59,7 +57,7 @@ package flashx.textLayout.edit
             if(doMerge)
             {
                followingLeaf = textFlow.findLeaf(endPos);
-               if(followingLeaf)
+               if(Boolean(followingLeaf))
                {
                   mergePara = followingLeaf.getParagraph();
                   if(mergePara.textLength == 1 && mergePara.parent is ListItemElement && mergePara.parent.numChildren > 1)
@@ -70,7 +68,7 @@ package flashx.textLayout.edit
             }
          }
          deleteRangeInternal(textFlow,startPos,endPos - startPos);
-         if(mergePara)
+         if(Boolean(mergePara))
          {
             previousLeaf = mergePara.getFirstLeaf().getPreviousLeaf();
             mergePara = Boolean(previousLeaf) ? previousLeaf.getParagraph() : null;
@@ -134,7 +132,7 @@ package flashx.textLayout.edit
       
       private static function findLowestPossibleParent(element:FlowGroupElement, prospectiveChild:FlowElement) : FlowGroupElement
       {
-         while(element && !element.canOwnFlowElement(prospectiveChild))
+         while(Boolean(element) && !element.tlf_internal::canOwnFlowElement(prospectiveChild))
          {
             element = element.parent;
          }
@@ -148,7 +146,7 @@ package flashx.textLayout.edit
          {
             return;
          }
-         if(element is FlowGroupElement && element.format)
+         if(element is FlowGroupElement && Boolean(element.format))
          {
             flowGroupElement = FlowGroupElement(element);
             if(element.format.getStyle(ConverterBase.MERGE_TO_NEXT_ON_PASTE) !== undefined)
@@ -174,14 +172,14 @@ package flashx.textLayout.edit
          {
             formatSourceSibling = destinationElement.getChildAt(0);
          }
-         if(formatSourceSibling)
+         if(Boolean(formatSourceSibling))
          {
             if(formatSourceSibling is FlowGroupElement)
             {
                element = FlowGroupElement(formatSourceSibling).getLastLeaf();
                while(element != formatSourceSibling.parent)
                {
-                  if(element.format)
+                  if(Boolean(element.format))
                   {
                      if(!concatFormat)
                      {
@@ -248,7 +246,7 @@ package flashx.textLayout.edit
          var insertPosition:int = absoluteStart;
          var firstParagraph:Boolean = true;
          var doSplit:Boolean = false;
-         while(scrapLeaf)
+         while(Boolean(scrapLeaf))
          {
             removePasteAttributes(scrapLeaf);
             scrapElement = scrapLeaf;
@@ -289,7 +287,7 @@ package flashx.textLayout.edit
                scrapParent = scrapElement.parent;
                scrapChildren = scrapParent.mxmlChildren;
                scrapParent.replaceChildren(0,scrapParent.numChildren);
-               if(scrapParent.parent)
+               if(Boolean(scrapParent.parent))
                {
                   scrapParent.parent.removeChild(scrapParent);
                }
@@ -329,7 +327,7 @@ package flashx.textLayout.edit
                destinationElement.replaceChildren(childIndex,childIndex,scrapElement);
             }
             destinationLeaf = scrapElement is FlowLeafElement ? FlowLeafElement(scrapElement).getNextLeaf() : FlowGroupElement(scrapElement).getLastLeaf().getNextLeaf();
-            insertPosition = Boolean(destinationLeaf) ? int(destinationLeaf.getAbsoluteStart()) : int(textFlow.textLength - 1);
+            insertPosition = Boolean(destinationLeaf) ? destinationLeaf.getAbsoluteStart() : textFlow.textLength - 1;
             scrapLeaf = scrapFlow.getFirstLeaf();
          }
          return insertPosition;
@@ -341,19 +339,19 @@ package flashx.textLayout.edit
          var curEndPos:int = 0;
          var new_tcyElem:TCYElement = null;
          var madeTCY:Boolean = true;
-         var curPara:ParagraphElement = theFlow.findAbsoluteParagraph(startPos);
+         var curPara:ParagraphElement = theFlow.tlf_internal::findAbsoluteParagraph(startPos);
          if(!curPara)
          {
             return false;
          }
-         while(curPara)
+         while(Boolean(curPara))
          {
             paraEnd = curPara.getAbsoluteStart() + curPara.textLength;
             curEndPos = Math.min(paraEnd,endPos);
-            if(canInsertSPBlock(theFlow,startPos,curEndPos,TCYElement) && curPara.textLength > 1)
+            if(tlf_internal::canInsertSPBlock(theFlow,startPos,curEndPos,TCYElement) && curPara.textLength > 1)
             {
                new_tcyElem = new TCYElement();
-               madeTCY = madeTCY && insertNewSPBlock(theFlow,startPos,curEndPos,new_tcyElem,TCYElement);
+               madeTCY &&= tlf_internal::insertNewSPBlock(theFlow,startPos,curEndPos,new_tcyElem,TCYElement);
             }
             else
             {
@@ -361,7 +359,7 @@ package flashx.textLayout.edit
             }
             if(paraEnd < endPos)
             {
-               curPara = theFlow.findAbsoluteParagraph(curEndPos);
+               curPara = theFlow.tlf_internal::findAbsoluteParagraph(curEndPos);
                startPos = curEndPos;
             }
             else
@@ -379,30 +377,30 @@ package flashx.textLayout.edit
          var linkEndPos:int = 0;
          var newLinkElement:LinkElement = null;
          var madeLink:Boolean = true;
-         var curPara:ParagraphElement = theFlow.findAbsoluteParagraph(startPos);
+         var curPara:ParagraphElement = theFlow.tlf_internal::findAbsoluteParagraph(startPos);
          if(!curPara)
          {
             return false;
          }
-         while(curPara)
+         while(Boolean(curPara))
          {
             paraEnd = curPara.getAbsoluteStart() + curPara.textLength;
             curEndPos = Math.min(paraEnd,endPos);
-            linkEndPos = curEndPos == paraEnd ? int(curEndPos - 1) : int(curEndPos);
+            linkEndPos = curEndPos == paraEnd ? curEndPos - 1 : curEndPos;
             if(linkEndPos > startPos)
             {
-               if(!canInsertSPBlock(theFlow,startPos,linkEndPos,LinkElement))
+               if(!tlf_internal::canInsertSPBlock(theFlow,startPos,linkEndPos,LinkElement))
                {
                   return false;
                }
                newLinkElement = new LinkElement();
                newLinkElement.href = urlString;
                newLinkElement.target = target;
-               madeLink = madeLink && insertNewSPBlock(theFlow,startPos,linkEndPos,newLinkElement,LinkElement);
+               madeLink &&= tlf_internal::insertNewSPBlock(theFlow,startPos,linkEndPos,newLinkElement,LinkElement);
             }
             if(paraEnd < endPos)
             {
-               curPara = theFlow.findAbsoluteParagraph(curEndPos);
+               curPara = theFlow.tlf_internal::findAbsoluteParagraph(curEndPos);
                startPos = curEndPos;
             }
             else
@@ -419,7 +417,7 @@ package flashx.textLayout.edit
          {
             return false;
          }
-         return findAndRemoveFlowGroupElement(theFlow,startPos,endPos,TCYElement);
+         return tlf_internal::findAndRemoveFlowGroupElement(theFlow,startPos,endPos,TCYElement);
       }
       
       public static function removeLink(theFlow:TextFlow, startPos:int, endPos:int) : Boolean
@@ -428,13 +426,13 @@ package flashx.textLayout.edit
          {
             return false;
          }
-         return findAndRemoveFlowGroupElement(theFlow,startPos,endPos,LinkElement);
+         return tlf_internal::findAndRemoveFlowGroupElement(theFlow,startPos,endPos,LinkElement);
       }
       
       tlf_internal static function insertNewSPBlock(theFlow:TextFlow, startPos:int, endPos:int, newSPB:SubParagraphGroupElementBase, spgClass:Class) : Boolean
       {
          var curPos:int = startPos;
-         var curFBE:FlowGroupElement = theFlow.findAbsoluteFlowGroupElement(curPos);
+         var curFBE:FlowGroupElement = theFlow.tlf_internal::findAbsoluteFlowGroupElement(curPos);
          var elementIdx:int = 0;
          var paraEl:ParagraphElement = curFBE.getParagraph();
          if(endPos == paraEl.getAbsoluteStart() + paraEl.textLength - 1)
@@ -456,11 +454,11 @@ package flashx.textLayout.edit
          {
             if(!(curFBE is spgClass))
             {
-               elementIdx = findAndSplitElement(curFBE,elementIdx,curPos,true);
+               elementIdx = tlf_internal::findAndSplitElement(curFBE,elementIdx,curPos,true);
             }
             else
             {
-               elementIdx = findAndSplitElement(curFBE.parent,curFBE.parent.getChildIndex(curFBE),curPos,false);
+               elementIdx = tlf_internal::findAndSplitElement(curFBE.parent,curFBE.parent.getChildIndex(curFBE),curPos,false);
                curFBE = curFBE.parent;
             }
          }
@@ -482,7 +480,7 @@ package flashx.textLayout.edit
          {
             curFBE.replaceChildren(elementIdx,elementIdx,newSPB);
          }
-         subsumeElementsToSPBlock(curFBE,elementIdx + 1,curPos,endPos,newSPB,spgClass);
+         tlf_internal::subsumeElementsToSPBlock(curFBE,elementIdx + 1,curPos,endPos,newSPB,spgClass);
          return true;
       }
       
@@ -498,7 +496,7 @@ package flashx.textLayout.edit
          {
             subBlock = SubParagraphGroupElementBase(elem);
             tempElem = subBlock.findLeaf(splitPos) as SpanElement;
-            if(tempElem)
+            if(Boolean(tempElem))
             {
                tempElem.splitAtPosition(splitPos - tempElem.getElementRelativeStart(subBlock));
             }
@@ -522,7 +520,7 @@ package flashx.textLayout.edit
             }
             if(curIndexInPar > curFlowEl.parentRelativeStart && curIndexInPar < curFlowEl.parentRelativeEnd)
             {
-               splitElement(curFlowEl,curIndexInPar - curFlowEl.parentRelativeStart,splitSubBlockContents);
+               tlf_internal::splitElement(curFlowEl,curIndexInPar - curFlowEl.parentRelativeStart,splitSubBlockContents);
             }
             elementIdx++;
          }
@@ -546,7 +544,7 @@ package flashx.textLayout.edit
             curFlowEl = parentFBE.getChildAt(elementIdx);
             if(curPos + curFlowEl.textLength > endPos)
             {
-               splitElement(curFlowEl,endPos - curFlowEl.getAbsoluteStart(),!(curFlowEl is spgClass));
+               tlf_internal::splitElement(curFlowEl,endPos - curFlowEl.getAbsoluteStart(),!(curFlowEl is spgClass));
             }
             curPos += curFlowEl.textLength;
             parentFBE.replaceChildren(elementIdx,elementIdx + 1);
@@ -564,7 +562,7 @@ package flashx.textLayout.edit
             {
                if(curFlowEl is SubParagraphGroupElementBase)
                {
-                  flushSPBlock(curFlowEl as SubParagraphGroupElementBase,spgClass);
+                  tlf_internal::flushSPBlock(curFlowEl as SubParagraphGroupElementBase,spgClass);
                }
                newSPB.replaceChildren(newSPB.numChildren,newSPB.numChildren,curFlowEl);
                if(newSPB.numChildren == 1 && curFlowEl is SubParagraphGroupElementBase)
@@ -572,7 +570,7 @@ package flashx.textLayout.edit
                   childSPGE = curFlowEl as SubParagraphGroupElementBase;
                   if(childSPGE.textLength == newSPB.textLength && curPos >= endPos)
                   {
-                     if(childSPGE.precedence > newSPB.precedence)
+                     if(childSPGE.tlf_internal::precedence > newSPB.tlf_internal::precedence)
                      {
                         newSPB.replaceChildren(0,1);
                         while(childSPGE.numChildren > 0)
@@ -607,7 +605,7 @@ package flashx.textLayout.edit
          var curPos:int = startPos;
          while(curPos < endPos)
          {
-            containerFBE = theFlow.findAbsoluteFlowGroupElement(curPos);
+            containerFBE = theFlow.tlf_internal::findAbsoluteFlowGroupElement(curPos);
             while(containerFBE.parent && containerFBE.parent.getAbsoluteStart() == containerFBE.getAbsoluteStart() && !(containerFBE.parent is ParagraphElement) && !(containerFBE is ParagraphElement))
             {
                containerFBE = containerFBE.parent;
@@ -639,14 +637,14 @@ package flashx.textLayout.edit
                idxInParent = parentBlock.getChildIndex(curFBE);
                if(curPos > curFBE.getAbsoluteStart())
                {
-                  splitElement(curFBE,curPos - curFBE.getAbsoluteStart(),false);
+                  tlf_internal::splitElement(curFBE,curPos - curFBE.getAbsoluteStart(),false);
                   curPos = curFBE.getAbsoluteStart() + curFBE.textLength;
                }
                else
                {
                   if(curFBE.getAbsoluteStart() + curFBE.textLength > endPos)
                   {
-                     splitElement(curFBE,endPos - curFBE.getAbsoluteStart(),false);
+                     tlf_internal::splitElement(curFBE,endPos - curFBE.getAbsoluteStart(),false);
                   }
                   curPos = curFBE.getAbsoluteStart() + curFBE.textLength;
                   while(curFBE.numChildren > 0)
@@ -688,13 +686,13 @@ package flashx.textLayout.edit
          {
             return false;
          }
-         var anchorFBE:FlowGroupElement = theFlow.findAbsoluteFlowGroupElement(startPos);
-         if(anchorFBE.getParentByType(blockClass))
+         var anchorFBE:FlowGroupElement = theFlow.tlf_internal::findAbsoluteFlowGroupElement(startPos);
+         if(Boolean(anchorFBE.getParentByType(blockClass)))
          {
             anchorFBE = anchorFBE.getParentByType(blockClass) as FlowGroupElement;
          }
-         var tailFBE:FlowGroupElement = theFlow.findAbsoluteFlowGroupElement(endPos - 1);
-         if(tailFBE.getParentByType(blockClass))
+         var tailFBE:FlowGroupElement = theFlow.tlf_internal::findAbsoluteFlowGroupElement(endPos - 1);
+         if(Boolean(tailFBE.getParentByType(blockClass)))
          {
             tailFBE = tailFBE.getParentByType(blockClass) as FlowGroupElement;
          }
@@ -756,7 +754,7 @@ package flashx.textLayout.edit
             }
             else if(subFE is SubParagraphGroupElementBase)
             {
-               flushSPBlock(subFE as SubParagraphGroupElementBase,spgClass);
+               tlf_internal::flushSPBlock(subFE as SubParagraphGroupElementBase,spgClass);
                subParaIter++;
             }
             else
@@ -769,11 +767,11 @@ package flashx.textLayout.edit
       tlf_internal static function findNextParagraph(para:ParagraphElement) : ParagraphElement
       {
          var leaf:FlowLeafElement = null;
-         if(para)
+         if(Boolean(para))
          {
             leaf = para.getLastLeaf();
             leaf = leaf.getNextLeaf();
-            if(leaf)
+            if(Boolean(leaf))
             {
                return leaf.getParagraph();
             }
@@ -786,10 +784,10 @@ package flashx.textLayout.edit
          var grandParent:FlowGroupElement = null;
          var parentIdx:int = 0;
          var mementoList:MementoList = new MementoList(parent.getTextFlow());
-         while(parent && parent.numChildren == 0)
+         while(Boolean(parent) && parent.numChildren == 0)
          {
             grandParent = parent.parent;
-            if(grandParent)
+            if(Boolean(grandParent))
             {
                parentIdx = grandParent.getChildIndex(parent);
                mementoList.push(ModelEdit.removeElements(grandParent.getTextFlow(),grandParent,parentIdx,1));
@@ -801,8 +799,8 @@ package flashx.textLayout.edit
       
       public static function joinNextParagraph(para:ParagraphElement, inSameParent:Boolean) : IMemento
       {
-         var nextPara:ParagraphElement = findNextParagraph(para);
-         if(nextPara && (!inSameParent || para.parent == nextPara.parent))
+         var nextPara:ParagraphElement = tlf_internal::findNextParagraph(para);
+         if(Boolean(nextPara) && (!inSameParent || para.parent == nextPara.parent))
          {
             return joinToElement(para,nextPara);
          }
@@ -811,8 +809,8 @@ package flashx.textLayout.edit
       
       public static function joinToNextParagraph(para:ParagraphElement, inSameParent:Boolean) : MementoList
       {
-         var sibParagraph:ParagraphElement = findNextParagraph(para);
-         if(sibParagraph && (!inSameParent || para.parent == sibParagraph.parent))
+         var sibParagraph:ParagraphElement = tlf_internal::findNextParagraph(para);
+         if(Boolean(sibParagraph) && (!inSameParent || para.parent == sibParagraph.parent))
          {
             return joinToNextElement(para,sibParagraph);
          }
@@ -822,7 +820,7 @@ package flashx.textLayout.edit
       public static function joinToElement(element1:FlowGroupElement, element2:FlowGroupElement) : IMemento
       {
          var list:MementoList = null;
-         if(element1 && element2)
+         if(Boolean(element1) && Boolean(element2))
          {
             return ModelEdit.joinElement(element2.getTextFlow(),element1,element2);
          }
@@ -834,7 +832,7 @@ package flashx.textLayout.edit
          var list:MementoList = null;
          var elementList:Array = null;
          var i:int = 0;
-         if(element1 && element2)
+         if(Boolean(element1) && Boolean(element2))
          {
             list = new MementoList(element1.getTextFlow());
             elementList = element1.mxmlChildren;
@@ -843,7 +841,7 @@ package flashx.textLayout.edit
             {
                list.push(ModelEdit.addElement(element2.getTextFlow(),elementList[i],element2,0));
             }
-            list.push(removeEmptyParentChain(element1));
+            list.push(tlf_internal::removeEmptyParentChain(element1));
             return list;
          }
          return list;

@@ -10,7 +10,7 @@ package fl.text
    import flashx.textLayout.formats.TextLayoutFormat;
    
    [ExcludeClass]
-   interface IContainerManager
+   internal interface IContainerManager
    {
        
       
@@ -20,29 +20,29 @@ package fl.text
       
       function get paddingTop() : Object;
       
-      function set direction(value:String) : void;
+      function set direction(param1:String) : void;
       
-      function setTextFormat(format:TextFormat, beginIndex:int, endIndex:int, charFormat:TextLayoutFormat, paraFormat:TextLayoutFormat) : void;
+      function setTextFormat(param1:TextFormat, param2:int, param3:int, param4:TextLayoutFormat, param5:TextLayoutFormat) : void;
       
-      function set editModeNoInteraction(value:String) : void;
+      function set editModeNoInteraction(param1:String) : void;
       
-      function setCompositionSize(width:Number, height:Number) : void;
+      function setCompositionSize(param1:Number, param2:Number) : void;
       
       function get paddingRight() : Object;
       
-      function setFormatForAllElements(flowGroupElem:FlowGroupElement, format:TextLayoutFormat) : void;
+      function setFormatForAllElements(param1:FlowGroupElement, param2:TextLayoutFormat) : void;
       
-      function replaceText(beginIndex:int, endIndex:int, newText:String) : void;
+      function replaceText(param1:int, param2:int, param3:String) : void;
       
       function compose() : void;
       
-      function set paddingRight(value:Object) : void;
+      function set paddingRight(param1:Object) : void;
       
-      function set paddingTop(value:Object) : void;
+      function set paddingTop(param1:Object) : void;
       
       function get numLines() : int;
       
-      function set editMode(value:String) : void;
+      function set editMode(param1:String) : void;
       
       function removeListeners() : void;
       
@@ -52,7 +52,7 @@ package fl.text
       
       function get columnWidth() : Object;
       
-      function set columnWidth(value:Object) : void;
+      function set columnWidth(param1:Object) : void;
       
       function get paddingBottom() : Object;
       
@@ -60,7 +60,7 @@ package fl.text
       
       function get contentLeft() : Number;
       
-      function set firstBaselineOffset(value:Object) : void;
+      function set firstBaselineOffset(param1:Object) : void;
       
       function get firstBaselineOffset() : Object;
       
@@ -72,9 +72,9 @@ package fl.text
       
       function get verticalAlign() : Object;
       
-      function set columnCount(value:Object) : void;
+      function set columnCount(param1:Object) : void;
       
-      function convert(cls:Class) : IContainerManager;
+      function convert(param1:Class) : IContainerManager;
       
       function get contentTop() : Number;
       
@@ -82,19 +82,19 @@ package fl.text
       
       function get textColor() : uint;
       
-      function set paddingBottom(value:Object) : void;
+      function set paddingBottom(param1:Object) : void;
       
       function get embedFonts() : Boolean;
       
-      function set horizontalScrollPosition(value:Number) : void;
+      function set horizontalScrollPosition(param1:Number) : void;
       
       function get compositionWidth() : Number;
       
-      function set antialiasType(value:String) : void;
+      function set antialiasType(param1:String) : void;
       
       function get paddingLeft() : Object;
       
-      function set columnGap(value:Object) : void;
+      function set columnGap(param1:Object) : void;
       
       function get columnGap() : Object;
       
@@ -104,45 +104,45 @@ package fl.text
       
       function get contentWidth() : Number;
       
-      function set lineBreak(value:String) : void;
+      function set lineBreak(param1:String) : void;
       
-      function set verticalScrollPosition(value:Number) : void;
+      function set verticalScrollPosition(param1:Number) : void;
       
       function get columnCount() : Object;
       
-      function set text(value:String) : void;
+      function set text(param1:String) : void;
       
-      function set blockProgression(value:Object) : void;
+      function set blockProgression(param1:Object) : void;
       
-      function getLineIndexBounds(index:int) : Rectangle;
+      function getLineIndexBounds(param1:int) : Rectangle;
       
-      function set verticalAlign(value:Object) : void;
+      function set verticalAlign(param1:Object) : void;
       
       function get horizontalScrollPosition() : Number;
       
-      function set embedFonts(value:Boolean) : void;
+      function set embedFonts(param1:Boolean) : void;
       
-      function appendText(newString:String) : void;
+      function appendText(param1:String) : void;
       
       function get lineBreak() : String;
       
-      function set textColor(value:uint) : void;
+      function set textColor(param1:uint) : void;
       
       function get blockProgression() : Object;
       
-      function set paddingLeft(value:Object) : void;
+      function set paddingLeft(param1:Object) : void;
       
       function get compositionHeight() : Number;
       
       function get textLength() : int;
       
-      function set textFlow(textFlow:TextFlow) : void;
+      function set textFlow(param1:TextFlow) : void;
       
-      function getTextFormat(beginIndex:int, endIndex:int) : TextFormat;
+      function getTextFormat(param1:int, param2:int) : TextFormat;
       
       function get textFlow() : TextFlow;
       
-      function set hostFormat(value:ITextLayoutFormat) : void;
+      function set hostFormat(param1:ITextLayoutFormat) : void;
       
       function get direction() : String;
    }

@@ -10,13 +10,13 @@ package com.brockw.stickwar.engine.projectile
    {
        
       
-      var spellMc:MovieClip;
+      internal var spellMc:MovieClip;
       
-      var explosionRadius:Number;
+      internal var explosionRadius:Number;
       
-      var explosionDamage:Number;
+      internal var explosionDamage:Number;
       
-      var whoNuked:String;
+      internal var whoNuked:String;
       
       public function Nuke(game:StickWar)
       {
@@ -41,7 +41,7 @@ package com.brockw.stickwar.engine.projectile
          this.scaleX = 1 * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
          this.scaleY = 1 * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
          var units:Array = team.enemyTeam.units;
-         var n:int = units.length;
+         var n:int = int(units.length);
          if(this.spellMc.explosion.currentFrame == 3)
          {
             game.spatialHash.mapInArea(px - this.explosionRadius,py - this.explosionRadius,px + this.explosionRadius,py + this.explosionRadius,this.damageUnit);

@@ -16,8 +16,6 @@ package flashx.textLayout.utils
    import flashx.textLayout.formats.Direction;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public final class NavigationUtil
    {
        
@@ -34,7 +32,7 @@ package flashx.textLayout.utils
       
       private static function doIncrement(flowRoot:TextFlow, pos:int, incrementer:Function) : int
       {
-         var para:ParagraphElement = flowRoot.findAbsoluteParagraph(pos);
+         var para:ParagraphElement = flowRoot.tlf_internal::findAbsoluteParagraph(pos);
          return incrementer(flowRoot,para,pos,para.getAbsoluteStart());
       }
       
@@ -42,7 +40,7 @@ package flashx.textLayout.utils
       {
          if(pos - paraStart == 0)
          {
-            return pos > 0 ? int(pos - 1) : int(0);
+            return pos > 0 ? pos - 1 : 0;
          }
          return para.findPreviousAtomBoundary(pos - paraStart) + paraStart;
       }
@@ -72,13 +70,13 @@ package flashx.textLayout.utils
          {
             return endOfLastController(flowRoot);
          }
-         var para:ParagraphElement = flowRoot.findAbsoluteParagraph(absolutePos);
+         var para:ParagraphElement = flowRoot.tlf_internal::findAbsoluteParagraph(absolutePos);
          var paraStart:int = para.getAbsoluteStart();
          var prevWordPos:int = absolutePos - paraStart;
          var nextWordPos:int = 0;
          if(absolutePos - paraStart == 0)
          {
-            return absolutePos > 0 ? int(absolutePos - 1) : int(0);
+            return absolutePos > 0 ? absolutePos - 1 : 0;
          }
          do
          {
@@ -99,7 +97,7 @@ package flashx.textLayout.utils
       
       public static function nextWordPosition(flowRoot:TextFlow, absolutePos:int) : int
       {
-         var para:ParagraphElement = flowRoot.findAbsoluteParagraph(absolutePos);
+         var para:ParagraphElement = flowRoot.tlf_internal::findAbsoluteParagraph(absolutePos);
          var paraStart:int = para.getAbsoluteStart();
          var nextWordPos:int = absolutePos - paraStart;
          if(absolutePos - paraStart == para.textLength - 1)
@@ -149,12 +147,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateStartIfInReadOnlyElement(textFlow,begIdx);
-            endIdx = updateEndIfInReadOnlyElement(textFlow,endIdx);
+            begIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,begIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,endIdx);
          }
          else
          {
-            endIdx = updateEndIfInReadOnlyElement(textFlow,endIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,endIdx);
          }
          if(!extendSelection && range.anchorPosition == begIdx && range.activePosition == endIdx)
          {
@@ -196,12 +194,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateEndIfInReadOnlyElement(textFlow,begIdx);
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            begIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,begIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          else
          {
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          if(!extendSelection && range.anchorPosition == begIdx && range.activePosition == endIdx)
          {
@@ -320,27 +318,27 @@ package flashx.textLayout.utils
             {
                if(!bidiRightToLeft)
                {
-                  endIdx = globalPoint.x <= targetTextLine.x ? int(targetFlowLine.absoluteStart) : int(targetFlowLine.absoluteStart + targetFlowLine.textLength - 1);
+                  endIdx = globalPoint.x <= targetTextLine.x ? targetFlowLine.absoluteStart : targetFlowLine.absoluteStart + targetFlowLine.textLength - 1;
                }
                else
                {
-                  endIdx = globalPoint.x <= targetTextLine.x ? int(targetFlowLine.absoluteStart + targetFlowLine.textLength - 1) : int(targetFlowLine.absoluteStart);
+                  endIdx = globalPoint.x <= targetTextLine.x ? targetFlowLine.absoluteStart + targetFlowLine.textLength - 1 : targetFlowLine.absoluteStart;
                }
             }
             else if(!bidiRightToLeft)
             {
-               endIdx = globalPoint.y <= targetTextLine.y ? int(targetFlowLine.absoluteStart) : int(targetFlowLine.absoluteStart + targetFlowLine.textLength - 1);
+               endIdx = globalPoint.y <= targetTextLine.y ? targetFlowLine.absoluteStart : targetFlowLine.absoluteStart + targetFlowLine.textLength - 1;
             }
             else
             {
-               endIdx = globalPoint.y <= targetTextLine.y ? int(targetFlowLine.absoluteStart + targetFlowLine.textLength - 1) : int(targetFlowLine.absoluteStart);
+               endIdx = globalPoint.y <= targetTextLine.y ? targetFlowLine.absoluteStart + targetFlowLine.textLength - 1 : targetFlowLine.absoluteStart;
             }
          }
          else
          {
             glyphRect = targetTextLine.getAtomBounds(atomIndex);
             leanRight = false;
-            if(glyphRect)
+            if(Boolean(glyphRect))
             {
                glyphGlobalPoint = new Point();
                glyphGlobalPoint.x = glyphRect.x;
@@ -357,7 +355,7 @@ package flashx.textLayout.utils
             }
             if(targetTextLine.getAtomBidiLevel(atomIndex) % 2 != 0)
             {
-               paraSelectionIdx = !!leanRight ? int(targetTextLine.getAtomTextBlockBeginIndex(atomIndex)) : int(targetTextLine.getAtomTextBlockEndIndex(atomIndex));
+               paraSelectionIdx = leanRight ? targetTextLine.getAtomTextBlockBeginIndex(atomIndex) : targetTextLine.getAtomTextBlockEndIndex(atomIndex);
             }
             else if(isRTLDirection)
             {
@@ -372,7 +370,7 @@ package flashx.textLayout.utils
             }
             else
             {
-               paraSelectionIdx = !!leanRight ? int(targetTextLine.getAtomTextBlockEndIndex(atomIndex)) : int(targetTextLine.getAtomTextBlockBeginIndex(atomIndex));
+               paraSelectionIdx = leanRight ? targetTextLine.getAtomTextBlockEndIndex(atomIndex) : targetTextLine.getAtomTextBlockBeginIndex(atomIndex);
             }
             endIdx = targetFlowLine.paragraph.getAbsoluteStart() + paraSelectionIdx;
          }
@@ -407,11 +405,11 @@ package flashx.textLayout.utils
             return true;
          }
          var textFlow:TextFlow = range.textFlow;
-         var blockProgression:String = textFlow.computedFormat.blockProgression;
+         var blockProgression:String = String(textFlow.computedFormat.blockProgression);
          var begIdx:int = range.anchorPosition;
          var endIdx:int = range.activePosition;
          var limitIdx:int = endOfLastController(textFlow);
-         var curLine:int = textFlow.flowComposer.findLineIndexAtPosition(endIdx);
+         var curLine:int = int(textFlow.flowComposer.findLineIndexAtPosition(endIdx));
          var isRTLDirection:Boolean = textFlow.computedFormat.direction == Direction.RTL;
          if(curLine < textFlow.flowComposer.numLines - 1)
          {
@@ -476,16 +474,16 @@ package flashx.textLayout.utils
             lastPosInContainer = firstPosInContainer + controller.textLength;
             if(nextFlowLine.absoluteStart >= firstPosInContainer && nextFlowLine.absoluteStart < lastPosInContainer)
             {
-               if(nextFlowLine.isDamaged())
+               if(nextFlowLine.tlf_internal::isDamaged())
                {
                   textFlow.flowComposer.composeToPosition(nextFlowLine.absoluteStart + 1);
                   nextFlowLine = textFlow.flowComposer.getLineAt(curLine + 1);
-                  if(nextFlowLine.isDamaged())
+                  if(nextFlowLine.tlf_internal::isDamaged())
                   {
                      return false;
                   }
                }
-               curLogicalHorizontalScrollPos = blockProgression == BlockProgression.TB ? Number(controller.horizontalScrollPosition) : Number(controller.verticalScrollPosition);
+               curLogicalHorizontalScrollPos = blockProgression == BlockProgression.TB ? controller.horizontalScrollPosition : controller.verticalScrollPosition;
                controller.scrollToRange(nextFlowLine.absoluteStart,nextFlowLine.absoluteStart + nextFlowLine.textLength - 1);
                if(blockProgression == BlockProgression.TB)
                {
@@ -496,7 +494,7 @@ package flashx.textLayout.utils
                   controller.verticalScrollPosition = curLogicalHorizontalScrollPos;
                }
             }
-            endIdx = computeEndIdx(nextFlowLine,curTextFlowLine,blockProgression,isRTLDirection,globalPoint);
+            endIdx = tlf_internal::computeEndIdx(nextFlowLine,curTextFlowLine,blockProgression,isRTLDirection,globalPoint);
             if(endIdx >= textFlow.textLength)
             {
                endIdx = textFlow.textLength;
@@ -512,12 +510,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateStartIfInReadOnlyElement(textFlow,begIdx);
-            endIdx = updateEndIfInReadOnlyElement(textFlow,endIdx);
+            begIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,begIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,endIdx);
          }
          else
          {
-            endIdx = updateEndIfInReadOnlyElement(textFlow,endIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -549,10 +547,10 @@ package flashx.textLayout.utils
             return true;
          }
          var textFlow:TextFlow = range.textFlow;
-         var blockProgression:String = textFlow.computedFormat.blockProgression;
+         var blockProgression:String = String(textFlow.computedFormat.blockProgression);
          var begIdx:int = range.anchorPosition;
          var endIdx:int = range.activePosition;
-         var curLine:int = textFlow.flowComposer.findLineIndexAtPosition(endIdx);
+         var curLine:int = int(textFlow.flowComposer.findLineIndexAtPosition(endIdx));
          var isRTLDirection:Boolean = textFlow.computedFormat.direction == Direction.RTL;
          if(curLine > 0)
          {
@@ -604,7 +602,7 @@ package flashx.textLayout.utils
             lastPosInContainer = firstPosInContainer + controller.textLength;
             if(prevFlowLine.absoluteStart >= firstPosInContainer && prevFlowLine.absoluteStart < lastPosInContainer)
             {
-               curLogicalHorizontalScrollPos = blockProgression == BlockProgression.TB ? Number(controller.horizontalScrollPosition) : Number(controller.verticalScrollPosition);
+               curLogicalHorizontalScrollPos = blockProgression == BlockProgression.TB ? controller.horizontalScrollPosition : controller.verticalScrollPosition;
                controller.scrollToRange(prevFlowLine.absoluteStart,prevFlowLine.absoluteStart + prevFlowLine.textLength - 1);
                if(blockProgression == BlockProgression.TB)
                {
@@ -615,7 +613,7 @@ package flashx.textLayout.utils
                   controller.verticalScrollPosition = curLogicalHorizontalScrollPos;
                }
             }
-            endIdx = computeEndIdx(prevFlowLine,curTextFlowLine,blockProgression,isRTLDirection,globalPoint);
+            endIdx = tlf_internal::computeEndIdx(prevFlowLine,curTextFlowLine,blockProgression,isRTLDirection,globalPoint);
          }
          else
          {
@@ -627,12 +625,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateStartIfInReadOnlyElement(textFlow,begIdx);
-            endIdx = updateEndIfInReadOnlyElement(textFlow,endIdx);
+            begIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,begIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,endIdx);
          }
          else
          {
-            endIdx = updateEndIfInReadOnlyElement(textFlow,endIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -653,7 +651,7 @@ package flashx.textLayout.utils
             return false;
          }
          var textFlow:TextFlow = range.textFlow;
-         var controllerIndex:int = textFlow.flowComposer.findControllerIndexAtPosition(range.activePosition);
+         var controllerIndex:int = int(textFlow.flowComposer.findControllerIndexAtPosition(range.activePosition));
          if(controllerIndex != textFlow.flowComposer.numControllers - 1)
          {
             range.activePosition = textFlow.flowComposer.getControllerAt(controllerIndex + 1).absoluteStart;
@@ -673,9 +671,9 @@ package flashx.textLayout.utils
          }
          var begIdx:int = range.absoluteStart;
          var endIdx:int = range.absoluteEnd;
-         var curLine:int = textFlow.flowComposer.findLineIndexAtPosition(endIdx);
+         var curLine:int = int(textFlow.flowComposer.findLineIndexAtPosition(endIdx));
          var curTextFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(curLine);
-         var lineStart:int = textFlow.flowComposer.getLineAt(curLine).absoluteStart;
+         var lineStart:int = int(textFlow.flowComposer.getLineAt(curLine).absoluteStart);
          var linePos:int = endIdx - lineStart;
          var nextTextFlowLine:TextFlowLine = curTextFlowLine;
          var isTTB:Boolean = textFlow.computedFormat.blockProgression == BlockProgression.RL;
@@ -690,7 +688,7 @@ package flashx.textLayout.utils
          }
          if(isTTB)
          {
-            contentWidth = controller.contentWidth;
+            contentWidth = Number(controller.tlf_internal::contentWidth);
             if(controller.horizontalScrollPosition - amount < -contentWidth)
             {
                controller.horizontalScrollPosition = -contentWidth;
@@ -724,7 +722,7 @@ package flashx.textLayout.utils
          }
          else
          {
-            contentHeight = controller.contentHeight;
+            contentHeight = Number(controller.tlf_internal::contentHeight);
             if(controller.verticalScrollPosition + amount > contentHeight)
             {
                controller.verticalScrollPosition = contentHeight;
@@ -768,12 +766,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateEndIfInReadOnlyElement(textFlow,begIdx);
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            begIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,begIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          else
          {
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -791,7 +789,7 @@ package flashx.textLayout.utils
             return false;
          }
          var textFlow:TextFlow = range.textFlow;
-         var controllerIndex:int = textFlow.flowComposer.findControllerIndexAtPosition(range.activePosition);
+         var controllerIndex:int = int(textFlow.flowComposer.findControllerIndexAtPosition(range.activePosition));
          var controller:ContainerController = textFlow.flowComposer.getControllerAt(controllerIndex);
          var controllerFirstLine:TextFlowLine = textFlow.flowComposer.findLineAtPosition(controller.absoluteStart);
          if(range.activePosition <= controller.absoluteStart + controllerFirstLine.textLength)
@@ -826,9 +824,9 @@ package flashx.textLayout.utils
          }
          var begIdx:int = range.absoluteStart;
          var endIdx:int = range.absoluteEnd;
-         var curLine:int = textFlow.flowComposer.findLineIndexAtPosition(endIdx);
+         var curLine:int = int(textFlow.flowComposer.findLineIndexAtPosition(endIdx));
          var curTextFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(curLine);
-         var lineStart:int = textFlow.flowComposer.getLineAt(curLine).absoluteStart;
+         var lineStart:int = int(textFlow.flowComposer.getLineAt(curLine).absoluteStart);
          var linePos:int = endIdx - lineStart;
          var nextTextFlowLine:TextFlowLine = curTextFlowLine;
          var isTTB:Boolean = textFlow.computedFormat.blockProgression == BlockProgression.RL;
@@ -846,7 +844,7 @@ package flashx.textLayout.utils
             if(controller.horizontalScrollPosition + amount + controller.compositionWidth > 0)
             {
                controller.horizontalScrollPosition = 0;
-               nextLine = textFlow.flowComposer.findLineIndexAtPosition(controller.absoluteStart);
+               nextLine = int(textFlow.flowComposer.findLineIndexAtPosition(controller.absoluteStart));
                nextTextFlowLine = textFlow.flowComposer.getLineAt(nextLine);
             }
             else
@@ -856,7 +854,7 @@ package flashx.textLayout.utils
                newHorzPos = controller.horizontalScrollPosition;
                if(oldHorzPos == newHorzPos)
                {
-                  nextLine = textFlow.flowComposer.findLineIndexAtPosition(controller.absoluteStart);
+                  nextLine = int(textFlow.flowComposer.findLineIndexAtPosition(controller.absoluteStart));
                   nextTextFlowLine = textFlow.flowComposer.getLineAt(nextLine);
                }
                else
@@ -877,7 +875,7 @@ package flashx.textLayout.utils
          else if(controller.verticalScrollPosition - amount + controller.compositionHeight < 0)
          {
             controller.verticalScrollPosition = 0;
-            nextLine = textFlow.flowComposer.findLineIndexAtPosition(controller.absoluteStart);
+            nextLine = int(textFlow.flowComposer.findLineIndexAtPosition(controller.absoluteStart));
             nextTextFlowLine = textFlow.flowComposer.getLineAt(nextLine);
          }
          else
@@ -887,7 +885,7 @@ package flashx.textLayout.utils
             newVertPos = controller.verticalScrollPosition;
             if(oldVertPos == newVertPos)
             {
-               nextLine = textFlow.flowComposer.findLineIndexAtPosition(controller.absoluteStart);
+               nextLine = int(textFlow.flowComposer.findLineIndexAtPosition(controller.absoluteStart));
                nextTextFlowLine = textFlow.flowComposer.getLineAt(nextLine);
             }
             else
@@ -916,12 +914,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateEndIfInReadOnlyElement(textFlow,begIdx);
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            begIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,begIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          else
          {
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -936,8 +934,8 @@ package flashx.textLayout.utils
          checkCompose(textFlow.flowComposer,range.absoluteEnd);
          var begIdx:int = range.anchorPosition;
          var endIdx:int = range.activePosition;
-         var curLine:int = textFlow.flowComposer.findLineIndexAtPosition(endIdx);
-         var lineStart:int = textFlow.flowComposer.getLineAt(curLine).absoluteStart;
+         var curLine:int = int(textFlow.flowComposer.findLineIndexAtPosition(endIdx));
+         var lineStart:int = int(textFlow.flowComposer.getLineAt(curLine).absoluteStart);
          var lineEnd:int = lineStart + textFlow.flowComposer.getLineAt(curLine).textLength - 1;
          var leaf:FlowLeafElement = textFlow.findLeaf(endIdx);
          var para:ParagraphElement = leaf.getParagraph();
@@ -955,12 +953,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateEndIfInReadOnlyElement(textFlow,begIdx);
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            begIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,begIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          else
          {
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -975,8 +973,8 @@ package flashx.textLayout.utils
          checkCompose(textFlow.flowComposer,range.absoluteEnd);
          var begIdx:int = range.anchorPosition;
          var endIdx:int = range.activePosition;
-         var curLine:int = textFlow.flowComposer.findLineIndexAtPosition(endIdx);
-         var lineStart:int = textFlow.flowComposer.getLineAt(curLine).absoluteStart;
+         var curLine:int = int(textFlow.flowComposer.findLineIndexAtPosition(endIdx));
+         var lineStart:int = int(textFlow.flowComposer.getLineAt(curLine).absoluteStart);
          endIdx = lineStart;
          if(!extendSelection)
          {
@@ -984,12 +982,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateEndIfInReadOnlyElement(textFlow,begIdx);
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            begIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,begIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          else
          {
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -1010,12 +1008,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateEndIfInReadOnlyElement(textFlow,begIdx);
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            begIdx = tlf_internal::updateEndIfInReadOnlyElement(textFlow,begIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          else
          {
-            endIdx = updateStartIfInReadOnlyElement(textFlow,endIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -1030,12 +1028,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateEndIfInReadOnlyElement(range.textFlow,begIdx);
-            endIdx = updateStartIfInReadOnlyElement(range.textFlow,endIdx);
+            begIdx = tlf_internal::updateEndIfInReadOnlyElement(range.textFlow,begIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(range.textFlow,endIdx);
          }
          else
          {
-            endIdx = updateStartIfInReadOnlyElement(range.textFlow,endIdx);
+            endIdx = tlf_internal::updateStartIfInReadOnlyElement(range.textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -1053,12 +1051,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateStartIfInReadOnlyElement(range.textFlow,begIdx);
-            endIdx = updateEndIfInReadOnlyElement(range.textFlow,endIdx);
+            begIdx = tlf_internal::updateStartIfInReadOnlyElement(range.textFlow,begIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(range.textFlow,endIdx);
          }
          else
          {
-            endIdx = updateEndIfInReadOnlyElement(range.textFlow,endIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(range.textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -1080,12 +1078,12 @@ package flashx.textLayout.utils
          }
          if(begIdx == endIdx)
          {
-            begIdx = updateStartIfInReadOnlyElement(range.textFlow,begIdx);
-            endIdx = updateEndIfInReadOnlyElement(range.textFlow,endIdx);
+            begIdx = tlf_internal::updateStartIfInReadOnlyElement(range.textFlow,begIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(range.textFlow,endIdx);
          }
          else
          {
-            endIdx = updateEndIfInReadOnlyElement(range.textFlow,endIdx);
+            endIdx = tlf_internal::updateEndIfInReadOnlyElement(range.textFlow,endIdx);
          }
          return range.updateRange(begIdx,endIdx);
       }
@@ -1101,9 +1099,9 @@ package flashx.textLayout.utils
             clampToFit(range,flowComposer.damageAbsoluteStart - 1);
             return true;
          }
-         if(flowComposer && flowComposer.numControllers)
+         if(Boolean(flowComposer) && Boolean(flowComposer.numControllers))
          {
-            controllerIndex = flowComposer.findControllerIndexAtPosition(range.absoluteEnd);
+            controllerIndex = int(flowComposer.findControllerIndexAtPosition(range.absoluteEnd));
             if(controllerIndex >= 0)
             {
                controller = flowComposer.getControllerAt(controllerIndex);
@@ -1138,7 +1136,7 @@ package flashx.textLayout.utils
       private static function adjustForOversetBack(range:TextRange) : Boolean
       {
          var flowComposer:IFlowComposer = range.textFlow.flowComposer;
-         if(flowComposer)
+         if(Boolean(flowComposer))
          {
             checkCompose(flowComposer,range.absoluteEnd);
             if(range.absoluteEnd > flowComposer.damageAbsoluteStart - 1)
@@ -1190,11 +1188,11 @@ package flashx.textLayout.utils
          {
             return false;
          }
-         var controllerIndex:int = flowComposer.findControllerIndexAtPosition(absolutePos);
+         var controllerIndex:int = int(flowComposer.findControllerIndexAtPosition(absolutePos));
          if(controllerIndex >= 0)
          {
             controller = flowComposer.getControllerAt(controllerIndex);
-            blockProgression = controller.rootElement.computedFormat.blockProgression;
+            blockProgression = String(controller.rootElement.computedFormat.blockProgression);
             return blockProgression == BlockProgression.TB && controller.verticalScrollPolicy != ScrollPolicy.OFF || blockProgression == BlockProgression.RL && controller.horizontalScrollPolicy != ScrollPolicy.OFF;
          }
          return false;

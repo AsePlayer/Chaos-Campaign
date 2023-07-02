@@ -41,7 +41,7 @@ package flashx.textLayout.property
       
       override public function owningHandlerCheck(newVal:*) : *
       {
-         var newNumber:Number = newVal is String ? Number(parseInt(newVal)) : Number(int(newVal));
+         var newNumber:Number = newVal is String ? parseInt(newVal) : int(newVal);
          if(isNaN(newNumber))
          {
             return undefined;

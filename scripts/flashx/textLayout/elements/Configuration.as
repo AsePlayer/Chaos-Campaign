@@ -13,16 +13,14 @@ package flashx.textLayout.elements
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
-   public class Configuration implements IConfiguration
+   public class Configuration implements flashx.textLayout.elements.IConfiguration
    {
       
-      tlf_internal static const playerEnablesArgoFeatures:Boolean = versionIsAtLeast(10,1);
+      tlf_internal static const playerEnablesArgoFeatures:Boolean = tlf_internal::versionIsAtLeast(10,1);
       
-      tlf_internal static const playerEnablesSpicyFeatures:Boolean = versionIsAtLeast(10,2) && new Sprite().hasOwnProperty("needsSoftKeyboard");
+      tlf_internal static const playerEnablesSpicyFeatures:Boolean = tlf_internal::versionIsAtLeast(10,2) && new Sprite().hasOwnProperty("needsSoftKeyboard");
       
-      tlf_internal static const hasTouchScreen:Boolean = playerEnablesArgoFeatures && Capabilities["touchScreenType"] != "none";
+      tlf_internal static const hasTouchScreen:Boolean = tlf_internal::playerEnablesArgoFeatures && Capabilities["touchScreenType"] != "none";
        
       
       private var _manageTabKey:Boolean;
@@ -63,7 +61,7 @@ package flashx.textLayout.elements
       
       private var _inlineGraphicResolverFunction:Function;
       
-      private var _immutableClone:IConfiguration;
+      private var _immutableClone:flashx.textLayout.elements.IConfiguration;
       
       public function Configuration(initializeWithDefaults:Boolean = true)
       {
@@ -122,7 +120,7 @@ package flashx.textLayout.elements
          this._flowComposerClass = StandardFlowComposer;
       }
       
-      tlf_internal function getImmutableClone() : IConfiguration
+      tlf_internal function getImmutableClone() : flashx.textLayout.elements.IConfiguration
       {
          var clonedConifg:Configuration = null;
          if(!this._immutableClone)

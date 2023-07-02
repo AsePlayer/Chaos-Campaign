@@ -58,7 +58,7 @@ package com.brockw.stickwar.engine
       
       private var _main:BaseMain;
       
-      private var _box:Box;
+      private var _box:com.brockw.stickwar.engine.Box;
       
       private var SCROLL_SPEED:Number = 100;
       
@@ -66,15 +66,15 @@ package com.brockw.stickwar.engine
       
       private var _team:Team;
       
-      private var _selectedUnits:SelectedUnits;
+      private var _selectedUnits:com.brockw.stickwar.engine.SelectedUnits;
       
-      private var _pauseMenu:PauseMenu;
+      private var _pauseMenu:com.brockw.stickwar.engine.PauseMenu;
       
       private var _hud:Hud;
       
-      private var _actionInterface:ActionInterface;
+      private var _actionInterface:com.brockw.stickwar.engine.ActionInterface;
       
-      private var _chat:Chat;
+      private var _chat:com.brockw.stickwar.engine.Chat;
       
       private var _isSlowCamera:Boolean;
       
@@ -108,7 +108,7 @@ package com.brockw.stickwar.engine
       
       private var isUnitCreationEnabled:Boolean = true;
       
-      private var _helpMessage:HelpMessage;
+      private var _helpMessage:com.brockw.stickwar.engine.HelpMessage;
       
       private var _isMusic:Boolean;
       
@@ -138,25 +138,25 @@ package com.brockw.stickwar.engine
       
       private var playerPop:Number;
       
-      var isB:Boolean;
+      internal var isB:Boolean;
       
-      var isR:Boolean;
+      internal var isR:Boolean;
       
-      var isU:Boolean;
+      internal var isU:Boolean;
       
-      var isH:Boolean;
+      internal var isH:Boolean;
       
-      var devHotkeyCounter:int;
+      internal var devHotkeyCounter:int;
       
-      var devHotkeyTotal:int;
+      internal var devHotkeyTotal:int;
       
-      var i:int;
+      internal var i:int;
       
-      var noDevmodeNoGodmode:int;
+      internal var noDevmodeNoGodmode:int;
       
-      var instaQueuedUnit:String;
+      internal var instaQueuedUnit:String;
       
-      var lookingAtEnemyEco:Boolean = false;
+      internal var lookingAtEnemyEco:Boolean = false;
       
       public function UserInterface(main:BaseMain, gameScreen:GameScreen)
       {
@@ -181,8 +181,8 @@ package com.brockw.stickwar.engine
          this.isMusic = this.main.soundManager.isMusic;
          this.lastSentScreenPosition = 0;
          this.spacePressTimer = getTimer();
-         this.box = new Box();
-         this.selectedUnits = new SelectedUnits(this.gameScreen);
+         this.box = new com.brockw.stickwar.engine.Box();
+         this.selectedUnits = new com.brockw.stickwar.engine.SelectedUnits(this.gameScreen);
          ++this.main.loadingFraction;
          if(this.gameScreen is MultiplayerGameScreen)
          {
@@ -204,17 +204,17 @@ package com.brockw.stickwar.engine
          {
             this._hud = new ChaosHud();
          }
-         this.actionInterface = new ActionInterface(this);
+         this.actionInterface = new com.brockw.stickwar.engine.ActionInterface(this);
          ++this.main.loadingFraction;
          addChild(this._actionInterface);
          this._actionInterface.mouseEnabled = false;
          this._actionInterface.mouseChildren = false;
          addChild(this._hud);
-         this._chat = new Chat(this.gameScreen);
+         this._chat = new com.brockw.stickwar.engine.Chat(this.gameScreen);
          ++this.main.loadingFraction;
          addChild(this._chat);
          this.gameScreen.addChild(this.pauseMenu);
-         this.helpMessage = new HelpMessage(this.gameScreen.game);
+         this.helpMessage = new com.brockw.stickwar.engine.HelpMessage(this.gameScreen.game);
          ++this.main.loadingFraction;
          addChild(this.helpMessage);
          this._chat.mouseEnabled = false;
@@ -1536,8 +1536,8 @@ package com.brockw.stickwar.engine
                {
                   if(!(Unit(this.team.units[_loc17_]).interactsWith & Unit.I_IS_BUILDING))
                   {
-                     _loc18_ = this.team.units[_loc17_].x;
-                     _loc19_ = this.team.units[_loc17_].y;
+                     _loc18_ = int(this.team.units[_loc17_].x);
+                     _loc19_ = int(this.team.units[_loc17_].y);
                      if(this.keyBoardState.isShift)
                      {
                         Unit(this.team.units[_loc17_]).selected = this.box.isInside(_loc18_,_loc19_,this.team.units[_loc17_].mc.height / 2,20) || Unit(this.team.units[_loc17_]).selected || this.gameScreen.game.mouseOverUnit == this.team.units[_loc17_];
@@ -1612,12 +1612,12 @@ package com.brockw.stickwar.engine
          this._hud = value;
       }
       
-      public function get actionInterface() : ActionInterface
+      public function get actionInterface() : com.brockw.stickwar.engine.ActionInterface
       {
          return this._actionInterface;
       }
       
-      public function set actionInterface(value:ActionInterface) : void
+      public function set actionInterface(value:com.brockw.stickwar.engine.ActionInterface) : void
       {
          this._actionInterface = value;
       }
@@ -1632,12 +1632,12 @@ package com.brockw.stickwar.engine
          this._team = value;
       }
       
-      public function get selectedUnits() : SelectedUnits
+      public function get selectedUnits() : com.brockw.stickwar.engine.SelectedUnits
       {
          return this._selectedUnits;
       }
       
-      public function set selectedUnits(value:SelectedUnits) : void
+      public function set selectedUnits(value:com.brockw.stickwar.engine.SelectedUnits) : void
       {
          this._selectedUnits = value;
       }
@@ -1652,12 +1652,12 @@ package com.brockw.stickwar.engine
          this._main = value;
       }
       
-      public function get chat() : Chat
+      public function get chat() : com.brockw.stickwar.engine.Chat
       {
          return this._chat;
       }
       
-      public function set chat(value:Chat) : void
+      public function set chat(value:com.brockw.stickwar.engine.Chat) : void
       {
          this._chat = value;
       }
@@ -1672,12 +1672,12 @@ package com.brockw.stickwar.engine
          this._gameScreen = value;
       }
       
-      public function get box() : Box
+      public function get box() : com.brockw.stickwar.engine.Box
       {
          return this._box;
       }
       
-      public function set box(value:Box) : void
+      public function set box(value:com.brockw.stickwar.engine.Box) : void
       {
          this._box = value;
       }
@@ -1692,12 +1692,12 @@ package com.brockw.stickwar.engine
          this._isSlowCamera = value;
       }
       
-      public function get helpMessage() : HelpMessage
+      public function get helpMessage() : com.brockw.stickwar.engine.HelpMessage
       {
          return this._helpMessage;
       }
       
-      public function set helpMessage(value:HelpMessage) : void
+      public function set helpMessage(value:com.brockw.stickwar.engine.HelpMessage) : void
       {
          this._helpMessage = value;
       }
@@ -1713,12 +1713,12 @@ package com.brockw.stickwar.engine
          this._isMusic = value;
       }
       
-      public function get pauseMenu() : PauseMenu
+      public function get pauseMenu() : com.brockw.stickwar.engine.PauseMenu
       {
          return this._pauseMenu;
       }
       
-      public function set pauseMenu(value:PauseMenu) : void
+      public function set pauseMenu(value:com.brockw.stickwar.engine.PauseMenu) : void
       {
          this._pauseMenu = value;
       }

@@ -1,7 +1,6 @@
 package com.brockw.stickwar.engine
 {
-   import flash.display.DisplayObject;
-   import flash.display.MovieClip;
+   import flash.display.*;
    import flash.geom.ColorTransform;
    
    public class FogOfWar extends Entity
@@ -20,13 +19,13 @@ package com.brockw.stickwar.engine
       
       private var movingFog:Array;
       
-      var fog:_fog;
+      internal var fog:_fog;
       
-      var fogLowQuality:_fogLowQuality;
+      internal var fogLowQuality:_fogLowQuality;
       
-      var fogBlur:_fogFade;
+      internal var fogBlur:_fogFade;
       
-      var xPos:Number;
+      internal var xPos:Number;
       
       public var isFogOn:Boolean;
       
@@ -52,7 +51,7 @@ package com.brockw.stickwar.engine
          this.fogLowQuality.cacheAsBitmap = true;
       }
       
-      function setTint(displayObject:DisplayObject, tintColor:uint, tintMultiplier:Number) : void
+      internal function setTint(displayObject:DisplayObject, tintColor:uint, tintMultiplier:Number) : void
       {
          var colTransform:ColorTransform = new ColorTransform();
          colTransform.redMultiplier = colTransform.greenMultiplier = colTransform.blueMultiplier = 1 - tintMultiplier;

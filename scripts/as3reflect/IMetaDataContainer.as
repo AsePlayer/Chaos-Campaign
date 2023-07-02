@@ -4,11 +4,11 @@ package as3reflect
    {
        
       
-      function addMetaData(metaData:MetaData) : void;
+      function addMetaData(param1:MetaData) : void;
       
-      function hasMetaData(key:String) : Boolean;
+      function hasMetaData(param1:String) : Boolean;
       
-      function getMetaData(key:String) : Array;
+      function getMetaData(param1:String) : Array;
       
       function get metaData() : Array;
    }

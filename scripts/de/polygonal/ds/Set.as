@@ -4,8 +4,8 @@ package de.polygonal.ds
    {
        
       
-      function set(val:Object) : Boolean;
+      function set(param1:Object) : Boolean;
       
-      function has(x:Object) : Boolean;
+      function has(param1:Object) : Boolean;
    }
 }

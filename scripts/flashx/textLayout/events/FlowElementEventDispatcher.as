@@ -5,8 +5,6 @@ package flashx.textLayout.events
    import flashx.textLayout.elements.TextFlow;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class FlowElementEventDispatcher extends EventDispatcher
    {
@@ -18,7 +16,7 @@ package flashx.textLayout.events
       
       public function FlowElementEventDispatcher(element:FlowElement)
       {
-         this._element = element;
+         this.tlf_internal::_element = element;
          super(null);
       }
       
@@ -26,32 +24,32 @@ package flashx.textLayout.events
       {
          var tf:TextFlow = null;
          super.addEventListener(type,listener,useCapture,priority,useWeakReference);
-         ++this._listenerCount;
-         if(this._listenerCount == 1)
+         ++this.tlf_internal::_listenerCount;
+         if(this.tlf_internal::_listenerCount == 1)
          {
-            tf = this._element.getTextFlow();
-            if(tf)
+            tf = this.tlf_internal::_element.getTextFlow();
+            if(Boolean(tf))
             {
-               tf.incInteractiveObjectCount();
+               tf.tlf_internal::incInteractiveObjectCount();
             }
          }
-         this._element.modelChanged(ModelChange.ELEMENT_MODIFIED,this._element,0,this._element.textLength);
+         this.tlf_internal::_element.tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this.tlf_internal::_element,0,this.tlf_internal::_element.textLength);
       }
       
       override public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false) : void
       {
          var tf:TextFlow = null;
          super.removeEventListener(type,listener,useCapture);
-         --this._listenerCount;
-         if(this._listenerCount == 0)
+         --this.tlf_internal::_listenerCount;
+         if(this.tlf_internal::_listenerCount == 0)
          {
-            tf = this._element.getTextFlow();
-            if(tf)
+            tf = this.tlf_internal::_element.getTextFlow();
+            if(Boolean(tf))
             {
-               tf.decInteractiveObjectCount();
+               tf.tlf_internal::decInteractiveObjectCount();
             }
          }
-         this._element.modelChanged(ModelChange.ELEMENT_MODIFIED,this._element,0,this._element.textLength);
+         this.tlf_internal::_element.tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this.tlf_internal::_element,0,this.tlf_internal::_element.textLength);
       }
    }
 }

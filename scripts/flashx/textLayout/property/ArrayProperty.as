@@ -3,8 +3,6 @@ package flashx.textLayout.property
    import flashx.textLayout.formats.FormatValue;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class ArrayProperty extends Property
    {
@@ -82,7 +80,7 @@ package flashx.textLayout.property
       
       override public function concatHelper(currVal:*, concatVal:*) : *
       {
-         if(inherited)
+         if(Boolean(inherited))
          {
             return currVal === undefined || currVal == FormatValue.INHERIT ? (concatVal is Array ? (concatVal as Array).slice() : concatVal) : currVal;
          }
@@ -103,7 +101,7 @@ package flashx.textLayout.property
          {
             v1Array = v1 as Array;
             v2Array = v2 as Array;
-            if(v1Array && v2Array)
+            if(Boolean(v1Array) && Boolean(v2Array))
             {
                if(v1Array.length == v2Array.length)
                {
@@ -124,39 +122,39 @@ package flashx.textLayout.property
       
       override public function toXMLString(val:Object) : String
       {
-         var _loc5_:Object = null;
-         var _loc6_:Boolean = false;
-         var _loc7_:Property = null;
+         var member:Object = null;
+         var addComma:Boolean = false;
+         var prop:Property = null;
          if(val == FormatValue.INHERIT)
          {
             return String(val);
          }
-         var _loc2_:Object = this._memberType.description;
-         var _loc3_:String = "";
-         var _loc4_:Boolean = false;
-         for each(_loc5_ in val)
+         var desc:Object = this._memberType.description;
+         var rslt:String = "";
+         var addSemi:Boolean = false;
+         for each(member in val)
          {
-            if(_loc4_)
+            if(addSemi)
             {
-               _loc3_ += "; ";
+               rslt += "; ";
             }
-            _loc6_ = false;
-            for each(_loc7_ in _loc2_)
+            addComma = false;
+            for each(prop in desc)
             {
-               val = _loc5_[_loc7_.name];
+               val = member[prop.name];
                if(val != null)
                {
-                  if(_loc6_)
+                  if(addComma)
                   {
-                     _loc3_ += ", ";
+                     rslt += ", ";
                   }
-                  _loc3_ += _loc7_.name + ":" + _loc7_.toXMLString(val);
-                  _loc6_ = true;
+                  rslt += prop.name + ":" + prop.toXMLString(val);
+                  addComma = true;
                }
             }
-            _loc4_ = true;
+            addSemi = true;
          }
-         return _loc3_;
+         return rslt;
       }
       
       private function valueFromString(str:String) : *
@@ -187,8 +185,8 @@ package flashx.textLayout.property
             for each(attr in attrsOne)
             {
                nameValArr = attr.split(":");
-               propName = nameValArr[0];
-               propVal = nameValArr[1];
+               propName = String(nameValArr[0]);
+               propVal = String(nameValArr[1]);
                for each(prop in desc)
                {
                   if(prop.name == propName)

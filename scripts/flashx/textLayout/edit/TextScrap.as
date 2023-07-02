@@ -8,8 +8,6 @@ package flashx.textLayout.edit
    import flashx.textLayout.elements.TextRange;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class TextScrap
    {
       
@@ -41,7 +39,7 @@ package flashx.textLayout.edit
             return null;
          }
          var newTextFlow:TextFlow = theFlow.deepCopy(startPos,endPos) as TextFlow;
-         newTextFlow.normalize();
+         newTextFlow.tlf_internal::normalize();
          var retTextScrap:TextScrap = new TextScrap(newTextFlow);
          if(newTextFlow.textLength > 0)
          {
@@ -52,11 +50,11 @@ package flashx.textLayout.edit
             {
                copyElem = newTextFlow.findLeaf(newTextFlow.textLength - 2);
             }
-            while(copyElem && srcElem)
+            while(Boolean(copyElem) && Boolean(srcElem))
             {
                if(endPos < srcElem.getAbsoluteStart() + srcElem.textLength)
                {
-                  copyElem.setStyle(MERGE_TO_NEXT_ON_PASTE,"true");
+                  copyElem.setStyle(tlf_internal::MERGE_TO_NEXT_ON_PASTE,"true");
                }
                copyElem = copyElem.parent;
                srcElem = srcElem.parent;
@@ -78,7 +76,7 @@ package flashx.textLayout.edit
       
       tlf_internal function setPlainText(plainText:Boolean) : void
       {
-         this._plainText = !!plainText ? int(0) : int(1);
+         this._plainText = plainText ? 0 : 1;
       }
       
       tlf_internal function isPlainText() : Boolean
@@ -87,14 +85,14 @@ package flashx.textLayout.edit
          var i:int = 0;
          isPlainElement = function(element:FlowElement):Boolean
          {
-            var prop:* = null;
+            var prop:String = null;
             if(!(element is ParagraphElement) && !(element is SpanElement))
             {
                foundAttributes = true;
                return true;
             }
             var styles:Object = element.styles;
-            if(styles)
+            if(Boolean(styles))
             {
                for(prop in styles)
                {
@@ -112,9 +110,9 @@ package flashx.textLayout.edit
          {
             for(i = this._textFlow.numChildren - 1; i >= 0; i--)
             {
-               this._textFlow.getChildAt(i).applyFunctionToElements(isPlainElement);
+               this._textFlow.getChildAt(i).tlf_internal::applyFunctionToElements(isPlainElement);
             }
-            this._plainText = !!foundAttributes ? int(1) : int(0);
+            this._plainText = foundAttributes ? 1 : 0;
          }
          return this._plainText == 0;
       }

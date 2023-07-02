@@ -94,7 +94,7 @@ package flashx.textLayout.operations
          {
             if(this._source.getChildAt(this._sourceIndex) is ListItemElement && !(this._destination is ListElement))
             {
-               for(count2 = 0; count2 = (this._source.getChildAt(this._sourceIndex) as FlowGroupElement).numChildren; count2++)
+               for(count2 = 0; Boolean(count2 = (this._source.getChildAt(this._sourceIndex) as FlowGroupElement).numChildren); count2++)
                {
                   this._mementoList.push(ModelEdit.moveElement(textFlow,(this._source.getChildAt(this._sourceIndex) as FlowGroupElement).getChildAt(0),this._destination,this._destinationIndex++));
                }

@@ -9,15 +9,15 @@ package com.brockw.stickwar.engine.projectile
    {
        
       
-      var spellMc:MovieClip;
+      internal var spellMc:MovieClip;
       
-      var explosionRadius:Number;
+      internal var explosionRadius:Number;
       
-      var explosionDamage:Number;
+      internal var explosionDamage:Number;
       
       public var frames:int;
       
-      var timeToLive:int;
+      internal var timeToLive:int;
       
       public var comment:String;
       
@@ -47,7 +47,7 @@ package com.brockw.stickwar.engine.projectile
          this.spellMc.nextFrame();
          Util.animateMovieClip(this.spellMc,0);
          var units:Array = team.enemyTeam.units;
-         var n:int = units.length;
+         var n:int = int(units.length);
          if(this.spellMc.currentFrame > 20)
          {
             rx = px + Util.sgn(scaleX) * 75;

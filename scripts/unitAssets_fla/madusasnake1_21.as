@@ -12,7 +12,7 @@ package unitAssets_fla
          addFrameScript(140,this.frame141);
       }
       
-      function frame141() : *
+      internal function frame141() : *
       {
          gotoAndPlay(2);
       }

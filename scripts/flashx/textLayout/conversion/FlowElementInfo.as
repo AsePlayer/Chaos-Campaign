@@ -3,7 +3,7 @@ package flashx.textLayout.conversion
    import flash.utils.getQualifiedClassName;
    
    [ExcludeClass]
-   class FlowElementInfo
+   internal class FlowElementInfo
    {
        
       
@@ -15,7 +15,7 @@ package flashx.textLayout.conversion
       
       private var _exporter:Function;
       
-      function FlowElementInfo(flowClass:Class, parser:Function, exporter:Function)
+      public function FlowElementInfo(flowClass:Class, parser:Function, exporter:Function)
       {
          super();
          this._flowClass = flowClass;

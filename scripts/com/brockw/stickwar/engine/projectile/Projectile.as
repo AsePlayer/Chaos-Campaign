@@ -196,8 +196,8 @@ package com.brockw.stickwar.engine.projectile
                   Unit(this.unitNotToHit).applyVelocity(2 * Util.sgn(direction));
                }
                type = 0;
-               type |= Unit.D_ARROW * (!!this.hasArrowDeath ? 1 : 0);
-               type |= Unit.D_FIRE * (!!this.isFire ? 1 : 0);
+               type |= Unit.D_ARROW * (this.hasArrowDeath ? 1 : 0);
+               type |= Unit.D_FIRE * (this.isFire ? 1 : 0);
                Entity(this.unitNotToHit.damage(type,this.damageToDeal,this._inflictor));
                if(this.area != 0)
                {

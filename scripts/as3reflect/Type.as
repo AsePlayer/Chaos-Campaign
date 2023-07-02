@@ -6,11 +6,11 @@ package as3reflect
    public class Type extends MetaDataContainer
    {
       
-      public static const UNTYPED:Type = new Type();
+      public static const UNTYPED:as3reflect.Type = new as3reflect.Type();
       
-      public static const PRIVATE:Type = new Type();
+      public static const PRIVATE:as3reflect.Type = new as3reflect.Type();
       
-      public static const VOID:Type = new Type();
+      public static const VOID:as3reflect.Type = new as3reflect.Type();
       
       private static var _cache:Object = {};
        
@@ -53,9 +53,9 @@ package as3reflect
          _fields = new Array();
       }
       
-      public static function forName(name:String) : Type
+      public static function forName(name:String) : as3reflect.Type
       {
-         var result:Type = null;
+         var result:as3reflect.Type = null;
          switch(name)
          {
             case "void":
@@ -77,9 +77,9 @@ package as3reflect
          return result;
       }
       
-      public static function forInstance(instance:*) : Type
+      public static function forInstance(instance:*) : as3reflect.Type
       {
-         var result:Type = null;
+         var result:as3reflect.Type = null;
          var clazz:Class = ClassUtils.forInstance(instance);
          if(clazz != null)
          {
@@ -88,19 +88,19 @@ package as3reflect
          return result;
       }
       
-      public static function forClass(clazz:Class) : Type
+      public static function forClass(clazz:Class) : as3reflect.Type
       {
-         var result:Type = null;
+         var result:as3reflect.Type = null;
          var description:XML = null;
          var fullyQualifiedClassName:String = ClassUtils.getFullyQualifiedName(clazz);
-         if(_cache[fullyQualifiedClassName])
+         if(Boolean(_cache[fullyQualifiedClassName]))
          {
             result = _cache[fullyQualifiedClassName];
          }
          else
          {
             description = describeType(clazz);
-            result = new Type();
+            result = new as3reflect.Type();
             _cache[fullyQualifiedClassName] = result;
             result.fullName = fullyQualifiedClassName;
             result.name = ClassUtils.getNameFromFullyQualifiedName(fullyQualifiedClassName);
@@ -290,7 +290,7 @@ class TypeXmlParser
 {
     
    
-   function TypeXmlParser()
+   public function TypeXmlParser()
    {
       super();
    }

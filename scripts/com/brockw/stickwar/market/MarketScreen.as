@@ -3,11 +3,11 @@ package com.brockw.stickwar.market
    import com.brockw.game.Screen;
    import com.brockw.stickwar.Main;
    import com.brockw.stickwar.engine.StickWar;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
-   import flash.display.MovieClip;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
+   import flash.display.*;
+   import flash.events.*;
+   import flash.text.*;
    import flash.utils.Timer;
    
    public class MarketScreen extends Screen
@@ -26,14 +26,15 @@ package com.brockw.stickwar.market
       
       private var timer:Timer;
       
-      var stickwar:StickWar;
+      internal var stickwar:StickWar;
       
       public function MarketScreen(main:Main)
       {
+         var txtWelcome:GenericText;
          var mainMenuButton:GenericButton = null;
          super();
          this.main = main;
-         var txtWelcome:GenericText = new GenericText();
+         txtWelcome = new GenericText();
          txtWelcome.text.text = "Market Place";
          txtWelcome.width *= 2.5;
          txtWelcome.height *= 2.5;

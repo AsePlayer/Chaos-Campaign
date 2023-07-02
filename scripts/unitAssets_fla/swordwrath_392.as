@@ -14,7 +14,7 @@ package unitAssets_fla
          addFrameScript(149,this.frame150);
       }
       
-      function frame150() : *
+      internal function frame150() : *
       {
          gotoAndPlay(60);
       }

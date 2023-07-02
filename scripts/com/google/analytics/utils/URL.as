@@ -43,7 +43,7 @@ package com.google.analytics.utils
          var _path:String = _url;
          if(_path.indexOf("://") > -1)
          {
-            _path = _path.split("://")[1];
+            _path = String(_path.split("://")[1]);
          }
          if(_path.indexOf(hostName) == 0)
          {
@@ -51,7 +51,7 @@ package com.google.analytics.utils
          }
          if(_path.indexOf("?") > -1)
          {
-            _path = _path.split("?")[0];
+            _path = String(_path.split("?")[0]);
          }
          if(_path.charAt(0) != "/")
          {
@@ -62,7 +62,7 @@ package com.google.analytics.utils
       
       public function get protocol() : Protocols
       {
-         var proto:String = _url.split("://")[0];
+         var proto:String = String(_url.split("://")[0]);
          switch(proto)
          {
             case "file":
@@ -81,15 +81,15 @@ package com.google.analytics.utils
          var hostname:String = _url;
          if(hostname.indexOf("://") > -1)
          {
-            hostname = hostname.split("://")[1];
+            hostname = String(hostname.split("://")[1]);
          }
          if(hostname.indexOf("/") > -1)
          {
-            hostname = hostname.split("/")[0];
+            hostname = String(hostname.split("/")[0]);
          }
          if(hostname.indexOf("?") > -1)
          {
-            hostname = hostname.split("?")[0];
+            hostname = String(hostname.split("?")[0]);
          }
          if(protocol == Protocols.file || protocol == Protocols.none)
          {
@@ -112,7 +112,7 @@ package com.google.analytics.utils
          var _search:String = _url;
          if(_search.indexOf("://") > -1)
          {
-            _search = _search.split("://")[1];
+            _search = String(_search.split("://")[1]);
          }
          if(_search.indexOf(hostName) == 0)
          {
@@ -120,7 +120,7 @@ package com.google.analytics.utils
          }
          if(_search.indexOf("?") > -1)
          {
-            _search = _search.split("?")[1];
+            _search = String(_search.split("?")[1]);
          }
          else
          {

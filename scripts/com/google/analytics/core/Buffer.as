@@ -42,7 +42,7 @@ package com.google.analytics.core
       public function Buffer(config:Configuration, debug:DebugConfiguration, volatile:Boolean = false, data:Object = null)
       {
          var saveSO:Boolean = false;
-         var prop:* = null;
+         var prop:String = null;
          super();
          _config = config;
          _debug = debug;
@@ -52,7 +52,7 @@ package com.google.analytics.core
          {
             _SO = SharedObject.getLocal(_config.cookieName,_config.cookiePath);
             saveSO = false;
-            if(_SO.data.utma)
+            if(Boolean(_SO.data.utma))
             {
                if(!hasUTMA())
                {
@@ -73,7 +73,7 @@ package com.google.analytics.core
                   saveSO = true;
                }
             }
-            if(_SO.data.utmb)
+            if(Boolean(_SO.data.utmb))
             {
                if(!hasUTMB())
                {
@@ -94,12 +94,12 @@ package com.google.analytics.core
                   saveSO = true;
                }
             }
-            if(_SO.data.utmc)
+            if(Boolean(_SO.data.utmc))
             {
                delete _SO.data.utmc;
                saveSO = true;
             }
-            if(_SO.data.utmk)
+            if(Boolean(_SO.data.utmk))
             {
                if(!hasUTMK())
                {
@@ -111,7 +111,7 @@ package com.google.analytics.core
                   _debug.info("found: " + _utmk.toString(),VisualDebugMode.geek);
                }
             }
-            if(_SO.data.utmv)
+            if(Boolean(_SO.data.utmv))
             {
                if(!hasUTMV())
                {
@@ -132,7 +132,7 @@ package com.google.analytics.core
                   saveSO = true;
                }
             }
-            if(_SO.data.utmz)
+            if(Boolean(_SO.data.utmz))
             {
                if(!hasUTMZ())
                {
@@ -161,7 +161,7 @@ package com.google.analytics.core
          else
          {
             _OBJ = new Object();
-            if(data)
+            if(Boolean(data))
             {
                for(prop in data)
                {
@@ -228,7 +228,7 @@ package com.google.analytics.core
       
       public function hasUTMA() : Boolean
       {
-         if(_utma)
+         if(Boolean(_utma))
          {
             return true;
          }
@@ -237,7 +237,7 @@ package com.google.analytics.core
       
       public function hasUTMB() : Boolean
       {
-         if(_utmb)
+         if(Boolean(_utmb))
          {
             return true;
          }
@@ -246,7 +246,7 @@ package com.google.analytics.core
       
       public function hasUTMC() : Boolean
       {
-         if(_utmc)
+         if(Boolean(_utmc))
          {
             return true;
          }
@@ -271,7 +271,7 @@ package com.google.analytics.core
       
       public function hasUTMK() : Boolean
       {
-         if(_utmk)
+         if(Boolean(_utmk))
          {
             return true;
          }
@@ -308,7 +308,7 @@ package com.google.analytics.core
       
       public function hasUTMV() : Boolean
       {
-         if(_utmv)
+         if(Boolean(_utmv))
          {
             return true;
          }
@@ -323,7 +323,7 @@ package com.google.analytics.core
       
       public function hasUTMZ() : Boolean
       {
-         if(_utmz)
+         if(Boolean(_utmz))
          {
             return true;
          }

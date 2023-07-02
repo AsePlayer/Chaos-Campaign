@@ -6,37 +6,35 @@ package flashx.textLayout.formats
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class ListMarkerFormat extends TextLayoutFormat implements IListMarkerFormat
    {
       
-      tlf_internal static const counterResetProperty:Property = createCounterResetProperty("counterReset",FormatValue.NONE,false,Vector.<String>([Category.LIST]));
+      tlf_internal static const counterResetProperty:Property = tlf_internal::createCounterResetProperty("counterReset",FormatValue.NONE,false,Vector.<String>([Category.LIST]));
       
-      tlf_internal static const counterIncrementProperty:Property = createCounterResetProperty("counterIncrement","ordered 1",false,Vector.<String>([Category.LIST]));
+      tlf_internal static const counterIncrementProperty:Property = tlf_internal::createCounterResetProperty("counterIncrement","ordered 1",false,Vector.<String>([Category.LIST]));
       
       tlf_internal static const beforeContentProperty:Property = Property.NewStringProperty("beforeContent",null,false,Vector.<String>([Category.LIST]));
       
-      tlf_internal static const contentProperty:Property = createCounterContentProperty("content","counter(ordered)",false,Vector.<String>([Category.LIST]));
+      tlf_internal static const contentProperty:Property = tlf_internal::createCounterContentProperty("content","counter(ordered)",false,Vector.<String>([Category.LIST]));
       
       tlf_internal static const afterContentProperty:Property = Property.NewStringProperty("afterContent",null,false,Vector.<String>([Category.LIST]));
       
       tlf_internal static const suffixProperty:Property = Property.NewEnumStringProperty("suffix",Suffix.AUTO,false,Vector.<String>([Category.LIST]),Suffix.AUTO,Suffix.NONE);
       
       private static var _lmfDescription:Object = {
-         "counterReset":counterResetProperty,
-         "counterIncrement":counterIncrementProperty,
-         "beforeContent":beforeContentProperty,
-         "content":contentProperty,
-         "afterContent":afterContentProperty,
-         "suffix":suffixProperty
+         "counterReset":tlf_internal::counterResetProperty,
+         "counterIncrement":tlf_internal::counterIncrementProperty,
+         "beforeContent":tlf_internal::beforeContentProperty,
+         "content":tlf_internal::contentProperty,
+         "afterContent":tlf_internal::afterContentProperty,
+         "suffix":tlf_internal::suffixProperty
       };
       
       private static var _description:Object;
       
       {
-         Property.sharedTextLayoutFormatHandler.converter = TextLayoutFormat.createTextLayoutFormat;
-         Property.sharedListMarkerFormatHandler.converter = ListMarkerFormat.createListMarkerFormat;
+         Property.tlf_internal::sharedTextLayoutFormatHandler.converter = TextLayoutFormat.createTextLayoutFormat;
+         Property.tlf_internal::sharedListMarkerFormatHandler.converter = ListMarkerFormat.createListMarkerFormat;
       }
       
       public function ListMarkerFormat(initialValues:IListMarkerFormat = null)
@@ -47,30 +45,30 @@ package flashx.textLayout.formats
       tlf_internal static function createCounterResetProperty(nameValue:String, defaultValue:String, inherited:Boolean, categories:Vector.<String>) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(Property.sharedUndefinedHandler,new EnumPropertyHandler([FormatValue.NONE]),new CounterPropHandler(0));
+         rslt.addHandlers(Property.tlf_internal::sharedUndefinedHandler,new EnumPropertyHandler([FormatValue.NONE]),new CounterPropHandler(0));
          return rslt;
       }
       
       tlf_internal static function createCounterIncrementProperty(nameValue:String, defaultValue:String, inherited:Boolean, categories:Vector.<String>) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(Property.sharedUndefinedHandler,new EnumPropertyHandler([FormatValue.NONE]),new CounterPropHandler(1));
+         rslt.addHandlers(Property.tlf_internal::sharedUndefinedHandler,new EnumPropertyHandler([FormatValue.NONE]),new CounterPropHandler(1));
          return rslt;
       }
       
       tlf_internal static function createCounterContentProperty(nameValue:String, defaultValue:String, inherited:Boolean, categories:Vector.<String>) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(Property.sharedUndefinedHandler,new EnumPropertyHandler([FormatValue.NONE]),new CounterContentHandler());
+         rslt.addHandlers(Property.tlf_internal::sharedUndefinedHandler,new EnumPropertyHandler([FormatValue.NONE]),new CounterContentHandler());
          return rslt;
       }
       
       tlf_internal static function get description() : Object
       {
-         var key:* = null;
+         var key:String = null;
          if(!_description)
          {
-            _description = Property.createObjectWithPrototype(TextLayoutFormat.description);
+            _description = Property.createObjectWithPrototype(TextLayoutFormat.tlf_internal::description);
             for(key in _lmfDescription)
             {
                _description[key] = _lmfDescription[key];
@@ -81,10 +79,10 @@ package flashx.textLayout.formats
       
       public static function createListMarkerFormat(initialValues:Object) : ListMarkerFormat
       {
-         var key:* = null;
+         var key:String = null;
          var lmf:IListMarkerFormat = initialValues as IListMarkerFormat;
          var rslt:ListMarkerFormat = new ListMarkerFormat(lmf);
-         if(lmf == null && initialValues)
+         if(lmf == null && Boolean(initialValues))
          {
             for(key in initialValues)
             {
@@ -98,13 +96,13 @@ package flashx.textLayout.formats
       {
          var name:String = styleProp.name;
          newValue = styleProp.setHelper(getStyle(name),newValue);
-         super.setStyleByName(name,newValue);
+         super.tlf_internal::setStyleByName(name,newValue);
       }
       
       override public function setStyle(styleProp:String, newValue:*) : void
       {
          var lmfStyle:Property = _lmfDescription[styleProp];
-         if(lmfStyle)
+         if(Boolean(lmfStyle))
          {
             this.setLMFStyle(lmfStyle,newValue);
          }
@@ -116,70 +114,70 @@ package flashx.textLayout.formats
       
       public function get counterReset() : *
       {
-         return getStyle(counterResetProperty.name);
+         return getStyle(tlf_internal::counterResetProperty.name);
       }
       
       public function set counterReset(value:*) : *
       {
-         this.setLMFStyle(counterResetProperty,value);
+         this.setLMFStyle(tlf_internal::counterResetProperty,value);
       }
       
       public function get counterIncrement() : *
       {
-         return getStyle(counterIncrementProperty.name);
+         return getStyle(tlf_internal::counterIncrementProperty.name);
       }
       
       public function set counterIncrement(value:*) : *
       {
-         this.setLMFStyle(counterIncrementProperty,value);
+         this.setLMFStyle(tlf_internal::counterIncrementProperty,value);
       }
       
       public function get content() : *
       {
-         return getStyle(contentProperty.name);
+         return getStyle(tlf_internal::contentProperty.name);
       }
       
       public function set content(value:*) : *
       {
-         this.setLMFStyle(contentProperty,value);
+         this.setLMFStyle(tlf_internal::contentProperty,value);
       }
       
       public function get beforeContent() : *
       {
-         return getStyle(beforeContentProperty.name);
+         return getStyle(tlf_internal::beforeContentProperty.name);
       }
       
       public function set beforeContent(value:*) : void
       {
-         this.setLMFStyle(beforeContentProperty,value);
+         this.setLMFStyle(tlf_internal::beforeContentProperty,value);
       }
       
       public function get afterContent() : *
       {
-         return getStyle(afterContentProperty.name);
+         return getStyle(tlf_internal::afterContentProperty.name);
       }
       
       public function set afterContent(value:*) : void
       {
-         this.setLMFStyle(afterContentProperty,value);
+         this.setLMFStyle(tlf_internal::afterContentProperty,value);
       }
       
       public function get suffix() : *
       {
-         return getStyle(suffixProperty.name);
+         return getStyle(tlf_internal::suffixProperty.name);
       }
       
       public function set suffix(value:*) : void
       {
-         this.setLMFStyle(suffixProperty,value);
+         this.setLMFStyle(tlf_internal::suffixProperty,value);
       }
       
       override public function copy(incoming:ITextLayoutFormat) : void
       {
-         var key:* = null;
+         var key:String = null;
          super.copy(incoming);
          var lmf:IListMarkerFormat = incoming as IListMarkerFormat;
-         if(lmf)
+         if(Boolean(lmf))
          {
             for(key in _lmfDescription)
             {
@@ -194,7 +192,7 @@ package flashx.textLayout.formats
          var name:String = null;
          super.concat(incoming);
          var lmf:IListMarkerFormat = incoming as IListMarkerFormat;
-         if(lmf)
+         if(Boolean(lmf))
          {
             for each(prop in _lmfDescription)
             {
@@ -210,7 +208,7 @@ package flashx.textLayout.formats
          var name:String = null;
          super.concatInheritOnly(incoming);
          var lmf:IListMarkerFormat = incoming as IListMarkerFormat;
-         if(lmf)
+         if(Boolean(lmf))
          {
             for each(prop in _lmfDescription)
             {
@@ -227,7 +225,7 @@ package flashx.textLayout.formats
          var val:* = undefined;
          super.apply(incoming);
          var lmf:IListMarkerFormat = incoming as IListMarkerFormat;
-         if(lmf)
+         if(Boolean(lmf))
          {
             for each(prop in _lmfDescription)
             {
@@ -247,7 +245,7 @@ package flashx.textLayout.formats
          var name:String = null;
          super.removeMatching(incoming);
          var lmf:IListMarkerFormat = incoming as IListMarkerFormat;
-         if(lmf)
+         if(Boolean(lmf))
          {
             for each(prop in _lmfDescription)
             {
@@ -266,7 +264,7 @@ package flashx.textLayout.formats
          var name:String = null;
          super.removeClashing(incoming);
          var lmf:IListMarkerFormat = incoming as IListMarkerFormat;
-         if(lmf)
+         if(Boolean(lmf))
          {
             for each(prop in _lmfDescription)
             {

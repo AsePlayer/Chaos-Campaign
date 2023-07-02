@@ -14,22 +14,20 @@ package flashx.textLayout.conversion
    import flashx.textLayout.formats.WhiteSpaceCollapse;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
-   class BaseTextLayoutExporter extends ConverterBase implements ITextExporter
+   internal class BaseTextLayoutExporter extends ConverterBase implements ITextExporter
    {
       
       private static const brRegEx:RegExp = / /;
        
       
-      private var _config:ImportExportConfiguration;
+      private var _config:flashx.textLayout.conversion.ImportExportConfiguration;
       
       private var _rootTag:XML;
       
       private var _ns:Namespace;
       
-      function BaseTextLayoutExporter(ns:Namespace, rootTag:XML, config:ImportExportConfiguration)
+      public function BaseTextLayoutExporter(ns:Namespace, rootTag:XML, config:flashx.textLayout.conversion.ImportExportConfiguration)
       {
          super();
          this._config = config;
@@ -48,7 +46,7 @@ package flashx.textLayout.conversion
             XML.ignoreWhitespace = false;
             XML.prettyPrinting = false;
             result = xml.toXMLString();
-            if(Configuration.playerEnablesArgoFeatures)
+            if(Configuration.tlf_internal::playerEnablesArgoFeatures)
             {
                System["disposeXML"](xml);
             }
@@ -75,11 +73,11 @@ package flashx.textLayout.conversion
          var replacementXML:XML = null;
          var spanText:String = span.text;
          var matchLocation:Array = spanText.match(replacementRegex);
-         if(matchLocation)
+         if(Boolean(matchLocation))
          {
             while(matchLocation != null)
             {
-               ix = matchLocation.index;
+               ix = int(matchLocation.index);
                tempStr = spanText.substr(0,ix);
                if(tempStr.length > 0)
                {
@@ -121,7 +119,7 @@ package flashx.textLayout.conversion
          {
             flowChild = flowBlockElement.getChildAt(childIter);
             childXML = exporter.exportChild(flowChild);
-            if(childXML)
+            if(Boolean(childXML))
             {
                output.appendChild(childXML);
             }
@@ -153,21 +151,21 @@ package flashx.textLayout.conversion
       {
          var output:XMLList = exportContainerFormattedElement(exporter,textFlow);
          output[TextLayoutFormat.whiteSpaceCollapseProperty.name] = WhiteSpaceCollapse.PRESERVE;
-         output["version"] = TextLayoutVersion.getVersionString(TextLayoutVersion.CURRENT_VERSION);
+         output["version"] = TextLayoutVersion.tlf_internal::getVersionString(TextLayoutVersion.CURRENT_VERSION);
          return output;
       }
       
       public function export(source:TextFlow, conversionType:String) : Object
       {
-         clear();
+         tlf_internal::clear();
          var result:XML = this.exportToXML(source);
-         return conversionType == ConversionType.STRING_TYPE ? convertXMLToString(result) : result;
+         return conversionType == ConversionType.STRING_TYPE ? tlf_internal::convertXMLToString(result) : result;
       }
       
       protected function exportToXML(textFlow:TextFlow) : XML
       {
          var result:XML = null;
-         if(this._rootTag)
+         if(Boolean(this._rootTag))
          {
             result = new XML(this._rootTag);
             result.addNamespace(this._ns);
@@ -276,7 +274,7 @@ package flashx.textLayout.conversion
          }
       }
       
-      function get flowNS() : Namespace
+      internal function get flowNS() : Namespace
       {
          return this._ns;
       }

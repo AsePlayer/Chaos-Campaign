@@ -8,7 +8,7 @@ package com.brockw.stickwar.engine.Team
    {
        
       
-      protected var tech:Tech;
+      protected var tech:com.brockw.stickwar.engine.Team.Tech;
       
       protected var _button:MovieClip;
       

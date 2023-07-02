@@ -2,19 +2,12 @@ package flashx.textLayout.edit
 {
    import flash.desktop.Clipboard;
    import flash.system.System;
-   import flashx.textLayout.conversion.ConversionType;
-   import flashx.textLayout.conversion.ConverterBase;
-   import flashx.textLayout.conversion.FormatDescriptor;
-   import flashx.textLayout.conversion.ITextExporter;
-   import flashx.textLayout.conversion.ITextImporter;
-   import flashx.textLayout.conversion.TextConverter;
+   import flashx.textLayout.conversion.*;
    import flashx.textLayout.elements.Configuration;
    import flashx.textLayout.elements.FlowElement;
    import flashx.textLayout.elements.FlowGroupElement;
    import flashx.textLayout.elements.TextFlow;
    import flashx.textLayout.tlf_internal;
-   
-   use namespace tlf_internal;
    
    public class TextClipboard
    {
@@ -33,10 +26,10 @@ package flashx.textLayout.edit
          var getFromClipboard:Function = null;
          getFromClipboard = function(clipboardFormat:String):String
          {
-            return !!systemClipboard.hasFormat(clipboardFormat) ? String(systemClipboard.getData(clipboardFormat)) : null;
+            return systemClipboard.hasFormat(clipboardFormat) ? String(systemClipboard.getData(clipboardFormat)) : null;
          };
          systemClipboard = Clipboard.generalClipboard;
-         return importScrap(getFromClipboard);
+         return tlf_internal::importScrap(getFromClipboard);
       }
       
       tlf_internal static function importScrap(importFunctor:Function) : TextScrap
@@ -50,9 +43,9 @@ package flashx.textLayout.edit
          {
             descriptor = TextConverter.getFormatDescriptorAt(i);
             textOnClipboard = importFunctor(descriptor.clipboardFormat);
-            if(textOnClipboard && textOnClipboard != "")
+            if(Boolean(textOnClipboard) && textOnClipboard != "")
             {
-               textScrap = importToScrap(textOnClipboard,descriptor.format);
+               textScrap = tlf_internal::importToScrap(textOnClipboard,descriptor.format);
             }
             i++;
          }
@@ -73,7 +66,7 @@ package flashx.textLayout.edit
          }
          systemClipboard = Clipboard.generalClipboard;
          systemClipboard.clear();
-         exportScrap(textScrap,addToClipboard);
+         tlf_internal::exportScrap(textScrap,addToClipboard);
       }
       
       tlf_internal static function exportScrap(scrap:TextScrap, exportFunctor:Function) : void
@@ -85,10 +78,10 @@ package flashx.textLayout.edit
          for(var i:int = 0; i < numFormats; i++)
          {
             descriptor = TextConverter.getFormatDescriptorAt(i);
-            if(descriptor.clipboardFormat && formatsPosted.indexOf(descriptor.clipboardFormat) < 0)
+            if(Boolean(descriptor.clipboardFormat) && formatsPosted.indexOf(descriptor.clipboardFormat) < 0)
             {
-               exportString = exportForClipboard(scrap,descriptor.format);
-               if(exportString)
+               exportString = tlf_internal::exportForClipboard(scrap,descriptor.format);
+               if(Boolean(exportString))
                {
                   exportFunctor(descriptor.clipboardFormat,exportString);
                   formatsPosted.push(descriptor.clipboardFormat);
@@ -102,25 +95,25 @@ package flashx.textLayout.edit
          var textScrap:TextScrap = null;
          var textFlow:TextFlow = null;
          var importer:ITextImporter = TextConverter.getImporter(format);
-         if(importer)
+         if(Boolean(importer))
          {
             importer.useClipboardAnnotations = true;
             textFlow = importer.importToFlow(textOnClipboard);
-            if(textFlow)
+            if(Boolean(textFlow))
             {
                textScrap = new TextScrap(textFlow);
             }
             if(format == TextConverter.PLAIN_TEXT_FORMAT)
             {
-               textScrap.setPlainText(true);
+               textScrap.tlf_internal::setPlainText(true);
             }
             else if(format == TextConverter.TEXT_LAYOUT_FORMAT)
             {
-               textScrap.setPlainText(false);
+               textScrap.tlf_internal::setPlainText(false);
             }
             if(!textScrap && format == TextConverter.TEXT_LAYOUT_FORMAT)
             {
-               textScrap = importOldTextLayoutFormatToScrap(textOnClipboard);
+               textScrap = tlf_internal::importOldTextLayoutFormatToScrap(textOnClipboard);
             }
          }
          return textScrap;
@@ -148,7 +141,7 @@ package flashx.textLayout.edit
                endArrayChild = xmlTree..EndMissingElements[0];
                textLayoutMarkup = xmlTree..TextFlow[0];
                textFlow = TextConverter.importToFlow(textLayoutMarkup,TextConverter.TEXT_LAYOUT_FORMAT);
-               if(textFlow)
+               if(Boolean(textFlow))
                {
                   textScrap = new TextScrap(textFlow);
                   endMissingArray = getEndArray(endArrayChild,textFlow);
@@ -158,7 +151,7 @@ package flashx.textLayout.edit
                   }
                }
             }
-            if(Configuration.playerEnablesArgoFeatures)
+            if(Configuration.tlf_internal::playerEnablesArgoFeatures)
             {
                System["disposeXML"](xmlTree);
             }
@@ -173,7 +166,7 @@ package flashx.textLayout.edit
       tlf_internal static function exportForClipboard(scrap:TextScrap, format:String) : String
       {
          var exporter:ITextExporter = TextConverter.getExporter(format);
-         if(exporter)
+         if(Boolean(exporter))
          {
             exporter.useClipboardAnnotations = true;
             return exporter.export(scrap.textFlow,ConversionType.STRING_TYPE) as String;
@@ -271,7 +264,7 @@ class TextClipboardSingletonEnforcer
 {
     
    
-   function TextClipboardSingletonEnforcer()
+   public function TextClipboardSingletonEnforcer()
    {
       super();
    }

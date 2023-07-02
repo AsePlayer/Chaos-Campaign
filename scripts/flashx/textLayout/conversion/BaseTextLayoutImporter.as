@@ -20,10 +20,8 @@ package flashx.textLayout.conversion
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
-   class BaseTextLayoutImporter extends ConverterBase implements ITextImporter
+   internal class BaseTextLayoutImporter extends ConverterBase implements ITextImporter
    {
       
       private static const anyPrintChar:RegExp = /[^\t\n\r ]/g;
@@ -37,7 +35,7 @@ package flashx.textLayout.conversion
       
       private var _textFlowNamespace:Namespace;
       
-      protected var _config:ImportExportConfiguration;
+      protected var _config:flashx.textLayout.conversion.ImportExportConfiguration;
       
       protected var _textFlowConfiguration:IConfiguration = null;
       
@@ -45,7 +43,7 @@ package flashx.textLayout.conversion
       
       private var _impliedPara:ParagraphElement = null;
       
-      function BaseTextLayoutImporter(nsValue:Namespace, config:ImportExportConfiguration)
+      public function BaseTextLayoutImporter(nsValue:Namespace, config:flashx.textLayout.conversion.ImportExportConfiguration)
       {
          super();
          this._ns = nsValue;
@@ -65,7 +63,7 @@ package flashx.textLayout.conversion
       public static function parsePara(importer:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var paraElem:ParagraphElement = importer.createParagraphFromXML(xmlToParse);
-         if(importer.addChild(parent,paraElem))
+         if(importer.tlf_internal::addChild(parent,paraElem))
          {
             importer.parseFlowGroupElementChildren(xmlToParse,paraElem);
             if(paraElem.numChildren == 0)
@@ -93,56 +91,56 @@ package flashx.textLayout.conversion
          var elemList:XMLList = xmlToParse[0].children();
          if(elemList.length() == 0)
          {
-            importer.addChild(parent,firstSpan);
+            importer.tlf_internal::addChild(parent,firstSpan);
             return;
          }
          for each(child in elemList)
          {
-            elemName = Boolean(child.name()) ? child.name().localName : null;
+            elemName = Boolean(child.name()) ? String(child.name().localName) : null;
             if(elemName == null)
             {
                if(firstSpan.parent == null)
                {
                   firstSpan.text = child.toString();
-                  importer.addChild(parent,firstSpan);
+                  importer.tlf_internal::addChild(parent,firstSpan);
                }
                else
                {
                   s = new SpanElement();
                   copyAllStyleProps(s,firstSpan);
                   s.text = child.toString();
-                  importer.addChild(parent,s);
+                  importer.tlf_internal::addChild(parent,s);
                }
             }
             else if(elemName == "br")
             {
                brElem = importer.createBreakFromXML(child);
-               if(brElem)
+               if(Boolean(brElem))
                {
                   copyAllStyleProps(brElem,firstSpan);
-                  importer.addChild(parent,brElem);
+                  importer.tlf_internal::addChild(parent,brElem);
                }
                else
                {
-                  importer.reportError(GlobalSettings.resourceStringFunction("unexpectedXMLElementInSpan",[elemName]));
+                  importer.tlf_internal::reportError(GlobalSettings.resourceStringFunction("unexpectedXMLElementInSpan",[elemName]));
                }
             }
             else if(elemName == "tab")
             {
                tabElem = importer.createTabFromXML(child);
-               if(tabElem)
+               if(Boolean(tabElem))
                {
                   copyAllStyleProps(tabElem,firstSpan);
-                  importer.addChild(parent,tabElem);
+                  importer.tlf_internal::addChild(parent,tabElem);
                }
                else
                {
-                  importer.reportError(GlobalSettings.resourceStringFunction("unexpectedXMLElementInSpan",[elemName]));
+                  importer.tlf_internal::reportError(GlobalSettings.resourceStringFunction("unexpectedXMLElementInSpan",[elemName]));
                }
             }
             else
             {
-               importer.reportError(GlobalSettings.resourceStringFunction("unexpectedXMLElementInSpan",[elemName]));
+               importer.tlf_internal::reportError(GlobalSettings.resourceStringFunction("unexpectedXMLElementInSpan",[elemName]));
             }
          }
       }
@@ -150,22 +148,22 @@ package flashx.textLayout.conversion
       public static function parseBreak(importer:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var breakElem:BreakElement = importer.createBreakFromXML(xmlToParse);
-         importer.addChild(parent,breakElem);
+         importer.tlf_internal::addChild(parent,breakElem);
       }
       
       public static function parseTab(importer:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var tabElem:TabElement = importer.createTabFromXML(xmlToParse);
-         if(tabElem)
+         if(Boolean(tabElem))
          {
-            importer.addChild(parent,tabElem);
+            importer.tlf_internal::addChild(parent,tabElem);
          }
       }
       
       public static function parseList(importer:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var listElem:ListElement = importer.createListFromXML(xmlToParse);
-         if(importer.addChild(parent,listElem))
+         if(importer.tlf_internal::addChild(parent,listElem))
          {
             importer.parseFlowGroupElementChildren(xmlToParse,listElem);
          }
@@ -174,7 +172,7 @@ package flashx.textLayout.conversion
       public static function parseListItem(importer:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var listItem:ListItemElement = importer.createListItemFromXML(xmlToParse);
-         if(importer.addChild(parent,listItem))
+         if(importer.tlf_internal::addChild(parent,listItem))
          {
             importer.parseFlowGroupElementChildren(xmlToParse,listItem);
             if(listItem.numChildren == 0)
@@ -201,20 +199,22 @@ package flashx.textLayout.conversion
       
       override tlf_internal function clear() : void
       {
-         super.clear();
+         super.tlf_internal::clear();
          this._textFlowNamespace = null;
          this._impliedPara = null;
       }
       
       public function importToFlow(source:Object) : TextFlow
       {
-         this.clear();
+         var rslt:TextFlow;
+         var savedErrorHandler:Function;
+         this.tlf_internal::clear();
          if(throwOnError)
          {
             return this.importToFlowCanThrow(source);
          }
-         var rslt:TextFlow = null;
-         var savedErrorHandler:Function = Property.errorHandler;
+         rslt = null;
+         savedErrorHandler = Property.errorHandler;
          try
          {
             Property.errorHandler = this.importPropertyErrorHandler;
@@ -222,7 +222,7 @@ package flashx.textLayout.conversion
          }
          catch(e:Error)
          {
-            reportError(e.toString());
+            tlf_internal::reportError(e.toString());
          }
          Property.errorHandler = savedErrorHandler;
          return rslt;
@@ -240,7 +240,7 @@ package flashx.textLayout.conversion
       
       protected function importPropertyErrorHandler(p:Property, value:Object) : void
       {
-         reportError(Property.createErrorString(p,value));
+         tlf_internal::reportError(Property.createErrorString(p,value));
       }
       
       private function importToFlowCanThrow(source:Object) : TextFlow
@@ -258,6 +258,7 @@ package flashx.textLayout.conversion
       
       protected function importFromString(source:String) : TextFlow
       {
+         var textFlow:TextFlow;
          var xmlTree:XML = null;
          var originalSettings:Object = XML.settings();
          try
@@ -270,8 +271,8 @@ package flashx.textLayout.conversion
          {
             XML.setSettings(originalSettings);
          }
-         var textFlow:TextFlow = this.importFromXML(xmlTree);
-         if(Configuration.playerEnablesArgoFeatures)
+         textFlow = this.importFromXML(xmlTree);
+         if(Configuration.tlf_internal::playerEnablesArgoFeatures)
          {
             System["disposeXML"](xmlTree);
          }
@@ -286,7 +287,7 @@ package flashx.textLayout.conversion
       protected function parseContent(rootStory:XML) : TextFlow
       {
          var child:XML = rootStory..TextFlow[0];
-         if(child)
+         if(Boolean(child))
          {
             return parseTextFlow(this,rootStory);
          }
@@ -305,14 +306,14 @@ package flashx.textLayout.conversion
          {
             if(elementNS != this.ns)
             {
-               reportError(GlobalSettings.resourceStringFunction("unexpectedNamespace",[elementNS.toString()]));
+               tlf_internal::reportError(GlobalSettings.resourceStringFunction("unexpectedNamespace",[elementNS.toString()]));
                return false;
             }
             this._textFlowNamespace = elementNS;
          }
          else if(elementNS != this._textFlowNamespace)
          {
-            reportError(GlobalSettings.resourceStringFunction("unexpectedNamespace",[elementNS.toString()]));
+            tlf_internal::reportError(GlobalSettings.resourceStringFunction("unexpectedNamespace",[elementNS.toString()]));
             return false;
          }
          return true;
@@ -335,7 +336,7 @@ package flashx.textLayout.conversion
          }
          for each(item in xmlToParse.attributes())
          {
-            propertyName = item.name().localName;
+            propertyName = String(item.name().localName);
             propertyValue = item.toString();
             imported = false;
             if(xmlToParse.localName() == "TextFlow")
@@ -415,7 +416,7 @@ package flashx.textLayout.conversion
          {
             if(child.nodeKind() == "element")
             {
-               this.parseObject(child.name().localName,child,parent,exceptionElements);
+               this.tlf_internal::parseObject(child.name().localName,child,parent,exceptionElements);
             }
             else if(child.nodeKind() == "text")
             {
@@ -427,13 +428,13 @@ package flashx.textLayout.conversion
                }
                if(!strip)
                {
-                  this.addChild(parent,this.createImpliedSpan(txt));
+                  this.tlf_internal::addChild(parent,this.createImpliedSpan(txt));
                }
             }
          }
          if(!chainedParent && parent is ContainerFormattedElement)
          {
-            this.resetImpliedPara();
+            this.tlf_internal::resetImpliedPara();
          }
       }
       
@@ -471,12 +472,12 @@ package flashx.textLayout.conversion
       
       protected function handleUnknownElement(name:String, xmlToParse:XML, parent:FlowGroupElement) : void
       {
-         reportError(GlobalSettings.resourceStringFunction("unknownElement",[name]));
+         tlf_internal::reportError(GlobalSettings.resourceStringFunction("unknownElement",[name]));
       }
       
       protected function handleUnknownAttribute(elementName:String, propertyName:String) : void
       {
-         reportError(GlobalSettings.resourceStringFunction("unknownAttribute",[propertyName,elementName]));
+         tlf_internal::reportError(GlobalSettings.resourceStringFunction("unknownAttribute",[propertyName,elementName]));
       }
       
       protected function getElementInfo(xmlToParse:XML) : FlowElementInfo
@@ -499,16 +500,16 @@ package flashx.textLayout.conversion
       {
          if(child is ParagraphFormattedElement)
          {
-            this.resetImpliedPara();
+            this.tlf_internal::resetImpliedPara();
          }
          else if(parent is ContainerFormattedElement)
          {
             if(!this._impliedPara)
             {
-               this._impliedPara = this.createImpliedParagraph();
+               this._impliedPara = this.tlf_internal::createImpliedParagraph();
                parent.addChild(this._impliedPara);
             }
-            var parent:FlowGroupElement = this._impliedPara;
+            parent = this._impliedPara;
          }
          if(throwOnError)
          {
@@ -522,7 +523,7 @@ package flashx.textLayout.conversion
             }
             catch(e:*)
             {
-               reportError(e);
+               tlf_internal::reportError(e);
                return false;
             }
          }
@@ -531,7 +532,7 @@ package flashx.textLayout.conversion
       
       tlf_internal function resetImpliedPara() : void
       {
-         if(this._impliedPara)
+         if(Boolean(this._impliedPara))
          {
             this.onResetImpliedPara(this._impliedPara);
             this._impliedPara = null;

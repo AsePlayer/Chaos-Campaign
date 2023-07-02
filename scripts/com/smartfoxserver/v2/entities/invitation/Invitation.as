@@ -9,7 +9,7 @@ package com.smartfoxserver.v2.entities.invitation
       
       function get id() : int;
       
-      function set id(value:int) : void;
+      function set id(param1:int) : void;
       
       function get inviter() : User;
       

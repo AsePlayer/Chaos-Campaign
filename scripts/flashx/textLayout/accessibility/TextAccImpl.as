@@ -56,7 +56,7 @@ package flashx.textLayout.accessibility
          var rslt:String = "";
          var curString:String = "";
          var discretionaryHyphen:String = String.fromCharCode(173);
-         while(leaf)
+         while(Boolean(leaf))
          {
             p = leaf.getParagraph();
             while(true)
@@ -149,9 +149,9 @@ package flashx.textLayout.accessibility
       {
          var selMgr:ISelectionManager = this.textFlow.interactionManager;
          var selIndex:int = -1;
-         if(selMgr && selMgr.editingMode != EditingMode.READ_ONLY)
+         if(Boolean(selMgr) && selMgr.editingMode != EditingMode.READ_ONLY)
          {
-            selIndex = selMgr.activePosition;
+            selIndex = int(selMgr.activePosition);
          }
          return selIndex;
       }
@@ -160,16 +160,16 @@ package flashx.textLayout.accessibility
       {
          var selMgr:ISelectionManager = this.textFlow.interactionManager;
          var selIndex:int = -1;
-         if(selMgr && selMgr.editingMode != EditingMode.READ_ONLY)
+         if(Boolean(selMgr) && selMgr.editingMode != EditingMode.READ_ONLY)
          {
-            selIndex = selMgr.anchorPosition;
+            selIndex = int(selMgr.anchorPosition);
          }
          return selIndex;
       }
       
       public function get searchText() : String
       {
-         return !!GlobalSettings.enableSearch ? this.textFlow.getText() : null;
+         return GlobalSettings.enableSearch ? this.textFlow.getText() : null;
       }
    }
 }

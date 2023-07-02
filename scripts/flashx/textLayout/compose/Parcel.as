@@ -6,8 +6,6 @@ package flashx.textLayout.compose
    import flashx.textLayout.formats.Direction;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class Parcel
    {
@@ -53,7 +51,7 @@ package flashx.textLayout.compose
          this.y = y;
          this.width = width;
          this.height = height;
-         this.logicalWidth = !!verticalText ? Number(height) : Number(width);
+         this.logicalWidth = verticalText ? height : width;
          this._verticalText = verticalText;
          this._controller = controller;
          this._columnIndex = columnIndex;
@@ -127,9 +125,9 @@ package flashx.textLayout.compose
       {
          if(this._verticalText)
          {
-            return !!this._controller.measureWidth ? Number(TextLine.MAX_LINE_WIDTH) : Number(this.width);
+            return !!this._controller.tlf_internal::measureWidth ? TextLine.MAX_LINE_WIDTH : this.width;
          }
-         return !!this._controller.measureHeight ? Number(TextLine.MAX_LINE_WIDTH) : Number(this.height);
+         return !!this._controller.tlf_internal::measureHeight ? TextLine.MAX_LINE_WIDTH : this.height;
       }
       
       public function applyClear(clear:String, depth:Number, direction:String) : Number
@@ -162,7 +160,7 @@ package flashx.textLayout.compose
                adjustedDepth = this._right.findNextTransition(adjustedDepth);
             }
          }
-         return !!this._verticalText ? Number(this.width) : Number(this.height);
+         return this._verticalText ? this.width : this.height;
       }
       
       public function fitsInHeight(depth:Number, minimumHeight:Number) : Boolean
@@ -200,7 +198,7 @@ package flashx.textLayout.compose
             {
                slug.rightMargin += rightMargin;
             }
-            if(textIndent)
+            if(Boolean(textIndent))
             {
                if(directionLTR)
                {
@@ -211,7 +209,7 @@ package flashx.textLayout.compose
                   slug.rightMargin += textIndent;
                }
             }
-            if(useExplicitLineBreaks || this._verticalText && this._controller.measureHeight || !this._verticalText && this._controller.measureWidth)
+            if(useExplicitLineBreaks || this._verticalText && Boolean(this._controller.tlf_internal::measureHeight) || !this._verticalText && Boolean(this._controller.tlf_internal::measureWidth))
             {
                slug.width = TextLine.MAX_LINE_WIDTH;
             }
@@ -230,13 +228,13 @@ package flashx.textLayout.compose
       
       public function knockOut(knockOutWidth:Number, yMin:Number, yMax:Number, onLeft:Boolean) : void
       {
-         var edge:Edge = !!onLeft ? this._left : this._right;
+         var edge:Edge = onLeft ? this._left : this._right;
          edge.addSpan(knockOutWidth,yMin,yMax);
       }
       
       public function removeKnockOut(knockOutWidth:Number, yMin:Number, yMax:Number, onLeft:Boolean) : void
       {
-         var edge:Edge = !!onLeft ? this._left : this._right;
+         var edge:Edge = onLeft ? this._left : this._right;
          edge.removeSpan(knockOutWidth,yMin,yMax);
       }
       
@@ -262,7 +260,7 @@ class Span
    
    public var ymax:Number;
    
-   function Span(x:Number, ymin:Number, ymax:Number)
+   public function Span(x:Number, ymin:Number, ymax:Number)
    {
       super();
       this.x = x;
@@ -289,7 +287,7 @@ class Edge
    
    private var _spanList:Vector.<Span>;
    
-   function Edge(xbase:Number)
+   public function Edge(xbase:Number)
    {
       super();
       this._xbase = xbase;

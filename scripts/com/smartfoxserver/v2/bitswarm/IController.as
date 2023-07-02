@@ -6,8 +6,8 @@ package com.smartfoxserver.v2.bitswarm
       
       function get id() : int;
       
-      function set id(value:int) : void;
+      function set id(param1:int) : void;
       
-      function handleMessage(message:IMessage) : void;
+      function handleMessage(param1:IMessage) : void;
    }
 }

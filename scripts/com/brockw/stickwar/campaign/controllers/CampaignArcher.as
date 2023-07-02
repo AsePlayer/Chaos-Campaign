@@ -14,15 +14,15 @@ package com.brockw.stickwar.campaign.controllers
       
       private var arrow:tutorialArrow;
       
-      var state:int = 0;
+      internal var state:int = 0;
       
-      var S_BEFORE:int = 0;
+      internal var S_BEFORE:int = 0;
       
-      var S_SELECT:int = 1;
+      internal var S_SELECT:int = 1;
       
-      var S_HILL:int = 2;
+      internal var S_HILL:int = 2;
       
-      var S_DONE:int = 2;
+      internal var S_DONE:int = 2;
       
       public function CampaignArcher(gameScreen:GameScreen)
       {
@@ -44,7 +44,7 @@ package com.brockw.stickwar.campaign.controllers
                this.arrow.nextFrame();
             }
          }
-         if(this.message)
+         if(Boolean(this.message))
          {
             this.message.update();
          }
@@ -70,7 +70,7 @@ package com.brockw.stickwar.campaign.controllers
          }
          else if(this.state == this.S_SELECT)
          {
-            if(gameScreen.userInterface.selectedUnits.interactsWith & Unit.I_ENEMY)
+            if(Boolean(gameScreen.userInterface.selectedUnits.interactsWith & Unit.I_ENEMY))
             {
                this.arrow.visible = true;
             }
@@ -87,7 +87,7 @@ package com.brockw.stickwar.campaign.controllers
                this.message.visible = false;
                this.arrow.visible = false;
             }
-            if(gameScreen.team.forwardUnit && gameScreen.team.forwardUnit.x > gameScreen.game.map.width / 2)
+            if(Boolean(gameScreen.team.forwardUnit) && gameScreen.team.forwardUnit.x > gameScreen.game.map.width / 2)
             {
                this.message.x = gameScreen.game.stage.stageWidth / 2;
                this.message.y = gameScreen.game.stage.stageHeight / 4 - 75;

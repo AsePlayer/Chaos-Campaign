@@ -5,8 +5,6 @@ package flashx.textLayout.compose
    import flash.utils.Dictionary;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class TextLineRecycler
    {
       
@@ -29,7 +27,7 @@ package flashx.textLayout.compose
       
       public static function set textLineRecyclerEnabled(value:Boolean) : void
       {
-         _textLineRecyclerEnabled = !!value ? Boolean(_textLineRecyclerCanBeEnabled) : Boolean(false);
+         _textLineRecyclerEnabled = value ? _textLineRecyclerCanBeEnabled : false;
       }
       
       public static function addLineForReuse(textLine:TextLine) : void
@@ -42,7 +40,7 @@ package flashx.textLayout.compose
       
       public static function getLineForReuse() : TextLine
       {
-         var obj:* = null;
+         var obj:Object = null;
          if(_textLineRecyclerEnabled)
          {
             var _loc2_:int = 0;

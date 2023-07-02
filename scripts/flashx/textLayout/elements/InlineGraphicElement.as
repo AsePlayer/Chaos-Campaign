@@ -32,8 +32,6 @@ package flashx.textLayout.elements
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public final class InlineGraphicElement extends FlowLeafElement
    {
       
@@ -97,7 +95,7 @@ package flashx.textLayout.elements
          this.internalSetWidth(undefined);
          this.internalSetHeight(undefined);
          this._graphicStatus = InlineGraphicElementStatus.LOAD_PENDING;
-         setTextLength(1);
+         tlf_internal::setTextLength(1);
          _text = graphicElementText;
       }
       
@@ -109,10 +107,10 @@ package flashx.textLayout.elements
          {
             Loader(graphic).unloadAndStop();
          }
-         else if(graphic)
+         else if(Boolean(graphic))
          {
             container = graphic as DisplayObjectContainer;
-            if(container)
+            if(Boolean(container))
             {
                for(idx = 0; idx < container.numChildren; idx++)
                {
@@ -128,7 +126,7 @@ package flashx.textLayout.elements
       
       override tlf_internal function createContentElement() : void
       {
-         if(_blockElement)
+         if(Boolean(_blockElement))
          {
             return;
          }
@@ -136,7 +134,7 @@ package flashx.textLayout.elements
          var graphicElement:GraphicElement = new GraphicElement();
          _blockElement = graphicElement;
          this.updateContentElement();
-         super.createContentElement();
+         super.tlf_internal::createContentElement();
       }
       
       private function updateContentElement() : void
@@ -149,7 +147,7 @@ package flashx.textLayout.elements
             this._placeholderGraphic = new Sprite();
          }
          graphicElement.graphic = this._placeholderGraphic;
-         if(this.effectiveFloat != Float.NONE)
+         if(this.tlf_internal::effectiveFloat != Float.NONE)
          {
             if(graphicElement.elementHeight != 0)
             {
@@ -162,12 +160,12 @@ package flashx.textLayout.elements
          }
          else
          {
-            height = this.elementHeightWithMarginsAndPadding();
+            height = this.tlf_internal::elementHeightWithMarginsAndPadding();
             if(graphicElement.elementHeight != height)
             {
                graphicElement.elementHeight = height;
             }
-            width = this.elementWidthWithMarginsAndPadding();
+            width = this.tlf_internal::elementWidthWithMarginsAndPadding();
             if(graphicElement.elementWidth != width)
             {
                graphicElement.elementWidth = width;
@@ -179,7 +177,7 @@ package flashx.textLayout.elements
       {
          var updateGraphicElement:Boolean = _computedFormat == null;
          super.computedFormat;
-         if(updateGraphicElement && _blockElement)
+         if(updateGraphicElement && Boolean(_blockElement))
          {
             this.updateContentElement();
          }
@@ -191,10 +189,10 @@ package flashx.textLayout.elements
          var textFlow:TextFlow = getTextFlow();
          if(!textFlow)
          {
-            return this.elementWidth;
+            return this.tlf_internal::elementWidth;
          }
-         var paddingAmount:Number = textFlow.computedFormat.blockProgression == BlockProgression.RL ? Number(getEffectivePaddingTop() + getEffectivePaddingBottom()) : Number(getEffectivePaddingLeft() + getEffectivePaddingRight());
-         return this.elementWidth + paddingAmount;
+         var paddingAmount:Number = textFlow.computedFormat.blockProgression == BlockProgression.RL ? tlf_internal::getEffectivePaddingTop() + tlf_internal::getEffectivePaddingBottom() : tlf_internal::getEffectivePaddingLeft() + tlf_internal::getEffectivePaddingRight();
+         return this.tlf_internal::elementWidth + paddingAmount;
       }
       
       tlf_internal function elementHeightWithMarginsAndPadding() : Number
@@ -202,10 +200,10 @@ package flashx.textLayout.elements
          var textFlow:TextFlow = getTextFlow();
          if(!textFlow)
          {
-            return this.elementWidth;
+            return this.tlf_internal::elementWidth;
          }
-         var paddingAmount:Number = textFlow.computedFormat.blockProgression == BlockProgression.RL ? Number(getEffectivePaddingLeft() + getEffectivePaddingRight()) : Number(getEffectivePaddingTop() + getEffectivePaddingBottom());
-         return this.elementHeight + paddingAmount;
+         var paddingAmount:Number = textFlow.computedFormat.blockProgression == BlockProgression.RL ? tlf_internal::getEffectivePaddingLeft() + tlf_internal::getEffectivePaddingRight() : tlf_internal::getEffectivePaddingTop() + tlf_internal::getEffectivePaddingBottom();
+         return this.tlf_internal::elementHeight + paddingAmount;
       }
       
       public function get graphic() : DisplayObject
@@ -231,11 +229,11 @@ package flashx.textLayout.elements
       tlf_internal function set elementWidth(value:Number) : void
       {
          this._elementWidth = value;
-         if(_blockElement)
+         if(Boolean(_blockElement))
          {
-            (_blockElement as GraphicElement).elementWidth = this.effectiveFloat != Float.NONE ? Number(0) : Number(this.elementWidthWithMarginsAndPadding());
+            (_blockElement as GraphicElement).elementWidth = this.tlf_internal::effectiveFloat != Float.NONE ? 0 : this.tlf_internal::elementWidthWithMarginsAndPadding();
          }
-         modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength,true,false);
+         tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength,true,false);
       }
       
       tlf_internal function get elementHeight() : Number
@@ -246,11 +244,11 @@ package flashx.textLayout.elements
       tlf_internal function set elementHeight(value:Number) : void
       {
          this._elementHeight = value;
-         if(_blockElement)
+         if(Boolean(_blockElement))
          {
-            (_blockElement as GraphicElement).elementHeight = this.effectiveFloat != Float.NONE ? Number(0) : Number(this.elementHeightWithMarginsAndPadding());
+            (_blockElement as GraphicElement).elementHeight = this.tlf_internal::effectiveFloat != Float.NONE ? 0 : this.tlf_internal::elementHeightWithMarginsAndPadding();
          }
-         modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength,true,false);
+         tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength,true,false);
       }
       
       public function get status() : String
@@ -282,11 +280,11 @@ package flashx.textLayout.elements
          if(oldStatus != newStatus || stat is ErrorEvent)
          {
             tf = getTextFlow();
-            if(tf)
+            if(Boolean(tf))
             {
                if(newStatus == InlineGraphicElementStatus.SIZE_PENDING)
                {
-                  tf.processAutoSizeImageLoaded(this);
+                  tf.tlf_internal::processAutoSizeImageLoaded(this);
                }
                tf.dispatchEvent(new StatusChangeEvent(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,false,false,this,newStatus,stat as ErrorEvent));
             }
@@ -301,7 +299,7 @@ package flashx.textLayout.elements
       public function set width(w:*) : void
       {
          this.internalSetWidth(w);
-         modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
+         tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
       }
       
       public function get measuredWidth() : Number
@@ -311,7 +309,7 @@ package flashx.textLayout.elements
       
       public function get actualWidth() : Number
       {
-         return this.elementWidth;
+         return this.tlf_internal::elementWidth;
       }
       
       private function widthIsComputed() : Boolean
@@ -321,7 +319,7 @@ package flashx.textLayout.elements
       
       private function get internalWidth() : Object
       {
-         return this._width === undefined ? widthPropertyDefinition.defaultValue : this._width;
+         return this._width === undefined ? tlf_internal::widthPropertyDefinition.defaultValue : this._width;
       }
       
       private function computeWidth() : Number
@@ -337,27 +335,27 @@ package flashx.textLayout.elements
             {
                return 0;
             }
-            effHeight = !!this.heightIsComputed() ? Number(this.computeHeight()) : Number(Number(this.internalHeight));
+            effHeight = this.heightIsComputed() ? this.computeHeight() : Number(this.internalHeight);
             return effHeight / this._measuredHeight * this._measuredWidth;
          }
-         return widthPropertyDefinition.computeActualPropertyValue(this.internalWidth,this._measuredWidth);
+         return tlf_internal::widthPropertyDefinition.computeActualPropertyValue(this.internalWidth,this._measuredWidth);
       }
       
       private function internalSetWidth(w:*) : void
       {
-         this._width = widthPropertyDefinition.setHelper(this.width,w);
-         this.elementWidth = !!this.widthIsComputed() ? Number(0) : Number(Number(this.internalWidth));
-         if(this.okToUpdateHeightAndWidth && this.graphic)
+         this._width = tlf_internal::widthPropertyDefinition.setHelper(this.width,w);
+         this.tlf_internal::elementWidth = this.widthIsComputed() ? 0 : Number(this.internalWidth);
+         if(this.okToUpdateHeightAndWidth && Boolean(this.graphic))
          {
             if(this.widthIsComputed())
             {
-               this.elementWidth = this.computeWidth();
+               this.tlf_internal::elementWidth = this.computeWidth();
             }
-            this.graphic.width = this.elementWidth;
+            this.graphic.width = this.tlf_internal::elementWidth;
             if(this.internalHeight == FormatValue.AUTO)
             {
-               this.elementHeight = this.computeHeight();
-               this.graphic.height = this.elementHeight;
+               this.tlf_internal::elementHeight = this.computeHeight();
+               this.graphic.height = this.tlf_internal::elementHeight;
             }
          }
       }
@@ -370,26 +368,26 @@ package flashx.textLayout.elements
       public function set height(h:*) : void
       {
          this.internalSetHeight(h);
-         modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
+         tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
       }
       
       private function get internalHeight() : Object
       {
-         return this._height === undefined ? heightPropertyDefinition.defaultValue : this._height;
+         return this._height === undefined ? tlf_internal::heightPropertyDefinition.defaultValue : this._height;
       }
       
       tlf_internal function get computedFloat() : *
       {
          if(this._float === undefined)
          {
-            return floatPropertyDefinition.defaultValue;
+            return tlf_internal::floatPropertyDefinition.defaultValue;
          }
          return this._float;
       }
       
       tlf_internal function get effectiveFloat() : *
       {
-         return Boolean(this._effectiveFloat) ? this._effectiveFloat : this.computedFloat;
+         return Boolean(this._effectiveFloat) ? this._effectiveFloat : this.tlf_internal::computedFloat;
       }
       
       tlf_internal function setEffectiveFloat(floatValue:String) : void
@@ -397,7 +395,7 @@ package flashx.textLayout.elements
          if(this._effectiveFloat != floatValue)
          {
             this._effectiveFloat = floatValue;
-            if(_blockElement)
+            if(Boolean(_blockElement))
             {
                this.updateContentElement();
             }
@@ -412,15 +410,15 @@ package flashx.textLayout.elements
       
       public function set float(value:*) : *
       {
-         value = floatPropertyDefinition.setHelper(this.float,value) as String;
+         value = tlf_internal::floatPropertyDefinition.setHelper(this.float,value) as String;
          if(this._float != value)
          {
             this._float = value;
-            if(_blockElement)
+            if(Boolean(_blockElement))
             {
                this.updateContentElement();
             }
-            modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
+            tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
          }
       }
       
@@ -431,7 +429,7 @@ package flashx.textLayout.elements
       
       public function get actualHeight() : Number
       {
-         return this.elementHeight;
+         return this.tlf_internal::elementHeight;
       }
       
       private function heightIsComputed() : Boolean
@@ -452,27 +450,27 @@ package flashx.textLayout.elements
             {
                return 0;
             }
-            effWidth = !!this.widthIsComputed() ? Number(this.computeWidth()) : Number(Number(this.internalWidth));
+            effWidth = this.widthIsComputed() ? this.computeWidth() : Number(this.internalWidth);
             return effWidth / this._measuredWidth * this._measuredHeight;
          }
-         return heightPropertyDefinition.computeActualPropertyValue(this.internalHeight,this._measuredHeight);
+         return tlf_internal::heightPropertyDefinition.computeActualPropertyValue(this.internalHeight,this._measuredHeight);
       }
       
       private function internalSetHeight(h:*) : void
       {
-         this._height = heightPropertyDefinition.setHelper(this.height,h);
-         this.elementHeight = !!this.heightIsComputed() ? Number(0) : Number(Number(this.internalHeight));
+         this._height = tlf_internal::heightPropertyDefinition.setHelper(this.height,h);
+         this.tlf_internal::elementHeight = this.heightIsComputed() ? 0 : Number(this.internalHeight);
          if(this.okToUpdateHeightAndWidth && this.graphic != null)
          {
             if(this.heightIsComputed())
             {
-               this.elementHeight = this.computeHeight();
+               this.tlf_internal::elementHeight = this.computeHeight();
             }
-            this.graphic.height = this.elementHeight;
+            this.graphic.height = this.tlf_internal::elementHeight;
             if(this.internalWidth == FormatValue.AUTO)
             {
-               this.elementWidth = this.computeWidth();
-               this.graphic.width = this.elementWidth;
+               this.tlf_internal::elementWidth = this.computeWidth();
+               this.graphic.width = this.tlf_internal::elementWidth;
             }
          }
       }
@@ -486,11 +484,11 @@ package flashx.textLayout.elements
          this._measuredHeight = g.height;
          if(!this.widthIsComputed())
          {
-            g.width = this.elementWidth;
+            g.width = this.tlf_internal::elementWidth;
          }
          if(!this.heightIsComputed())
          {
-            g.height = this.elementHeight;
+            g.height = this.tlf_internal::elementHeight;
          }
          if(e is IOErrorEvent)
          {
@@ -534,10 +532,10 @@ package flashx.textLayout.elements
       
       public function set source(value:Object) : void
       {
-         this.stop(true);
+         this.tlf_internal::stop(true);
          this._source = value;
          this.changeGraphicStatus(InlineGraphicElementStatus.LOAD_PENDING);
-         modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
+         tlf_internal::modelChanged(ModelChange.ELEMENT_MODIFIED,this,0,textLength);
       }
       
       override tlf_internal function applyDelayedElementUpdate(textFlow:TextFlow, okToUnloadGraphics:Boolean, hasController:Boolean) : void
@@ -552,7 +550,7 @@ package flashx.textLayout.elements
          var cls:Class = null;
          if(textFlow != this.getTextFlow())
          {
-            var hasController:Boolean = false;
+            hasController = false;
          }
          if(this._graphicStatus == InlineGraphicElementStatus.LOAD_PENDING)
          {
@@ -622,17 +620,17 @@ package flashx.textLayout.elements
                if(this._graphicStatus != LOAD_INITIATED)
                {
                   this.okToUpdateHeightAndWidth = true;
-                  this._measuredWidth = Boolean(elem) ? Number(elem.width) : Number(0);
-                  this._measuredHeight = Boolean(elem) ? Number(elem.height) : Number(0);
+                  this._measuredWidth = Boolean(elem) ? elem.width : 0;
+                  this._measuredHeight = Boolean(elem) ? elem.height : 0;
                   if(this.widthIsComputed())
                   {
-                     if(elem)
+                     if(Boolean(elem))
                      {
-                        elem.width = this.elementWidth = this.computeWidth();
+                        elem.width = this.tlf_internal::elementWidth = this.computeWidth();
                      }
                      else
                      {
-                        this.elementWidth = 0;
+                        this.tlf_internal::elementWidth = 0;
                      }
                   }
                   else
@@ -641,13 +639,13 @@ package flashx.textLayout.elements
                   }
                   if(this.heightIsComputed())
                   {
-                     if(elem)
+                     if(Boolean(elem))
                      {
-                        elem.height = this.elementHeight = this.computeHeight();
+                        elem.height = this.tlf_internal::elementHeight = this.computeHeight();
                      }
                      else
                      {
-                        this.elementHeight = 0;
+                        this.tlf_internal::elementHeight = 0;
                      }
                   }
                   else
@@ -668,14 +666,14 @@ package flashx.textLayout.elements
             }
             if(!hasController)
             {
-               this.stop(okToUnloadGraphics);
+               this.tlf_internal::stop(okToUnloadGraphics);
             }
          }
       }
       
       override tlf_internal function updateForMustUseComposer(textFlow:TextFlow) : Boolean
       {
-         this.applyDelayedElementUpdate(textFlow,false,true);
+         this.tlf_internal::applyDelayedElementUpdate(textFlow,false,true);
          return this.status != InlineGraphicElementStatus.READY;
       }
       
@@ -683,13 +681,13 @@ package flashx.textLayout.elements
       {
          if(this.widthIsComputed())
          {
-            this.elementWidth = this.computeWidth();
-            this.graphic.width = this.elementWidth;
+            this.tlf_internal::elementWidth = this.computeWidth();
+            this.graphic.width = this.tlf_internal::elementWidth;
          }
          if(this.heightIsComputed())
          {
-            this.elementHeight = this.computeHeight();
-            this.graphic.height = this.elementHeight;
+            this.tlf_internal::elementHeight = this.computeHeight();
+            this.graphic.height = this.tlf_internal::elementHeight;
          }
       }
       
@@ -717,11 +715,11 @@ package flashx.textLayout.elements
             }
             if(this.widthIsComputed())
             {
-               this.elementWidth = 0;
+               this.tlf_internal::elementWidth = 0;
             }
             if(this.heightIsComputed())
             {
-               this.elementHeight = 0;
+               this.tlf_internal::elementHeight = 0;
             }
             this.changeGraphicStatus(InlineGraphicElementStatus.LOAD_PENDING);
          }
@@ -730,40 +728,40 @@ package flashx.textLayout.elements
       
       override tlf_internal function getEffectiveFontSize() : Number
       {
-         if(this.effectiveFloat != Float.NONE)
+         if(this.tlf_internal::effectiveFloat != Float.NONE)
          {
             return 0;
          }
-         var defaultLeading:Number = super.getEffectiveFontSize();
-         return Math.max(defaultLeading,this.elementHeightWithMarginsAndPadding());
+         var defaultLeading:Number = super.tlf_internal::getEffectiveFontSize();
+         return Math.max(defaultLeading,this.tlf_internal::elementHeightWithMarginsAndPadding());
       }
       
       override tlf_internal function getEffectiveLineHeight(blockProgression:String) : Number
       {
-         if(this.effectiveFloat != Float.NONE)
+         if(this.tlf_internal::effectiveFloat != Float.NONE)
          {
             return 0;
          }
-         return super.getEffectiveLineHeight(blockProgression);
+         return super.tlf_internal::getEffectiveLineHeight(blockProgression);
       }
       
       tlf_internal function getTypographicAscent(textLine:TextLine) : Number
       {
          var dominantBaselineString:String = null;
-         if(this.effectiveFloat != Float.NONE)
+         if(this.tlf_internal::effectiveFloat != Float.NONE)
          {
             return 0;
          }
-         var effectiveHeight:Number = this.elementHeightWithMarginsAndPadding();
+         var effectiveHeight:Number = this.tlf_internal::elementHeightWithMarginsAndPadding();
          if(this._computedFormat.dominantBaseline != FormatValue.AUTO)
          {
             dominantBaselineString = this._computedFormat.dominantBaseline;
          }
          else
          {
-            dominantBaselineString = this.getParagraph().getEffectiveDominantBaseline();
+            dominantBaselineString = String(this.getParagraph().tlf_internal::getEffectiveDominantBaseline());
          }
-         var elementFormat:ElementFormat = Boolean(_blockElement) ? _blockElement.elementFormat : computeElementFormat();
+         var elementFormat:ElementFormat = Boolean(_blockElement) ? _blockElement.elementFormat : tlf_internal::computeElementFormat();
          var alignmentBaseline:String = elementFormat.alignmentBaseline == TextBaseline.USE_DOMINANT_BASELINE ? dominantBaselineString : elementFormat.alignmentBaseline;
          var top:Number = 0;
          if(dominantBaselineString == TextBaseline.IDEOGRAPHIC_CENTER)
@@ -775,35 +773,35 @@ package flashx.textLayout.elements
             top += effectiveHeight;
          }
          top += textLine.getBaselinePosition(TextBaseline.ROMAN) - textLine.getBaselinePosition(alignmentBaseline);
-         return Number(top + elementFormat.baselineShift);
+         return top + elementFormat.baselineShift;
       }
       
       override tlf_internal function getCSSInlineBox(blockProgression:String, textLine:TextLine, para:ParagraphElement = null, swfContext:ISWFContext = null) : Rectangle
       {
-         if(this.effectiveFloat != Float.NONE)
+         if(this.tlf_internal::effectiveFloat != Float.NONE)
          {
             return null;
          }
          var inlineBox:Rectangle = new Rectangle();
-         inlineBox.top = -this.getTypographicAscent(textLine);
-         inlineBox.height = this.elementHeightWithMarginsAndPadding();
-         inlineBox.width = this.elementWidth;
+         inlineBox.top = -this.tlf_internal::getTypographicAscent(textLine);
+         inlineBox.height = this.tlf_internal::elementHeightWithMarginsAndPadding();
+         inlineBox.width = this.tlf_internal::elementWidth;
          return inlineBox;
       }
       
       override tlf_internal function updateIMEAdornments(tLine:TextLine, blockProgression:String, imeStatus:String) : void
       {
-         if(this.effectiveFloat == Float.NONE)
+         if(this.tlf_internal::effectiveFloat == Float.NONE)
          {
-            super.updateIMEAdornments(tLine,blockProgression,imeStatus);
+            super.tlf_internal::updateIMEAdornments(tLine,blockProgression,imeStatus);
          }
       }
       
       override tlf_internal function updateAdornments(tLine:TextLine, blockProgression:String) : int
       {
-         if(this.effectiveFloat == Float.NONE)
+         if(this.tlf_internal::effectiveFloat == Float.NONE)
          {
-            return super.updateAdornments(tLine,blockProgression);
+            return super.tlf_internal::updateAdornments(tLine,blockProgression);
          }
          return 0;
       }
@@ -836,15 +834,15 @@ package flashx.textLayout.elements
       {
          if(changeType == ModelChange.ELEMENT_ADDED)
          {
-            tf.incGraphicObjectCount();
+            tf.tlf_internal::incGraphicObjectCount();
          }
          else if(changeType == ModelChange.ELEMENT_REMOVAL)
          {
-            tf.decGraphicObjectCount();
+            tf.tlf_internal::decGraphicObjectCount();
          }
          if(this.status != InlineGraphicElementStatus.READY || changeType == ModelChange.ELEMENT_REMOVAL)
          {
-            tf.appendOneElementForUpdate(this);
+            tf.tlf_internal::appendOneElementForUpdate(this);
          }
       }
       
@@ -855,61 +853,61 @@ package flashx.textLayout.elements
          var elemIdx:int = 0;
          if(!this.graphic || this.status != InlineGraphicElementStatus.READY)
          {
-            return super.calculateStrikeThrough(tLine,blockProgression,metrics);
+            return super.tlf_internal::calculateStrikeThrough(tLine,blockProgression,metrics);
          }
          var stOffset:Number = 0;
          var inlineHolder:DisplayObjectContainer = this._placeholderGraphic.parent;
-         if(inlineHolder)
+         if(Boolean(inlineHolder))
          {
             if(blockProgression != BlockProgression.RL)
             {
-               stOffset = this.placeholderGraphic.parent.y + (this.elementHeight / 2 + Number(getEffectivePaddingTop()));
+               stOffset = this.tlf_internal::placeholderGraphic.parent.y + (this.tlf_internal::elementHeight / 2 + Number(tlf_internal::getEffectivePaddingTop()));
             }
             else
             {
-               paddingRight = getEffectivePaddingRight();
+               paddingRight = Number(tlf_internal::getEffectivePaddingRight());
                line = tLine.userData as TextFlowLine;
                elemIdx = this.getAbsoluteStart() - line.absoluteStart;
                if(tLine.getAtomTextRotation(elemIdx) != TextRotation.ROTATE_0)
                {
-                  stOffset = this._placeholderGraphic.parent.x - (this.elementHeight / 2 + paddingRight);
+                  stOffset = this._placeholderGraphic.parent.x - (this.tlf_internal::elementHeight / 2 + paddingRight);
                }
                else
                {
-                  stOffset = this._placeholderGraphic.parent.x - (this.elementWidth / 2 + paddingRight);
+                  stOffset = this._placeholderGraphic.parent.x - (this.tlf_internal::elementWidth / 2 + paddingRight);
                }
             }
          }
-         return blockProgression == BlockProgression.TB ? Number(stOffset) : Number(-stOffset);
+         return blockProgression == BlockProgression.TB ? stOffset : -stOffset;
       }
       
       override tlf_internal function calculateUnderlineOffset(stOffset:Number, blockProgression:String, metrics:FontMetrics, tLine:TextLine) : Number
       {
          if(!this.graphic || this.status != InlineGraphicElementStatus.READY)
          {
-            return super.calculateUnderlineOffset(stOffset,blockProgression,metrics,tLine);
+            return super.tlf_internal::calculateUnderlineOffset(stOffset,blockProgression,metrics,tLine);
          }
          var para:ParagraphElement = this.getParagraph();
          var ulOffset:Number = 0;
          var inlineHolder:DisplayObjectContainer = this._placeholderGraphic.parent;
-         if(inlineHolder)
+         if(Boolean(inlineHolder))
          {
             if(blockProgression == BlockProgression.TB)
             {
-               ulOffset = inlineHolder.y + this.elementHeightWithMarginsAndPadding();
+               ulOffset = inlineHolder.y + this.tlf_internal::elementHeightWithMarginsAndPadding();
             }
             else
             {
                if(para.computedFormat.locale.toLowerCase().indexOf("zh") == 0)
                {
-                  ulOffset = inlineHolder.x - this.elementHeightWithMarginsAndPadding();
-                  return Number(ulOffset - (metrics.underlineOffset + metrics.underlineThickness / 2));
+                  ulOffset = inlineHolder.x - this.tlf_internal::elementHeightWithMarginsAndPadding();
+                  return ulOffset - (metrics.underlineOffset + metrics.underlineThickness / 2);
                }
-               ulOffset = inlineHolder.x - getEffectivePaddingLeft();
+               ulOffset = inlineHolder.x - tlf_internal::getEffectivePaddingLeft();
             }
          }
          ulOffset += metrics.underlineOffset + metrics.underlineThickness / 2;
-         var justRule:String = para.getEffectiveJustificationRule();
+         var justRule:String = String(para.tlf_internal::getEffectiveJustificationRule());
          if(justRule == JustificationRule.EAST_ASIAN)
          {
             ulOffset += 1;

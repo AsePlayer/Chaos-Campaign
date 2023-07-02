@@ -3,8 +3,6 @@ package flashx.textLayout.elements
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class FlowValueHolder extends TextLayoutFormat
    {
@@ -20,8 +18,8 @@ package flashx.textLayout.elements
       
       private function initialize(initialValues:FlowValueHolder) : void
       {
-         var s:* = null;
-         if(initialValues)
+         var s:String = null;
+         if(Boolean(initialValues))
          {
             for(s in initialValues.privateData)
             {
@@ -49,7 +47,7 @@ package flashx.textLayout.elements
       {
          if(newValue === undefined)
          {
-            if(this._privateData)
+            if(Boolean(this._privateData))
             {
                delete this._privateData[styleProp];
             }

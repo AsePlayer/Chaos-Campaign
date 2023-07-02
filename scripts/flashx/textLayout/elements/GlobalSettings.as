@@ -2,8 +2,6 @@ package flashx.textLayout.elements
 {
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class GlobalSettings
    {
       
@@ -41,7 +39,7 @@ package flashx.textLayout.elements
          "unsupportedProperty":"Property {0} is unsupported"
       };
       
-      private static var _resourceStringFunction:Function = defaultResourceStringFunction;
+      private static var _resourceStringFunction:Function = tlf_internal::defaultResourceStringFunction;
       
       private static var _enableDefaultTabStops:Boolean = false;
        
@@ -99,9 +97,9 @@ package flashx.textLayout.elements
             value = String(resourceDict["missingStringResource"]);
             parameters = [resourceName];
          }
-         if(parameters)
+         if(Boolean(parameters))
          {
-            value = substitute(value,parameters);
+            value = tlf_internal::substitute(value,parameters);
          }
          return value;
       }
@@ -113,7 +111,7 @@ package flashx.textLayout.elements
          {
             return "";
          }
-         var len:uint = rest.length;
+         var len:uint = uint(rest.length);
          if(len == 1 && rest[0] is Array)
          {
             args = rest[0] as Array;

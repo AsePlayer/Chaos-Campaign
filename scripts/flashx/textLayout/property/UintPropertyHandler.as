@@ -2,8 +2,6 @@ package flashx.textLayout.property
 {
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class UintPropertyHandler extends PropertyHandler
    {
@@ -21,7 +19,7 @@ package flashx.textLayout.property
       
       override public function toXMLString(val:Object) : String
       {
-         var result:String = val.toString(16);
+         var result:String = String(val.toString(16));
          if(result.length < 6)
          {
             result = "000000".substr(0,6 - result.length) + result;
@@ -44,7 +42,7 @@ package flashx.textLayout.property
             {
                str = "0x" + str.substr(1,str.length - 1);
             }
-            newRslt = str.toLowerCase().substr(0,2) == "0x" ? Number(parseInt(str)) : Number(NaN);
+            newRslt = str.toLowerCase().substr(0,2) == "0x" ? parseInt(str) : NaN;
          }
          else
          {

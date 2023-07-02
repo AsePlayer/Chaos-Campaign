@@ -7,8 +7,6 @@ package flashx.textLayout.utils
    import flashx.textLayout.elements.TextRange;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public final class GeometryUtil
    {
@@ -34,7 +32,7 @@ package flashx.textLayout.utils
          }
          var resultShapes:Array = new Array();
          var begLine:int = flowComposer.findLineIndexAtPosition(range.absoluteStart);
-         var endLine:int = range.absoluteStart == range.absoluteEnd ? int(begLine) : int(flowComposer.findLineIndexAtPosition(range.absoluteEnd));
+         var endLine:int = range.absoluteStart == range.absoluteEnd ? begLine : flowComposer.findLineIndexAtPosition(range.absoluteEnd);
          if(endLine >= flowComposer.numLines)
          {
             endLine = flowComposer.numLines - 1;
@@ -45,9 +43,9 @@ package flashx.textLayout.utils
          for(var curLineIndex:int = begLine; curLineIndex <= endLine; curLineIndex++)
          {
             nextLine = curLineIndex != flowComposer.numLines - 1 ? flowComposer.getLineAt(curLineIndex + 1) : null;
-            heightAndAdj = line.getRomanSelectionHeightAndVerticalAdjustment(prevLine,nextLine);
+            heightAndAdj = line.tlf_internal::getRomanSelectionHeightAndVerticalAdjustment(prevLine,nextLine);
             textLine = line.getTextLine(true);
-            line.calculateSelectionBounds(textLine,mainRects,range.absoluteStart < line.absoluteStart ? int(line.absoluteStart - line.paragraph.getAbsoluteStart()) : int(range.absoluteStart - line.paragraph.getAbsoluteStart()),range.absoluteEnd > line.absoluteStart + line.textLength ? int(line.absoluteStart + line.textLength - line.paragraph.getAbsoluteStart()) : int(range.absoluteEnd - line.paragraph.getAbsoluteStart()),range.textFlow.computedFormat.blockProgression,heightAndAdj);
+            line.tlf_internal::calculateSelectionBounds(textLine,mainRects,range.absoluteStart < line.absoluteStart ? line.absoluteStart - line.paragraph.getAbsoluteStart() : range.absoluteStart - line.paragraph.getAbsoluteStart(),range.absoluteEnd > line.absoluteStart + line.textLength ? line.absoluteStart + line.textLength - line.paragraph.getAbsoluteStart() : range.absoluteEnd - line.paragraph.getAbsoluteStart(),range.textFlow.computedFormat.blockProgression,heightAndAdj);
             for each(rect in mainRects)
             {
                obj = new Object();

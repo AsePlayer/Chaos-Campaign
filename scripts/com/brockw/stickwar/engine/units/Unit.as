@@ -188,7 +188,7 @@ package com.brockw.stickwar.engine.units
       
       protected var _isDualing:Boolean;
       
-      protected var _dualPartner:Unit;
+      protected var _dualPartner:com.brockw.stickwar.engine.units.Unit;
       
       protected var _flyingHeight:Number;
       
@@ -244,7 +244,7 @@ package com.brockw.stickwar.engine.units
       
       private var reaperAmplification:Number;
       
-      private var reaperInflictor:Unit;
+      private var reaperInflictor:com.brockw.stickwar.engine.units.Unit;
       
       private var chaosHealRate:Number;
       
@@ -345,7 +345,7 @@ package com.brockw.stickwar.engine.units
          return 0;
       }
       
-      public function reaperCurse(inflictor:Unit) : void
+      public function reaperCurse(inflictor:com.brockw.stickwar.engine.units.Unit) : void
       {
          this.stateFixForCutToWalk();
          if(this.reaperMc && this.mc.contains(this.reaperMc))
@@ -399,7 +399,7 @@ package com.brockw.stickwar.engine.units
          return this._poisonDamage > 0;
       }
       
-      protected function moveDualPartner(partner:Unit, xDiff:Number) : *
+      protected function moveDualPartner(partner:com.brockw.stickwar.engine.units.Unit, xDiff:Number) : *
       {
          var differenceInPositions:Number = Math.abs(partner.px - this.px);
          var goalDifference:Number = this._currentDual.xDiff * this.team.game.getPerspectiveScale(py);
@@ -461,7 +461,7 @@ package com.brockw.stickwar.engine.units
       
       public function firstInit() : void
       {
-         var otherHeight:Number = this.mc.mc.height;
+         var otherHeight:Number = Number(this.mc.mc.height);
          this._mayWalkThrough = false;
          pheight = Number(this.mc.height);
          pwidth = Number(this.mc.width);
@@ -478,7 +478,7 @@ package com.brockw.stickwar.engine.units
       public function initBase() : void
       {
          var frameLabel:FrameLabel = null;
-         _type = Unit.U_MINER;
+         _type = com.brockw.stickwar.engine.units.Unit.U_MINER;
          this._maxForce = Number(1);
          this._mass = 1;
          this._dragForce = Number(1);
@@ -523,7 +523,7 @@ package com.brockw.stickwar.engine.units
       
       protected function loadDamage(unitXml:XMLList) : void
       {
-         var _damage:Number = unitXml.damage;
+         var _damage:Number = Number(unitXml.damage);
          this.isArmoured = Boolean(unitXml.armoured == "1" ? Boolean(true) : Boolean(false));
          this._damageToArmour = Number(_damage + Number(unitXml.toArmour));
          this._damageToNotArmour = Number(_damage + Number(unitXml.toNotArmour));
@@ -610,7 +610,7 @@ package com.brockw.stickwar.engine.units
          {
             label = FrameLabel(this.mc.currentLabels[s]).name;
             parts = label.split("_",4);
-            type = parts[0];
+            type = String(parts[0]);
             switch(type)
             {
                case "attack":
@@ -689,7 +689,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      public function sqrDistanceToTarget(target:Unit) : Number
+      public function sqrDistanceToTarget(target:com.brockw.stickwar.engine.units.Unit) : Number
       {
          if(target == null)
          {
@@ -698,7 +698,7 @@ package com.brockw.stickwar.engine.units
          return Math.pow(target.px - px,2) + Math.pow(target.py - py,2) * 10;
       }
       
-      public function sqrDistanceTo(target:Unit) : Number
+      public function sqrDistanceTo(target:com.brockw.stickwar.engine.units.Unit) : Number
       {
          if(target == null)
          {
@@ -707,7 +707,7 @@ package com.brockw.stickwar.engine.units
          return Math.pow(target.px - px,2) + Math.pow(target.py - py,2);
       }
       
-      public function mayAttack(target:Unit) : Boolean
+      public function mayAttack(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          return false;
       }
@@ -1148,7 +1148,7 @@ package com.brockw.stickwar.engine.units
          y = py + pz;
       }
       
-      private function checkCollision(param1:Unit) : void
+      private function checkCollision(param1:com.brockw.stickwar.engine.units.Unit) : void
       {
          var _loc2_:Number = NaN;
          var _loc3_:int = 0;
@@ -1165,7 +1165,7 @@ package com.brockw.stickwar.engine.units
          {
             return;
          }
-         if(param1 is Unit)
+         if(param1 is com.brockw.stickwar.engine.units.Unit)
          {
             param1 = Unit(param1);
             if(!param1.mayWalkThrough && param1.stunTimeLeft == 0 && param1.isCollision(this,this.dx,this.dy))
@@ -1255,7 +1255,7 @@ package com.brockw.stickwar.engine.units
          }
          if(s > 0)
          {
-            this._dz = Number(0 - Unit.stunUpForce);
+            this._dz = Number(0 - com.brockw.stickwar.engine.units.Unit.stunUpForce);
             this.stunTimeLeft = s;
             if(this.stunMc && this.mc.contains(this.stunMc))
             {
@@ -1277,12 +1277,12 @@ package com.brockw.stickwar.engine.units
          v.w = 0;
       }
       
-      protected function fractionOfCollision(unit:Unit, dx:int, dy:int) : Number
+      protected function fractionOfCollision(unit:com.brockw.stickwar.engine.units.Unit, dx:int, dy:int) : Number
       {
          return (Math.pow(unit.px + unit.dx - dx - px,2) + Math.pow(unit.py + unit.dy - dy - py,2)) / Math.pow(unit.hitBoxWidth * (this.perspectiveScale + unit.perspectiveScale) / 2,2);
       }
       
-      protected function isCollision(unit:Unit, dx:int, dy:int) : Boolean
+      protected function isCollision(unit:com.brockw.stickwar.engine.units.Unit, dx:int, dy:int) : Boolean
       {
          if(Math.pow(unit.px + unit.dx - dx - px,2) + Math.pow(unit.py + unit.dy - dy - py,2) < Math.pow(unit.hitBoxWidth * (this.perspectiveScale + unit.perspectiveScale) / 2,2))
          {
@@ -1293,7 +1293,7 @@ package com.brockw.stickwar.engine.units
       
       protected function checkForHit() : Boolean
       {
-         var target:Unit = this.ai.getClosestTarget();
+         var target:com.brockw.stickwar.engine.units.Unit = this.ai.getClosestTarget();
          if(target == null)
          {
             return false;
@@ -1312,7 +1312,7 @@ package com.brockw.stickwar.engine.units
          return false;
       }
       
-      public function checkForHitPoint(p:Point, target:Unit) : Boolean
+      public function checkForHitPoint(p:Point, target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(target == null)
          {
@@ -1327,7 +1327,7 @@ package com.brockw.stickwar.engine.units
          return false;
       }
       
-      public function checkForHitPointArrow(p:Point, py:Number, target:Unit) : Boolean
+      public function checkForHitPointArrow(p:Point, py:Number, target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(target == null)
          {
@@ -1347,7 +1347,7 @@ package com.brockw.stickwar.engine.units
          var dmg:Number = NaN;
          if(this.isTargetable() && !this.isDualing)
          {
-            if(!(Unit.D_NO_SOUND & type))
+            if(!(com.brockw.stickwar.engine.units.Unit.D_NO_SOUND & type))
             {
                if(this.isArmoured)
                {
@@ -1367,7 +1367,7 @@ package com.brockw.stickwar.engine.units
             {
                dmg = amount * modifier;
             }
-            if(!(Unit.D_NO_BLOOD & type))
+            if(!(com.brockw.stickwar.engine.units.Unit.D_NO_BLOOD & type))
             {
                this.team.game.bloodManager.addBlood(px,py,0 - this.team.direction,this.team.game);
             }
@@ -1386,7 +1386,7 @@ package com.brockw.stickwar.engine.units
                {
                   this.isOnFire = true;
                }
-               else if(type & Unit.D_ARROW)
+               else if(type & com.brockw.stickwar.engine.units.Unit.D_ARROW)
                {
                   this.arrowDeath = true;
                   this.forceFaceDirection(Util.sgn(inflictor.px - px));
@@ -1427,7 +1427,7 @@ package com.brockw.stickwar.engine.units
          this.team.game.soundManager.playSoundRandom("Pain",8,px,py);
       }
       
-      public function startDual(target:Unit) : Boolean
+      public function startDual(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(!this.team.isMember)
          {

@@ -11,17 +11,11 @@ package flashx.textLayout.events
    import flash.geom.Rectangle;
    import flash.ui.Mouse;
    import flash.ui.MouseCursor;
-   import flashx.textLayout.elements.FlowElement;
-   import flashx.textLayout.elements.FlowGroupElement;
-   import flashx.textLayout.elements.LinkElement;
-   import flashx.textLayout.elements.TextFlow;
-   import flashx.textLayout.elements.TextRange;
+   import flashx.textLayout.elements.*;
    import flashx.textLayout.formats.BlockProgression;
    import flashx.textLayout.tlf_internal;
    import flashx.textLayout.utils.GeometryUtil;
    import flashx.textLayout.utils.HitTestArea;
-   
-   use namespace tlf_internal;
    
    [ExcludeClass]
    public class FlowElementMouseEventManager
@@ -108,9 +102,9 @@ package flashx.textLayout.events
          var oldObj:Object = null;
          this._needsCtrlKey = needsCtrlKey;
          var elements:Array = [];
-         if(textFlow.interactiveObjectCount != 0 && startPos != endPos)
+         if(textFlow.tlf_internal::interactiveObjectCount != 0 && startPos != endPos)
          {
-            this.collectElements(textFlow,startPos,endPos,elements);
+            this.tlf_internal::collectElements(textFlow,startPos,endPos,elements);
          }
          var rectCount:int = 0;
          if(elements.length != 0)
@@ -151,7 +145,7 @@ package flashx.textLayout.events
          {
             if(!this._hitTests)
             {
-               this.startHitTests();
+               this.tlf_internal::startHitTests();
             }
             this._hitRects = newHitRects;
             this._hitTests = new HitTestArea(newHitRects);
@@ -251,14 +245,14 @@ package flashx.textLayout.events
             {
                break;
             }
-            if(child.hasActiveEventMirror() || child is LinkElement)
+            if(Boolean(child.tlf_internal::hasActiveEventMirror()) || child is LinkElement)
             {
                results.push(child);
             }
             group = child as FlowGroupElement;
-            if(group)
+            if(Boolean(group))
             {
-               this.collectElements(group,Math.max(startPosition - group.parentRelativeStart,0),endPosition - group.parentRelativeStart,results);
+               this.tlf_internal::collectElements(group,Math.max(startPosition - group.parentRelativeStart,0),endPosition - group.parentRelativeStart,results);
             }
             i++;
          }
@@ -268,14 +262,14 @@ package flashx.textLayout.events
       {
          var keyEvt:KeyboardEvent = null;
          var mouseEvt:MouseEvent = evt as MouseEvent;
-         if(mouseEvt)
+         if(Boolean(mouseEvt))
          {
             this.hitTestMouseEventHandler(mouseEvt);
          }
          else
          {
             keyEvt = evt as KeyboardEvent;
-            if(keyEvt)
+            if(Boolean(keyEvt))
             {
                this.hitTestKeyEventHandler(keyEvt);
             }
@@ -300,11 +294,11 @@ package flashx.textLayout.events
          this._ctrlKeyState = curState;
          if(this._ctrlKeyState)
          {
-            link.mouseOverHandler(this,this._lastMouseEvent);
+            link.tlf_internal::mouseOverHandler(this,this._lastMouseEvent);
          }
          else
          {
-            link.mouseOutHandler(this,this._lastMouseEvent);
+            link.tlf_internal::mouseOutHandler(this,this._lastMouseEvent);
          }
       }
       
@@ -320,7 +314,7 @@ package flashx.textLayout.events
          if(hitElement != this._currentElement)
          {
             this._mouseDownElement = null;
-            if(this._currentElement)
+            if(Boolean(this._currentElement))
             {
                this.localDispatchEvent(FlowElementMouseEvent.ROLL_OUT,evt);
             }
@@ -329,7 +323,7 @@ package flashx.textLayout.events
                this._blockInteraction = true;
             }
             this._currentElement = hitElement;
-            if(this._currentElement)
+            if(Boolean(this._currentElement))
             {
                this.localDispatchEvent(FlowElementMouseEvent.ROLL_OVER,evt);
             }
@@ -358,7 +352,7 @@ package flashx.textLayout.events
                isClick = this._currentElement == this._mouseDownElement;
                this._mouseDownElement = null;
          }
-         if(this._currentElement && eventType)
+         if(Boolean(this._currentElement) && Boolean(eventType))
          {
             this.localDispatchEvent(eventType,evt);
             if(isClick)
@@ -374,10 +368,10 @@ package flashx.textLayout.events
          {
             return false;
          }
-         var locallyListening:Boolean = this._currentElement.hasActiveEventMirror();
+         var locallyListening:Boolean = Boolean(this._currentElement.tlf_internal::hasActiveEventMirror());
          var textFlow:TextFlow = this._currentElement.getTextFlow();
          var textFlowListening:Boolean = false;
-         if(textFlow)
+         if(Boolean(textFlow))
          {
             textFlowListening = textFlow.hasEventListener(type);
          }
@@ -388,7 +382,7 @@ package flashx.textLayout.events
          var event:FlowElementMouseEvent = new FlowElementMouseEvent(type,false,true,this._currentElement,originalEvent);
          if(locallyListening)
          {
-            this._currentElement.getEventMirror().dispatchEvent(event);
+            this._currentElement.tlf_internal::getEventMirror().dispatchEvent(event);
             if(event.isDefaultPrevented())
             {
                return true;
@@ -424,7 +418,7 @@ package flashx.textLayout.events
                   this.removeEventListener(KeyboardEvent.KEY_UP,true);
             }
          }
-         if(this.dispatchFlowElementMouseEvent(type,evt))
+         if(this.tlf_internal::dispatchFlowElementMouseEvent(type,evt))
          {
             return;
          }
@@ -436,22 +430,22 @@ package flashx.textLayout.events
          switch(type)
          {
             case FlowElementMouseEvent.MOUSE_DOWN:
-               link.mouseDownHandler(this,evt);
+               link.tlf_internal::mouseDownHandler(this,evt);
                break;
             case FlowElementMouseEvent.MOUSE_MOVE:
-               link.mouseMoveHandler(this,evt);
+               link.tlf_internal::mouseMoveHandler(this,evt);
                break;
             case FlowElementMouseEvent.ROLL_OUT:
-               link.mouseOutHandler(this,evt);
+               link.tlf_internal::mouseOutHandler(this,evt);
                break;
             case FlowElementMouseEvent.ROLL_OVER:
-               link.mouseOverHandler(this,evt);
+               link.tlf_internal::mouseOverHandler(this,evt);
                break;
             case FlowElementMouseEvent.MOUSE_UP:
-               link.mouseUpHandler(this,evt);
+               link.tlf_internal::mouseUpHandler(this,evt);
                break;
             case FlowElementMouseEvent.CLICK:
-               link.mouseClickHandler(this,evt);
+               link.tlf_internal::mouseClickHandler(this,evt);
          }
       }
       
@@ -464,10 +458,10 @@ package flashx.textLayout.events
             return;
          }
          var tf:TextFlow = this._currentElement.getTextFlow();
-         if(tf != null && tf.flowComposer && tf.flowComposer.numControllers)
+         if(tf != null && tf.flowComposer && Boolean(tf.flowComposer.numControllers))
          {
             sprite = this._container as Sprite;
-            if(sprite)
+            if(Boolean(sprite))
             {
                sprite.buttonMode = state;
                sprite.useHandCursor = state;
@@ -478,8 +472,8 @@ package flashx.textLayout.events
             }
             else
             {
-               wmode = tf.computedFormat.blockProgression;
-               if(tf.interactionManager && wmode != BlockProgression.RL)
+               wmode = String(tf.computedFormat.blockProgression);
+               if(Boolean(tf.interactionManager) && wmode != BlockProgression.RL)
                {
                   Mouse.cursor = MouseCursor.IBEAM;
                }

@@ -6,13 +6,13 @@ package com.google.analytics.debug
    import flash.display.Sprite;
    import flash.events.MouseEvent;
    
-   public class Panel extends UISprite
+   public class Panel extends com.google.analytics.debug.UISprite
    {
        
       
       private var _savedH:uint;
       
-      private var _data:UISprite;
+      private var _data:com.google.analytics.debug.UISprite;
       
       private var _mask:Sprite;
       
@@ -30,7 +30,7 @@ package com.google.analytics.debug
       
       private var _backgroundColor:uint;
       
-      private var _title:Label;
+      private var _title:com.google.analytics.debug.Label;
       
       private var _colapsed:Boolean;
       
@@ -47,11 +47,11 @@ package com.google.analytics.debug
          forcedHeight = height;
          this.baseAlpha = baseAlpha;
          _background = new Shape();
-         _data = new UISprite();
+         _data = new com.google.analytics.debug.UISprite();
          _data.forcedWidth = width;
          _data.forcedHeight = height;
          _data.mouseEnabled = false;
-         _title = new Label(name,"uiLabel",16777215,Align.topLeft,stickToEdge);
+         _title = new com.google.analytics.debug.Label(name,"uiLabel",16777215,Align.topLeft,stickToEdge);
          _title.buttonMode = true;
          _title.margin.top = 0.6;
          _title.margin.left = 0.6;
@@ -70,12 +70,12 @@ package com.google.analytics.debug
          this.stickToEdge = stickToEdge;
          if(backgroundColor == 0)
          {
-            backgroundColor = Style.backgroundColor;
+            backgroundColor = uint(Style.backgroundColor);
          }
          _backgroundColor = backgroundColor;
          if(borderColor == 0)
          {
-            borderColor = Style.borderColor;
+            borderColor = uint(Style.borderColor);
          }
          _borderColor = borderColor;
       }
@@ -116,7 +116,7 @@ package com.google.analytics.debug
       {
          var W:uint = 0;
          var H:uint = 0;
-         if(_savedW && _savedH)
+         if(Boolean(_savedW) && Boolean(_savedH))
          {
             forcedWidth = _savedW;
             forcedHeight = _savedH;

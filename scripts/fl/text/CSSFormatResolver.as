@@ -1,7 +1,7 @@
 package fl.text
 {
    import flash.text.StyleSheet;
-   import flash.text.engine.Kerning;
+   import flash.text.engine.*;
    import flashx.textLayout.elements.FlowElement;
    import flashx.textLayout.elements.IFormatResolver;
    import flashx.textLayout.elements.LinkElement;
@@ -10,7 +10,7 @@ package fl.text
    import flashx.textLayout.formats.TextLayoutFormat;
    
    [ExcludeClass]
-   class CSSFormatResolver implements IFormatResolver
+   internal class CSSFormatResolver implements IFormatResolver
    {
       
       private static const textFieldToTLFStyleMap:Object = {
@@ -30,7 +30,7 @@ package fl.text
       
       private var _styleSheet:StyleSheet;
       
-      function CSSFormatResolver(styleSheet:StyleSheet)
+      public function CSSFormatResolver(styleSheet:StyleSheet)
       {
          super();
          this._styleSheet = styleSheet;
@@ -53,7 +53,7 @@ package fl.text
          {
             try
             {
-               if(elem.typeName)
+               if(Boolean(elem.typeName))
                {
                   switch(elem.typeName)
                   {
@@ -102,15 +102,15 @@ package fl.text
                {
                   attr = new TextLayoutFormat();
                }
-               if(textFieldToTLFStyleMap[p])
+               if(Boolean(textFieldToTLFStyleMap[p]))
                {
-                  tlfProp = textFieldToTLFStyleMap[p];
+                  tlfProp = String(textFieldToTLFStyleMap[p]);
                   attr[tlfProp] = propStyle;
                }
                else if(p == "color" || p == "backgroundColor")
                {
                   color = String(propStyle);
-                  if(color && color.charAt(0) == "#")
+                  if(Boolean(color) && color.charAt(0) == "#")
                   {
                      attr[p] = "0x" + color.substring(1);
                   }
@@ -154,7 +154,7 @@ package fl.text
          var attr:TextLayoutFormat = null;
          var attrName:String = null;
          var flowElem:FlowElement = elem as FlowElement;
-         if(flowElem)
+         if(Boolean(flowElem))
          {
             try
             {

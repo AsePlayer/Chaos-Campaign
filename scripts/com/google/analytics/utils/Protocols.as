@@ -3,13 +3,13 @@ package com.google.analytics.utils
    public class Protocols
    {
       
-      public static const none:Protocols = new Protocols(0,"none");
+      public static const none:com.google.analytics.utils.Protocols = new com.google.analytics.utils.Protocols(0,"none");
       
-      public static const HTTPS:Protocols = new Protocols(3,"HTTPS");
+      public static const HTTPS:com.google.analytics.utils.Protocols = new com.google.analytics.utils.Protocols(3,"HTTPS");
       
-      public static const file:Protocols = new Protocols(1,"file");
+      public static const file:com.google.analytics.utils.Protocols = new com.google.analytics.utils.Protocols(1,"file");
       
-      public static const HTTP:Protocols = new Protocols(2,"HTTP");
+      public static const HTTP:com.google.analytics.utils.Protocols = new com.google.analytics.utils.Protocols(2,"HTTP");
        
       
       private var _value:int;

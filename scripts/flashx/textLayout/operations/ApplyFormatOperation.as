@@ -9,8 +9,6 @@ package flashx.textLayout.operations
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class ApplyFormatOperation extends FlowTextOperation
    {
        
@@ -73,7 +71,7 @@ package flashx.textLayout.operations
          var paragraph:ParagraphElement = null;
          var newFormat:PointFormat = null;
          var range:ElementRange = null;
-         if(this.applyLeafFormat)
+         if(Boolean(this.applyLeafFormat))
          {
             begSel = absoluteStart;
             endSel = absoluteEnd;
@@ -83,12 +81,12 @@ package flashx.textLayout.operations
                if(paragraph.textLength <= 1)
                {
                   endSel++;
-                  anyNewSelectionState = originalSelectionState.clone();
+                  anyNewSelectionState = originalSelectionState.tlf_internal::clone();
                   anyNewSelectionState.pointFormat = null;
                }
-               else if(originalSelectionState.selectionManagerOperationState && textFlow.interactionManager)
+               else if(originalSelectionState.tlf_internal::selectionManagerOperationState && Boolean(textFlow.interactionManager))
                {
-                  anyNewSelectionState = originalSelectionState.clone();
+                  anyNewSelectionState = originalSelectionState.tlf_internal::clone();
                   newFormat = new PointFormat(anyNewSelectionState.pointFormat);
                   newFormat.apply(this.applyLeafFormat);
                   anyNewSelectionState.pointFormat = newFormat;
@@ -111,7 +109,7 @@ package flashx.textLayout.operations
                ParaEdit.applyTextStyleChange(textFlow,begSel,endSel,this.applyLeafFormat,null);
             }
          }
-         if(this.applyParagraphFormat)
+         if(Boolean(this.applyParagraphFormat))
          {
             if(!this.undoParagraphArray)
             {
@@ -120,7 +118,7 @@ package flashx.textLayout.operations
             }
             ParaEdit.applyParagraphStyleChange(textFlow,absoluteStart,absoluteEnd,this.applyParagraphFormat,null);
          }
-         if(this.applyContainerFormat)
+         if(Boolean(this.applyContainerFormat))
          {
             if(!this.undoContainerArray)
             {
@@ -135,7 +133,7 @@ package flashx.textLayout.operations
       override public function doOperation() : Boolean
       {
          var newSelectionState:SelectionState = this.doInternal();
-         if(newSelectionState && textFlow.interactionManager)
+         if(Boolean(newSelectionState) && Boolean(textFlow.interactionManager))
          {
             textFlow.interactionManager.setSelectionState(newSelectionState);
          }

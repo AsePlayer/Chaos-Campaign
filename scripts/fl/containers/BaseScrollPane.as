@@ -12,11 +12,11 @@ package fl.containers
    import flash.events.MouseEvent;
    import flash.geom.Rectangle;
    
-   [Style(name="disabledAlpha",format="Length",type="Number")]
-   [Style(name="contentPadding",format="Length",type="Number")]
+   [Style(name="disabledAlpha",type="Number",format="Length")]
+   [Style(name="contentPadding",type="Number",format="Length")]
    [Style(name="skin",type="Class")]
-   [Style(name="repeatInterval",format="Time",type="Number")]
-   [Style(name="repeatDelay",format="Time",type="Number")]
+   [Style(name="repeatInterval",type="Number",format="Time")]
+   [Style(name="repeatDelay",type="Number",format="Time")]
    [Style(name="thumbIcon",type="Class")]
    [Style(name="upArrowUpSkin",type="Class")]
    [Style(name="upArrowOverSkin",type="Class")]
@@ -233,7 +233,7 @@ package fl.containers
          {
             drawNow();
          }
-         return _horizontalPageScrollSize == 0 && !isNaN(availableWidth) ? Number(availableWidth) : Number(_horizontalPageScrollSize);
+         return _horizontalPageScrollSize == 0 && !isNaN(availableWidth) ? availableWidth : _horizontalPageScrollSize;
       }
       
       public function set horizontalPageScrollSize(param1:Number) : void
@@ -249,7 +249,7 @@ package fl.containers
          {
             drawNow();
          }
-         return _verticalPageScrollSize == 0 && !isNaN(availableHeight) ? Number(availableHeight) : Number(_verticalPageScrollSize);
+         return _verticalPageScrollSize == 0 && !isNaN(availableHeight) ? availableHeight : _verticalPageScrollSize;
       }
       
       public function set verticalPageScrollSize(param1:Number) : void
@@ -403,7 +403,7 @@ package fl.containers
          {
             _horizontalScrollBar.visible = false;
          }
-         _horizontalScrollBar.setScrollProperties(availableWidth,0,!!useFixedHorizontalScrolling ? Number(_maxHorizontalScrollPosition) : Number(contentWidth - availableWidth),horizontalPageScrollSize);
+         _horizontalScrollBar.setScrollProperties(availableWidth,0,useFixedHorizontalScrolling ? _maxHorizontalScrollPosition : contentWidth - availableWidth,horizontalPageScrollSize);
          setHorizontalScrollPosition(_horizontalScrollBar.scrollPosition,false);
          drawDisabledOverlay();
       }
@@ -433,8 +433,8 @@ package fl.containers
          var _loc2_:Number = contentPadding = Number(getStyleValue("contentPadding"));
          var _loc3_:Number = height - 2 * _loc2_ - vOffset;
          vScrollBar = _verticalScrollPolicy == ScrollPolicy.ON || _verticalScrollPolicy == ScrollPolicy.AUTO && contentHeight > _loc3_;
-         var _loc4_:Number = width - (!!vScrollBar ? _loc1_ : 0) - 2 * _loc2_;
-         var _loc5_:Number = !!useFixedHorizontalScrolling ? Number(_maxHorizontalScrollPosition) : Number(contentWidth - _loc4_);
+         var _loc4_:Number = width - (vScrollBar ? _loc1_ : 0) - 2 * _loc2_;
+         var _loc5_:Number = useFixedHorizontalScrolling ? _maxHorizontalScrollPosition : contentWidth - _loc4_;
          hScrollBar = _horizontalScrollPolicy == ScrollPolicy.ON || _horizontalScrollPolicy == ScrollPolicy.AUTO && _loc5_ > 0;
          if(hScrollBar)
          {

@@ -18,16 +18,16 @@ package de.polygonal.ds
       
       public var _map:Dictionary;
       
-      public function HashMap(weak:Boolean = false, maxSize:int = -1)
+      public function HashMap(param1:Boolean = false, param2:int = -1)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         _map = new Dictionary(_weak = Boolean(weak));
+         _map = new Dictionary(_weak = param1);
          _size = 0;
          var _loc4_:int;
-         HashKey._counter = (_loc4_ = HashKey._counter) + 1;
+         HashKey._counter = (_loc4_ = int(HashKey._counter)) + 1;
          key = _loc4_;
          maxSize = -1;
       }
@@ -36,12 +36,12 @@ package de.polygonal.ds
       {
          var _loc6_:* = null as Object;
          var _loc1_:ListSet = new ListSet();
-         var _loc4_:int = 0;
+         var _loc4_:* = 0;
          var _loc3_:Array = [];
          var _loc5_:* = _map;
-         while(§§hasnext(_loc5_,_loc4_))
+         for(_loc4_ in _loc5_)
          {
-            _loc3_.push(§§nextname(_loc4_,_loc5_));
+            _loc3_.push(_loc4_);
          }
          var _loc2_:Array = _loc3_;
          _loc4_ = 0;
@@ -63,12 +63,12 @@ package de.polygonal.ds
       {
          var _loc6_:* = null as Object;
          var _loc1_:ListSet = new ListSet();
-         var _loc4_:int = 0;
+         var _loc4_:* = 0;
          var _loc3_:Array = [];
          var _loc5_:* = _map;
-         while(§§hasnext(_loc5_,_loc4_))
+         for(_loc4_ in _loc5_)
          {
-            _loc3_.push(§§nextname(_loc4_,_loc5_));
+            _loc3_.push(_loc4_);
          }
          var _loc2_:Array = _loc3_;
          _loc4_ = 0;
@@ -88,12 +88,12 @@ package de.polygonal.ds
       
       public function toKeyArray() : Array
       {
-         var _loc2_:int = 0;
+         var _loc2_:* = 0;
          var _loc1_:Array = [];
          var _loc3_:* = _map;
-         while(§§hasnext(_loc3_,_loc2_))
+         for(_loc2_ in _loc3_)
          {
-            _loc1_.push(§§nextname(_loc2_,_loc3_));
+            _loc1_.push(_loc2_);
          }
          return _loc1_;
       }
@@ -112,7 +112,7 @@ package de.polygonal.ds
             _loc1_._a[_loc4_] = _loc3_;
             if(_loc4_ >= _loc1_._size)
             {
-               _loc1_._size = _loc1_._size + 1;
+               ++_loc1_._size;
             }
          }
          return _loc1_;
@@ -138,36 +138,36 @@ package de.polygonal.ds
          return _size;
       }
       
-      public function set(_tmp_key:Object, _tmp_val:Object) : Boolean
+      public function set(param1:Object, param2:Object) : Boolean
       {
-         var _loc3_:Object = _tmp_key;
-         var _loc4_:Object = _tmp_val;
+         var _loc3_:Object = param1;
+         var _loc4_:Object = param2;
          var _loc5_:Object = _map[_loc3_];
          if(_loc5_ != null)
          {
             return false;
          }
          _map[_loc3_] = _loc4_;
-         _size = _size + 1;
+         ++_size;
          return true;
       }
       
-      public function remove(_tmp_x:Object) : Boolean
+      public function remove(param1:Object) : Boolean
       {
          var _loc5_:* = null as Array;
          var _loc6_:* = null as Array;
-         var _loc7_:int = 0;
+         var _loc7_:* = 0;
          var _loc8_:* = null;
          var _loc9_:* = null as Object;
-         var _loc2_:Object = _tmp_x;
+         var _loc2_:Object = param1;
          var _loc3_:Boolean = false;
          var _loc4_:Boolean = false;
          _loc7_ = 0;
          _loc6_ = [];
          _loc8_ = _map;
-         while(§§hasnext(_loc8_,_loc7_))
+         for(_loc7_ in _loc8_)
          {
-            _loc6_.push(§§nextname(_loc7_,_loc8_));
+            _loc6_.push(_loc7_);
          }
          _loc5_ = _loc6_;
          _loc7_ = 0;
@@ -186,9 +186,9 @@ package de.polygonal.ds
             _loc7_ = 0;
             _loc6_ = [];
             _loc8_ = _map;
-            while(§§hasnext(_loc8_,_loc7_))
+            for(_loc7_ in _loc8_)
             {
-               _loc6_.push(§§nextname(_loc7_,_loc8_));
+               _loc6_.push(_loc7_);
             }
             _loc5_ = _loc6_;
             _loc7_ = 0;
@@ -199,7 +199,7 @@ package de.polygonal.ds
                if(_map[_loc9_] == _loc2_)
                {
                   delete _map[_loc9_];
-                  _size = _size - 1;
+                  --_size;
                   _loc3_ = true;
                }
             }
@@ -207,10 +207,10 @@ package de.polygonal.ds
          return _loc3_;
       }
       
-      public function remap(_tmp_key:Object, _tmp_val:Object) : Boolean
+      public function remap(param1:Object, param2:Object) : Boolean
       {
-         var _loc3_:Object = _tmp_key;
-         var _loc4_:Object = _tmp_val;
+         var _loc3_:Object = param1;
+         var _loc4_:Object = param2;
          var _loc5_:Object = _map[_loc3_];
          if(_loc5_ != null)
          {
@@ -235,24 +235,24 @@ package de.polygonal.ds
          return _size == 0;
       }
       
-      public function hasKey(_tmp_key:Object) : Boolean
+      public function hasKey(param1:Object) : Boolean
       {
-         var _loc2_:Object = _tmp_key;
+         var _loc2_:Object = param1;
          var _loc3_:Object = _map[_loc2_];
          return _loc3_ != null;
       }
       
-      public function has(_tmp_val:Object) : Boolean
+      public function has(param1:Object) : Boolean
       {
          var _loc8_:* = null as Object;
-         var _loc2_:Object = _tmp_val;
+         var _loc2_:Object = param1;
          var _loc3_:Boolean = false;
-         var _loc6_:int = 0;
+         var _loc6_:* = 0;
          var _loc5_:Array = [];
          var _loc7_:* = _map;
-         while(§§hasnext(_loc7_,_loc6_))
+         for(_loc6_ in _loc7_)
          {
-            _loc5_.push(§§nextname(_loc6_,_loc7_));
+            _loc5_.push(_loc6_);
          }
          var _loc4_:Array = _loc5_;
          _loc6_ = 0;
@@ -269,9 +269,9 @@ package de.polygonal.ds
          return _loc3_;
       }
       
-      public function get(_tmp_key:Object) : Object
+      public function get(param1:Object) : Object
       {
-         var _loc2_:Object = _tmp_key;
+         var _loc2_:Object = param1;
          return _map[_loc2_];
       }
       
@@ -279,7 +279,7 @@ package de.polygonal.ds
       {
          var _loc1_:* = null as Array;
          var _loc2_:* = null as Array;
-         var _loc3_:int = 0;
+         var _loc3_:* = 0;
          var _loc4_:* = null;
          var _loc5_:* = null as Object;
          if(!_weak)
@@ -287,9 +287,9 @@ package de.polygonal.ds
             _loc3_ = 0;
             _loc2_ = [];
             _loc4_ = _map;
-            while(§§hasnext(_loc4_,_loc3_))
+            for(_loc3_ in _loc4_)
             {
-               _loc2_.push(§§nextname(_loc3_,_loc4_));
+               _loc2_.push(_loc3_);
             }
             _loc1_ = _loc2_;
             _loc3_ = 0;
@@ -303,17 +303,17 @@ package de.polygonal.ds
          _map = null;
       }
       
-      public function contains(_tmp_x:Object) : Boolean
+      public function contains(param1:Object) : Boolean
       {
          var _loc8_:* = null as Object;
-         var _loc2_:Object = _tmp_x;
+         var _loc2_:Object = param1;
          var _loc3_:Boolean = false;
-         var _loc6_:int = 0;
+         var _loc6_:* = 0;
          var _loc5_:Array = [];
          var _loc7_:* = _map;
-         while(§§hasnext(_loc7_,_loc6_))
+         for(_loc6_ in _loc7_)
          {
-            _loc5_.push(§§nextname(_loc6_,_loc7_));
+            _loc5_.push(_loc6_);
          }
          var _loc4_:Array = _loc5_;
          _loc6_ = 0;
@@ -330,35 +330,35 @@ package de.polygonal.ds
          return _loc3_;
       }
       
-      public function clr(_tmp_key:Object) : Boolean
+      public function clr(param1:Object) : Boolean
       {
-         var _loc2_:Object = _tmp_key;
+         var _loc2_:Object = param1;
          if(_map[_loc2_] != null)
          {
             delete _map[_loc2_];
-            _size = _size - 1;
+            --_size;
             return true;
          }
          return false;
       }
       
-      public function clone(assign:Boolean, _tmp_copier:Object = undefined) : Collection
+      public function clone(param1:Boolean, param2:Object = undefined) : Collection
       {
-         var _loc7_:int = 0;
+         var _loc7_:* = 0;
          var _loc9_:* = null as Object;
          var _loc10_:* = null as Object;
          var _loc11_:* = null as Cloneable;
-         var _loc3_:* = _tmp_copier;
+         var _loc3_:* = param2;
          var _loc4_:HashMap = new HashMap(_weak,maxSize);
          _loc7_ = 0;
          var _loc6_:Array = [];
          var _loc8_:* = _map;
-         while(§§hasnext(_loc8_,_loc7_))
+         for(_loc7_ in _loc8_)
          {
-            _loc6_.push(§§nextname(_loc7_,_loc8_));
+            _loc6_.push(_loc7_);
          }
          var _loc5_:Array = _loc6_;
-         if(assign)
+         if(param1)
          {
             _loc7_ = 0;
             while(_loc7_ < int(_loc5_.length))
@@ -373,7 +373,7 @@ package de.polygonal.ds
                else
                {
                   _loc4_._map[_loc9_] = _map[_loc9_];
-                  _loc4_._size = _loc4_._size + 1;
+                  ++_loc4_._size;
                   true;
                }
             }
@@ -395,7 +395,7 @@ package de.polygonal.ds
                else
                {
                   _loc4_._map[_loc9_] = _map[_loc9_];
-                  _loc4_._size = _loc4_._size + 1;
+                  ++_loc4_._size;
                   true;
                }
             }
@@ -415,7 +415,7 @@ package de.polygonal.ds
                else
                {
                   _loc4_._map[_loc9_] = _loc3_(_map[_loc9_]);
-                  _loc4_._size = _loc4_._size + 1;
+                  ++_loc4_._size;
                   true;
                }
             }
@@ -423,15 +423,15 @@ package de.polygonal.ds
          return _loc4_;
       }
       
-      public function clear(purge:Boolean = false) : void
+      public function clear(param1:Boolean = false) : void
       {
          var _loc6_:* = null as Object;
-         var _loc4_:int = 0;
+         var _loc4_:* = 0;
          var _loc3_:Array = [];
          var _loc5_:* = _map;
-         while(§§hasnext(_loc5_,_loc4_))
+         for(_loc4_ in _loc5_)
          {
-            _loc3_.push(§§nextname(_loc4_,_loc5_));
+            _loc3_.push(_loc4_);
          }
          var _loc2_:Array = _loc3_;
          _loc4_ = 0;

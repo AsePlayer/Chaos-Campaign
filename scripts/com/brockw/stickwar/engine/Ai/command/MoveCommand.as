@@ -1,15 +1,14 @@
 package com.brockw.stickwar.engine.Ai.command
 {
    import com.brockw.stickwar.GameScreen;
+   import com.brockw.stickwar.engine.Ai.*;
    import com.brockw.stickwar.engine.Gold;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Team;
    import com.brockw.stickwar.engine.units.Statue;
    import com.brockw.stickwar.engine.units.Unit;
    import fl.motion.Color;
-   import flash.display.Bitmap;
-   import flash.display.MovieClip;
-   import flash.display.Sprite;
+   import flash.display.*;
    import flash.geom.Point;
    import flash.ui.Mouse;
    
@@ -69,11 +68,11 @@ package com.brockw.stickwar.engine.Ai.command
       {
          if(targetId in game.units)
          {
-            if(game.units[targetId] is Gold && game.gameScreen.userInterface.selectedUnits.interactsWith & Unit.I_MINE)
+            if(game.units[targetId] is Gold && Boolean(game.gameScreen.userInterface.selectedUnits.interactsWith & Unit.I_MINE))
             {
                game.soundManager.playSoundFullVolume("ClickGold");
             }
-            else if(game.units[targetId] is Statue && game.gameScreen.userInterface.selectedUnits.interactsWith & Unit.I_STATUE)
+            else if(game.units[targetId] is Statue && Boolean(game.gameScreen.userInterface.selectedUnits.interactsWith & Unit.I_STATUE))
             {
                game.soundManager.playSoundFullVolume("ClickMana");
             }
@@ -142,17 +141,17 @@ package com.brockw.stickwar.engine.Ai.command
          Mouse.show();
          var cursor2:MovieClip = null;
          var interactsWith:* = gameScreen.userInterface.selectedUnits.interactsWith;
-         if(interactsWith & (Unit.I_MINE | Unit.I_STATUE) && gameScreen.game.mouseOverUnit is Statue)
+         if(Boolean(interactsWith & (Unit.I_MINE | Unit.I_STATUE)) && gameScreen.game.mouseOverUnit is Statue)
          {
             cursor2 = prayClip;
             Mouse.hide();
          }
-         else if(interactsWith & (Unit.I_MINE | Unit.I_STATUE) && gameScreen.game.mouseOverUnit is Gold)
+         else if(Boolean(interactsWith & (Unit.I_MINE | Unit.I_STATUE)) && gameScreen.game.mouseOverUnit is Gold)
          {
             cursor2 = mineClip;
             Mouse.hide();
          }
-         else if(interactsWith & Unit.I_ENEMY)
+         else if(Boolean(interactsWith & Unit.I_ENEMY))
          {
             if(gameScreen.game.mouseOverUnit is Unit && Unit(gameScreen.game.mouseOverUnit).team != gameScreen.team)
             {
@@ -160,7 +159,7 @@ package com.brockw.stickwar.engine.Ai.command
                Mouse.hide();
             }
          }
-         if(cursor2)
+         if(Boolean(cursor2))
          {
             canvas.addChild(cursor2);
             cursor2.x = gameScreen.game.battlefield.mouseX;

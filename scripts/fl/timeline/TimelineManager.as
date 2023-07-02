@@ -252,13 +252,27 @@ package fl.timeline
             while(i < list.length)
             {
                compII = list[i];
-               if(!(sceneName != null && sceneName.length > 0 && compII.sceneName != sceneName))
+               if(sceneName != null && sceneName.length > 0 && compII.sceneName != sceneName)
+               {
+                  i++;
+               }
+               else
                {
                   if(compII.startFrame > startFrame)
                   {
                      list.splice(i,0,ii);
                      added = true;
                      i++;
+                     while(i < list.length)
+                     {
+                        compII = list[i];
+                        if(endFrame < compII.startFrame)
+                        {
+                           break;
+                        }
+                        list.splice(i,1);
+                     }
+                     break;
                   }
                   if(compII.endFrame >= startFrame)
                   {
@@ -268,20 +282,7 @@ package fl.timeline
                   {
                      i++;
                   }
-                  continue;
                }
-               i++;
-               continue;
-               while(i < list.length)
-               {
-                  compII = list[i];
-                  if(endFrame < compII.startFrame)
-                  {
-                     break;
-                  }
-                  list.splice(i,1);
-               }
-               break;
             }
             if(!added)
             {
@@ -389,7 +390,7 @@ package fl.timeline
          }
          if(this._supportParentChildAcrossFrames && ii.children != null)
          {
-            len = ii.children.length;
+            len = int(ii.children.length);
             for(i = 0; i < len; i++)
             {
                childII = ii.children[i];
@@ -410,7 +411,7 @@ package fl.timeline
             {
                ii.parent.content = this.getInstanceForInfo(ii.parent);
             }
-            if(ii.parent.content)
+            if(Boolean(ii.parent.content))
             {
                this.addXn(ii.content,ii.parent.content,ii.parent,TimelineManager.PARENT);
                this.addXn(ii.parent.content,ii.content,ii,TimelineManager.CHILD);
@@ -552,7 +553,7 @@ package fl.timeline
          }
          var mc:MovieClip = ii.container as MovieClip;
          var isSprite:Boolean = mc == null;
-         var currentFrame:int = !!isSprite ? int(0) : int(mc.currentFrame - 1);
+         var currentFrame:int = isSprite ? 0 : mc.currentFrame - 1;
          if(!isSprite && mc.scenes.length > 1 && ii.sceneName != null && ii.sceneName.length > 0 && mc.currentScene.name != ii.sceneName)
          {
             return;
@@ -585,7 +586,7 @@ package fl.timeline
             }
             if(ii.children != null)
             {
-               len = ii.children.length;
+               len = int(ii.children.length);
                for(j = 0; j < len; j++)
                {
                   childII = ii.children[j];

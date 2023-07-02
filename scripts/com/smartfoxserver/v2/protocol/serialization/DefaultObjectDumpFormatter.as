@@ -95,7 +95,7 @@ package com.smartfoxserver.v2.protocol.serialization
          var currByte:int = 0;
          var hexByte:String = null;
          var j:int = 0;
-         var savedByteArrayPosition:int = ba.position;
+         var savedByteArrayPosition:int = int(ba.position);
          ba.position = 0;
          if(bytesPerLine == -1)
          {

@@ -62,7 +62,7 @@ package com.brockw.stickwar
          if(xml.xml.isKongregate == 1)
          {
             paramObj = LoaderInfo(stage.root.loaderInfo).parameters;
-            apiPath = paramObj.kongregate_api_path || "http://www.kongregate.com/flash/API_AS3_Local.swf";
+            apiPath = String(paramObj.kongregate_api_path || "http://www.kongregate.com/flash/API_AS3_Local.swf");
             isKongregate = true;
             Security.allowDomain(apiPath);
             request = new URLRequest(apiPath);
@@ -73,7 +73,7 @@ package com.brockw.stickwar
          }
       }
       
-      function loadComplete(event:Event) : void
+      internal function loadComplete(event:Event) : void
       {
          kongregate = event.target.content;
          kongregate.services.connect();

@@ -13,8 +13,6 @@ package flashx.textLayout.operations
    import flashx.textLayout.formats.ITextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class CreateSubParagraphGroupOperation extends FlowTextOperation
    {
        
@@ -148,7 +146,7 @@ package flashx.textLayout.operations
                if(endChildIndex != 0)
                {
                   lastChild = target.getChildAt(endChildIndex - 1);
-                  if(lastChild is SpanElement && lastChild.textLength == 1 && (lastChild as SpanElement).hasParagraphTerminator)
+                  if(lastChild is SpanElement && lastChild.textLength == 1 && Boolean((lastChild as SpanElement).tlf_internal::hasParagraphTerminator))
                   {
                      endChildIndex--;
                   }
@@ -192,9 +190,9 @@ package flashx.textLayout.operations
                endChildIndex--;
             }
          }
-         if(originalSelectionState.selectionManagerOperationState && textFlow.interactionManager)
+         if(originalSelectionState.tlf_internal::selectionManagerOperationState && Boolean(textFlow.interactionManager))
          {
-            textFlow.normalize();
+            textFlow.tlf_internal::normalize();
             this._postOpSelectionState = new SelectionState(textFlow,this._spgeElement.getAbsoluteStart(),this._spgeElement.getAbsoluteStart() + this._spgeElement.textLength);
             textFlow.interactionManager.setSelectionState(this._postOpSelectionState);
          }

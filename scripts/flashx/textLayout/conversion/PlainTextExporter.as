@@ -5,8 +5,6 @@ package flashx.textLayout.conversion
    import flashx.textLayout.elements.TextFlow;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class PlainTextExporter extends ConverterBase implements IPlainTextExporter
    {
       
@@ -46,7 +44,7 @@ package flashx.textLayout.conversion
       
       public function export(source:TextFlow, conversionType:String) : Object
       {
-         clear();
+         tlf_internal::clear();
          if(conversionType == ConversionType.STRING_TYPE)
          {
             return this.exportToString(source);
@@ -63,7 +61,7 @@ package flashx.textLayout.conversion
          var lastPara:ParagraphElement = null;
          var rslt:String = "";
          var leaf:FlowLeafElement = source.getFirstLeaf();
-         while(leaf)
+         while(Boolean(leaf))
          {
             p = leaf.getParagraph();
             while(true)
@@ -83,7 +81,7 @@ package flashx.textLayout.conversion
                leaf = nextLeaf;
             }
             leaf = leaf.getNextLeaf();
-            if(leaf)
+            if(Boolean(leaf))
             {
                rslt += this._paragraphSeparator;
             }

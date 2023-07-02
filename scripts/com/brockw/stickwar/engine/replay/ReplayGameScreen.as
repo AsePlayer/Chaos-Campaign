@@ -1,17 +1,20 @@
 package com.brockw.stickwar.engine.replay
 {
+   import com.brockw.*;
+   import com.brockw.game.*;
    import com.brockw.simulationSync.Move;
    import com.brockw.simulationSync.SimulationSyncronizer;
    import com.brockw.stickwar.GameScreen;
    import com.brockw.stickwar.Main;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Team;
    import com.brockw.stickwar.engine.UserInterface;
    import com.brockw.stickwar.engine.multiplayer.PostGameScreen;
-   import com.brockw.stickwar.engine.multiplayer.moves.EndOfGameMove;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
-   import flash.events.TimerEvent;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.brockw.stickwar.engine.units.*;
+   import flash.display.*;
+   import flash.events.*;
    import flash.utils.getTimer;
    
    public class ReplayGameScreen extends GameScreen
@@ -254,7 +257,7 @@ package com.brockw.stickwar.engine.replay
          this.userInterface.hud.hud.replayHud.pauseButton.addEventListener(MouseEvent.CLICK,this.pauseButton);
          this.userInterface.hud.hud.replayHud.playButton.addEventListener(MouseEvent.CLICK,this.playButton);
          this.userInterface.hud.hud.replayHud.forwardButton.addEventListener(MouseEvent.CLICK,this.forwardButton);
-         if(userInterface.hud.hud.fastForward)
+         if(Boolean(userInterface.hud.hud.fastForward))
          {
             userInterface.hud.hud.fastForward.visible = false;
          }

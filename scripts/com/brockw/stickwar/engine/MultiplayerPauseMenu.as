@@ -3,8 +3,7 @@ package com.brockw.stickwar.engine
    import com.brockw.stickwar.GameScreen;
    import com.brockw.stickwar.engine.multiplayer.moves.ForfeitMove;
    import com.brockw.stickwar.engine.multiplayer.moves.PauseMove;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
+   import flash.events.*;
    import flash.net.URLRequest;
    import flash.net.navigateToURL;
    

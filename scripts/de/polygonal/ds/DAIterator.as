@@ -10,17 +10,17 @@ package de.polygonal.ds
       
       public var _i:int;
       
-      public var _f:DA;
+      public var _f:de.polygonal.ds.DA;
       
       public var _a:Array;
       
-      public function DAIterator(f:DA = undefined)
+      public function DAIterator(param1:de.polygonal.ds.DA = undefined)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         _f = f;
+         _f = param1;
          _a = _f._a;
          _s = _f._size;
          _i = 0;
@@ -47,14 +47,14 @@ package de.polygonal.ds
          return _i < _s;
       }
       
-      public function __size(f:Object) : int
+      public function __size(param1:Object) : int
       {
-         return int(f._size);
+         return int(param1._size);
       }
       
-      public function __a(f:Object) : Array
+      public function __a(param1:Object) : Array
       {
-         return f._a;
+         return param1._a;
       }
    }
 }

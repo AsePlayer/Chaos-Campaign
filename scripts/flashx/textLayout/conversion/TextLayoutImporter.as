@@ -21,15 +21,13 @@ package flashx.textLayout.conversion
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class TextLayoutImporter extends BaseTextLayoutImporter implements ITextLayoutImporter
    {
       
-      private static var _defaultConfiguration:ImportExportConfiguration;
+      private static var _defaultConfiguration:flashx.textLayout.conversion.ImportExportConfiguration;
       
-      private static const _formatImporter:TLFormatImporter = new TLFormatImporter(TextLayoutFormat,TextLayoutFormat.description);
+      private static const _formatImporter:flashx.textLayout.conversion.TLFormatImporter = new flashx.textLayout.conversion.TLFormatImporter(TextLayoutFormat,TextLayoutFormat.tlf_internal::description);
       
       private static const _idImporter:SingletonAttributeImporter = new SingletonAttributeImporter("id");
       
@@ -39,24 +37,24 @@ package flashx.textLayout.conversion
       
       private static const _flowElementFormatImporters:Array = [_formatImporter,_idImporter,_typeNameImporter,_customFormatImporter];
       
-      static const _linkDescription:Object = {
+      internal static const _linkDescription:Object = {
          "href":Property.NewStringProperty("href",null,false,null),
          "target":Property.NewStringProperty("target",null,false,null)
       };
       
-      private static const _linkFormatImporter:TLFormatImporter = new TLFormatImporter(Dictionary,_linkDescription);
+      private static const _linkFormatImporter:flashx.textLayout.conversion.TLFormatImporter = new flashx.textLayout.conversion.TLFormatImporter(Dictionary,_linkDescription);
       
       private static const _linkElementFormatImporters:Array = [_linkFormatImporter,_formatImporter,_idImporter,_typeNameImporter,_customFormatImporter];
       
       private static const _imageDescription:Object = {
-         "height":InlineGraphicElement.heightPropertyDefinition,
-         "width":InlineGraphicElement.widthPropertyDefinition,
+         "height":InlineGraphicElement.tlf_internal::heightPropertyDefinition,
+         "width":InlineGraphicElement.tlf_internal::widthPropertyDefinition,
          "source":Property.NewStringProperty("source",null,false,null),
          "float":Property.NewStringProperty("float",null,false,null),
-         "rotation":InlineGraphicElement.rotationPropertyDefinition
+         "rotation":InlineGraphicElement.tlf_internal::rotationPropertyDefinition
       };
       
-      private static const _ilgFormatImporter:TLFormatImporter = new TLFormatImporter(Dictionary,_imageDescription);
+      private static const _ilgFormatImporter:flashx.textLayout.conversion.TLFormatImporter = new flashx.textLayout.conversion.TLFormatImporter(Dictionary,_imageDescription);
       
       private static const _ilgElementFormatImporters:Array = [_ilgFormatImporter,_formatImporter,_idImporter,_typeNameImporter,_customFormatImporter];
        
@@ -68,11 +66,11 @@ package flashx.textLayout.conversion
          super(new Namespace("flow","http://ns.adobe.com/textLayout/2008"),defaultConfiguration);
       }
       
-      public static function get defaultConfiguration() : ImportExportConfiguration
+      public static function get defaultConfiguration() : flashx.textLayout.conversion.ImportExportConfiguration
       {
          if(!_defaultConfiguration)
          {
-            _defaultConfiguration = new ImportExportConfiguration();
+            _defaultConfiguration = new flashx.textLayout.conversion.ImportExportConfiguration();
             _defaultConfiguration.addIEInfo("TextFlow",TextFlow,BaseTextLayoutImporter.parseTextFlow,BaseTextLayoutExporter.exportTextFlow);
             _defaultConfiguration.addIEInfo("br",BreakElement,BaseTextLayoutImporter.parseBreak,BaseTextLayoutExporter.exportFlowElement);
             _defaultConfiguration.addIEInfo("p",ParagraphElement,BaseTextLayoutImporter.parsePara,BaseTextLayoutExporter.exportParagraphFormattedElement);
@@ -85,10 +83,10 @@ package flashx.textLayout.conversion
             _defaultConfiguration.addIEInfo("a",LinkElement,TextLayoutImporter.parseLink,TextLayoutExporter.exportLink);
             _defaultConfiguration.addIEInfo("div",DivElement,TextLayoutImporter.parseDivElement,TextLayoutExporter.exportDiv);
             _defaultConfiguration.addIEInfo("img",InlineGraphicElement,TextLayoutImporter.parseInlineGraphic,TextLayoutExporter.exportImage);
-            _defaultConfiguration.addIEInfo(LinkElement.LINK_NORMAL_FORMAT_NAME,null,TextLayoutImporter.parseLinkNormalFormat,null);
-            _defaultConfiguration.addIEInfo(LinkElement.LINK_ACTIVE_FORMAT_NAME,null,TextLayoutImporter.parseLinkActiveFormat,null);
-            _defaultConfiguration.addIEInfo(LinkElement.LINK_HOVER_FORMAT_NAME,null,TextLayoutImporter.parseLinkHoverFormat,null);
-            _defaultConfiguration.addIEInfo(ListElement.LIST_MARKER_FORMAT_NAME,null,TextLayoutImporter.parseListMarkerFormat,null);
+            _defaultConfiguration.addIEInfo(LinkElement.tlf_internal::LINK_NORMAL_FORMAT_NAME,null,TextLayoutImporter.parseLinkNormalFormat,null);
+            _defaultConfiguration.addIEInfo(LinkElement.tlf_internal::LINK_ACTIVE_FORMAT_NAME,null,TextLayoutImporter.parseLinkActiveFormat,null);
+            _defaultConfiguration.addIEInfo(LinkElement.tlf_internal::LINK_HOVER_FORMAT_NAME,null,TextLayoutImporter.parseLinkHoverFormat,null);
+            _defaultConfiguration.addIEInfo(ListElement.tlf_internal::LIST_MARKER_FORMAT_NAME,null,TextLayoutImporter.parseListMarkerFormat,null);
          }
          return _defaultConfiguration;
       }
@@ -101,7 +99,7 @@ package flashx.textLayout.conversion
       public static function parseSPGE(importFilter:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var elem:SubParagraphGroupElement = TextLayoutImporter(importFilter).createSubParagraphGroupFromXML(xmlToParse);
-         if(importFilter.addChild(parent,elem))
+         if(importFilter.tlf_internal::addChild(parent,elem))
          {
             importFilter.parseFlowGroupElementChildren(xmlToParse,elem);
             if(elem.numChildren == 0)
@@ -114,7 +112,7 @@ package flashx.textLayout.conversion
       public static function parseTCY(importFilter:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var tcyElem:TCYElement = TextLayoutImporter(importFilter).createTCYFromXML(xmlToParse);
-         if(importFilter.addChild(parent,tcyElem))
+         if(importFilter.tlf_internal::addChild(parent,tcyElem))
          {
             importFilter.parseFlowGroupElementChildren(xmlToParse,tcyElem);
             if(tcyElem.numChildren == 0)
@@ -127,7 +125,7 @@ package flashx.textLayout.conversion
       public static function parseLink(importFilter:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var linkElem:LinkElement = TextLayoutImporter(importFilter).createLinkFromXML(xmlToParse);
-         if(importFilter.addChild(parent,linkElem))
+         if(importFilter.tlf_internal::addChild(parent,linkElem))
          {
             importFilter.parseFlowGroupElementChildren(xmlToParse,linkElem);
             if(linkElem.numChildren == 0)
@@ -160,7 +158,7 @@ package flashx.textLayout.conversion
       public static function parseDivElement(importFilter:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var divElem:DivElement = TextLayoutImporter(importFilter).createDivFromXML(xmlToParse);
-         if(importFilter.addChild(parent,divElem))
+         if(importFilter.tlf_internal::addChild(parent,divElem))
          {
             importFilter.parseFlowGroupElementChildren(xmlToParse,divElem);
             if(divElem.numChildren == 0)
@@ -173,7 +171,7 @@ package flashx.textLayout.conversion
       public static function parseInlineGraphic(importFilter:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var ilg:InlineGraphicElement = TextLayoutImporter(importFilter).createInlineGraphicFromXML(xmlToParse);
-         importFilter.addChild(parent,ilg);
+         importFilter.tlf_internal::addChild(parent,ilg);
       }
       
       public function get imageSourceResolveFunction() : Function
@@ -188,11 +186,11 @@ package flashx.textLayout.conversion
       
       override protected function parseContent(rootStory:XML) : TextFlow
       {
-         var rootName:String = rootStory.name().localName;
+         var rootName:String = String(rootStory.name().localName);
          var textFlowElement:XML = rootName == "TextFlow" ? rootStory : rootStory..TextFlow[0];
          if(!textFlowElement)
          {
-            reportError(GlobalSettings.resourceStringFunction("missingTextFlow"));
+            tlf_internal::reportError(GlobalSettings.resourceStringFunction("missingTextFlow"));
             return null;
          }
          if(!checkNamespace(textFlowElement))
@@ -204,26 +202,26 @@ package flashx.textLayout.conversion
       
       private function parseStandardFlowElementAttributes(flowElem:FlowElement, xmlToParse:XML, importers:Array = null) : void
       {
-         var styleName:* = null;
+         var styleName:String = null;
          if(importers == null)
          {
             importers = _flowElementFormatImporters;
          }
          parseAttributes(xmlToParse,importers);
          var textFormat:TextLayoutFormat = this.extractTextFormatAttributesHelper(flowElem.format,_formatImporter) as TextLayoutFormat;
-         if(textFormat)
+         if(Boolean(textFormat))
          {
             flowElem.format = textFormat;
          }
-         if(_idImporter.result)
+         if(Boolean(_idImporter.result))
          {
             flowElem.id = _idImporter.result as String;
          }
-         if(_typeNameImporter.result)
+         if(Boolean(_typeNameImporter.result))
          {
             flowElem.typeName = _typeNameImporter.result as String;
          }
-         if(_customFormatImporter.result)
+         if(Boolean(_customFormatImporter.result))
          {
             for(styleName in _customFormatImporter.result)
             {
@@ -253,7 +251,7 @@ package flashx.textLayout.conversion
             }
             else
             {
-               reportError(GlobalSettings.resourceStringFunction("unsupportedVersion",[xmlToParse["version"]]));
+               tlf_internal::reportError(GlobalSettings.resourceStringFunction("unsupportedVersion",[xmlToParse["version"]]));
                _importVersion = TextLayoutVersion.CURRENT_VERSION;
             }
          }
@@ -267,8 +265,8 @@ package flashx.textLayout.conversion
          }
          this.parseStandardFlowElementAttributes(newFlow,xmlToParse);
          parseFlowGroupElementChildren(xmlToParse,newFlow);
-         newFlow.normalize();
-         newFlow.applyWhiteSpaceCollapse(null);
+         newFlow.tlf_internal::normalize();
+         newFlow.tlf_internal::applyWhiteSpaceCollapse(null);
          return newFlow;
       }
       
@@ -304,7 +302,7 @@ package flashx.textLayout.conversion
       {
          var linkElem:LinkElement = new LinkElement();
          this.parseStandardFlowElementAttributes(linkElem,xmlToParse,_linkElementFormatImporters);
-         if(_linkFormatImporter.result)
+         if(Boolean(_linkFormatImporter.result))
          {
             linkElem.href = _linkFormatImporter.result["href"] as String;
             linkElem.target = _linkFormatImporter.result["target"] as String;
@@ -324,9 +322,9 @@ package flashx.textLayout.conversion
          var source:String = null;
          var imgElem:InlineGraphicElement = new InlineGraphicElement();
          this.parseStandardFlowElementAttributes(imgElem,xmlToParse,_ilgElementFormatImporters);
-         if(_ilgFormatImporter.result)
+         if(Boolean(_ilgFormatImporter.result))
          {
-            source = _ilgFormatImporter.result["source"];
+            source = String(_ilgFormatImporter.result["source"]);
             imgElem.source = this._imageSourceResolveFunction != null ? this._imageSourceResolveFunction(source) : source;
             imgElem.height = _ilgFormatImporter.result["height"];
             imgElem.width = _ilgFormatImporter.result["width"];
@@ -349,7 +347,7 @@ package flashx.textLayout.conversion
          return rslt;
       }
       
-      public function extractTextFormatAttributesHelper(curAttrs:Object, importer:TLFormatImporter) : Object
+      public function extractTextFormatAttributesHelper(curAttrs:Object, importer:flashx.textLayout.conversion.TLFormatImporter) : Object
       {
          return extractAttributesHelper(curAttrs,importer);
       }
@@ -360,7 +358,7 @@ package flashx.textLayout.conversion
          var formatList:XMLList = xmlToParse..TextLayoutFormat;
          if(formatList.length() != 1)
          {
-            reportError(GlobalSettings.resourceStringFunction("expectedExactlyOneTextLayoutFormat",[xmlToParse.name()]));
+            tlf_internal::reportError(GlobalSettings.resourceStringFunction("expectedExactlyOneTextLayoutFormat",[xmlToParse.name()]));
          }
          var parseThis:XML = formatList.length() > 0 ? formatList[0] : xmlToParse;
          parseAttributes(parseThis,formatImporters);
@@ -373,7 +371,7 @@ package flashx.textLayout.conversion
          var formatList:XMLList = xmlToParse..ListMarkerFormat;
          if(formatList.length() != 1)
          {
-            reportError(GlobalSettings.resourceStringFunction("expectedExactlyOneListMarkerFormat",[xmlToParse.name()]));
+            tlf_internal::reportError(GlobalSettings.resourceStringFunction("expectedExactlyOneListMarkerFormat",[xmlToParse.name()]));
          }
          var parseThis:XML = formatList.length() > 0 ? formatList[0] : xmlToParse;
          parseAttributes(parseThis,formatImporters);

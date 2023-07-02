@@ -20,7 +20,7 @@ package flashx.textLayout.property
       
       override public function owningHandlerCheck(newVal:*) : *
       {
-         return !!this._range.hasOwnProperty(newVal) ? newVal : undefined;
+         return this._range.hasOwnProperty(newVal) ? newVal : undefined;
       }
    }
 }

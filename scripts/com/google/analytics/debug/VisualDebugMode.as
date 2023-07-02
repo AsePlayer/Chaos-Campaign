@@ -3,11 +3,11 @@ package com.google.analytics.debug
    public class VisualDebugMode
    {
       
-      public static const advanced:VisualDebugMode = new VisualDebugMode(1,"advanced");
+      public static const advanced:com.google.analytics.debug.VisualDebugMode = new com.google.analytics.debug.VisualDebugMode(1,"advanced");
       
-      public static const geek:VisualDebugMode = new VisualDebugMode(2,"geek");
+      public static const geek:com.google.analytics.debug.VisualDebugMode = new com.google.analytics.debug.VisualDebugMode(2,"geek");
       
-      public static const basic:VisualDebugMode = new VisualDebugMode(0,"basic");
+      public static const basic:com.google.analytics.debug.VisualDebugMode = new com.google.analytics.debug.VisualDebugMode(0,"basic");
        
       
       private var _value:int;

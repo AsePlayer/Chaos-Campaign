@@ -12,8 +12,6 @@ package flashx.textLayout.elements
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [IMXMLObject]
    public class FlowElement implements ITextLayoutFormat
    {
@@ -27,9 +25,9 @@ package flashx.textLayout.elements
       tlf_internal static var _scratchTextLayoutFormat:TextLayoutFormat = new TextLayoutFormat();
        
       
-      private var _parent:FlowGroupElement;
+      private var _parent:flashx.textLayout.elements.FlowGroupElement;
       
-      private var _format:FlowValueHolder;
+      private var _format:flashx.textLayout.elements.FlowValueHolder;
       
       protected var _computedFormat:TextLayoutFormat;
       
@@ -49,7 +47,7 @@ package flashx.textLayout.elements
       tlf_internal static function createTextLayoutFormatPrototype(localStyles:ITextLayoutFormat, parentPrototype:TextLayoutFormat) : TextLayoutFormat
       {
          var parentStylesPrototype:Object = null;
-         var key:* = null;
+         var key:String = null;
          var val:* = undefined;
          var prop:Property = null;
          var rslt:TextLayoutFormat = null;
@@ -58,15 +56,15 @@ package flashx.textLayout.elements
          var coreStyles:Object = null;
          var parentPrototypeUsable:Boolean = true;
          var hasStylesSet:Boolean = false;
-         if(parentPrototype)
+         if(Boolean(parentPrototype))
          {
-            parentStylesPrototype = parentPrototype.getStyles();
+            parentStylesPrototype = parentPrototype.tlf_internal::getStyles();
             if(parentStylesPrototype.hasNonInheritedStyles !== undefined)
             {
                if(parentStylesPrototype.hasNonInheritedStyles === true)
                {
                   noInheritParentStylesPrototype = Property.createObjectWithPrototype(parentStylesPrototype);
-                  TextLayoutFormat.resetModifiedNoninheritedStyles(noInheritParentStylesPrototype);
+                  TextLayoutFormat.tlf_internal::resetModifiedNoninheritedStyles(noInheritParentStylesPrototype);
                   parentStylesPrototype.hasNonInheritedStyles = noInheritParentStylesPrototype;
                   parentStylesPrototype = noInheritParentStylesPrototype;
                }
@@ -80,25 +78,25 @@ package flashx.textLayout.elements
          else
          {
             parentPrototype = TextLayoutFormat.defaultFormat as TextLayoutFormat;
-            parentStylesPrototype = parentPrototype.getStyles();
+            parentStylesPrototype = parentPrototype.tlf_internal::getStyles();
          }
          var stylesObject:Object = Property.createObjectWithPrototype(parentStylesPrototype);
          var hasNonInheritedStyles:Boolean = false;
          if(localStyles != null)
          {
             lvh = localStyles as TextLayoutFormat;
-            if(lvh)
+            if(Boolean(lvh))
             {
-               coreStyles = lvh.getStyles();
+               coreStyles = lvh.tlf_internal::getStyles();
                for(key in coreStyles)
                {
                   val = coreStyles[key];
                   if(val == FormatValue.INHERIT)
                   {
-                     if(parentPrototype)
+                     if(Boolean(parentPrototype))
                      {
-                        prop = TextLayoutFormat.description[key];
-                        if(prop && !prop.inherited)
+                        prop = TextLayoutFormat.tlf_internal::description[key];
+                        if(Boolean(prop) && !prop.inherited)
                         {
                            val = parentPrototype[key];
                            if(stylesObject[key] != val)
@@ -112,8 +110,8 @@ package flashx.textLayout.elements
                   }
                   else if(stylesObject[key] != val)
                   {
-                     prop = TextLayoutFormat.description[key];
-                     if(prop && !prop.inherited)
+                     prop = TextLayoutFormat.tlf_internal::description[key];
+                     if(Boolean(prop) && !prop.inherited)
                      {
                         hasNonInheritedStyles = true;
                      }
@@ -124,7 +122,7 @@ package flashx.textLayout.elements
             }
             else
             {
-               for each(prop in TextLayoutFormat.description)
+               for each(prop in TextLayoutFormat.tlf_internal::description)
                {
                   key = prop.name;
                   val = localStyles[key];
@@ -132,7 +130,7 @@ package flashx.textLayout.elements
                   {
                      if(val == FormatValue.INHERIT)
                      {
-                        if(parentPrototype)
+                        if(Boolean(parentPrototype))
                         {
                            if(!prop.inherited)
                            {
@@ -166,7 +164,7 @@ package flashx.textLayout.elements
                return parentPrototype;
             }
             rslt = new TextLayoutFormat();
-            rslt.setStyles(stylesObject,true);
+            rslt.tlf_internal::setStyles(stylesObject,true);
             return rslt;
          }
          if(hasNonInheritedStyles)
@@ -180,7 +178,7 @@ package flashx.textLayout.elements
             stylesObject.setPropertyIsEnumerable("hasNonInheritedStyles",false);
          }
          rslt = new TextLayoutFormat();
-         rslt.setStyles(stylesObject,false);
+         rslt.tlf_internal::setStyles(stylesObject,false);
          return rslt;
       }
       
@@ -201,14 +199,14 @@ package flashx.textLayout.elements
       
       public function set userStyles(styles:Object) : void
       {
-         var val:* = null;
+         var val:String = null;
          for(val in this.userStyles)
          {
             this.setStyle(val,undefined);
          }
          for(val in styles)
          {
-            if(!TextLayoutFormat.description.hasOwnProperty(val))
+            if(!TextLayoutFormat.tlf_internal::description.hasOwnProperty(val))
             {
                this.setStyle(val,styles[val]);
             }
@@ -227,15 +225,15 @@ package flashx.textLayout.elements
       
       tlf_internal function setStylesInternal(styles:Object) : void
       {
-         if(styles)
+         if(Boolean(styles))
          {
-            this.writableTextLayoutFormat().setStyles(Property.shallowCopy(styles),false);
+            this.tlf_internal::writableTextLayoutFormat().tlf_internal::setStyles(Property.shallowCopy(styles),false);
          }
-         else if(this._format)
+         else if(Boolean(this._format))
          {
-            this._format.clearStyles();
+            this._format.tlf_internal::clearStyles();
          }
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function equalUserStyles(otherElement:FlowElement) : Boolean
@@ -253,7 +251,7 @@ package flashx.textLayout.elements
          var retFlow:FlowElement = new (getDefinitionByName(getQualifiedClassName(this)) as Class)();
          if(this._format != null)
          {
-            retFlow._format = new FlowValueHolder(this._format);
+            retFlow._format = new flashx.textLayout.elements.FlowValueHolder(this._format);
          }
          return retFlow;
       }
@@ -283,12 +281,12 @@ package flashx.textLayout.elements
       
       tlf_internal function get bindableElement() : Boolean
       {
-         return this.getPrivateStyle("bindable") == true;
+         return this.tlf_internal::getPrivateStyle("bindable") == true;
       }
       
       tlf_internal function set bindableElement(value:Boolean) : void
       {
-         this.setPrivateStyle("bindable",value);
+         this.tlf_internal::setPrivateStyle("bindable",value);
       }
       
       tlf_internal function mergeToPreviousIfPossible() : Boolean
@@ -304,19 +302,19 @@ package flashx.textLayout.elements
       {
       }
       
-      public function get parent() : FlowGroupElement
+      public function get parent() : flashx.textLayout.elements.FlowGroupElement
       {
          return this._parent;
       }
       
-      tlf_internal function setParentAndRelativeStart(newParent:FlowGroupElement, newStart:int) : void
+      tlf_internal function setParentAndRelativeStart(newParent:flashx.textLayout.elements.FlowGroupElement, newStart:int) : void
       {
          this._parent = newParent;
          this._parentRelativeStart = newStart;
-         this.attributesChanged(false);
+         this.tlf_internal::attributesChanged(false);
       }
       
-      tlf_internal function setParentAndRelativeStartOnly(newParent:FlowGroupElement, newStart:int) : void
+      tlf_internal function setParentAndRelativeStartOnly(newParent:flashx.textLayout.elements.FlowGroupElement, newStart:int) : void
       {
          this._parent = newParent;
          this._parentRelativeStart = newStart;
@@ -351,12 +349,12 @@ package flashx.textLayout.elements
       {
          var contElement:ContainerFormattedElement = null;
          var elem:FlowElement = this;
-         while(elem)
+         while(Boolean(elem))
          {
             contElement = elem as ContainerFormattedElement;
-            if(contElement)
+            if(Boolean(contElement))
             {
-               if(!contElement._parent || contElement.flowComposer)
+               if(!contElement._parent || Boolean(contElement.flowComposer))
                {
                   return contElement;
                }
@@ -373,34 +371,34 @@ package flashx.textLayout.elements
       
       tlf_internal function setPrivateStyle(styleName:String, val:*) : void
       {
-         if(this.getPrivateStyle(styleName) != val)
+         if(this.tlf_internal::getPrivateStyle(styleName) != val)
          {
-            this.writableTextLayoutFormat().setPrivateData(styleName,val);
-            this.modelChanged(ModelChange.STYLE_SELECTOR_CHANGED,this,0,this._textLength);
+            this.tlf_internal::writableTextLayoutFormat().setPrivateData(styleName,val);
+            this.tlf_internal::modelChanged(ModelChange.STYLE_SELECTOR_CHANGED,this,0,this._textLength);
          }
       }
       
       public function get id() : String
       {
-         return this.getPrivateStyle(idString);
+         return this.tlf_internal::getPrivateStyle(idString);
       }
       
       public function set id(val:String) : void
       {
-         return this.setPrivateStyle(idString,val);
+         return this.tlf_internal::setPrivateStyle(idString,val);
       }
       
       public function get typeName() : String
       {
-         var typeName:String = this.getPrivateStyle(typeNameString);
-         return Boolean(typeName) ? typeName : this.defaultTypeName;
+         var typeName:String = this.tlf_internal::getPrivateStyle(typeNameString);
+         return Boolean(typeName) ? typeName : this.tlf_internal::defaultTypeName;
       }
       
       public function set typeName(val:String) : void
       {
          if(val != this.typeName)
          {
-            this.setPrivateStyle(typeNameString,val == this.defaultTypeName ? undefined : val);
+            this.tlf_internal::setPrivateStyle(typeNameString,val == this.tlf_internal::defaultTypeName ? undefined : val);
          }
       }
       
@@ -411,12 +409,12 @@ package flashx.textLayout.elements
       
       tlf_internal function get impliedElement() : Boolean
       {
-         return this.getPrivateStyle(impliedElementString) !== undefined;
+         return this.tlf_internal::getPrivateStyle(impliedElementString) !== undefined;
       }
       
       tlf_internal function set impliedElement(value:*) : void
       {
-         this.setPrivateStyle(impliedElementString,value);
+         this.tlf_internal::setPrivateStyle(impliedElementString,value);
       }
       
       public function get color() : *
@@ -426,8 +424,8 @@ package flashx.textLayout.elements
       
       public function set color(colorValue:*) : void
       {
-         this.writableTextLayoutFormat().color = colorValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().color = colorValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get backgroundColor() : *
@@ -437,8 +435,8 @@ package flashx.textLayout.elements
       
       public function set backgroundColor(backgroundColorValue:*) : void
       {
-         this.writableTextLayoutFormat().backgroundColor = backgroundColorValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().backgroundColor = backgroundColorValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="true,false,inherit")]
@@ -449,8 +447,8 @@ package flashx.textLayout.elements
       
       public function set lineThrough(lineThroughValue:*) : void
       {
-         this.writableTextLayoutFormat().lineThrough = lineThroughValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().lineThrough = lineThroughValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get textAlpha() : *
@@ -460,8 +458,8 @@ package flashx.textLayout.elements
       
       public function set textAlpha(textAlphaValue:*) : void
       {
-         this.writableTextLayoutFormat().textAlpha = textAlphaValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().textAlpha = textAlphaValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get backgroundAlpha() : *
@@ -471,8 +469,8 @@ package flashx.textLayout.elements
       
       public function set backgroundAlpha(backgroundAlphaValue:*) : void
       {
-         this.writableTextLayoutFormat().backgroundAlpha = backgroundAlphaValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().backgroundAlpha = backgroundAlphaValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get fontSize() : *
@@ -482,8 +480,8 @@ package flashx.textLayout.elements
       
       public function set fontSize(fontSizeValue:*) : void
       {
-         this.writableTextLayoutFormat().fontSize = fontSizeValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().fontSize = fontSizeValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get baselineShift() : *
@@ -493,8 +491,8 @@ package flashx.textLayout.elements
       
       public function set baselineShift(baselineShiftValue:*) : void
       {
-         this.writableTextLayoutFormat().baselineShift = baselineShiftValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().baselineShift = baselineShiftValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get trackingLeft() : *
@@ -504,8 +502,8 @@ package flashx.textLayout.elements
       
       public function set trackingLeft(trackingLeftValue:*) : void
       {
-         this.writableTextLayoutFormat().trackingLeft = trackingLeftValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().trackingLeft = trackingLeftValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get trackingRight() : *
@@ -515,8 +513,8 @@ package flashx.textLayout.elements
       
       public function set trackingRight(trackingRightValue:*) : void
       {
-         this.writableTextLayoutFormat().trackingRight = trackingRightValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().trackingRight = trackingRightValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get lineHeight() : *
@@ -526,8 +524,8 @@ package flashx.textLayout.elements
       
       public function set lineHeight(lineHeightValue:*) : void
       {
-         this.writableTextLayoutFormat().lineHeight = lineHeightValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().lineHeight = lineHeightValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="all,any,auto,none,inherit")]
@@ -538,8 +536,8 @@ package flashx.textLayout.elements
       
       public function set breakOpportunity(breakOpportunityValue:*) : void
       {
-         this.writableTextLayoutFormat().breakOpportunity = breakOpportunityValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().breakOpportunity = breakOpportunityValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="default,lining,oldStyle,inherit")]
@@ -550,8 +548,8 @@ package flashx.textLayout.elements
       
       public function set digitCase(digitCaseValue:*) : void
       {
-         this.writableTextLayoutFormat().digitCase = digitCaseValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().digitCase = digitCaseValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="default,proportional,tabular,inherit")]
@@ -562,8 +560,8 @@ package flashx.textLayout.elements
       
       public function set digitWidth(digitWidthValue:*) : void
       {
-         this.writableTextLayoutFormat().digitWidth = digitWidthValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().digitWidth = digitWidthValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="auto,roman,ascent,descent,ideographicTop,ideographicCenter,ideographicBottom,inherit")]
@@ -574,8 +572,8 @@ package flashx.textLayout.elements
       
       public function set dominantBaseline(dominantBaselineValue:*) : void
       {
-         this.writableTextLayoutFormat().dominantBaseline = dominantBaselineValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().dominantBaseline = dominantBaselineValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="on,off,auto,inherit")]
@@ -586,8 +584,8 @@ package flashx.textLayout.elements
       
       public function set kerning(kerningValue:*) : void
       {
-         this.writableTextLayoutFormat().kerning = kerningValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().kerning = kerningValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="minimum,common,uncommon,exotic,inherit")]
@@ -598,8 +596,8 @@ package flashx.textLayout.elements
       
       public function set ligatureLevel(ligatureLevelValue:*) : void
       {
-         this.writableTextLayoutFormat().ligatureLevel = ligatureLevelValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().ligatureLevel = ligatureLevelValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="roman,ascent,descent,ideographicTop,ideographicCenter,ideographicBottom,useDominantBaseline,inherit")]
@@ -610,8 +608,8 @@ package flashx.textLayout.elements
       
       public function set alignmentBaseline(alignmentBaselineValue:*) : void
       {
-         this.writableTextLayoutFormat().alignmentBaseline = alignmentBaselineValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().alignmentBaseline = alignmentBaselineValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get locale() : *
@@ -621,8 +619,8 @@ package flashx.textLayout.elements
       
       public function set locale(localeValue:*) : void
       {
-         this.writableTextLayoutFormat().locale = localeValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().locale = localeValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="default,capsToSmallCaps,uppercase,lowercase,lowercaseToSmallCaps,inherit")]
@@ -633,8 +631,8 @@ package flashx.textLayout.elements
       
       public function set typographicCase(typographicCaseValue:*) : void
       {
-         this.writableTextLayoutFormat().typographicCase = typographicCaseValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().typographicCase = typographicCaseValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get fontFamily() : *
@@ -644,8 +642,8 @@ package flashx.textLayout.elements
       
       public function set fontFamily(fontFamilyValue:*) : void
       {
-         this.writableTextLayoutFormat().fontFamily = fontFamilyValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().fontFamily = fontFamilyValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="none,underline,inherit")]
@@ -656,8 +654,8 @@ package flashx.textLayout.elements
       
       public function set textDecoration(textDecorationValue:*) : void
       {
-         this.writableTextLayoutFormat().textDecoration = textDecorationValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().textDecoration = textDecorationValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="normal,bold,inherit")]
@@ -668,8 +666,8 @@ package flashx.textLayout.elements
       
       public function set fontWeight(fontWeightValue:*) : void
       {
-         this.writableTextLayoutFormat().fontWeight = fontWeightValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().fontWeight = fontWeightValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="normal,italic,inherit")]
@@ -680,8 +678,8 @@ package flashx.textLayout.elements
       
       public function set fontStyle(fontStyleValue:*) : void
       {
-         this.writableTextLayoutFormat().fontStyle = fontStyleValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().fontStyle = fontStyleValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="preserve,collapse,inherit")]
@@ -692,8 +690,8 @@ package flashx.textLayout.elements
       
       public function set whiteSpaceCollapse(whiteSpaceCollapseValue:*) : void
       {
-         this.writableTextLayoutFormat().whiteSpaceCollapse = whiteSpaceCollapseValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().whiteSpaceCollapse = whiteSpaceCollapseValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="normal,cff,inherit")]
@@ -704,8 +702,8 @@ package flashx.textLayout.elements
       
       public function set renderingMode(renderingModeValue:*) : void
       {
-         this.writableTextLayoutFormat().renderingMode = renderingModeValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().renderingMode = renderingModeValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="none,horizontalStem,inherit")]
@@ -716,8 +714,8 @@ package flashx.textLayout.elements
       
       public function set cffHinting(cffHintingValue:*) : void
       {
-         this.writableTextLayoutFormat().cffHinting = cffHintingValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().cffHinting = cffHintingValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="device,embeddedCFF,inherit")]
@@ -728,8 +726,8 @@ package flashx.textLayout.elements
       
       public function set fontLookup(fontLookupValue:*) : void
       {
-         this.writableTextLayoutFormat().fontLookup = fontLookupValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().fontLookup = fontLookupValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="rotate0,rotate180,rotate270,rotate90,auto,inherit")]
@@ -740,8 +738,8 @@ package flashx.textLayout.elements
       
       public function set textRotation(textRotationValue:*) : void
       {
-         this.writableTextLayoutFormat().textRotation = textRotationValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().textRotation = textRotationValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get textIndent() : *
@@ -751,8 +749,8 @@ package flashx.textLayout.elements
       
       public function set textIndent(textIndentValue:*) : void
       {
-         this.writableTextLayoutFormat().textIndent = textIndentValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().textIndent = textIndentValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get paragraphStartIndent() : *
@@ -762,8 +760,8 @@ package flashx.textLayout.elements
       
       public function set paragraphStartIndent(paragraphStartIndentValue:*) : void
       {
-         this.writableTextLayoutFormat().paragraphStartIndent = paragraphStartIndentValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().paragraphStartIndent = paragraphStartIndentValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get paragraphEndIndent() : *
@@ -773,8 +771,8 @@ package flashx.textLayout.elements
       
       public function set paragraphEndIndent(paragraphEndIndentValue:*) : void
       {
-         this.writableTextLayoutFormat().paragraphEndIndent = paragraphEndIndentValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().paragraphEndIndent = paragraphEndIndentValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get paragraphSpaceBefore() : *
@@ -784,8 +782,8 @@ package flashx.textLayout.elements
       
       public function set paragraphSpaceBefore(paragraphSpaceBeforeValue:*) : void
       {
-         this.writableTextLayoutFormat().paragraphSpaceBefore = paragraphSpaceBeforeValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().paragraphSpaceBefore = paragraphSpaceBeforeValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get paragraphSpaceAfter() : *
@@ -795,8 +793,8 @@ package flashx.textLayout.elements
       
       public function set paragraphSpaceAfter(paragraphSpaceAfterValue:*) : void
       {
-         this.writableTextLayoutFormat().paragraphSpaceAfter = paragraphSpaceAfterValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().paragraphSpaceAfter = paragraphSpaceAfterValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="left,right,center,justify,start,end,inherit")]
@@ -807,8 +805,8 @@ package flashx.textLayout.elements
       
       public function set textAlign(textAlignValue:*) : void
       {
-         this.writableTextLayoutFormat().textAlign = textAlignValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().textAlign = textAlignValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="left,right,center,justify,start,end,inherit")]
@@ -819,8 +817,8 @@ package flashx.textLayout.elements
       
       public function set textAlignLast(textAlignLastValue:*) : void
       {
-         this.writableTextLayoutFormat().textAlignLast = textAlignLastValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().textAlignLast = textAlignLastValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="interWord,distribute,inherit")]
@@ -831,8 +829,8 @@ package flashx.textLayout.elements
       
       public function set textJustify(textJustifyValue:*) : void
       {
-         this.writableTextLayoutFormat().textJustify = textJustifyValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().textJustify = textJustifyValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="eastAsian,space,auto,inherit")]
@@ -843,8 +841,8 @@ package flashx.textLayout.elements
       
       public function set justificationRule(justificationRuleValue:*) : void
       {
-         this.writableTextLayoutFormat().justificationRule = justificationRuleValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().justificationRule = justificationRuleValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="prioritizeLeastAdjustment,pushInKinsoku,pushOutOnly,auto,inherit")]
@@ -855,8 +853,8 @@ package flashx.textLayout.elements
       
       public function set justificationStyle(justificationStyleValue:*) : void
       {
-         this.writableTextLayoutFormat().justificationStyle = justificationStyleValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().justificationStyle = justificationStyleValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="ltr,rtl,inherit")]
@@ -867,8 +865,8 @@ package flashx.textLayout.elements
       
       public function set direction(directionValue:*) : void
       {
-         this.writableTextLayoutFormat().direction = directionValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().direction = directionValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get wordSpacing() : *
@@ -878,8 +876,8 @@ package flashx.textLayout.elements
       
       public function set wordSpacing(wordSpacingValue:*) : void
       {
-         this.writableTextLayoutFormat().wordSpacing = wordSpacingValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().wordSpacing = wordSpacingValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get tabStops() : *
@@ -889,8 +887,8 @@ package flashx.textLayout.elements
       
       public function set tabStops(tabStopsValue:*) : void
       {
-         this.writableTextLayoutFormat().tabStops = tabStopsValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().tabStops = tabStopsValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="romanUp,ideographicTopUp,ideographicCenterUp,ideographicTopDown,ideographicCenterDown,approximateTextField,ascentDescentUp,box,auto,inherit")]
@@ -901,8 +899,8 @@ package flashx.textLayout.elements
       
       public function set leadingModel(leadingModelValue:*) : void
       {
-         this.writableTextLayoutFormat().leadingModel = leadingModelValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().leadingModel = leadingModelValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get columnGap() : *
@@ -912,8 +910,8 @@ package flashx.textLayout.elements
       
       public function set columnGap(columnGapValue:*) : void
       {
-         this.writableTextLayoutFormat().columnGap = columnGapValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().columnGap = columnGapValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get paddingLeft() : *
@@ -923,8 +921,8 @@ package flashx.textLayout.elements
       
       public function set paddingLeft(paddingLeftValue:*) : void
       {
-         this.writableTextLayoutFormat().paddingLeft = paddingLeftValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().paddingLeft = paddingLeftValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get paddingTop() : *
@@ -934,8 +932,8 @@ package flashx.textLayout.elements
       
       public function set paddingTop(paddingTopValue:*) : void
       {
-         this.writableTextLayoutFormat().paddingTop = paddingTopValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().paddingTop = paddingTopValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get paddingRight() : *
@@ -945,8 +943,8 @@ package flashx.textLayout.elements
       
       public function set paddingRight(paddingRightValue:*) : void
       {
-         this.writableTextLayoutFormat().paddingRight = paddingRightValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().paddingRight = paddingRightValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get paddingBottom() : *
@@ -956,8 +954,8 @@ package flashx.textLayout.elements
       
       public function set paddingBottom(paddingBottomValue:*) : void
       {
-         this.writableTextLayoutFormat().paddingBottom = paddingBottomValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().paddingBottom = paddingBottomValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get columnCount() : *
@@ -967,8 +965,8 @@ package flashx.textLayout.elements
       
       public function set columnCount(columnCountValue:*) : void
       {
-         this.writableTextLayoutFormat().columnCount = columnCountValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().columnCount = columnCountValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get columnWidth() : *
@@ -978,8 +976,8 @@ package flashx.textLayout.elements
       
       public function set columnWidth(columnWidthValue:*) : void
       {
-         this.writableTextLayoutFormat().columnWidth = columnWidthValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().columnWidth = columnWidthValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get firstBaselineOffset() : *
@@ -989,8 +987,8 @@ package flashx.textLayout.elements
       
       public function set firstBaselineOffset(firstBaselineOffsetValue:*) : void
       {
-         this.writableTextLayoutFormat().firstBaselineOffset = firstBaselineOffsetValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().firstBaselineOffset = firstBaselineOffsetValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="top,middle,bottom,justify,inherit")]
@@ -1001,8 +999,8 @@ package flashx.textLayout.elements
       
       public function set verticalAlign(verticalAlignValue:*) : void
       {
-         this.writableTextLayoutFormat().verticalAlign = verticalAlignValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().verticalAlign = verticalAlignValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="rl,tb,inherit")]
@@ -1013,8 +1011,8 @@ package flashx.textLayout.elements
       
       public function set blockProgression(blockProgressionValue:*) : void
       {
-         this.writableTextLayoutFormat().blockProgression = blockProgressionValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().blockProgression = blockProgressionValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="explicit,toFit,inherit")]
@@ -1025,8 +1023,8 @@ package flashx.textLayout.elements
       
       public function set lineBreak(lineBreakValue:*) : void
       {
-         this.writableTextLayoutFormat().lineBreak = lineBreakValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().lineBreak = lineBreakValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="upperAlpha,lowerAlpha,upperRoman,lowerRoman,none,disc,circle,square,box,check,diamond,hyphen,arabicIndic,bengali,decimal,decimalLeadingZero,devanagari,gujarati,gurmukhi,kannada,persian,thai,urdu,cjkEarthlyBranch,cjkHeavenlyStem,hangul,hangulConstant,hiragana,hiraganaIroha,katakana,katakanaIroha,lowerAlpha,lowerGreek,lowerLatin,upperAlpha,upperGreek,upperLatin,inherit")]
@@ -1037,8 +1035,8 @@ package flashx.textLayout.elements
       
       public function set listStyleType(listStyleTypeValue:*) : void
       {
-         this.writableTextLayoutFormat().listStyleType = listStyleTypeValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().listStyleType = listStyleTypeValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="inside,outside,inherit")]
@@ -1049,8 +1047,8 @@ package flashx.textLayout.elements
       
       public function set listStylePosition(listStylePositionValue:*) : void
       {
-         this.writableTextLayoutFormat().listStylePosition = listStylePositionValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().listStylePosition = listStylePositionValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get listAutoPadding() : *
@@ -1060,8 +1058,8 @@ package flashx.textLayout.elements
       
       public function set listAutoPadding(listAutoPaddingValue:*) : void
       {
-         this.writableTextLayoutFormat().listAutoPadding = listAutoPaddingValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().listAutoPadding = listAutoPaddingValue;
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="start,end,left,right,both,none,inherit")]
@@ -1072,8 +1070,8 @@ package flashx.textLayout.elements
       
       public function set clearFloats(clearFloatsValue:*) : void
       {
-         this.writableTextLayoutFormat().clearFloats = clearFloatsValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().clearFloats = clearFloatsValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get styleName() : *
@@ -1083,8 +1081,8 @@ package flashx.textLayout.elements
       
       public function set styleName(styleNameValue:*) : void
       {
-         this.writableTextLayoutFormat().styleName = styleNameValue;
-         this.styleSelectorChanged();
+         this.tlf_internal::writableTextLayoutFormat().styleName = styleNameValue;
+         this.tlf_internal::styleSelectorChanged();
       }
       
       public function get linkNormalFormat() : *
@@ -1094,8 +1092,8 @@ package flashx.textLayout.elements
       
       public function set linkNormalFormat(linkNormalFormatValue:*) : void
       {
-         this.writableTextLayoutFormat().linkNormalFormat = linkNormalFormatValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().linkNormalFormat = linkNormalFormatValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get linkActiveFormat() : *
@@ -1105,8 +1103,8 @@ package flashx.textLayout.elements
       
       public function set linkActiveFormat(linkActiveFormatValue:*) : void
       {
-         this.writableTextLayoutFormat().linkActiveFormat = linkActiveFormatValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().linkActiveFormat = linkActiveFormatValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get linkHoverFormat() : *
@@ -1116,8 +1114,8 @@ package flashx.textLayout.elements
       
       public function set linkHoverFormat(linkHoverFormatValue:*) : void
       {
-         this.writableTextLayoutFormat().linkHoverFormat = linkHoverFormatValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().linkHoverFormat = linkHoverFormatValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get listMarkerFormat() : *
@@ -1127,8 +1125,8 @@ package flashx.textLayout.elements
       
       public function set listMarkerFormat(listMarkerFormatValue:*) : void
       {
-         this.writableTextLayoutFormat().listMarkerFormat = listMarkerFormatValue;
-         this.formatChanged();
+         this.tlf_internal::writableTextLayoutFormat().listMarkerFormat = listMarkerFormatValue;
+         this.tlf_internal::formatChanged();
       }
       
       public function get format() : ITextLayoutFormat
@@ -1145,24 +1143,24 @@ package flashx.textLayout.elements
          var oldStyleName:String = this.styleName;
          if(value == null)
          {
-            this._format.clearStyles();
+            this._format.tlf_internal::clearStyles();
          }
          else
          {
-            this.writableTextLayoutFormat().copy(value);
+            this.tlf_internal::writableTextLayoutFormat().copy(value);
          }
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
          if(oldStyleName != this.styleName)
          {
-            this.styleSelectorChanged();
+            this.tlf_internal::styleSelectorChanged();
          }
       }
       
-      tlf_internal function writableTextLayoutFormat() : FlowValueHolder
+      tlf_internal function writableTextLayoutFormat() : flashx.textLayout.elements.FlowValueHolder
       {
          if(this._format == null)
          {
-            this._format = new FlowValueHolder();
+            this._format = new flashx.textLayout.elements.FlowValueHolder();
          }
          return this._format;
       }
@@ -1171,14 +1169,14 @@ package flashx.textLayout.elements
       {
          if(notifyModelChanged)
          {
-            this.modelChanged(ModelChange.TEXTLAYOUT_FORMAT_CHANGED,this,0,this._textLength);
+            this.tlf_internal::modelChanged(ModelChange.TEXTLAYOUT_FORMAT_CHANGED,this,0,this._textLength);
          }
          this._computedFormat = null;
       }
       
       tlf_internal function styleSelectorChanged() : void
       {
-         this.modelChanged(ModelChange.STYLE_SELECTOR_CHANGED,this,0,this._textLength);
+         this.tlf_internal::modelChanged(ModelChange.STYLE_SELECTOR_CHANGED,this,0,this._textLength);
          this._computedFormat = null;
       }
       
@@ -1188,10 +1186,10 @@ package flashx.textLayout.elements
          var localFormat:ITextLayoutFormat = null;
          var rslt:TextLayoutFormat = null;
          var tf:TextFlow = this.getTextFlow();
-         if(tf)
+         if(Boolean(tf))
          {
-            elemStyle = tf.getTextLayoutFormatStyle(this);
-            if(elemStyle)
+            elemStyle = tf.tlf_internal::getTextLayoutFormatStyle(this);
+            if(Boolean(elemStyle))
             {
                localFormat = this.format;
                if(localFormat == null)
@@ -1211,7 +1209,7 @@ package flashx.textLayout.elements
       {
          if(this._computedFormat == null)
          {
-            this._computedFormat = this.doComputeTextLayoutFormat();
+            this._computedFormat = this.tlf_internal::doComputeTextLayoutFormat();
          }
          return this._computedFormat;
       }
@@ -1219,17 +1217,17 @@ package flashx.textLayout.elements
       tlf_internal function doComputeTextLayoutFormat() : TextLayoutFormat
       {
          var parentPrototype:TextLayoutFormat = Boolean(this._parent) ? TextLayoutFormat(this._parent.computedFormat) : null;
-         return FlowElement.createTextLayoutFormatPrototype(this.formatForCascade,parentPrototype);
+         return FlowElement.tlf_internal::createTextLayoutFormatPrototype(this.tlf_internal::formatForCascade,parentPrototype);
       }
       
       tlf_internal function attributesChanged(notifyModelChanged:Boolean = true) : void
       {
-         this.formatChanged(notifyModelChanged);
+         this.tlf_internal::formatChanged(notifyModelChanged);
       }
       
       public function getStyle(styleProp:String) : *
       {
-         if(TextLayoutFormat.description.hasOwnProperty(styleProp))
+         if(TextLayoutFormat.tlf_internal::description.hasOwnProperty(styleProp))
          {
             return this.computedFormat.getStyle(styleProp);
          }
@@ -1238,7 +1236,7 @@ package flashx.textLayout.elements
          {
             return this.computedFormat.getStyle(styleProp);
          }
-         return this.getUserStyleWorker(styleProp);
+         return this.tlf_internal::getUserStyleWorker(styleProp);
       }
       
       tlf_internal function getUserStyleWorker(styleProp:String) : *
@@ -1253,7 +1251,7 @@ package flashx.textLayout.elements
             }
          }
          var tf:TextFlow = this.getTextFlow();
-         if(tf && tf.formatResolver)
+         if(Boolean(tf) && Boolean(tf.formatResolver))
          {
             userStyle = tf.formatResolver.resolveUserFormat(this,styleProp);
             if(userStyle !== undefined)
@@ -1261,19 +1259,19 @@ package flashx.textLayout.elements
                return userStyle;
             }
          }
-         return Boolean(this._parent) ? this._parent.getUserStyleWorker(styleProp) : undefined;
+         return Boolean(this._parent) ? this._parent.tlf_internal::getUserStyleWorker(styleProp) : undefined;
       }
       
       public function setStyle(styleProp:String, newValue:*) : void
       {
-         if(TextLayoutFormat.description[styleProp])
+         if(Boolean(TextLayoutFormat.tlf_internal::description[styleProp]))
          {
             this[styleProp] = newValue;
          }
          else
          {
-            this.writableTextLayoutFormat().setStyle(styleProp,newValue);
-            this.formatChanged();
+            this.tlf_internal::writableTextLayoutFormat().setStyle(styleProp,newValue);
+            this.tlf_internal::formatChanged();
          }
       }
       
@@ -1285,9 +1283,9 @@ package flashx.textLayout.elements
       tlf_internal function modelChanged(changeType:String, element:FlowElement, changeStart:int, changeLen:int, needNormalize:Boolean = true, bumpGeneration:Boolean = true) : void
       {
          var tf:TextFlow = this.getTextFlow();
-         if(tf)
+         if(Boolean(tf))
          {
-            tf.processModelChanged(changeType,element,this.getAbsoluteStart() + changeStart,changeLen,needNormalize,bumpGeneration);
+            tf.tlf_internal::processModelChanged(changeType,element,this.getAbsoluteStart() + changeStart,changeLen,needNormalize,bumpGeneration);
          }
       }
       
@@ -1301,22 +1299,22 @@ package flashx.textLayout.elements
       
       tlf_internal function getEffectivePaddingLeft() : Number
       {
-         return this.computedFormat.paddingLeft == FormatValue.AUTO ? Number(0) : Number(this.computedFormat.paddingLeft);
+         return this.computedFormat.paddingLeft == FormatValue.AUTO ? 0 : Number(this.computedFormat.paddingLeft);
       }
       
       tlf_internal function getEffectivePaddingRight() : Number
       {
-         return this.computedFormat.paddingRight == FormatValue.AUTO ? Number(0) : Number(this.computedFormat.paddingRight);
+         return this.computedFormat.paddingRight == FormatValue.AUTO ? 0 : Number(this.computedFormat.paddingRight);
       }
       
       tlf_internal function getEffectivePaddingTop() : Number
       {
-         return this.computedFormat.paddingTop == FormatValue.AUTO ? Number(0) : Number(this.computedFormat.paddingTop);
+         return this.computedFormat.paddingTop == FormatValue.AUTO ? 0 : Number(this.computedFormat.paddingTop);
       }
       
       tlf_internal function getEffectivePaddingBottom() : Number
       {
-         return this.computedFormat.paddingBottom == FormatValue.AUTO ? Number(0) : Number(this.computedFormat.paddingBottom);
+         return this.computedFormat.paddingBottom == FormatValue.AUTO ? 0 : Number(this.computedFormat.paddingBottom);
       }
       
       public function set tracking(trackingValue:Object) : void
@@ -1330,13 +1328,13 @@ package flashx.textLayout.elements
          {
             this.whiteSpaceCollapse = undefined;
          }
-         this.setPrivateStyle(impliedElementString,undefined);
+         this.tlf_internal::setPrivateStyle(impliedElementString,undefined);
       }
       
       public function getAbsoluteStart() : int
       {
          var rslt:int = this._parentRelativeStart;
-         for(var elem:FlowElement = this._parent; elem; elem = elem._parent)
+         for(var elem:FlowElement = this._parent; Boolean(elem); elem = elem._parent)
          {
             rslt += elem._parentRelativeStart;
          }
@@ -1347,7 +1345,7 @@ package flashx.textLayout.elements
       {
          var rslt:int = this._parentRelativeStart;
          var elem:FlowElement = this._parent;
-         while(elem && elem != ancestorElement)
+         while(Boolean(elem) && elem != ancestorElement)
          {
             rslt += elem._parentRelativeStart;
             elem = elem._parent;
@@ -1369,10 +1367,10 @@ package flashx.textLayout.elements
       {
          var para:ParagraphElement = null;
          var rslt:FlowElement = this;
-         while(rslt)
+         while(Boolean(rslt))
          {
             para = rslt as ParagraphElement;
-            if(para)
+            if(Boolean(para))
             {
                break;
             }
@@ -1384,7 +1382,7 @@ package flashx.textLayout.elements
       public function getParentByType(elementType:Class) : FlowElement
       {
          var curElement:FlowElement = this._parent;
-         while(curElement)
+         while(Boolean(curElement))
          {
             if(curElement is elementType)
             {
@@ -1423,7 +1421,7 @@ package flashx.textLayout.elements
       public function getCharCodeAtPosition(relativePosition:int) : int
       {
          var str:String = this.getCharAtPosition(relativePosition);
-         return str && str.length > 0 ? int(str.charCodeAt(0)) : int(0);
+         return Boolean(str) && str.length > 0 ? int(str.charCodeAt(0)) : 0;
       }
       
       tlf_internal function applyFunctionToElements(func:Function) : Boolean
@@ -1443,7 +1441,7 @@ package flashx.textLayout.elements
       
       private function updateRange(len:int) : void
       {
-         this.setParentRelativeStart(this._parentRelativeStart + len);
+         this.tlf_internal::setParentRelativeStart(this._parentRelativeStart + len);
       }
       
       tlf_internal function updateLengths(startIdx:int, len:int, updateLines:Boolean) : void
@@ -1451,9 +1449,9 @@ package flashx.textLayout.elements
          var idx:int = 0;
          var pElementCount:int = 0;
          var child:FlowElement = null;
-         this.setTextLength(this._textLength + len);
-         var p:FlowGroupElement = this._parent;
-         if(p)
+         this.tlf_internal::setTextLength(this._textLength + len);
+         var p:flashx.textLayout.elements.FlowGroupElement = this._parent;
+         if(Boolean(p))
          {
             idx = p.getChildIndex(this) + 1;
             pElementCount = p.numChildren;
@@ -1462,7 +1460,7 @@ package flashx.textLayout.elements
                child = p.getChildAt(idx++);
                child.updateRange(len);
             }
-            p.updateLengths(startIdx,len,updateLines);
+            p.tlf_internal::updateLengths(startIdx,len,updateLines);
          }
       }
       
@@ -1474,7 +1472,7 @@ package flashx.textLayout.elements
             return null;
          }
          var curItem:FlowElement = this;
-         while(curItem && (!(curItem is ContainerFormattedElement) || ContainerFormattedElement(curItem).flowComposer == null))
+         while(Boolean(curItem) && (!(curItem is ContainerFormattedElement) || ContainerFormattedElement(curItem).flowComposer == null))
          {
             curItem = curItem._parent;
          }
@@ -1483,7 +1481,7 @@ package flashx.textLayout.elements
          {
             return null;
          }
-         var controllerIndex:int = ContainerFormattedElement(curItem).flowComposer.findControllerIndexAtPosition(this.getAbsoluteStart() + relativePos,false);
+         var controllerIndex:int = int(ContainerFormattedElement(curItem).flowComposer.findControllerIndexAtPosition(this.getAbsoluteStart() + relativePos,false));
          return controllerIndex != -1 ? flowComposer.getControllerAt(controllerIndex) : null;
       }
       
@@ -1498,25 +1496,25 @@ package flashx.textLayout.elements
          var flowComposer:IFlowComposer = null;
          var myIdx:int = 0;
          var previousEnclosingWithContent:ContainerController = null;
-         if(this.getTextFlow())
+         if(Boolean(this.getTextFlow()))
          {
             absoluteEndPos = this.getAbsoluteStart() + endPos;
             absStartIdx = absoluteEndPos - deleteTotal;
             while(deleteTotal > 0)
             {
-               enclosingController = this.getEnclosingController(endPos - 1);
+               enclosingController = this.tlf_internal::getEnclosingController(endPos - 1);
                if(!enclosingController)
                {
-                  enclosingController = this.getEnclosingController(endPos - deleteTotal);
-                  if(enclosingController)
+                  enclosingController = this.tlf_internal::getEnclosingController(endPos - deleteTotal);
+                  if(Boolean(enclosingController))
                   {
                      flowComposer = enclosingController.flowComposer;
-                     myIdx = flowComposer.getControllerIndex(enclosingController);
+                     myIdx = int(flowComposer.getControllerIndex(enclosingController));
                      previousEnclosingWithContent = enclosingController;
                      while(myIdx + 1 < flowComposer.numControllers && enclosingController.absoluteStart + enclosingController.textLength < endPos)
                      {
                         enclosingController = flowComposer.getControllerAt(myIdx + 1);
-                        if(enclosingController.textLength)
+                        if(Boolean(enclosingController.textLength))
                         {
                            previousEnclosingWithContent = enclosingController;
                            break;
@@ -1542,12 +1540,12 @@ package flashx.textLayout.elements
                {
                   charsDeletedFromCurContainer = deleteTotal;
                }
-               containerTextLengthDelta = enclosingController.textLength < charsDeletedFromCurContainer ? int(enclosingController.textLength) : int(charsDeletedFromCurContainer);
+               containerTextLengthDelta = enclosingController.textLength < charsDeletedFromCurContainer ? enclosingController.textLength : charsDeletedFromCurContainer;
                if(containerTextLengthDelta <= 0)
                {
                   break;
                }
-               ContainerController(enclosingController).setTextLengthOnly(enclosingController.textLength - containerTextLengthDelta);
+               ContainerController(enclosingController).tlf_internal::setTextLengthOnly(enclosingController.textLength - containerTextLengthDelta);
                deleteTotal -= containerTextLengthDelta;
                absoluteEndPos -= containerTextLengthDelta;
                endPos -= containerTextLengthDelta;
@@ -1561,7 +1559,7 @@ package flashx.textLayout.elements
       
       tlf_internal function quickCloneTextLayoutFormat(sibling:FlowElement) : void
       {
-         this._format = Boolean(sibling._format) ? new FlowValueHolder(sibling._format) : null;
+         this._format = Boolean(sibling._format) ? new flashx.textLayout.elements.FlowValueHolder(sibling._format) : null;
          this._computedFormat = null;
       }
       

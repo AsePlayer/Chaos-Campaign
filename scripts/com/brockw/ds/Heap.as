@@ -6,7 +6,7 @@ package com.brockw.ds
       
       private var currentSize:int;
       
-      private var array:Vector.<Comparable>;
+      private var array:Vector.<com.brockw.ds.Comparable>;
       
       public function Heap(capacity:int)
       {
@@ -25,7 +25,7 @@ package com.brockw.ds
          return this.currentSize;
       }
       
-      public function insert(x:Comparable) : void
+      public function insert(x:com.brockw.ds.Comparable) : void
       {
          var hole:int = ++this.currentSize;
          while(hole > 1 && x.compare(this.array[Math.floor(hole / 2)]) < 0)
@@ -36,7 +36,7 @@ package com.brockw.ds
          this.array[hole] = x;
       }
       
-      public function findMin() : Comparable
+      public function findMin() : com.brockw.ds.Comparable
       {
          if(this.isEmpty())
          {
@@ -45,13 +45,13 @@ package com.brockw.ds
          return this.array[1];
       }
       
-      public function pop() : Comparable
+      public function pop() : com.brockw.ds.Comparable
       {
          if(this.isEmpty())
          {
             throw new Error("Heap: Can not delete min");
          }
-         var minItem:Comparable = this.findMin();
+         var minItem:com.brockw.ds.Comparable = this.findMin();
          this.array[1] = this.array[this.currentSize--];
          this.percolateDown(1);
          return minItem;
@@ -78,7 +78,7 @@ package com.brockw.ds
       private function percolateDown(hole:int) : void
       {
          var child:int = 0;
-         for(var tmp:Comparable = this.array[hole]; hole * 2 <= this.currentSize; )
+         for(var tmp:com.brockw.ds.Comparable = this.array[hole]; hole * 2 <= this.currentSize; )
          {
             child = hole * 2;
             if(child != this.currentSize && this.array[child + 1].compare(this.array[child]) < 0)

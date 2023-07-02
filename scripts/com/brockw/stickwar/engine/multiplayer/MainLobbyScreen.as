@@ -2,8 +2,8 @@ package com.brockw.stickwar.engine.multiplayer
 {
    import com.brockw.game.Screen;
    import com.brockw.stickwar.BaseMain;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
    import flash.display.MovieClip;
    import flash.events.Event;
    import flash.events.MouseEvent;
@@ -127,8 +127,8 @@ package com.brockw.stickwar.engine.multiplayer
       
       override public function enter() : void
       {
-         var _loc1_:SFSObject = null;
-         var _loc2_:ExtensionRequest = null;
+         var params:SFSObject = null;
+         var r:ExtensionRequest = null;
          this.mc.leftArrow.addEventListener(MouseEvent.CLICK,this.leftArrow);
          this.mc.rightArrow.addEventListener(MouseEvent.CLICK,this.rightArrow);
          this.main.setOverlayScreen("chatOverlay");
@@ -139,33 +139,33 @@ package com.brockw.stickwar.engine.multiplayer
          this.mc.campaignButton.addEventListener(MouseEvent.CLICK,this.campaignButton);
          this.mc.replayButton.addEventListener(MouseEvent.CLICK,this.replayButton);
          addEventListener(Event.ENTER_FRAME,this.update);
-         _loc1_ = new SFSObject();
-         _loc1_.putInt("index",0);
-         _loc2_ = new ExtensionRequest("getNews",_loc1_);
-         this.main.sfs.send(_loc2_);
-         _loc1_ = new SFSObject();
-         _loc1_.putInt("index",1);
-         _loc2_ = new ExtensionRequest("getNews",_loc1_);
-         this.main.sfs.send(_loc2_);
-         _loc1_ = new SFSObject();
-         _loc1_.putInt("index",2);
-         _loc2_ = new ExtensionRequest("getNews",_loc1_);
-         this.main.sfs.send(_loc2_);
-         _loc1_ = new SFSObject();
-         _loc1_.putInt("index",3);
-         _loc2_ = new ExtensionRequest("getNews",_loc1_);
-         this.main.sfs.send(_loc2_);
-         _loc1_ = new SFSObject();
-         _loc1_.putInt("index",4);
-         _loc2_ = new ExtensionRequest("getNews",_loc1_);
-         this.main.sfs.send(_loc2_);
+         params = new SFSObject();
+         params.putInt("index",0);
+         r = new ExtensionRequest("getNews",params);
+         this.main.sfs.send(r);
+         params = new SFSObject();
+         params.putInt("index",1);
+         r = new ExtensionRequest("getNews",params);
+         this.main.sfs.send(r);
+         params = new SFSObject();
+         params.putInt("index",2);
+         r = new ExtensionRequest("getNews",params);
+         this.main.sfs.send(r);
+         params = new SFSObject();
+         params.putInt("index",3);
+         r = new ExtensionRequest("getNews",params);
+         this.main.sfs.send(r);
+         params = new SFSObject();
+         params.putInt("index",4);
+         r = new ExtensionRequest("getNews",params);
+         this.main.sfs.send(r);
       }
       
       private function gameGuideButton(e:Event) : void
       {
          var url:URLRequest = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
          navigateToURL(url,"_blank");
-         if(this.main.tracker)
+         if(Boolean(this.main.tracker))
          {
             this.main.tracker.trackEvent("link","http://www.stickpage.com/stickempiresguide.shtml");
          }
@@ -181,7 +181,7 @@ package com.brockw.stickwar.engine.multiplayer
       {
          var url:URLRequest = new URLRequest("http://www.stickpage.com/stickwar2gameplay.shtml");
          navigateToURL(url,"_blank");
-         if(this.main.tracker)
+         if(Boolean(this.main.tracker))
          {
             this.main.tracker.trackEvent("link","http://www.stickpage.com/stickwar2gameplay.shtml");
          }

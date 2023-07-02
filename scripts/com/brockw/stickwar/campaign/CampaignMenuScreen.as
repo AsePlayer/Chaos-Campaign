@@ -52,7 +52,7 @@ package com.brockw.stickwar.campaign
       
       private var main:BaseMain;
       
-      private var youtubeLoader:YoutubeLoader;
+      private var youtubeLoader:com.brockw.stickwar.campaign.YoutubeLoader;
       
       private var keyboard:KeyboardState;
       
@@ -91,7 +91,7 @@ package com.brockw.stickwar.campaign
          urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
          urlLoader.addEventListener(Event.COMPLETE,this.handleComplete);
          urlLoader.load(urlRequest);
-         this.youtubeLoader = new YoutubeLoader("w6q9EoFmu0w");
+         this.youtubeLoader = new com.brockw.stickwar.campaign.YoutubeLoader("w6q9EoFmu0w");
          addChild(this.youtubeLoader);
          this.hasInitStickpageLink = false;
          this.mc.introBrokenMc.visible = false;
@@ -99,11 +99,11 @@ package com.brockw.stickwar.campaign
       
       public function handleComplete(e:Event) : void
       {
-         var link:String = e.target.data;
+         var link:String = String(e.target.data);
          if(link != "")
          {
             removeChild(this.youtubeLoader);
-            this.youtubeLoader = new YoutubeLoader(link);
+            this.youtubeLoader = new com.brockw.stickwar.campaign.YoutubeLoader(link);
             addChild(this.youtubeLoader);
          }
       }
@@ -167,7 +167,7 @@ package com.brockw.stickwar.campaign
             return;
          }
          this.mc.introBrokenMc.visible = false;
-         if(this.mc.stickpageLink)
+         if(Boolean(this.mc.stickpageLink))
          {
             MovieClip(this.mc.stickpageLink).buttonMode = true;
             this.hasInitStickpageLink = true;
@@ -196,7 +196,7 @@ package com.brockw.stickwar.campaign
             else
             {
                this.mc.introBrokenMc.buttonMode = false;
-               if(this.youtubeLoader)
+               if(Boolean(this.youtubeLoader))
                {
                   this.youtubeLoader.visible = true;
                   this.youtubeLoader.playVideo();
@@ -213,13 +213,13 @@ package com.brockw.stickwar.campaign
                this.mc.creditsButton.visible = false;
             }
          }
-         else if(this.youtubeLoader)
+         else if(Boolean(this.youtubeLoader))
          {
             this.youtubeLoader.visible = false;
             this.youtubeLoader.stopVideo();
             this.mc.introOverlay.visible = false;
          }
-         if(this.mc.difficultySelectOverlay)
+         if(Boolean(this.mc.difficultySelectOverlay))
          {
             if(this.state == S_DIFFICULTY_SELECT)
             {
@@ -290,7 +290,7 @@ package com.brockw.stickwar.campaign
             for each(buttonArray in this.buttons)
             {
                mc = buttonArray[0];
-               delay = buttonArray[1];
+               delay = Number(buttonArray[1]);
                func = buttonArray[2];
                if(mc in this.buttonsHit)
                {
@@ -299,40 +299,42 @@ package com.brockw.stickwar.campaign
                   {
                      func();
                      delete this.buttonsHit[mc];
+                     break;
                   }
                   mc.gotoAndStop(3);
-                  continue;
-                  break;
                }
-               mc.gotoAndStop(1);
-               if(mc.hitTestPoint(stage.mouseX,stage.mouseY))
+               else
                {
-                  mc.gotoAndStop(2);
-                  if(this.mouseState.mouseJustDown())
+                  mc.gotoAndStop(1);
+                  if(mc.hitTestPoint(stage.mouseX,stage.mouseY))
                   {
-                     this.mouseState.mouseDown = false;
-                     mc.gotoAndStop(3);
-                     this.main.soundManager.playSoundFullVolume("clickButton");
-                     if(!(mc in this.buttonsHit))
+                     mc.gotoAndStop(2);
+                     if(this.mouseState.mouseJustDown())
                      {
-                        this.buttonsHit[mc] = delay;
+                        this.mouseState.mouseDown = false;
+                        mc.gotoAndStop(3);
+                        this.main.soundManager.playSoundFullVolume("clickButton");
+                        if(!(mc in this.buttonsHit))
+                        {
+                           this.buttonsHit[mc] = delay;
+                        }
                      }
-                  }
-                  if(this.mc.difficultySelectOverlay)
-                  {
-                     if(this.state == S_DIFFICULTY_SELECT)
+                     if(Boolean(this.mc.difficultySelectOverlay))
                      {
-                        if(mc == this.mc.difficultyPanel.normalButton || this.mc.difficultyPanel.normalButton in this.buttonsHit)
+                        if(this.state == S_DIFFICULTY_SELECT)
                         {
-                           this.mc.difficultySelectOverlay.normal.visible = true;
-                        }
-                        else if(mc == this.mc.difficultyPanel.hardButton || this.mc.difficultyPanel.hardButton in this.buttonsHit)
-                        {
-                           this.mc.difficultySelectOverlay.hard.visible = true;
-                        }
-                        else if(mc == this.mc.difficultyPanel.insaneButton || this.mc.difficultyPanel.insaneButton in this.buttonsHit)
-                        {
-                           this.mc.difficultySelectOverlay.insane.visible = true;
+                           if(mc == this.mc.difficultyPanel.normalButton || this.mc.difficultyPanel.normalButton in this.buttonsHit)
+                           {
+                              this.mc.difficultySelectOverlay.normal.visible = true;
+                           }
+                           else if(mc == this.mc.difficultyPanel.hardButton || this.mc.difficultyPanel.hardButton in this.buttonsHit)
+                           {
+                              this.mc.difficultySelectOverlay.hard.visible = true;
+                           }
+                           else if(mc == this.mc.difficultyPanel.insaneButton || this.mc.difficultyPanel.insaneButton in this.buttonsHit)
+                           {
+                              this.mc.difficultySelectOverlay.insane.visible = true;
+                           }
                         }
                      }
                   }
@@ -354,7 +356,7 @@ package com.brockw.stickwar.campaign
       
       override public function enter() : void
       {
-         if(this.main.stage)
+         if(Boolean(this.main.stage))
          {
             this.keyboard = new KeyboardState(this.main.stage);
             this.mouseState = new MouseState(this.main.stage);
@@ -403,7 +405,8 @@ package com.brockw.stickwar.campaign
          {
             return;
          }
-         for(var i:int = 48; i <= 57; i++)
+         var i:int = 48;
+         while(i <= 57)
          {
             if(this.keyboard.isDown(i))
             {
@@ -418,6 +421,7 @@ package com.brockw.stickwar.campaign
                   this.main.campaign.campaignPoints = i - 48;
                }
             }
+            i++;
          }
       }
       
@@ -455,11 +459,11 @@ package com.brockw.stickwar.campaign
       
       private function onlineButton(e:Event) : void
       {
-         var url:URLRequest = new URLRequest("https://www.paypal.com/paypalme/aseplayer");
+         var url:URLRequest = new URLRequest("https://www.paypal.com/donate/?hosted_button_id=EAQQPFT8SDLD6");
          navigateToURL(url,"_blank");
          if(this.main.tracker != null)
          {
-            this.main.tracker.trackEvent("link","https://www.paypal.com/paypalme/aseplayer");
+            this.main.tracker.trackEvent("link","https://www.paypal.com/donate/?hosted_button_id=EAQQPFT8SDLD6");
          }
       }
       

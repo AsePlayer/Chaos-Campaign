@@ -2,8 +2,6 @@ package flashx.textLayout.elements
 {
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public final class LinkState
    {
       

@@ -10,29 +10,29 @@ package com.smartfoxserver.v2.entities.managers
       
       function get ownerZone() : String;
       
-      function addRoom(room:Room, addGroupIfMissing:Boolean = true) : void;
+      function addRoom(param1:Room, param2:Boolean = true) : void;
       
-      function addGroup(groupId:String) : void;
+      function addGroup(param1:String) : void;
       
-      function replaceRoom(room:Room, addToGroupIfMissing:Boolean = true) : Room;
+      function replaceRoom(param1:Room, param2:Boolean = true) : Room;
       
-      function removeGroup(groupId:String) : void;
+      function removeGroup(param1:String) : void;
       
-      function containsGroup(groupId:String) : Boolean;
+      function containsGroup(param1:String) : Boolean;
       
-      function containsRoom(idOrName:*) : Boolean;
+      function containsRoom(param1:*) : Boolean;
       
-      function containsRoomInGroup(idOrName:*, groupId:String) : Boolean;
+      function containsRoomInGroup(param1:*, param2:String) : Boolean;
       
-      function changeRoomName(room:Room, newName:String) : void;
+      function changeRoomName(param1:Room, param2:String) : void;
       
-      function changeRoomPasswordState(room:Room, isPassProtected:Boolean) : void;
+      function changeRoomPasswordState(param1:Room, param2:Boolean) : void;
       
-      function changeRoomCapacity(room:Room, maxUsers:int, maxSpect:int) : void;
+      function changeRoomCapacity(param1:Room, param2:int, param3:int) : void;
       
-      function getRoomById(id:int) : Room;
+      function getRoomById(param1:int) : Room;
       
-      function getRoomByName(name:String) : Room;
+      function getRoomByName(param1:String) : Room;
       
       function getRoomList() : Array;
       
@@ -40,19 +40,19 @@ package com.smartfoxserver.v2.entities.managers
       
       function getRoomGroups() : Array;
       
-      function getRoomListFromGroup(groupId:String) : Array;
+      function getRoomListFromGroup(param1:String) : Array;
       
       function getJoinedRooms() : Array;
       
-      function getUserRooms(user:User) : Array;
+      function getUserRooms(param1:User) : Array;
       
-      function removeRoom(room:Room) : void;
+      function removeRoom(param1:Room) : void;
       
-      function removeRoomById(id:int) : void;
+      function removeRoomById(param1:int) : void;
       
-      function removeRoomByName(name:String) : void;
+      function removeRoomByName(param1:String) : void;
       
-      function removeUser(user:User) : void;
+      function removeUser(param1:User) : void;
       
       function get smartFox() : SmartFox;
    }

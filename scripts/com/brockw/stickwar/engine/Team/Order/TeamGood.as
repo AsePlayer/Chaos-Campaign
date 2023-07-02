@@ -2,16 +2,15 @@ package com.brockw.stickwar.engine.Team.Order
 {
    import com.brockw.game.Util;
    import com.brockw.stickwar.GameScreen;
-   import com.brockw.stickwar.engine.Ai.command.StandCommand;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.Entity;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Building;
    import com.brockw.stickwar.engine.Team.Team;
    import com.brockw.stickwar.engine.Team.Tech;
    import com.brockw.stickwar.engine.UserInterface;
-   import com.brockw.stickwar.engine.units.Statue;
-   import com.brockw.stickwar.engine.units.Unit;
-   import flash.display.MovieClip;
+   import com.brockw.stickwar.engine.units.*;
+   import flash.display.*;
    import flash.text.TextField;
    import flash.text.TextFormat;
    import flash.utils.Dictionary;
@@ -20,10 +19,10 @@ package com.brockw.stickwar.engine.Team.Order
    {
        
       
-      public function TeamGood(game:StickWar, statueHealth:int, techAllowed:Dictionary = null, handicap:* = 1.0, healthModifier:Number = 1.0)
+      public function TeamGood(game:StickWar, statueHealth:int, techAllowed:Dictionary = null, handicap:* = 1, healthModifier:Number = 1)
       {
          var bulding:Building = null;
-         var unit:* = null;
+         var unit:String = null;
          var un:Unit = null;
          var e:Entity = new Entity();
          e.addChild(new _castleFrontMc());
@@ -68,7 +67,7 @@ package com.brockw.stickwar.engine.Team.Order
          unitInfo[Unit.U_MONK] = [game.xml.xml.Order.Units.monk.gold * handicap,game.xml.xml.Order.Units.monk.mana * handicap];
          unitInfo[Unit.U_MAGIKILL] = [game.xml.xml.Order.Units.magikill.gold * handicap,game.xml.xml.Order.Units.magikill.mana * handicap];
          unitInfo[Unit.U_ENSLAVED_GIANT] = [game.xml.xml.Order.Units.giant.gold * handicap,game.xml.xml.Order.Units.giant.mana * handicap];
-         if(game.unitFactory)
+         if(Boolean(game.unitFactory))
          {
             for(unit in unitInfo)
             {
@@ -134,7 +133,7 @@ package com.brockw.stickwar.engine.Team.Order
       
       override public function initTeamButtons(gameScreen:GameScreen) : void
       {
-         var key:* = null;
+         var key:String = null;
          var overlay:MovieClip = null;
          var button:MovieClip = null;
          var cancelButtonMc:MovieClip = null;

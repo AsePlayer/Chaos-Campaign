@@ -10,7 +10,7 @@ package com.brockw.stickwar.engine.projectile
    {
        
       
-      var spellMc:MovieClip;
+      internal var spellMc:MovieClip;
       
       public var unit:Unit;
       

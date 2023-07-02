@@ -34,7 +34,7 @@ package flashx.textLayout.property
       
       private static function compareTabStopFormats(a:TabStopFormat, b:TabStopFormat) : Number
       {
-         return a.position == b.position ? Number(0) : (a.position < b.position ? Number(-1) : Number(1));
+         return a.position == b.position ? 0 : (a.position < b.position ? -1 : 1);
       }
       
       override public function setHelper(currVal:*, newVal:*) : *
@@ -48,7 +48,7 @@ package flashx.textLayout.property
             return newVal;
          }
          var tabStops:Array = newVal as Array;
-         if(tabStops)
+         if(Boolean(tabStops))
          {
             if(!checkArrayTypes(tabStops))
             {
@@ -131,7 +131,7 @@ package flashx.textLayout.property
          var tabStops:Array = val as Array;
          for each(tabStop in tabStops)
          {
-            if(str.length)
+            if(Boolean(str.length))
             {
                str += " ";
             }
@@ -152,7 +152,7 @@ package flashx.textLayout.property
             str += tabStop.position.toString();
             if(tabStop.alignment == TabAlignment.DECIMAL)
             {
-               escapedAlignmentToken = tabStop.decimalAlignmentToken.replace(_backslashRegex,"\\\\");
+               escapedAlignmentToken = String(tabStop.decimalAlignmentToken.replace(_backslashRegex,"\\\\"));
                escapedAlignmentToken = escapedAlignmentToken.replace(_spaceRegex,"\\ ");
                str += "|" + escapedAlignmentToken;
             }

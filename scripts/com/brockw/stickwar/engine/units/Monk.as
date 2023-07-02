@@ -10,7 +10,7 @@ package com.brockw.stickwar.engine.units
    import flash.display.MovieClip;
    import flash.geom.Point;
    
-   public class Monk extends Unit
+   public class Monk extends com.brockw.stickwar.engine.units.Unit
    {
       
       private static var WEAPON_REACH:int;
@@ -18,11 +18,11 @@ package com.brockw.stickwar.engine.units
       
       public var isGay:Boolean = false;
       
-      private var cureSpellCooldown:SpellCooldown;
+      private var cureSpellCooldown:com.brockw.stickwar.engine.units.SpellCooldown;
       
-      private var healSpellCooldown:SpellCooldown;
+      private var healSpellCooldown:com.brockw.stickwar.engine.units.SpellCooldown;
       
-      private var slowSpellCooldown:SpellCooldown;
+      private var slowSpellCooldown:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var isCuring:Boolean;
       
@@ -38,7 +38,7 @@ package com.brockw.stickwar.engine.units
       
       private var _isCureToggled:Boolean;
       
-      private var cureTarget:Unit;
+      private var cureTarget:com.brockw.stickwar.engine.units.Unit;
       
       private var _healAmount:Number;
       
@@ -46,7 +46,7 @@ package com.brockw.stickwar.engine.units
       
       private var _isHealToggled:Boolean;
       
-      private var healTarget:Unit;
+      private var healTarget:com.brockw.stickwar.engine.units.Unit;
       
       public function Monk(game:StickWar)
       {
@@ -92,7 +92,7 @@ package com.brockw.stickwar.engine.units
          maxHealth = health = game.xml.xml.Order.Units.monk.health;
          this._healAmount = game.xml.xml.Order.Units.monk.heal.amount;
          this._healDuration = game.xml.xml.Order.Units.monk.heal.duration;
-         type = Unit.U_MONK;
+         type = com.brockw.stickwar.engine.units.Unit.U_MONK;
          _mc.stop();
          _mc.width *= _scale;
          _mc.height *= _scale;
@@ -100,9 +100,9 @@ package com.brockw.stickwar.engine.units
          MovieClip(_mc.mc.gotoAndPlay(1));
          MovieClip(_mc.gotoAndStop(1));
          drawShadow();
-         this.healSpellCooldown = new SpellCooldown(game.xml.xml.Order.Units.monk.heal.effect,game.xml.xml.Order.Units.monk.heal.cooldown,game.xml.xml.Order.Units.monk.heal.mana);
-         this.cureSpellCooldown = new SpellCooldown(game.xml.xml.Order.Units.monk.cure.effect,game.xml.xml.Order.Units.monk.cure.cooldown,game.xml.xml.Order.Units.monk.cure.mana);
-         this.slowSpellCooldown = new SpellCooldown(game.xml.xml.Order.Units.monk.slow.effect,game.xml.xml.Order.Units.monk.slow.cooldown,game.xml.xml.Order.Units.monk.slow.mana);
+         this.healSpellCooldown = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Order.Units.monk.heal.effect,game.xml.xml.Order.Units.monk.heal.cooldown,game.xml.xml.Order.Units.monk.heal.mana);
+         this.cureSpellCooldown = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Order.Units.monk.cure.effect,game.xml.xml.Order.Units.monk.cure.cooldown,game.xml.xml.Order.Units.monk.cure.mana);
+         this.slowSpellCooldown = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Order.Units.monk.slow.effect,game.xml.xml.Order.Units.monk.slow.cooldown,game.xml.xml.Order.Units.monk.slow.mana);
          this.isCuring = false;
          this.isHealing = false;
          this.isShielding = false;
@@ -124,7 +124,7 @@ package com.brockw.stickwar.engine.units
       
       override public function update(game:StickWar) : void
       {
-         var target:Unit = null;
+         var target:com.brockw.stickwar.engine.units.Unit = null;
          var p:Point = null;
          this.healSpellCooldown.update();
          this.cureSpellCooldown.update();
@@ -217,7 +217,7 @@ package com.brockw.stickwar.engine.units
                if(!hasHit)
                {
                   hasHit = this.checkForHit();
-                  if(!hasHit)
+                  if(hasHit)
                   {
                   }
                }
@@ -302,7 +302,7 @@ package com.brockw.stickwar.engine.units
          return this.isCuring || this.isHealing || this.isShielding || isBusyForSpell;
       }
       
-      public function healSpell(personToHeal:Unit) : Boolean
+      public function healSpell(personToHeal:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(!this.isBusy() && this.healSpellCooldown.spellActivate(team))
          {
@@ -316,7 +316,7 @@ package com.brockw.stickwar.engine.units
          return false;
       }
       
-      public function cureSpell(personToCure:Unit) : void
+      public function cureSpell(personToCure:com.brockw.stickwar.engine.units.Unit) : void
       {
          if(!this.isBusy() && team.tech.isResearched(Tech.MONK_CURE) && this.cureSpellCooldown.spellActivate(team))
          {
@@ -337,7 +337,7 @@ package com.brockw.stickwar.engine.units
             _scale = 3;
             return;
          }
-         var t:Unit = null;
+         var t:com.brockw.stickwar.engine.units.Unit = null;
          if(!this.isSlowing && this.slowSpellCooldown.spellActivate(this.team))
          {
             this.spellX = target;
@@ -367,7 +367,7 @@ package com.brockw.stickwar.engine.units
          return this.slowSpellCooldown.cooldown();
       }
       
-      override public function mayAttack(target:Unit) : Boolean
+      override public function mayAttack(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(isIncapacitated())
          {

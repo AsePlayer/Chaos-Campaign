@@ -22,11 +22,11 @@ package com.smartfoxserver.v2.requests
       
       private var _variables:Array;
       
-      private var _permissions:RoomPermissions;
+      private var _permissions:com.smartfoxserver.v2.requests.RoomPermissions;
       
-      private var _events:RoomEvents;
+      private var _events:com.smartfoxserver.v2.requests.RoomEvents;
       
-      private var _extension:RoomExtension;
+      private var _extension:com.smartfoxserver.v2.requests.RoomExtension;
       
       public function RoomSettings(name:String)
       {
@@ -110,32 +110,32 @@ package com.smartfoxserver.v2.requests
          this._variables = value;
       }
       
-      public function get permissions() : RoomPermissions
+      public function get permissions() : com.smartfoxserver.v2.requests.RoomPermissions
       {
          return this._permissions;
       }
       
-      public function set permissions(value:RoomPermissions) : void
+      public function set permissions(value:com.smartfoxserver.v2.requests.RoomPermissions) : void
       {
          this._permissions = value;
       }
       
-      public function get events() : RoomEvents
+      public function get events() : com.smartfoxserver.v2.requests.RoomEvents
       {
          return this._events;
       }
       
-      public function set events(value:RoomEvents) : void
+      public function set events(value:com.smartfoxserver.v2.requests.RoomEvents) : void
       {
          this._events = value;
       }
       
-      public function get extension() : RoomExtension
+      public function get extension() : com.smartfoxserver.v2.requests.RoomExtension
       {
          return this._extension;
       }
       
-      public function set extension(value:RoomExtension) : void
+      public function set extension(value:com.smartfoxserver.v2.requests.RoomExtension) : void
       {
          this._extension = value;
       }

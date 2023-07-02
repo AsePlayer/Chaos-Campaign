@@ -9,23 +9,23 @@ package de.polygonal.ds
       
       public var val:Object;
       
-      public var prev:DLLNode;
+      public var prev:de.polygonal.ds.DLLNode;
       
-      public var next:DLLNode;
+      public var next:de.polygonal.ds.DLLNode;
       
-      public var _list:DLL;
+      public var _list:de.polygonal.ds.DLL;
       
-      public function DLLNode(x:Object = undefined, list:DLL = undefined)
+      public function DLLNode(param1:Object = undefined, param2:de.polygonal.ds.DLL = undefined)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         val = x;
-         _list = list;
+         val = param1;
+         _list = param2;
       }
       
-      public function unlink() : DLLNode
+      public function unlink() : de.polygonal.ds.DLLNode
       {
          null;
          return _list.unlink(this);
@@ -42,27 +42,27 @@ package de.polygonal.ds
          return prev.val;
       }
       
-      public function prependTo(node:DLLNode) : DLLNode
+      public function prependTo(param1:de.polygonal.ds.DLLNode) : de.polygonal.ds.DLLNode
       {
          null;
          null;
          null;
-         next = node;
-         if(node != null)
+         next = param1;
+         if(param1 != null)
          {
-            node.prev = this;
+            param1.prev = this;
          }
          return this;
       }
       
-      public function prepend(node:DLLNode) : DLLNode
+      public function prepend(param1:de.polygonal.ds.DLLNode) : de.polygonal.ds.DLLNode
       {
          null;
          null;
          null;
-         node.next = this;
-         prev = node;
-         return node;
+         param1.next = this;
+         prev = param1;
+         return param1;
       }
       
       public function nextVal() : Object
@@ -93,7 +93,7 @@ package de.polygonal.ds
          return next != null;
       }
       
-      public function getList() : DLL
+      public function getList() : de.polygonal.ds.DLL
       {
          return _list;
       }
@@ -106,32 +106,32 @@ package de.polygonal.ds
          _list = null;
       }
       
-      public function appendTo(node:DLLNode) : DLLNode
+      public function appendTo(param1:de.polygonal.ds.DLLNode) : de.polygonal.ds.DLLNode
       {
          null;
          null;
          null;
-         prev = node;
-         if(node != null)
+         prev = param1;
+         if(param1 != null)
          {
-            node.next = this;
+            param1.next = this;
          }
          return this;
       }
       
-      public function append(node:DLLNode) : DLLNode
+      public function append(param1:de.polygonal.ds.DLLNode) : de.polygonal.ds.DLLNode
       {
          null;
          null;
          null;
-         next = node;
-         node.prev = this;
-         return node;
+         next = param1;
+         param1.prev = this;
+         return param1;
       }
       
-      public function _unlink() : DLLNode
+      public function _unlink() : de.polygonal.ds.DLLNode
       {
-         var _loc1_:DLLNode = next;
+         var _loc1_:de.polygonal.ds.DLLNode = next;
          if(prev != null)
          {
             prev.next = next;
@@ -144,26 +144,26 @@ package de.polygonal.ds
          return _loc1_;
       }
       
-      public function _insertBefore(node:DLLNode) : void
+      public function _insertBefore(param1:de.polygonal.ds.DLLNode) : void
       {
-         node.next = this;
-         node.prev = prev;
+         param1.next = this;
+         param1.prev = prev;
          if(prev != null)
          {
-            prev.next = node;
+            prev.next = param1;
          }
-         prev = node;
+         prev = param1;
       }
       
-      public function _insertAfter(node:DLLNode) : void
+      public function _insertAfter(param1:de.polygonal.ds.DLLNode) : void
       {
-         node.next = next;
-         node.prev = this;
+         param1.next = next;
+         param1.prev = this;
          if(next != null)
          {
-            next.prev = node;
+            next.prev = param1;
          }
-         next = node;
+         next = param1;
       }
    }
 }

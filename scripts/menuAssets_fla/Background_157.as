@@ -12,7 +12,7 @@ package menuAssets_fla
          addFrameScript(173,this.frame174);
       }
       
-      function frame174() : *
+      internal function frame174() : *
       {
          stop();
       }

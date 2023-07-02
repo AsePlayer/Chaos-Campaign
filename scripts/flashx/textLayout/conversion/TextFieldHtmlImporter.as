@@ -32,8 +32,6 @@ package flashx.textLayout.conversion
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class TextFieldHtmlImporter extends BaseTextLayoutImporter implements IHTMLImporter
    {
@@ -66,8 +64,8 @@ package flashx.textLayout.conversion
       tlf_internal static const _linkTargetDescription:Object = {"target":Property.NewStringProperty("target",null,false,null)};
       
       tlf_internal static const _imageDescription:Object = {
-         "height":InlineGraphicElement.heightPropertyDefinition,
-         "width":InlineGraphicElement.widthPropertyDefinition
+         "height":InlineGraphicElement.tlf_internal::heightPropertyDefinition,
+         "width":InlineGraphicElement.tlf_internal::widthPropertyDefinition
       };
       
       tlf_internal static const _imageMiscDescription:Object = {
@@ -103,7 +101,7 @@ package flashx.textLayout.conversion
       
       tlf_internal static var _activeImpliedParaFormat:TextLayoutFormat = null;
       
-      tlf_internal static var _htmlImporterConfig:ImportExportConfiguration;
+      tlf_internal static var _htmlImporterConfig:flashx.textLayout.conversion.ImportExportConfiguration;
       
       tlf_internal static const stripRegex:RegExp = /<!--.*?-->|<\?(".*?"|'.*?'|[^>"']+)*>|<!(".*?"|'.*?'|[^>"']+)*>/sg;
       
@@ -124,46 +122,46 @@ package flashx.textLayout.conversion
       
       public function TextFieldHtmlImporter()
       {
-         createConfig();
-         super(null,_htmlImporterConfig);
+         tlf_internal::createConfig();
+         super(null,tlf_internal::_htmlImporterConfig);
       }
       
       tlf_internal static function createConfig() : void
       {
-         if(!_htmlImporterConfig)
+         if(!tlf_internal::_htmlImporterConfig)
          {
-            _htmlImporterConfig = new ImportExportConfiguration();
-            _htmlImporterConfig.addIEInfo("BR",BreakElement,BaseTextLayoutImporter.parseBreak,null);
-            _htmlImporterConfig.addIEInfo("P",ParagraphElement,TextFieldHtmlImporter.parsePara,null);
-            _htmlImporterConfig.addIEInfo("SPAN",SpanElement,TextFieldHtmlImporter.parseSpan,null);
-            _htmlImporterConfig.addIEInfo("A",LinkElement,TextFieldHtmlImporter.parseLink,null);
-            _htmlImporterConfig.addIEInfo("IMG",InlineGraphicElement,TextFieldHtmlImporter.parseInlineGraphic,null);
-            _htmlImporterConfig.addIEInfo("DIV",DivElement,TextFieldHtmlImporter.parseDiv,null);
-            _htmlImporterConfig.addIEInfo("HTML",null,TextFieldHtmlImporter.parseHtmlElement,null);
-            _htmlImporterConfig.addIEInfo("BODY",null,TextFieldHtmlImporter.parseBody,null);
-            _htmlImporterConfig.addIEInfo("FONT",null,TextFieldHtmlImporter.parseFont,null);
-            _htmlImporterConfig.addIEInfo("TEXTFORMAT",null,TextFieldHtmlImporter.parseTextFormat,null);
-            _htmlImporterConfig.addIEInfo("U",null,TextFieldHtmlImporter.parseUnderline,null);
-            _htmlImporterConfig.addIEInfo("I",null,TextFieldHtmlImporter.parseItalic,null);
-            _htmlImporterConfig.addIEInfo("B",null,TextFieldHtmlImporter.parseBold,null);
-            _htmlImporterConfig.addIEInfo("S",null,TextFieldHtmlImporter.parseStrikeThrough,null);
-            _htmlImporterConfig.addIEInfo("UL",null,BaseTextLayoutImporter.parseList,null);
-            _htmlImporterConfig.addIEInfo("OL",null,BaseTextLayoutImporter.parseList,null);
-            _htmlImporterConfig.addIEInfo("LI",null,TextFieldHtmlImporter.parseListItem,null);
+            tlf_internal::_htmlImporterConfig = new flashx.textLayout.conversion.ImportExportConfiguration();
+            tlf_internal::_htmlImporterConfig.addIEInfo("BR",BreakElement,BaseTextLayoutImporter.parseBreak,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("P",ParagraphElement,TextFieldHtmlImporter.parsePara,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("SPAN",SpanElement,TextFieldHtmlImporter.parseSpan,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("A",LinkElement,TextFieldHtmlImporter.parseLink,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("IMG",InlineGraphicElement,TextFieldHtmlImporter.parseInlineGraphic,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("DIV",DivElement,TextFieldHtmlImporter.parseDiv,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("HTML",null,TextFieldHtmlImporter.parseHtmlElement,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("BODY",null,TextFieldHtmlImporter.parseBody,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("FONT",null,TextFieldHtmlImporter.parseFont,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("TEXTFORMAT",null,TextFieldHtmlImporter.parseTextFormat,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("U",null,TextFieldHtmlImporter.parseUnderline,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("I",null,TextFieldHtmlImporter.parseItalic,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("B",null,TextFieldHtmlImporter.parseBold,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("S",null,TextFieldHtmlImporter.parseStrikeThrough,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("UL",null,BaseTextLayoutImporter.parseList,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("OL",null,BaseTextLayoutImporter.parseList,null);
+            tlf_internal::_htmlImporterConfig.addIEInfo("LI",null,TextFieldHtmlImporter.parseListItem,null);
          }
-         if(_classAndIdDescription["CLASS"] === undefined)
+         if(tlf_internal::_classAndIdDescription["CLASS"] === undefined)
          {
-            _classAndIdDescription["CLASS"] = Property.NewStringProperty("CLASS",null,false,null);
-            _paragraphFormatImporter = new HtmlCustomParaFormatImporter(TextLayoutFormat,_paragraphFormatDescription);
-            _textFormatImporter = new TextFormatImporter(TextLayoutFormat,_textFormatDescription);
-            _fontImporter = new FontImporter(TextLayoutFormat,_fontDescription);
-            _fontMiscImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,_fontMiscDescription);
-            _textFormatMiscImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,_textFormatMiscDescription);
-            _linkHrefImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,_linkHrefDescription,false);
-            _linkTargetImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,_linkTargetDescription);
-            _ilgFormatImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,_imageDescription);
-            _ilgMiscFormatImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,_imageMiscDescription,false);
-            _classAndIdImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,_classAndIdDescription);
+            tlf_internal::_classAndIdDescription["CLASS"] = Property.NewStringProperty("CLASS",null,false,null);
+            tlf_internal::_paragraphFormatImporter = new HtmlCustomParaFormatImporter(TextLayoutFormat,tlf_internal::_paragraphFormatDescription);
+            tlf_internal::_textFormatImporter = new TextFormatImporter(TextLayoutFormat,tlf_internal::_textFormatDescription);
+            tlf_internal::_fontImporter = new FontImporter(TextLayoutFormat,tlf_internal::_fontDescription);
+            tlf_internal::_fontMiscImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,tlf_internal::_fontMiscDescription);
+            tlf_internal::_textFormatMiscImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,tlf_internal::_textFormatMiscDescription);
+            tlf_internal::_linkHrefImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,tlf_internal::_linkHrefDescription,false);
+            tlf_internal::_linkTargetImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,tlf_internal::_linkTargetDescription);
+            tlf_internal::_ilgFormatImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,tlf_internal::_imageDescription);
+            tlf_internal::_ilgMiscFormatImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,tlf_internal::_imageMiscDescription,false);
+            tlf_internal::_classAndIdImporter = new CaseInsensitiveTLFFormatImporter(Dictionary,tlf_internal::_classAndIdDescription);
          }
       }
       
@@ -173,11 +171,11 @@ package flashx.textLayout.conversion
          if(!(parent is ListElement))
          {
             list = importer.createListFromXML(null);
-            importer.addChild(parent,list);
+            importer.tlf_internal::addChild(parent,list);
             parent = list;
          }
          var listItem:ListItemElement = importer.createListItemFromXML(xmlToParse);
-         if(importer.addChild(parent,listItem))
+         if(importer.tlf_internal::addChild(parent,listItem))
          {
             importer.parseFlowGroupElementChildren(xmlToParse,listItem);
             if(listItem.numChildren == 0)
@@ -191,10 +189,10 @@ package flashx.textLayout.conversion
       {
          var fontFormattingElement:XML = null;
          var paraElem:ParagraphElement = importer.createParagraphFromXML(xmlToParse);
-         if(importer.addChild(parent,paraElem))
+         if(importer.tlf_internal::addChild(parent,paraElem))
          {
             fontFormattingElement = getSingleFontChild(xmlToParse);
-            parseChildrenUnderNewActiveFormat(importer,Boolean(fontFormattingElement) ? fontFormattingElement : xmlToParse,paraElem,_activeFormat,null);
+            parseChildrenUnderNewActiveFormat(importer,Boolean(fontFormattingElement) ? fontFormattingElement : xmlToParse,paraElem,tlf_internal::_activeFormat,null);
             if(paraElem.numChildren == 0)
             {
                paraElem.addChild(importer.createImpliedSpan(""));
@@ -206,7 +204,7 @@ package flashx.textLayout.conversion
       public static function parseDiv(importer:TextFieldHtmlImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var elem:FlowGroupElement = null;
-         if(parent.canOwnFlowElement(new DivElement()))
+         if(parent.tlf_internal::canOwnFlowElement(new DivElement()))
          {
             elem = importer.createDivFromXML(xmlToParse);
          }
@@ -215,7 +213,7 @@ package flashx.textLayout.conversion
             elem = importer.createSPGEFromXML(xmlToParse);
             elem.typeName = "div";
          }
-         importer.addChild(parent,elem);
+         importer.tlf_internal::addChild(parent,elem);
          importer.parseFlowGroupElementChildren(xmlToParse,elem);
       }
       
@@ -230,10 +228,10 @@ package flashx.textLayout.conversion
                parent.addChild(newParent);
                parent = newParent;
             }
-            importer.parseAttributes(xmlToParse,[_classAndIdImporter]);
+            importer.parseAttributes(xmlToParse,[tlf_internal::_classAndIdImporter]);
             parent.typeName = "html";
-            parent.styleName = _classAndIdImporter.getFormatValue("CLASS");
-            parent.id = _classAndIdImporter.getFormatValue("ID");
+            parent.styleName = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+            parent.id = tlf_internal::_classAndIdImporter.getFormatValue("ID");
          }
          importer.parseFlowGroupElementChildren(xmlToParse,parent,null,true);
       }
@@ -246,10 +244,10 @@ package flashx.textLayout.conversion
             newParent = parent is ParagraphElement || parent is SubParagraphGroupElementBase ? new SubParagraphGroupElement() : new DivElement();
             parent.addChild(newParent);
             parent = newParent;
-            importer.parseAttributes(xmlToParse,[_classAndIdImporter]);
+            importer.parseAttributes(xmlToParse,[tlf_internal::_classAndIdImporter]);
             parent.typeName = "body";
-            parent.styleName = _classAndIdImporter.getFormatValue("CLASS");
-            parent.id = _classAndIdImporter.getFormatValue("ID");
+            parent.styleName = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+            parent.id = tlf_internal::_classAndIdImporter.getFormatValue("ID");
          }
          importer.parseFlowGroupElementChildren(xmlToParse,parent,null,true);
       }
@@ -272,9 +270,9 @@ package flashx.textLayout.conversion
       public static function parseLink(importer:TextFieldHtmlImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var linkElem:LinkElement = importer.createLinkFromXML(xmlToParse);
-         if(importer.addChild(parent,linkElem))
+         if(importer.tlf_internal::addChild(parent,linkElem))
          {
-            parseChildrenUnderNewActiveFormat(importer,xmlToParse,linkElem,_activeFormat,null);
+            parseChildrenUnderNewActiveFormat(importer,xmlToParse,linkElem,tlf_internal::_activeFormat,null);
          }
       }
       
@@ -296,7 +294,7 @@ package flashx.textLayout.conversion
          for each(child in _loc7_)
          {
          }
-         elemName = Boolean(child.name()) ? child.name().localName : null;
+         elemName = Boolean(child.name()) ? String(child.name().localName) : null;
          if(elemName != null)
          {
             return null;
@@ -308,37 +306,37 @@ package flashx.textLayout.conversion
       public static function parseSpan(importer:TextFieldHtmlImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var spge:SubParagraphGroupElement = null;
-         importer.parseAttributes(xmlToParse,[_classAndIdImporter]);
-         var classFormatValue:* = _classAndIdImporter.getFormatValue("CLASS");
-         var idFormatValue:* = _classAndIdImporter.getFormatValue("ID");
-         var simpleSpanText:String = extractSimpleSpanText(xmlToParse);
+         importer.parseAttributes(xmlToParse,[tlf_internal::_classAndIdImporter]);
+         var classFormatValue:* = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+         var idFormatValue:* = tlf_internal::_classAndIdImporter.getFormatValue("ID");
+         var simpleSpanText:String = tlf_internal::extractSimpleSpanText(xmlToParse);
          if(simpleSpanText == null)
          {
-            if(classFormatValue !== undefined || idFormatValue !== undefined || !TextLayoutFormat.isEqual(_activeFormat,TextLayoutFormat.emptyTextLayoutFormat))
+            if(classFormatValue !== undefined || idFormatValue !== undefined || !TextLayoutFormat.isEqual(tlf_internal::_activeFormat,TextLayoutFormat.tlf_internal::emptyTextLayoutFormat))
             {
                spge = new SubParagraphGroupElement();
-               spge.format = _activeFormat;
+               spge.format = tlf_internal::_activeFormat;
                spge.styleName = classFormatValue;
                spge.id = idFormatValue;
                spge.typeName = "span";
-               importer.addChild(parent,spge);
+               importer.tlf_internal::addChild(parent,spge);
                parent = spge;
             }
-            parseChildrenUnderNewActiveFormat(importer,xmlToParse,parent,_activeFormat,null);
+            parseChildrenUnderNewActiveFormat(importer,xmlToParse,parent,tlf_internal::_activeFormat,null);
             return;
          }
          var span:SpanElement = new SpanElement();
-         span.format = _activeFormat;
+         span.format = tlf_internal::_activeFormat;
          span.styleName = classFormatValue;
          span.id = idFormatValue;
          span.text = simpleSpanText;
-         importer.addChild(parent,span);
+         importer.tlf_internal::addChild(parent,span);
       }
       
       public static function parseInlineGraphic(importer:TextFieldHtmlImporter, xmlToParse:XML, parent:FlowGroupElement) : void
       {
          var ilg:InlineGraphicElement = importer.createInlineGraphicFromXML(xmlToParse);
-         importer.addChild(parent,ilg);
+         importer.tlf_internal::addChild(parent,ilg);
       }
       
       public static function parseFont(importer:TextFieldHtmlImporter, xmlToParse:XML, parent:FlowGroupElement) : void
@@ -351,10 +349,10 @@ package flashx.textLayout.conversion
       {
          var blockIndentVal:Number = NaN;
          var format:TextLayoutFormat = null;
-         var formatImporters:Array = [_textFormatImporter,_textFormatMiscImporter];
+         var formatImporters:Array = [tlf_internal::_textFormatImporter,tlf_internal::_textFormatMiscImporter];
          importer.parseAttributes(xmlToParse,formatImporters);
-         var newFormat:TextLayoutFormat = new TextLayoutFormat(_textFormatImporter.result as ITextLayoutFormat);
-         var blockIndent:* = _textFormatMiscImporter.getFormatValue("BLOCKINDENT");
+         var newFormat:TextLayoutFormat = new TextLayoutFormat(tlf_internal::_textFormatImporter.result as ITextLayoutFormat);
+         var blockIndent:* = tlf_internal::_textFormatMiscImporter.getFormatValue("BLOCKINDENT");
          switch(blockIndent)
          {
             default:
@@ -364,7 +362,7 @@ package flashx.textLayout.conversion
             case undefined:
             case undefined:
          }
-         var saveLineHeight:* = _activeFormat.lineHeight;
+         var saveLineHeight:* = tlf_internal::_activeFormat.lineHeight;
          if(parent is ParagraphElement)
          {
             if(parent.numChildren == 0)
@@ -376,15 +374,15 @@ package flashx.textLayout.conversion
                   format.leadingModel = LeadingModel.APPROXIMATE_TEXT_FIELD;
                }
                parent.format = format;
-               newFormat.clearStyles();
+               newFormat.tlf_internal::clearStyles();
             }
             else if(newFormat.lineHeight !== undefined)
             {
-               _activeFormat.lineHeight = newFormat.lineHeight;
+               tlf_internal::_activeFormat.lineHeight = newFormat.lineHeight;
             }
          }
-         parseChildrenUnderNewActiveFormat(importer,xmlToParse,parent,_activeParaFormat,newFormat,true);
-         _activeFormat.lineHeight = saveLineHeight;
+         parseChildrenUnderNewActiveFormat(importer,xmlToParse,parent,tlf_internal::_activeParaFormat,newFormat,true);
+         tlf_internal::_activeFormat.lineHeight = saveLineHeight;
       }
       
       public static function parseBold(importer:TextFieldHtmlImporter, xmlToParse:XML, parent:FlowGroupElement) : void
@@ -417,18 +415,18 @@ package flashx.textLayout.conversion
       
       protected static function parseChildrenUnderNewActiveFormatWithImpliedParaFormat(importer:TextFieldHtmlImporter, xmlToParse:XML, parent:FlowGroupElement, newFormat:ITextLayoutFormat) : void
       {
-         var oldActiveImpliedParaFormat:TextLayoutFormat = _activeImpliedParaFormat;
-         if(_activeImpliedParaFormat == null)
+         var oldActiveImpliedParaFormat:TextLayoutFormat = tlf_internal::_activeImpliedParaFormat;
+         if(tlf_internal::_activeImpliedParaFormat == null)
          {
-            _activeImpliedParaFormat = new TextLayoutFormat(_activeFormat);
+            tlf_internal::_activeImpliedParaFormat = new TextLayoutFormat(tlf_internal::_activeFormat);
          }
          try
          {
-            parseChildrenUnderNewActiveFormat(importer,xmlToParse,parent,_activeFormat,newFormat,true);
+            parseChildrenUnderNewActiveFormat(importer,xmlToParse,parent,tlf_internal::_activeFormat,newFormat,true);
          }
          finally
          {
-            _activeImpliedParaFormat = oldActiveImpliedParaFormat;
+            tlf_internal::_activeImpliedParaFormat = oldActiveImpliedParaFormat;
          }
       }
       
@@ -436,19 +434,19 @@ package flashx.textLayout.conversion
       {
          var beforeCount:int = 0;
          var span:SpanElement = null;
-         var restoreBaseFontSize:Number = importer._baseFontSize;
-         var restoreStyles:Object = Property.shallowCopy(currFormat.getStyles());
-         if(newFormat)
+         var restoreBaseFontSize:Number = importer.tlf_internal::_baseFontSize;
+         var restoreStyles:Object = Property.shallowCopy(currFormat.tlf_internal::getStyles());
+         if(Boolean(newFormat))
          {
             if(newFormat.fontSize !== undefined)
             {
-               importer._baseFontSize = newFormat.fontSize;
+               importer.tlf_internal::_baseFontSize = newFormat.fontSize;
             }
             currFormat.apply(newFormat);
          }
          else
          {
-            currFormat.clearStyles();
+            currFormat.tlf_internal::clearStyles();
          }
          try
          {
@@ -457,13 +455,13 @@ package flashx.textLayout.conversion
             if(beforeCount == parent.numChildren)
             {
                span = importer.createImpliedSpan("");
-               importer.addChild(parent,span);
+               importer.tlf_internal::addChild(parent,span);
             }
          }
          finally
          {
-            currFormat.setStyles(restoreStyles,false);
-            importer._baseFontSize = restoreBaseFontSize;
+            currFormat.tlf_internal::setStyles(restoreStyles,false);
+            importer.tlf_internal::_baseFontSize = restoreBaseFontSize;
          }
       }
       
@@ -473,7 +471,7 @@ package flashx.textLayout.conversion
          var paraIndex:int = 0;
          var paraParent:FlowGroupElement = null;
          var elem:FlowLeafElement = para.getFirstLeaf();
-         while(elem)
+         while(Boolean(elem))
          {
             if(!(elem is BreakElement))
             {
@@ -494,7 +492,7 @@ package flashx.textLayout.conversion
                elem = para.getFirstLeaf();
             }
          }
-         if(paraArray)
+         if(Boolean(paraArray))
          {
             paraParent.replaceChildren(paraIndex,paraIndex,paraArray);
          }
@@ -534,10 +532,10 @@ package flashx.textLayout.conversion
       {
          var textFlow:TextFlow = null;
          var xml:XML = this.toXML(source);
-         if(xml)
+         if(Boolean(xml))
          {
             textFlow = this.importFromXML(xml);
-            if(Configuration.playerEnablesArgoFeatures)
+            if(Configuration.tlf_internal::playerEnablesArgoFeatures)
             {
                System["disposeXML"](xml);
             }
@@ -552,36 +550,36 @@ package flashx.textLayout.conversion
          {
             textFlow.typeName = "html";
          }
-         this._baseFontSize = textFlow.fontSize === undefined ? Number(12) : Number(textFlow.fontSize);
-         this.parseObject(xmlSource.name().localName,xmlSource,textFlow);
-         resetImpliedPara();
-         textFlow.normalize();
-         textFlow.applyWhiteSpaceCollapse(null);
+         this.tlf_internal::_baseFontSize = textFlow.fontSize === undefined ? 12 : textFlow.fontSize;
+         this.tlf_internal::parseObject(xmlSource.name().localName,xmlSource,textFlow);
+         tlf_internal::resetImpliedPara();
+         textFlow.tlf_internal::normalize();
+         textFlow.tlf_internal::applyWhiteSpaceCollapse(null);
          return textFlow;
       }
       
       override tlf_internal function clear() : void
       {
-         _activeParaFormat.clearStyles();
-         _activeFormat.clearStyles();
-         super.clear();
+         tlf_internal::_activeParaFormat.tlf_internal::clearStyles();
+         tlf_internal::_activeFormat.tlf_internal::clearStyles();
+         super.tlf_internal::clear();
       }
       
       override tlf_internal function createImpliedParagraph() : ParagraphElement
       {
          var rslt:ParagraphElement = null;
-         var savedActiveFormat:TextLayoutFormat = _activeFormat;
-         if(_activeImpliedParaFormat)
+         var savedActiveFormat:TextLayoutFormat = tlf_internal::_activeFormat;
+         if(Boolean(tlf_internal::_activeImpliedParaFormat))
          {
-            _activeFormat = _activeImpliedParaFormat;
+            tlf_internal::_activeFormat = tlf_internal::_activeImpliedParaFormat;
          }
          try
          {
-            rslt = super.createImpliedParagraph();
+            rslt = super.tlf_internal::createImpliedParagraph();
          }
          finally
          {
-            _activeFormat = savedActiveFormat;
+            tlf_internal::_activeFormat = savedActiveFormat;
          }
          return rslt;
       }
@@ -589,19 +587,19 @@ package flashx.textLayout.conversion
       override public function createParagraphFromXML(xmlToParse:XML) : ParagraphElement
       {
          var paraElem:ParagraphElement = new ParagraphElement();
-         var formatImporters:Array = [_paragraphFormatImporter,_classAndIdImporter];
+         var formatImporters:Array = [tlf_internal::_paragraphFormatImporter,tlf_internal::_classAndIdImporter];
          parseAttributes(xmlToParse,formatImporters);
-         var paragraphFormat:TextLayoutFormat = new TextLayoutFormat(_paragraphFormatImporter.result as ITextLayoutFormat);
-         if(_activeParaFormat)
+         var paragraphFormat:TextLayoutFormat = new TextLayoutFormat(tlf_internal::_paragraphFormatImporter.result as ITextLayoutFormat);
+         if(Boolean(tlf_internal::_activeParaFormat))
          {
-            paragraphFormat.apply(_activeParaFormat);
+            paragraphFormat.apply(tlf_internal::_activeParaFormat);
          }
-         if(_activeFormat)
+         if(Boolean(tlf_internal::_activeFormat))
          {
-            paragraphFormat.apply(_activeFormat);
+            paragraphFormat.apply(tlf_internal::_activeFormat);
          }
          var fontFormattingElement:XML = getSingleFontChild(xmlToParse);
-         if(fontFormattingElement)
+         if(Boolean(fontFormattingElement))
          {
             paragraphFormat.apply(this.parseFontAttributes(fontFormattingElement));
          }
@@ -610,50 +608,50 @@ package flashx.textLayout.conversion
             paragraphFormat.leadingModel = LeadingModel.APPROXIMATE_TEXT_FIELD;
          }
          paraElem.format = paragraphFormat;
-         paraElem.styleName = _classAndIdImporter.getFormatValue("CLASS");
-         paraElem.id = _classAndIdImporter.getFormatValue("ID");
+         paraElem.styleName = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+         paraElem.id = tlf_internal::_classAndIdImporter.getFormatValue("ID");
          return paraElem;
       }
       
       override public function createListFromXML(xmlToParse:XML) : ListElement
       {
-         parseAttributes(xmlToParse,[_classAndIdImporter]);
+         parseAttributes(xmlToParse,[tlf_internal::_classAndIdImporter]);
          var list:ListElement = new ListElement();
          list.paddingLeft = 36;
-         var name:String = Boolean(xmlToParse) ? xmlToParse.name().localName : null;
+         var name:String = Boolean(xmlToParse) ? String(xmlToParse.name().localName) : null;
          list.listStyleType = name == "OL" ? ListStyleType.DECIMAL : ListStyleType.DISC;
          var lmf:ListMarkerFormat = new ListMarkerFormat();
          lmf.paragraphEndIndent = 14;
          list.listMarkerFormat = lmf;
-         list.styleName = _classAndIdImporter.getFormatValue("CLASS");
-         list.id = _classAndIdImporter.getFormatValue("ID");
+         list.styleName = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+         list.id = tlf_internal::_classAndIdImporter.getFormatValue("ID");
          return list;
       }
       
       override public function createListItemFromXML(xmlToParse:XML) : ListItemElement
       {
-         parseAttributes(xmlToParse,[_classAndIdImporter]);
+         parseAttributes(xmlToParse,[tlf_internal::_classAndIdImporter]);
          var listItem:ListItemElement = new ListItemElement();
-         listItem.styleName = _classAndIdImporter.getFormatValue("CLASS");
-         listItem.id = _classAndIdImporter.getFormatValue("ID");
+         listItem.styleName = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+         listItem.id = tlf_internal::_classAndIdImporter.getFormatValue("ID");
          return listItem;
       }
       
       public function createDivFromXML(xmlToParse:XML) : DivElement
       {
-         parseAttributes(xmlToParse,[_classAndIdImporter]);
+         parseAttributes(xmlToParse,[tlf_internal::_classAndIdImporter]);
          var divElement:DivElement = new DivElement();
-         divElement.styleName = _classAndIdImporter.getFormatValue("CLASS");
-         divElement.id = _classAndIdImporter.getFormatValue("ID");
+         divElement.styleName = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+         divElement.id = tlf_internal::_classAndIdImporter.getFormatValue("ID");
          return divElement;
       }
       
       public function createSPGEFromXML(xmlToParse:XML) : SubParagraphGroupElement
       {
-         parseAttributes(xmlToParse,[_classAndIdImporter]);
+         parseAttributes(xmlToParse,[tlf_internal::_classAndIdImporter]);
          var spge:SubParagraphGroupElement = new SubParagraphGroupElement();
-         spge.styleName = _classAndIdImporter.getFormatValue("CLASS");
-         spge.id = _classAndIdImporter.getFormatValue("ID");
+         spge.styleName = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+         spge.id = tlf_internal::_classAndIdImporter.getFormatValue("ID");
          return spge;
       }
       
@@ -665,44 +663,44 @@ package flashx.textLayout.conversion
       private function createLinkFromXML(xmlToParse:XML) : LinkElement
       {
          var linkElem:LinkElement = new LinkElement();
-         var formatImporters:Array = [_linkHrefImporter,_linkTargetImporter,_classAndIdImporter];
+         var formatImporters:Array = [tlf_internal::_linkHrefImporter,tlf_internal::_linkTargetImporter,tlf_internal::_classAndIdImporter];
          parseAttributes(xmlToParse,formatImporters);
-         linkElem.href = _linkHrefImporter.getFormatValue("HREF");
-         linkElem.target = _linkTargetImporter.getFormatValue("TARGET");
+         linkElem.href = tlf_internal::_linkHrefImporter.getFormatValue("HREF");
+         linkElem.target = tlf_internal::_linkTargetImporter.getFormatValue("TARGET");
          if(!linkElem.target)
          {
             linkElem.target = "_self";
          }
-         linkElem.format = _activeFormat;
-         linkElem.styleName = _classAndIdImporter.getFormatValue("CLASS");
-         linkElem.id = _classAndIdImporter.getFormatValue("ID");
+         linkElem.format = tlf_internal::_activeFormat;
+         linkElem.styleName = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+         linkElem.id = tlf_internal::_classAndIdImporter.getFormatValue("ID");
          return linkElem;
       }
       
       override public function createImpliedSpan(text:String) : SpanElement
       {
          var span:SpanElement = super.createImpliedSpan(text);
-         span.format = _activeFormat;
+         span.format = tlf_internal::_activeFormat;
          return span;
       }
       
       protected function createInlineGraphicFromXML(xmlToParse:XML) : InlineGraphicElement
       {
          var imgElem:InlineGraphicElement = new InlineGraphicElement();
-         var formatImporters:Array = [_ilgFormatImporter,_ilgMiscFormatImporter,_classAndIdImporter];
+         var formatImporters:Array = [tlf_internal::_ilgFormatImporter,tlf_internal::_ilgMiscFormatImporter,tlf_internal::_classAndIdImporter];
          parseAttributes(xmlToParse,formatImporters);
-         var source:String = _ilgMiscFormatImporter.getFormatValue("SRC");
+         var source:String = tlf_internal::_ilgMiscFormatImporter.getFormatValue("SRC");
          imgElem.source = this._imageSourceResolveFunction != null ? this._imageSourceResolveFunction(source) : source;
-         imgElem.height = InlineGraphicElement.heightPropertyDefinition.setHelper(imgElem.height,_ilgFormatImporter.getFormatValue("HEIGHT"));
-         imgElem.width = InlineGraphicElement.heightPropertyDefinition.setHelper(imgElem.width,_ilgFormatImporter.getFormatValue("WIDTH"));
-         var floatVal:String = _ilgMiscFormatImporter.getFormatValue("ALIGN");
+         imgElem.height = InlineGraphicElement.tlf_internal::heightPropertyDefinition.setHelper(imgElem.height,tlf_internal::_ilgFormatImporter.getFormatValue("HEIGHT"));
+         imgElem.width = InlineGraphicElement.tlf_internal::heightPropertyDefinition.setHelper(imgElem.width,tlf_internal::_ilgFormatImporter.getFormatValue("WIDTH"));
+         var floatVal:String = tlf_internal::_ilgMiscFormatImporter.getFormatValue("ALIGN");
          if(floatVal == Float.LEFT || floatVal == Float.RIGHT)
          {
             imgElem.float = floatVal;
          }
-         imgElem.format = _activeFormat;
-         imgElem.id = _classAndIdImporter.getFormatValue("ID");
-         imgElem.styleName = _classAndIdImporter.getFormatValue("CLASS");
+         imgElem.format = tlf_internal::_activeFormat;
+         imgElem.id = tlf_internal::_classAndIdImporter.getFormatValue("ID");
+         imgElem.styleName = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
          return imgElem;
       }
       
@@ -715,24 +713,24 @@ package flashx.textLayout.conversion
       {
          var kerningVal:Number = NaN;
          var sizeVal:Number = NaN;
-         var formatImporters:Array = [_fontImporter,_fontMiscImporter];
+         var formatImporters:Array = [tlf_internal::_fontImporter,tlf_internal::_fontMiscImporter];
          parseAttributes(xmlToParse,formatImporters);
-         var newFormat:TextLayoutFormat = new TextLayoutFormat(_fontImporter.result as ITextLayoutFormat);
-         var kerning:String = _fontMiscImporter.getFormatValue("KERNING");
-         if(kerning)
+         var newFormat:TextLayoutFormat = new TextLayoutFormat(tlf_internal::_fontImporter.result as ITextLayoutFormat);
+         var kerning:String = tlf_internal::_fontMiscImporter.getFormatValue("KERNING");
+         if(Boolean(kerning))
          {
             kerningVal = Number(kerning);
             newFormat.kerning = kerningVal == 0 ? Kerning.OFF : Kerning.AUTO;
          }
-         var size:String = _fontMiscImporter.getFormatValue("SIZE");
-         if(size)
+         var size:String = tlf_internal::_fontMiscImporter.getFormatValue("SIZE");
+         if(Boolean(size))
          {
             sizeVal = TextLayoutFormat.fontSizeProperty.setHelper(NaN,size);
             if(!isNaN(sizeVal))
             {
                if(size.search(/\s*(-|\+)/) != -1)
                {
-                  sizeVal += this._baseFontSize;
+                  sizeVal += this.tlf_internal::_baseFontSize;
                }
                newFormat.fontSize = sizeVal;
             }
@@ -748,18 +746,18 @@ package flashx.textLayout.conversion
       {
          var newParent:FlowGroupElement = null;
          var addedChild:FlowElement = null;
-         parseAttributes(xmlToParse,[_classAndIdImporter]);
-         var classFormatValue:* = _classAndIdImporter.getFormatValue("CLASS");
-         var idFormatValue:* = _classAndIdImporter.getFormatValue("ID");
-         if(classFormatValue !== undefined || idFormatValue !== undefined || !TextLayoutFormat.isEqual(_activeFormat,TextLayoutFormat.emptyTextLayoutFormat) || parent is ListElement)
+         parseAttributes(xmlToParse,[tlf_internal::_classAndIdImporter]);
+         var classFormatValue:* = tlf_internal::_classAndIdImporter.getFormatValue("CLASS");
+         var idFormatValue:* = tlf_internal::_classAndIdImporter.getFormatValue("ID");
+         if(classFormatValue !== undefined || idFormatValue !== undefined || !TextLayoutFormat.isEqual(tlf_internal::_activeFormat,TextLayoutFormat.tlf_internal::emptyTextLayoutFormat) || parent is ListElement)
          {
             newParent = parent is ParagraphElement || parent is SubParagraphGroupElementBase ? new SubParagraphGroupElement() : new DivElement();
-            addChild(parent,newParent);
-            newParent.format = _activeFormat;
+            tlf_internal::addChild(parent,newParent);
+            newParent.format = tlf_internal::_activeFormat;
             newParent.typeName = name.toLowerCase();
             newParent.styleName = classFormatValue;
             newParent.id = idFormatValue;
-            parseChildrenUnderNewActiveFormat(this,xmlToParse,newParent,_activeFormat,null);
+            parseChildrenUnderNewActiveFormat(this,xmlToParse,newParent,tlf_internal::_activeFormat,null);
             return;
          }
          var befNumChildren:int = parent.numChildren;
@@ -771,7 +769,7 @@ package flashx.textLayout.conversion
          if(befNumChildren + 1 == parent.numChildren)
          {
             addedChild = parent.getChildAt(befNumChildren);
-            if(addedChild.id == null && addedChild.styleName == null && addedChild.typeName == addedChild.defaultTypeName)
+            if(addedChild.id == null && addedChild.styleName == null && addedChild.typeName == addedChild.tlf_internal::defaultTypeName)
             {
                addedChild.typeName = name.toLowerCase();
                return;
@@ -780,12 +778,12 @@ package flashx.textLayout.conversion
          newParent = parent is ParagraphElement || parent is SubParagraphGroupElementBase ? new SubParagraphGroupElement() : new DivElement();
          newParent.typeName = name.toLowerCase();
          newParent.replaceChildren(0,0,parent.mxmlChildren.slice(befNumChildren));
-         addChild(parent,newParent);
+         tlf_internal::addChild(parent,newParent);
       }
       
       override tlf_internal function parseObject(name:String, xmlToParse:XML, parent:FlowGroupElement, exceptionElements:Object = null) : void
       {
-         super.parseObject(name.toUpperCase(),xmlToParse,parent,exceptionElements);
+         super.tlf_internal::parseObject(name.toUpperCase(),xmlToParse,parent,exceptionElements);
       }
       
       override protected function checkNamespace(xmlToParse:XML) : Boolean
@@ -824,13 +822,13 @@ package flashx.textLayout.conversion
          var val:String = null;
          var startChar:String = null;
          var openElem:XML = null;
-         source = source.replace(stripRegex,"");
+         source = source.replace(tlf_internal::stripRegex,"");
          var root:XML = <HTML/>;
          var currElem:XML = root;
-         var lastIndex:int = tagRegex.lastIndex = 0;
+         var lastIndex:int = tlf_internal::tagRegex.lastIndex = 0;
          do
          {
-            result = tagRegex.exec(source);
+            result = tlf_internal::tagRegex.exec(source);
             if(!result)
             {
                this.appendTextChild(currElem,source.substring(lastIndex));
@@ -840,10 +838,10 @@ package flashx.textLayout.conversion
             {
                this.appendTextChild(currElem,source.substring(lastIndex,result.index));
             }
-            tag = result[0];
+            tag = String(result[0]);
             hasStartModifier = result[1] == "/";
-            name = result[2].toUpperCase();
-            attrs = result[3];
+            name = String(result[2].toUpperCase());
+            attrs = String(result[3]);
             hasEndModifier = result[4] == "/";
             if(!hasStartModifier)
             {
@@ -854,14 +852,14 @@ package flashx.textLayout.conversion
                tag = "<" + name;
                do
                {
-                  innerResult = attrRegex.exec(attrs);
+                  innerResult = tlf_internal::attrRegex.exec(attrs);
                   if(!innerResult)
                   {
                      break;
                   }
-                  attrName = innerResult[1].toUpperCase();
+                  attrName = String(innerResult[1].toUpperCase());
                   tag += " " + attrName + "=";
-                  val = Boolean(innerResult[2]) ? innerResult[2] : attrName;
+                  val = Boolean(innerResult[2]) ? String(innerResult[2]) : attrName;
                   startChar = val.charAt(0);
                   tag += startChar == "\'" || startChar == "\"" ? val : "\"" + val + "\"";
                }
@@ -874,16 +872,16 @@ package flashx.textLayout.conversion
                   currElem = currElem.children()[currElem.children().length() - 1];
                }
             }
-            else if(hasEndModifier || attrs.length)
+            else if(hasEndModifier || Boolean(attrs.length))
             {
-               reportError(GlobalSettings.resourceStringFunction("malformedTag",[tag]));
+               tlf_internal::reportError(GlobalSettings.resourceStringFunction("malformedTag",[tag]));
             }
             else
             {
                openElem = currElem;
                do
                {
-                  openElemName = openElem.name().localName;
+                  openElemName = String(openElem.name().localName);
                   openElem = openElem.parent();
                   if(openElemName == name)
                   {
@@ -898,13 +896,13 @@ package flashx.textLayout.conversion
                while(true);
                
             }
-            lastIndex = tagRegex.lastIndex;
+            lastIndex = tlf_internal::tagRegex.lastIndex;
             if(lastIndex == source.length)
             {
                break;
             }
          }
-         while(currElem);
+         while(Boolean(currElem));
          
          return root;
       }
@@ -925,16 +923,16 @@ package flashx.textLayout.conversion
       {
          var xml:XML = null;
          var parentIsSpan:Boolean = parent.localName() == "SPAN";
-         var elemName:String = !!parentIsSpan ? "DUMMY" : "SPAN";
+         var elemName:String = parentIsSpan ? "DUMMY" : "SPAN";
          var xmlText:String = "<" + elemName + ">" + text + "</" + elemName + ">";
          try
          {
             xml = new XML(xmlText);
-            parent.appendChild(!!parentIsSpan ? xml.children()[0] : xml);
+            parent.appendChild(parentIsSpan ? xml.children()[0] : xml);
          }
          catch(e:*)
          {
-            reportError(GlobalSettings.resourceStringFunction("malformedMarkup",[text]));
+            tlf_internal::reportError(GlobalSettings.resourceStringFunction("malformedMarkup",[text]));
          }
       }
    }
@@ -948,9 +946,9 @@ class CaseInsensitiveTLFFormatImporter extends TLFormatImporter
    
    private var _convertValuesToLowerCase:Boolean;
    
-   function CaseInsensitiveTLFFormatImporter(classType:Class, description:Object, convertValuesToLowerCase:Boolean = true)
+   public function CaseInsensitiveTLFFormatImporter(classType:Class, description:Object, convertValuesToLowerCase:Boolean = true)
    {
-      var prop:* = null;
+      var prop:Object = null;
       this._convertValuesToLowerCase = convertValuesToLowerCase;
       var lowerCaseDescription:Object = new Object();
       for(prop in description)
@@ -977,7 +975,7 @@ class HtmlCustomParaFormatImporter extends TLFormatImporter
 {
     
    
-   function HtmlCustomParaFormatImporter(classType:Class, description:Object)
+   public function HtmlCustomParaFormatImporter(classType:Class, description:Object)
    {
       super(classType,description);
    }
@@ -999,7 +997,7 @@ class TextFormatImporter extends TLFormatImporter
 {
     
    
-   function TextFormatImporter(classType:Class, description:Object)
+   public function TextFormatImporter(classType:Class, description:Object)
    {
       super(classType,description);
    }
@@ -1038,7 +1036,7 @@ class FontImporter extends TLFormatImporter
 {
     
    
-   function FontImporter(classType:Class, description:Object)
+   public function FontImporter(classType:Class, description:Object)
    {
       super(classType,description);
    }

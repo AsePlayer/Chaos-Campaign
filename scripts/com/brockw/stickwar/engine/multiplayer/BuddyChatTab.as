@@ -15,9 +15,9 @@ package com.brockw.stickwar.engine.multiplayer
       
       private var _isMinimized:Boolean;
       
-      var main:Main;
+      internal var main:Main;
       
-      private var _buddy:Buddy;
+      private var _buddy:com.brockw.stickwar.engine.multiplayer.Buddy;
       
       public function BuddyChatTab(id:int, main:Main)
       {
@@ -92,12 +92,12 @@ package com.brockw.stickwar.engine.multiplayer
          }
       }
       
-      public function get buddy() : Buddy
+      public function get buddy() : com.brockw.stickwar.engine.multiplayer.Buddy
       {
          return this._buddy;
       }
       
-      public function set buddy(value:Buddy) : void
+      public function set buddy(value:com.brockw.stickwar.engine.multiplayer.Buddy) : void
       {
          this._buddy = value;
       }

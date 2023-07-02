@@ -17,19 +17,19 @@ package com.smartfoxserver.v2.entities
       
       function get isSpectator() : Boolean;
       
-      function getPlayerId(room:Room) : int;
+      function getPlayerId(param1:Room) : int;
       
-      function setPlayerId(id:int, room:Room) : void;
+      function setPlayerId(param1:int, param2:Room) : void;
       
-      function removePlayerId(room:Room) : void;
+      function removePlayerId(param1:Room) : void;
       
       function get privilegeId() : int;
       
-      function set privilegeId(value:int) : void;
+      function set privilegeId(param1:int) : void;
       
       function get userManager() : IUserManager;
       
-      function set userManager(value:IUserManager) : void;
+      function set userManager(param1:IUserManager) : void;
       
       function isGuest() : Boolean;
       
@@ -39,26 +39,26 @@ package com.smartfoxserver.v2.entities
       
       function isAdmin() : Boolean;
       
-      function isPlayerInRoom(room:Room) : Boolean;
+      function isPlayerInRoom(param1:Room) : Boolean;
       
-      function isSpectatorInRoom(room:Room) : Boolean;
+      function isSpectatorInRoom(param1:Room) : Boolean;
       
-      function isJoinedInRoom(room:Room) : Boolean;
+      function isJoinedInRoom(param1:Room) : Boolean;
       
       function get isItMe() : Boolean;
       
       function getVariables() : Array;
       
-      function getVariable(name:String) : UserVariable;
+      function getVariable(param1:String) : UserVariable;
       
-      function setVariable(userVariable:UserVariable) : void;
+      function setVariable(param1:UserVariable) : void;
       
-      function setVariables(userVariables:Array) : void;
+      function setVariables(param1:Array) : void;
       
-      function containsVariable(name:String) : Boolean;
+      function containsVariable(param1:String) : Boolean;
       
       function get properties() : Object;
       
-      function set properties(value:Object) : void;
+      function set properties(param1:Object) : void;
    }
 }

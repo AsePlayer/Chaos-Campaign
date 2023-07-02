@@ -114,20 +114,20 @@ package com.smartfoxserver.v2.core
       
       private function handleDataSize(data:ByteArray) : ByteArray
       {
-         this.log.debug("Handling Header Size. Size: " + data.length + " (" + (!!this.pendingPacket.header.bigSized ? "big" : "small") + ")");
+         this.log.debug("Handling Header Size. Size: " + data.length + " (" + (this.pendingPacket.header.bigSized ? "big" : "small") + ")");
          var dataSize:int = -1;
          var sizeBytes:int = 2;
          if(this.pendingPacket.header.bigSized)
          {
             if(data.length >= 4)
             {
-               dataSize = data.readUnsignedInt();
+               dataSize = int(data.readUnsignedInt());
             }
             sizeBytes = 4;
          }
          else if(data.length >= 2)
          {
-            dataSize = data.readUnsignedShort();
+            dataSize = int(data.readUnsignedShort());
          }
          if(dataSize != -1)
          {
@@ -148,12 +148,12 @@ package com.smartfoxserver.v2.core
       {
          var dataSize:int = 0;
          this.log.debug("Handling Size fragment. Data: " + data.length);
-         var remaining:int = !!this.pendingPacket.header.bigSized ? int(4 - this.pendingPacket.buffer.position) : int(2 - this.pendingPacket.buffer.position);
+         var remaining:int = this.pendingPacket.header.bigSized ? 4 - this.pendingPacket.buffer.position : 2 - this.pendingPacket.buffer.position;
          if(data.length >= remaining)
          {
             this.pendingPacket.buffer.writeBytes(data,0,remaining);
             this.pendingPacket.buffer.position = 0;
-            dataSize = !!this.pendingPacket.header.bigSized ? int(this.pendingPacket.buffer.readInt()) : int(this.pendingPacket.buffer.readShort());
+            dataSize = this.pendingPacket.header.bigSized ? this.pendingPacket.buffer.readInt() : this.pendingPacket.buffer.readShort();
             this.log.debug("DataSize is ready:",dataSize,"bytes");
             this.pendingPacket.header.expectedLen = dataSize;
             this.pendingPacket.buffer = new ByteArray();

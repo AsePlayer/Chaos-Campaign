@@ -164,7 +164,7 @@ package com.smartfoxserver.v2.entities.managers
          var onlineVar:BuddyVariable = this.getMyVariable(ReservedBuddyVariables.BV_ONLINE);
          if(onlineVar != null)
          {
-            onlineState = onlineVar.getBoolValue();
+            onlineState = Boolean(onlineVar.getBoolValue());
          }
          return onlineState;
       }
@@ -172,13 +172,13 @@ package com.smartfoxserver.v2.entities.managers
       public function get myNickName() : String
       {
          var nickNameVar:BuddyVariable = this.getMyVariable(ReservedBuddyVariables.BV_NICKNAME);
-         return nickNameVar != null ? nickNameVar.getStringValue() : null;
+         return nickNameVar != null ? String(nickNameVar.getStringValue()) : null;
       }
       
       public function get myState() : String
       {
          var stateVar:BuddyVariable = this.getMyVariable(ReservedBuddyVariables.BV_STATE);
-         return stateVar != null ? stateVar.getStringValue() : null;
+         return stateVar != null ? String(stateVar.getStringValue()) : null;
       }
       
       public function get buddyStates() : Array

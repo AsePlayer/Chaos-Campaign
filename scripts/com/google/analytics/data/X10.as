@@ -61,11 +61,11 @@ package com.google.analytics.data
          var data:Array = null;
          var result:String = "";
          var needTypeQualifier:Boolean = false;
-         var l:int = _set.length;
+         var l:int = int(_set.length);
          for(i = 0; i < l; i++)
          {
             data = project[_set[i]];
-            if(data)
+            if(Boolean(data))
             {
                if(needTypeQualifier)
                {
@@ -126,7 +126,7 @@ package com.google.analytics.data
       
       public function renderMergedUrlString(extObject:X10 = null) : String
       {
-         var projectId:* = null;
+         var projectId:String = null;
          if(!extObject)
          {
             return renderUrlString();
@@ -154,7 +154,7 @@ package com.google.analytics.data
       
       public function renderUrlString() : String
       {
-         var projectId:* = null;
+         var projectId:String = null;
          var result:Array = [];
          for(projectId in _projectData)
          {
@@ -195,7 +195,7 @@ package com.google.analytics.data
          {
             _projectData[projectId][type] = undefined;
             isEmpty = true;
-            l = _set.length;
+            l = int(_set.length);
             for(i = 0; i < l; i++)
             {
                if(_projectData[projectId][_set[i]] != undefined)
@@ -231,8 +231,8 @@ package com.google.analytics.data
          for(i = 0; i < value.length; i++)
          {
             c = value.charAt(i);
-            escaped = _escapeCharMap[c];
-            if(escaped)
+            escaped = String(_escapeCharMap[c]);
+            if(Boolean(escaped))
             {
                result += escaped;
             }

@@ -18,14 +18,14 @@ package
       
       public const __enum__:Boolean = true;
       
-      public function Void(tag:String, index:int, params:*)
+      public function Void(param1:String, param2:int, param3:*)
       {
-         tag = tag;
-         index = index;
-         params = params;
+         tag = param1;
+         index = param2;
+         params = param3;
       }
       
-      public final function toString() : String
+      final public function toString() : String
       {
          return Boot.enum_to_string(this);
       }

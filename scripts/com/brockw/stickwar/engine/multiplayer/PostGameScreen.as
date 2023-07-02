@@ -17,8 +17,7 @@ package com.brockw.stickwar.engine.multiplayer
    import flash.net.URLRequest;
    import flash.net.navigateToURL;
    import flash.system.System;
-   import flash.text.TextField;
-   import flash.text.TextFormat;
+   import flash.text.*;
    import flash.utils.Timer;
    
    public class PostGameScreen extends Screen
@@ -41,9 +40,9 @@ package com.brockw.stickwar.engine.multiplayer
       
       private var txtWelcome:GenericText;
       
-      var btnConnect:GenericButton;
+      internal var btnConnect:GenericButton;
       
-      var txtReplayFile:TextField;
+      internal var txtReplayFile:TextField;
       
       private var _economyRecords:Array;
       
@@ -112,19 +111,19 @@ package com.brockw.stickwar.engine.multiplayer
       
       public static function getTimeFormat(seconds:int) : String
       {
-         var _loc2_:int = Math.floor(seconds / 60);
+         var minutes:int = Math.floor(seconds / 60);
          seconds = Math.floor(seconds % 60);
-         var _loc3_:String = "";
-         if(_loc2_ < 10)
+         var result:String = "";
+         if(minutes < 10)
          {
-            _loc3_ += "0";
+            result += "0";
          }
-         _loc3_ += _loc2_ + ":";
+         result += minutes + ":";
          if(seconds < 10)
          {
-            _loc3_ += "0";
+            result += "0";
          }
-         return _loc3_ + ("" + seconds);
+         return result + ("" + seconds);
       }
       
       public function appendUnitUnlocked(u:int, game:StickWar) : void
@@ -155,7 +154,7 @@ package com.brockw.stickwar.engine.multiplayer
             m = MovieClip(this.mc.unlockCard.profilePictureBacking);
             if(this.lastAddImage != null)
             {
-               if(this.mc.unlockCard.profilePictureBacking.contains(this.lastAddImage))
+               if(Boolean(this.mc.unlockCard.profilePictureBacking.contains(this.lastAddImage)))
                {
                   this.mc.unlockCard.profilePictureBacking.removeChild(this.lastAddImage);
                }
@@ -228,7 +227,7 @@ package com.brockw.stickwar.engine.multiplayer
       {
          var gapSize:Number = this.D_WIDTH / (records.length / 2 - 1);
          var incrementSize:Number = this.D_HEIGHT / max;
-         for(var i:int = !!isEven ? int(0) : int(1); i < records.length; i += 2)
+         for(var i:int = isEven ? 0 : 1; i < records.length; i += 2)
          {
             if(i == 0 || i == 1)
             {
@@ -256,79 +255,79 @@ package com.brockw.stickwar.engine.multiplayer
       
       private function drawGraph() : void
       {
-         var _loc3_:int = 0;
-         var _loc7_:TextField = null;
-         var _loc8_:String = null;
-         var _loc9_:TextField = null;
-         var _loc10_:TextFormat = null;
+         var i:int = 0;
+         var box:TextField = null;
+         var prevValue:String = null;
+         var newTxt:TextField = null;
+         var t:TextFormat = null;
          this.displayGraph.graphics.clear();
          this.displayGraphBackground.graphics.clear();
          this.displayGraphBackgroundHighlight.graphics.clear();
-         var _loc1_:int = 0;
-         var _loc2_:int = 0;
-         for(_loc3_ = 0; _loc3_ < this.economyRecords.length; _loc3_++)
+         var maxMiners:int = 0;
+         var maxPopulation:int = 0;
+         for(i = 0; i < this.economyRecords.length; i++)
          {
-            if(this.economyRecords[_loc3_] > _loc1_)
+            if(this.economyRecords[i] > maxMiners)
             {
-               _loc1_ = this.economyRecords[_loc3_];
+               maxMiners = int(this.economyRecords[i]);
             }
          }
-         for(_loc3_ = 0; _loc3_ < this.militaryRecords.length; _loc3_++)
+         for(i = 0; i < this.militaryRecords.length; i++)
          {
-            if(this.militaryRecords[_loc3_] > _loc2_)
+            if(this.militaryRecords[i] > maxPopulation)
             {
-               _loc2_ = this.militaryRecords[_loc3_];
+               maxPopulation = int(this.militaryRecords[i]);
             }
          }
-         var _loc4_:int = Math.max(_loc1_,_loc2_);
-         var _loc5_:Number = this.D_WIDTH / (this.economyRecords.length / 2 - 1);
-         var _loc6_:Number = this.D_HEIGHT / Math.max(_loc1_,_loc2_);
-         this.drawSpecialLine(this.economyRecords,_loc4_,this.displayGraph,true,26367);
-         this.drawSpecialLine(this.economyRecords,_loc4_,this.displayGraph,false,16685313);
-         this.drawSpecialLine(this.militaryRecords,_loc4_,this.displayGraph,true,35840);
-         this.drawSpecialLine(this.militaryRecords,_loc4_,this.displayGraph,false,10223616);
-         for each(_loc7_ in this.textBoxes)
+         var max:int = Math.max(maxMiners,maxPopulation);
+         var gapSize:Number = this.D_WIDTH / (this.economyRecords.length / 2 - 1);
+         var incrementSize:Number = this.D_HEIGHT / Math.max(maxMiners,maxPopulation);
+         this.drawSpecialLine(this.economyRecords,max,this.displayGraph,true,26367);
+         this.drawSpecialLine(this.economyRecords,max,this.displayGraph,false,16685313);
+         this.drawSpecialLine(this.militaryRecords,max,this.displayGraph,true,35840);
+         this.drawSpecialLine(this.militaryRecords,max,this.displayGraph,false,10223616);
+         for each(box in this.textBoxes)
          {
-            this.displayGraph.removeChild(_loc7_);
+            this.displayGraph.removeChild(box);
          }
          this.textBoxes = [];
-         _loc8_ = "";
-         for(_loc3_ = 0; _loc3_ < this.D_WIDTH / TEXT_SPACING; _loc3_++)
+         prevValue = "";
+         for(i = 0; i < this.D_WIDTH / TEXT_SPACING; i++)
          {
-            _loc9_ = new TextField();
-            _loc9_.y = this.D_HEIGHT + 3;
-            _loc9_.x = _loc3_ * TEXT_SPACING - 5;
-            _loc10_ = new TextFormat();
-            _loc10_.color = 16777215;
-            _loc9_.defaultTextFormat = _loc10_;
-            _loc9_.text = getTimeFormat(Math.floor(_loc3_ / (this.D_WIDTH / TEXT_SPACING) * this.militaryRecords.length / 2 * 2));
-            if(_loc9_.text == _loc8_)
+            newTxt = new TextField();
+            newTxt.y = this.D_HEIGHT + 3;
+            newTxt.x = i * TEXT_SPACING - 5;
+            t = new TextFormat();
+            t.color = 16777215;
+            newTxt.defaultTextFormat = t;
+            newTxt.text = getTimeFormat(Math.floor(i / (this.D_WIDTH / TEXT_SPACING) * this.militaryRecords.length / 2 * 2));
+            if(newTxt.text == prevValue)
             {
-               _loc9_.visible = false;
+               newTxt.visible = false;
             }
-            _loc8_ = _loc9_.text;
-            _loc9_.mouseEnabled = false;
-            this.displayGraph.addChild(_loc9_);
-            this.textBoxes.push(_loc9_);
+            prevValue = newTxt.text;
+            newTxt.mouseEnabled = false;
+            this.displayGraph.addChild(newTxt);
+            this.textBoxes.push(newTxt);
          }
-         _loc8_ = "";
-         for(_loc3_ = 0; _loc3_ < this.D_HEIGHT / TEXT_SPACING + 1; _loc3_++)
+         prevValue = "";
+         for(i = 0; i < this.D_HEIGHT / TEXT_SPACING + 1; i++)
          {
-            _loc9_ = new TextField();
-            _loc9_.y = this.D_HEIGHT - _loc3_ * TEXT_SPACING - 6;
-            _loc9_.x = 0 - 20;
-            _loc10_ = new TextFormat();
-            _loc10_.color = 16777215;
-            _loc9_.defaultTextFormat = _loc10_;
-            _loc9_.text = "" + Math.floor(_loc2_ * _loc3_ / (this.D_WIDTH / TEXT_SPACING));
-            _loc9_.mouseEnabled = false;
-            if(_loc9_.text == _loc8_)
+            newTxt = new TextField();
+            newTxt.y = this.D_HEIGHT - i * TEXT_SPACING - 6;
+            newTxt.x = 0 - 20;
+            t = new TextFormat();
+            t.color = 16777215;
+            newTxt.defaultTextFormat = t;
+            newTxt.text = "" + Math.floor(maxPopulation * i / (this.D_WIDTH / TEXT_SPACING));
+            newTxt.mouseEnabled = false;
+            if(newTxt.text == prevValue)
             {
-               _loc9_.visible = false;
+               newTxt.visible = false;
             }
-            _loc8_ = _loc9_.text;
-            this.displayGraph.addChild(_loc9_);
-            this.textBoxes.push(_loc9_);
+            prevValue = newTxt.text;
+            this.displayGraph.addChild(newTxt);
+            this.textBoxes.push(newTxt);
          }
          this.mc.timer.text = getTimeFormat(this.militaryRecords.length);
       }
@@ -377,17 +376,17 @@ package com.brockw.stickwar.engine.multiplayer
       
       private function secondButton(e:Event) : void
       {
-         var _loc2_:URLRequest = null;
+         var url:URLRequest = null;
          if(this.mode == PostGameScreen.M_CAMPAIGN)
          {
-            _loc2_ = new URLRequest("http://www.stickempires.com");
-            navigateToURL(_loc2_,"_blank");
+            url = new URLRequest("http://www.stickempires.com");
+            navigateToURL(url,"_blank");
             this.main.soundManager.playSoundFullVolume("clickButton");
          }
          else if(this.mode == PostGameScreen.M_SINGLEPLAYER)
          {
-            _loc2_ = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
-            navigateToURL(_loc2_,"_blank");
+            url = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
+            navigateToURL(url,"_blank");
          }
          else
          {

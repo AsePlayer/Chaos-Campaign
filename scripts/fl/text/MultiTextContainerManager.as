@@ -22,10 +22,8 @@ package fl.text
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
-   class MultiTextContainerManager extends CommonTextContainerManager implements IContainerManager
+   internal class MultiTextContainerManager extends CommonTextContainerManager implements IContainerManager
    {
        
       
@@ -33,19 +31,19 @@ package fl.text
       
       private var _hostFormat:TextLayoutFormat;
       
-      function MultiTextContainerManager(container:Sprite, ownerField:TLFTextField, controller:ContainerController = null)
+      public function MultiTextContainerManager(container:Sprite, ownerField:TLFTextField, controller:ContainerController = null)
       {
          super();
          _container = container;
          _ownerField = ownerField;
          this._hostFormat = new TextLayoutFormat();
-         _controller = controller != null ? controller : ownerField.initController(_container);
+         _controller = controller != null ? controller : ownerField.tlf_internal::initController(_container);
          _ownerField.addEventListener(FocusEvent.FOCUS_IN,_controller.focusInHandler);
       }
       
       public function get contentHeight() : Number
       {
-         return _controller.contentHeight;
+         return _controller.tlf_internal::contentHeight;
       }
       
       public function get firstBaselineOffset() : Object
@@ -75,11 +73,11 @@ package fl.text
       
       public function removeListeners() : void
       {
-         this.textFlow.removeEventListener(TextLayoutEvent.SCROLL,_ownerField.textFlow_ScrollHandler);
-         this.textFlow.removeEventListener(MouseEvent.CLICK,_ownerField.linkClick);
-         this.textFlow.removeEventListener(FlowOperationEvent.FLOW_OPERATION_BEGIN,_ownerField.textFlow_flowOperationBeginHandler);
-         this.textFlow.removeEventListener(FlowOperationEvent.FLOW_OPERATION_END,_ownerField.textFlow_flowOperationEndHandler);
-         this.textFlow.removeEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE,_ownerField.composeComplete);
+         this.textFlow.removeEventListener(TextLayoutEvent.SCROLL,_ownerField.tlf_internal::textFlow_ScrollHandler);
+         this.textFlow.removeEventListener(MouseEvent.CLICK,_ownerField.tlf_internal::linkClick);
+         this.textFlow.removeEventListener(FlowOperationEvent.FLOW_OPERATION_BEGIN,_ownerField.tlf_internal::textFlow_flowOperationBeginHandler);
+         this.textFlow.removeEventListener(FlowOperationEvent.FLOW_OPERATION_END,_ownerField.tlf_internal::textFlow_flowOperationEndHandler);
+         this.textFlow.removeEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE,_ownerField.tlf_internal::composeComplete);
          _ownerField.removeEventListener(FocusEvent.FOCUS_IN,_controller.focusInHandler);
       }
       
@@ -90,7 +88,7 @@ package fl.text
       
       public function get contentTop() : Number
       {
-         return _controller.contentTop;
+         return _controller.tlf_internal::contentTop;
       }
       
       override public function isTextStringAndFormat() : Boolean
@@ -110,7 +108,7 @@ package fl.text
       
       public function get contentLeft() : Number
       {
-         return _controller.contentLeft;
+         return _controller.tlf_internal::contentLeft;
       }
       
       public function set firstBaselineOffset(value:Object) : void
@@ -125,7 +123,7 @@ package fl.text
             return "";
          }
          var temp:String = TextConverter.export(this._textFlow,TextConverter.PLAIN_TEXT_FORMAT,ConversionType.STRING_TYPE) as String;
-         _ownerField.generationID = this.textFlow.generation;
+         _ownerField.tlf_internal::generationID = this.textFlow.generation;
          return temp;
       }
       
@@ -141,7 +139,7 @@ package fl.text
       
       public function set antialiasType(value:String) : void
       {
-         if(this._textFlow)
+         if(Boolean(this._textFlow))
          {
             this._textFlow.renderingMode = value == AntiAliasType.ADVANCED ? RenderingMode.CFF : RenderingMode.NORMAL;
          }
@@ -212,11 +210,11 @@ package fl.text
       {
          var oldGeneration:uint = 0;
          this._hostFormat = TextLayoutFormat(value);
-         if(this._textFlow)
+         if(Boolean(this._textFlow))
          {
             oldGeneration = this._textFlow.generation;
             this._textFlow.hostFormat = value;
-            this._textFlow.setGeneration(oldGeneration);
+            this._textFlow.tlf_internal::setGeneration(oldGeneration);
          }
       }
       
@@ -232,11 +230,11 @@ package fl.text
       
       public function addListeners() : void
       {
-         this.textFlow.addEventListener(TextLayoutEvent.SCROLL,_ownerField.textFlow_ScrollHandler,false,0,true);
-         this.textFlow.addEventListener(MouseEvent.CLICK,_ownerField.linkClick,false,0,true);
-         this.textFlow.addEventListener(FlowOperationEvent.FLOW_OPERATION_BEGIN,_ownerField.textFlow_flowOperationBeginHandler,false,0,true);
-         this.textFlow.addEventListener(FlowOperationEvent.FLOW_OPERATION_END,_ownerField.textFlow_flowOperationEndHandler,false,0,true);
-         this.textFlow.addEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE,_ownerField.composeComplete,false,0,true);
+         this.textFlow.addEventListener(TextLayoutEvent.SCROLL,_ownerField.tlf_internal::textFlow_ScrollHandler,false,0,true);
+         this.textFlow.addEventListener(MouseEvent.CLICK,_ownerField.tlf_internal::linkClick,false,0,true);
+         this.textFlow.addEventListener(FlowOperationEvent.FLOW_OPERATION_BEGIN,_ownerField.tlf_internal::textFlow_flowOperationBeginHandler,false,0,true);
+         this.textFlow.addEventListener(FlowOperationEvent.FLOW_OPERATION_END,_ownerField.tlf_internal::textFlow_flowOperationEndHandler,false,0,true);
+         this.textFlow.addEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE,_ownerField.tlf_internal::composeComplete,false,0,true);
          _ownerField.addEventListener(FocusEvent.FOCUS_IN,_controller.focusInHandler,false,0,true);
       }
       
@@ -275,7 +273,7 @@ package fl.text
       
       public function get antialiasType() : String
       {
-         if(this._textFlow)
+         if(Boolean(this._textFlow))
          {
             return this._textFlow.renderingMode == RenderingMode.NORMAL ? AntiAliasType.NORMAL : AntiAliasType.ADVANCED;
          }
@@ -341,12 +339,12 @@ package fl.text
       
       public function get contentWidth() : Number
       {
-         return _controller.contentWidth;
+         return _controller.tlf_internal::contentWidth;
       }
       
       override public function update() : void
       {
-         if(this._textFlow)
+         if(Boolean(this._textFlow))
          {
             this._textFlow.flowComposer.updateAllControllers();
          }

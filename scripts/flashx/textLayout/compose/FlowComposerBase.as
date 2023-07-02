@@ -8,13 +8,11 @@ package flashx.textLayout.compose
    import flashx.textLayout.elements.TextFlow;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
-   [Exclude(kind="method",name="checkFirstDamage")]
-   [Exclude(kind="method",name="debugCheckTextFlowLines")]
-   [Exclude(kind="property",name="lines")]
-   [Exclude(kind="method",name="addLine")]
-   [Exclude(kind="method",name="initializeLines")]
+   [Exclude(name="checkFirstDamage",kind="method")]
+   [Exclude(name="debugCheckTextFlowLines",kind="method")]
+   [Exclude(name="lines",kind="property")]
+   [Exclude(name="addLine",kind="method")]
+   [Exclude(name="initializeLines",kind="method")]
    public class FlowComposerBase
    {
        
@@ -26,7 +24,7 @@ package flashx.textLayout.compose
       
       protected var _damageAbsoluteStart:int;
       
-      protected var _swfContext:ISWFContext;
+      protected var _swfContext:flashx.textLayout.compose.ISWFContext;
       
       public function FlowComposerBase()
       {
@@ -35,9 +33,9 @@ package flashx.textLayout.compose
          this._swfContext = null;
       }
       
-      tlf_internal static function computeBaseSWFContext(context:ISWFContext) : ISWFContext
+      tlf_internal static function computeBaseSWFContext(context:flashx.textLayout.compose.ISWFContext) : flashx.textLayout.compose.ISWFContext
       {
-         return context && Object(context).hasOwnProperty("getBaseSWFContext") ? context["getBaseSWFContext"]() : context;
+         return Boolean(context) && Object(context).hasOwnProperty("getBaseSWFContext") ? context["getBaseSWFContext"]() : context;
       }
       
       public function get lines() : Array
@@ -70,13 +68,13 @@ package flashx.textLayout.compose
          var line:TextFlowLine = null;
          var textLine:TextLine = null;
          var textBlock:TextBlock = null;
-         var backgroundManager:BackgroundManager = Boolean(this._textFlow) ? this._textFlow.backgroundManager : null;
+         var backgroundManager:BackgroundManager = Boolean(this._textFlow) ? this._textFlow.tlf_internal::backgroundManager : null;
          if(TextLineRecycler.textLineRecyclerEnabled)
          {
             for each(line in this._lines)
             {
-               textLine = line.peekTextLine();
-               if(textLine && !textLine.parent)
+               textLine = line.tlf_internal::peekTextLine();
+               if(Boolean(textLine) && !textLine.parent)
                {
                   if(textLine.validity != TextLineValidity.INVALID)
                   {
@@ -85,7 +83,7 @@ package flashx.textLayout.compose
                   }
                   textLine.userData = null;
                   TextLineRecycler.addLineForReuse(textLine);
-                  if(backgroundManager)
+                  if(Boolean(backgroundManager))
                   {
                      backgroundManager.removeLineFromCache(textLine);
                   }
@@ -103,7 +101,7 @@ package flashx.textLayout.compose
          if(this._lines.length == 0)
          {
             line = new TextFlowLine(null,null);
-            line.setTextLength(this.textFlow.textLength);
+            line.tlf_internal::setTextLength(this.textFlow.textLength);
             this._lines.push(line);
          }
          else
@@ -113,8 +111,8 @@ package flashx.textLayout.compose
             if(lineEnd < this.textFlow.textLength)
             {
                line = new TextFlowLine(null,null);
-               line.setAbsoluteStart(lineEnd);
-               line.setTextLength(this.textFlow.textLength - lineEnd);
+               line.tlf_internal::setAbsoluteStart(lineEnd);
+               line.tlf_internal::setTextLength(this.textFlow.textLength - lineEnd);
                this._lines.push(line);
             }
          }
@@ -138,12 +136,12 @@ package flashx.textLayout.compose
             if(lineIdx == this._lines.length)
             {
                line = this._lines[this._lines.length - 1];
-               line.setTextLength(line.textLength + deltaLength);
+               line.tlf_internal::setTextLength(line.textLength + deltaLength);
             }
             else
             {
                line = this._lines[lineIdx++];
-               line.setTextLength(line.textLength + deltaLength);
+               line.tlf_internal::setTextLength(line.textLength + deltaLength);
             }
             damageStart = line.absoluteStart;
          }
@@ -154,8 +152,8 @@ package flashx.textLayout.compose
             while(true)
             {
                line = this._lines[lineIdx];
-               line.setAbsoluteStart(line.absoluteStart + lenToDel + deltaLength);
-               curPos = startPosition > line.absoluteStart ? int(startPosition) : int(line.absoluteStart);
+               line.tlf_internal::setAbsoluteStart(line.absoluteStart + lenToDel + deltaLength);
+               curPos = startPosition > line.absoluteStart ? startPosition : line.absoluteStart;
                lineEndIdx = line.absoluteStart + line.textLength;
                deleteChars = 0;
                if(curPos + lenToDel <= lineEndIdx)
@@ -188,7 +186,7 @@ package flashx.textLayout.compose
                   {
                      damageStart = line.absoluteStart;
                   }
-                  line.setTextLength(line.textLength - deleteChars);
+                  line.tlf_internal::setTextLength(line.textLength - deleteChars);
                   lenToDel -= deleteChars;
                   lineIdx++;
                }
@@ -203,11 +201,11 @@ package flashx.textLayout.compose
             line = this._lines[lineIdx];
             if(deltaLength >= 0)
             {
-               line.setAbsoluteStart(line.absoluteStart + deltaLength);
+               line.tlf_internal::setAbsoluteStart(line.absoluteStart + deltaLength);
             }
             else
             {
-               line.setAbsoluteStart(line.absoluteStart > -deltaLength ? int(line.absoluteStart + deltaLength) : int(0));
+               line.tlf_internal::setAbsoluteStart(line.absoluteStart > -deltaLength ? line.absoluteStart + deltaLength : 0);
             }
             lineIdx++;
          }
@@ -230,7 +228,7 @@ package flashx.textLayout.compose
          }
          var lineIndex:int = this.findLineIndexAtPosition(startPosition);
          var leaf:FlowLeafElement = this.textFlow.findLeaf(startPosition);
-         if(leaf && lineIndex > 0)
+         if(Boolean(leaf) && lineIndex > 0)
          {
             lineIndex--;
          }
@@ -245,7 +243,7 @@ package flashx.textLayout.compose
             {
                break;
             }
-            line.damage(damageType);
+            line.tlf_internal::damage(damageType);
             lineIndex++;
          }
       }
@@ -322,27 +320,27 @@ package flashx.textLayout.compose
             if(workLine.absoluteStart + workLine.textLength > newLine.absoluteStart + newLine.textLength)
             {
                afterLine = new TextFlowLine(null,newLine.paragraph);
-               afterLine.setAbsoluteStart(newLine.absoluteStart + newLine.textLength);
+               afterLine.tlf_internal::setAbsoluteStart(newLine.absoluteStart + newLine.textLength);
                oldCharCount = workLine.textLength;
-               workLine.setTextLength(newLine.absoluteStart - workLine.absoluteStart);
-               afterLine.setTextLength(oldCharCount - newLine.textLength - workLine.textLength);
+               workLine.tlf_internal::setTextLength(newLine.absoluteStart - workLine.absoluteStart);
+               afterLine.tlf_internal::setTextLength(oldCharCount - newLine.textLength - workLine.textLength);
                this._lines.splice(workIndex + 1,0,newLine,afterLine);
             }
             else
             {
-               workLine.setTextLength(newLine.absoluteStart - workLine.absoluteStart);
+               workLine.tlf_internal::setTextLength(newLine.absoluteStart - workLine.absoluteStart);
                afterLine = this._lines[workIndex + 1];
-               afterLine.setTextLength(newLine.absoluteStart + newLine.textLength - afterLine.absoluteStart);
-               afterLine.setAbsoluteStart(newLine.absoluteStart + newLine.textLength);
+               afterLine.tlf_internal::setTextLength(newLine.absoluteStart + newLine.textLength - afterLine.absoluteStart);
+               afterLine.tlf_internal::setAbsoluteStart(newLine.absoluteStart + newLine.textLength);
                this._lines.splice(workIndex + 1,0,newLine);
             }
             damageStart = workLine.absoluteStart;
          }
          else if(workLine.textLength > newLine.textLength)
          {
-            workLine.setTextLength(workLine.textLength - newLine.textLength);
-            workLine.setAbsoluteStart(newLine.absoluteStart + newLine.textLength);
-            workLine.damage(TextLineValidity.INVALID);
+            workLine.tlf_internal::setTextLength(workLine.textLength - newLine.textLength);
+            workLine.tlf_internal::setAbsoluteStart(newLine.absoluteStart + newLine.textLength);
+            workLine.tlf_internal::damage(TextLineValidity.INVALID);
             this._lines.splice(workIndex,0,newLine);
             damageStart = workLine.absoluteStart;
          }
@@ -358,8 +356,8 @@ package flashx.textLayout.compose
                   afterLine = this._lines[nextLine];
                   if(amtRemaining < afterLine.textLength)
                   {
-                     afterLine.setTextLength(afterLine.textLength - amtRemaining);
-                     afterLine.damage(TextLineValidity.INVALID);
+                     afterLine.tlf_internal::setTextLength(afterLine.textLength - amtRemaining);
+                     afterLine.tlf_internal::damage(TextLineValidity.INVALID);
                      break;
                   }
                   deleteCount++;
@@ -367,26 +365,26 @@ package flashx.textLayout.compose
                   nextLine++;
                   afterLine = nextLine < this._lines.length ? this._lines[nextLine] : null;
                }
-               if(afterLine && afterLine.absoluteStart != newLine.absoluteStart + newLine.textLength)
+               if(Boolean(afterLine) && afterLine.absoluteStart != newLine.absoluteStart + newLine.textLength)
                {
-                  afterLine.setAbsoluteStart(newLine.absoluteStart + newLine.textLength);
-                  afterLine.damage(TextLineValidity.INVALID);
+                  afterLine.tlf_internal::setAbsoluteStart(newLine.absoluteStart + newLine.textLength);
+                  afterLine.tlf_internal::damage(TextLineValidity.INVALID);
                }
                damageStart = newLine.absoluteStart + newLine.textLength;
             }
             if(TextLineRecycler.textLineRecyclerEnabled)
             {
-               backgroundManager = this.textFlow.backgroundManager;
+               backgroundManager = this.textFlow.tlf_internal::backgroundManager;
                for(recycleIdx = workIndex; recycleIdx < workIndex + deleteCount; recycleIdx++)
                {
-                  textLine = TextFlowLine(this._lines[recycleIdx]).peekTextLine();
-                  if(textLine && !textLine.parent)
+                  textLine = TextFlowLine(this._lines[recycleIdx]).tlf_internal::peekTextLine();
+                  if(Boolean(textLine) && !textLine.parent)
                   {
                      if(textLine.validity != TextLineValidity.VALID)
                      {
                         textLine.userData = null;
                         TextLineRecycler.addLineForReuse(textLine);
-                        if(backgroundManager)
+                        if(Boolean(backgroundManager))
                         {
                            backgroundManager.removeLineFromCache(textLine);
                         }
@@ -402,21 +400,21 @@ package flashx.textLayout.compose
          }
       }
       
-      public function get swfContext() : ISWFContext
+      public function get swfContext() : flashx.textLayout.compose.ISWFContext
       {
          return this._swfContext;
       }
       
-      public function set swfContext(context:ISWFContext) : void
+      public function set swfContext(context:flashx.textLayout.compose.ISWFContext) : void
       {
-         var newBaseContext:ISWFContext = null;
-         var oldBaseContext:ISWFContext = null;
+         var newBaseContext:flashx.textLayout.compose.ISWFContext = null;
+         var oldBaseContext:flashx.textLayout.compose.ISWFContext = null;
          if(context != this._swfContext)
          {
-            if(this.textFlow)
+            if(Boolean(this.textFlow))
             {
-               newBaseContext = computeBaseSWFContext(context);
-               oldBaseContext = computeBaseSWFContext(this._swfContext);
+               newBaseContext = tlf_internal::computeBaseSWFContext(context);
+               oldBaseContext = tlf_internal::computeBaseSWFContext(this._swfContext);
                this._swfContext = context;
                if(newBaseContext != oldBaseContext)
                {

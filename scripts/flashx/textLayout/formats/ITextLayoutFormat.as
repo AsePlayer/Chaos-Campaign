@@ -4,7 +4,7 @@ package flashx.textLayout.formats
    {
        
       
-      function getStyle(styleName:String) : *;
+      function getStyle(param1:String) : *;
       
       function get color() : *;
       

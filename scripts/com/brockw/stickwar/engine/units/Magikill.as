@@ -2,10 +2,10 @@ package com.brockw.stickwar.engine.units
 {
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.ActionInterface;
-   import com.brockw.stickwar.engine.Ai.MagikillAi;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.engine.Ai.*;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.Team.Tech;
+   import com.brockw.stickwar.engine.Team.*;
    import com.brockw.stickwar.market.MarketItem;
    import flash.display.MovieClip;
    
@@ -15,11 +15,11 @@ package com.brockw.stickwar.engine.units
       private static var WEAPON_REACH:int;
        
       
-      private var stunSpellCooldown:SpellCooldown;
+      private var stunSpellCooldown:com.brockw.stickwar.engine.units.SpellCooldown;
       
-      private var nukeSpellCooldown:SpellCooldown;
+      private var nukeSpellCooldown:com.brockw.stickwar.engine.units.SpellCooldown;
       
-      private var poisonDartSpellCooldown:SpellCooldown;
+      private var poisonDartSpellCooldown:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var isStunning:Boolean;
       
@@ -48,21 +48,21 @@ package com.brockw.stickwar.engine.units
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
       {
          var m:_magikill = _magikill(mc);
-         if(m.mc.wizhat)
+         if(Boolean(m.mc.wizhat))
          {
             if(armor != "")
             {
                m.mc.wizhat.gotoAndStop(armor);
             }
          }
-         if(m.mc.wizstaff)
+         if(Boolean(m.mc.wizstaff))
          {
             if(weapon != "")
             {
                m.mc.wizstaff.gotoAndStop(weapon);
             }
          }
-         if(m.mc.wizbeard)
+         if(Boolean(m.mc.wizbeard))
          {
             if(misc != "")
             {
@@ -103,9 +103,9 @@ package com.brockw.stickwar.engine.units
          MovieClip(_mc.mc.gotoAndPlay(1));
          MovieClip(_mc.gotoAndStop(1));
          drawShadow();
-         this.stunSpellCooldown = new SpellCooldown(game.xml.xml.Order.Units.magikill.electricWall.effect,game.xml.xml.Order.Units.magikill.electricWall.cooldown,game.xml.xml.Order.Units.magikill.electricWall.mana);
-         this.nukeSpellCooldown = new SpellCooldown(game.xml.xml.Order.Units.magikill.nuke.effect,game.xml.xml.Order.Units.magikill.nuke.cooldown,game.xml.xml.Order.Units.magikill.nuke.mana);
-         this.poisonDartSpellCooldown = new SpellCooldown(game.xml.xml.Order.Units.magikill.poisonSpray.effect,game.xml.xml.Order.Units.magikill.poisonSpray.cooldown,game.xml.xml.Order.Units.magikill.poisonSpray.mana);
+         this.stunSpellCooldown = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Order.Units.magikill.electricWall.effect,game.xml.xml.Order.Units.magikill.electricWall.cooldown,game.xml.xml.Order.Units.magikill.electricWall.mana);
+         this.nukeSpellCooldown = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Order.Units.magikill.nuke.effect,game.xml.xml.Order.Units.magikill.nuke.cooldown,game.xml.xml.Order.Units.magikill.nuke.mana);
+         this.poisonDartSpellCooldown = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Order.Units.magikill.poisonSpray.effect,game.xml.xml.Order.Units.magikill.poisonSpray.cooldown,game.xml.xml.Order.Units.magikill.poisonSpray.mana);
          this.isNuking = false;
          this.isStunning = false;
          this.isPoisonDarting = false;

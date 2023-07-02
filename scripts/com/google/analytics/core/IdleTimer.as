@@ -26,9 +26,9 @@ package com.google.analytics.core
       
       private var _session:Timer;
       
-      private var _buffer:Buffer;
+      private var _buffer:com.google.analytics.core.Buffer;
       
-      public function IdleTimer(config:Configuration, debug:DebugConfiguration, display:DisplayObject, buffer:Buffer)
+      public function IdleTimer(config:Configuration, debug:DebugConfiguration, display:DisplayObject, buffer:com.google.analytics.core.Buffer)
       {
          super();
          var delay:Number = config.idleLoop;

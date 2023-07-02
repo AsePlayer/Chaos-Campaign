@@ -4,13 +4,13 @@ package flashx.textLayout.elements
    {
        
       
-      private var _textFlow:TextFlow;
+      private var _textFlow:flashx.textLayout.elements.TextFlow;
       
       private var _anchorPosition:int;
       
       private var _activePosition:int;
       
-      public function TextRange(root:TextFlow, anchorIndex:int, activeIndex:int)
+      public function TextRange(root:flashx.textLayout.elements.TextFlow, anchorIndex:int, activeIndex:int)
       {
          super();
          this._textFlow = root;
@@ -52,12 +52,12 @@ package flashx.textLayout.elements
          return false;
       }
       
-      public function get textFlow() : TextFlow
+      public function get textFlow() : flashx.textLayout.elements.TextFlow
       {
          return this._textFlow;
       }
       
-      public function set textFlow(value:TextFlow) : void
+      public function set textFlow(value:flashx.textLayout.elements.TextFlow) : void
       {
          this._textFlow = value;
       }
@@ -84,7 +84,7 @@ package flashx.textLayout.elements
       
       public function get absoluteStart() : int
       {
-         return this._activePosition < this._anchorPosition ? int(this._activePosition) : int(this._anchorPosition);
+         return this._activePosition < this._anchorPosition ? this._activePosition : this._anchorPosition;
       }
       
       public function set absoluteStart(value:int) : void
@@ -101,7 +101,7 @@ package flashx.textLayout.elements
       
       public function get absoluteEnd() : int
       {
-         return this._activePosition > this._anchorPosition ? int(this._activePosition) : int(this._anchorPosition);
+         return this._activePosition > this._anchorPosition ? this._activePosition : this._anchorPosition;
       }
       
       public function set absoluteEnd(value:int) : void

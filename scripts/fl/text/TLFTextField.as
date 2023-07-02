@@ -32,7 +32,7 @@ package fl.text
    import flash.utils.getDefinitionByName;
    import flashx.textLayout.compose.IFlowComposer;
    import flashx.textLayout.compose.TextFlowLine;
-   import flashx.textLayout.container.ContainerController;
+   import flashx.textLayout.container.*;
    import flashx.textLayout.conversion.ConversionType;
    import flashx.textLayout.conversion.ITextImporter;
    import flashx.textLayout.conversion.TextConverter;
@@ -72,8 +72,6 @@ package fl.text
    import flashx.textLayout.operations.PasteOperation;
    import flashx.textLayout.operations.SplitParagraphOperation;
    import flashx.textLayout.tlf_internal;
-   
-   use namespace tlf_internal;
    
    [Event(name="textInput",type="flash.events.TextEvent")]
    [Event(name="scroll",type="flash.events.Event")]
@@ -130,7 +128,7 @@ package fl.text
       
       tlf_internal static const INVALID_WORD_WRAP:uint = 8;
       
-      tlf_internal static const INVALID_ALL:uint = INVALID_TEXT | INVALID_DIMENSIONS | INVALID_BORDER | INVALID_WORD_WRAP | INVALID_SELECTION | INVALID_AUTO_SIZE | INVALID_TYPE;
+      tlf_internal static const INVALID_ALL:uint = tlf_internal::INVALID_TEXT | tlf_internal::INVALID_DIMENSIONS | tlf_internal::INVALID_BORDER | tlf_internal::INVALID_WORD_WRAP | tlf_internal::INVALID_SELECTION | tlf_internal::INVALID_AUTO_SIZE | tlf_internal::INVALID_TYPE;
        
       
       private var _generationID:int;
@@ -239,20 +237,21 @@ package fl.text
       
       public function TLFTextField()
       {
+         var tlfStage:Sprite;
          var container:DisplayObjectContainer = null;
          var rtMgr:Class = null;
          super();
          this._bgShape = new Shape();
-         var tlfStage:Sprite = new Sprite();
+         tlfStage = new Sprite();
          addChild(this._bgShape);
          addChild(tlfStage);
          tlfStage.tabEnabled = true;
          tlfStage.focusRect = false;
-         this._containerManager = !!useTCM ? new SingleTextContainerManager(tlfStage,this) : new MultiTextContainerManager(tlfStage,this);
+         this._containerManager = useTCM ? new SingleTextContainerManager(tlfStage,this) : new MultiTextContainerManager(tlfStage,this);
          doubleClickEnabled = true;
          tabEnabled = false;
          focusRect = false;
-         this._alwaysShowSelection = false;
+         this.tlf_internal::_alwaysShowSelection = false;
          this._antiAliasType = AntiAliasType.NORMAL;
          this._autoSize = TextFieldAutoSize.NONE;
          this._background = false;
@@ -263,8 +262,8 @@ package fl.text
          this._borderColor = 0;
          this._borderWidth = 1;
          this._condenseWhite = false;
-         this._defaultTextFormat = _initialDefaultTextFormat;
-         this._containerManager.hostFormat = createTextLayoutFormat(_initialDefaultTextFormat);
+         this._defaultTextFormat = tlf_internal::_initialDefaultTextFormat;
+         this._containerManager.hostFormat = tlf_internal::createTextLayoutFormat(tlf_internal::_initialDefaultTextFormat);
          this._containerManager.antialiasType = AntiAliasType.NORMAL;
          this._containerManager.columnCount = FormatValue.AUTO;
          this._containerManager.columnWidth = FormatValue.AUTO;
@@ -299,7 +298,7 @@ package fl.text
          this.originalWidth = int.MAX_VALUE;
          this.originalHeight = int.MAX_VALUE;
          this.objInit = true;
-         this._invalidState = INVALID_ALL;
+         this._invalidState = tlf_internal::INVALID_ALL;
          try
          {
             if(this.parent != null)
@@ -562,32 +561,32 @@ package fl.text
                   this._inRepaint = false;
                   return;
                }
-               removeEventListener(Event.ADDED,this.repaint);
-               removeEventListener(Event.ADDED_TO_STAGE,this.repaint);
-               removeEventListener(Event.FRAME_CONSTRUCTED,this.repaint);
+               removeEventListener(Event.ADDED,this.tlf_internal::repaint);
+               removeEventListener(Event.ADDED_TO_STAGE,this.tlf_internal::repaint);
+               removeEventListener(Event.FRAME_CONSTRUCTED,this.tlf_internal::repaint);
                try
                {
                   if(stage != null)
                   {
-                     stage.removeEventListener(Event.RENDER,this.repaint);
+                     stage.removeEventListener(Event.RENDER,this.tlf_internal::repaint);
                   }
                   else if(e.type == Event.RENDER)
                   {
-                     e.target.removeEventListener(Event.RENDER,this.repaint);
+                     e.target.removeEventListener(Event.RENDER,this.tlf_internal::repaint);
                   }
                }
                catch(se:SecurityError)
                {
                }
             }
-            if(this._invalidState == INVALID_NONE)
+            if(this._invalidState == tlf_internal::INVALID_NONE)
             {
                return;
             }
             wmode = this.blockProgression as String;
-            if(this.TCMUsesTextStringAndFormat || this._containerManager.textFlow)
+            if(this.tlf_internal::TCMUsesTextStringAndFormat || Boolean(this._containerManager.textFlow))
             {
-               if(this._invalidState & (INVALID_AUTO_SIZE | INVALID_WORD_WRAP))
+               if(Boolean(this._invalidState & (tlf_internal::INVALID_AUTO_SIZE | tlf_internal::INVALID_WORD_WRAP)))
                {
                   if(this._prevAutoSize != null && this.originalWidth != int.MAX_VALUE)
                   {
@@ -632,7 +631,7 @@ package fl.text
                         this.originalHeight = this._containerManager.compositionHeight;
                      }
                   }
-                  if(this._invalidState & INVALID_WORD_WRAP)
+                  if(Boolean(this._invalidState & tlf_internal::INVALID_WORD_WRAP))
                   {
                      if(this._prevAutoSize == null)
                      {
@@ -677,7 +676,7 @@ package fl.text
                            this.originalHeight = this._containerManager.compositionHeight;
                         }
                      }
-                     this._containerManager.lineBreak = !!this._wordWrap ? LineBreak.TO_FIT : LineBreak.EXPLICIT;
+                     this._containerManager.lineBreak = this._wordWrap ? LineBreak.TO_FIT : LineBreak.EXPLICIT;
                   }
                   else
                   {
@@ -717,7 +716,7 @@ package fl.text
                         this._containerManager.setCompositionSize(NaN,NaN);
                      }
                   }
-                  else if(this._invalidState & INVALID_AUTO_SIZE && this._prevAutoSize != null && this._prevAutoSize != this._autoSize)
+                  else if(this._invalidState & tlf_internal::INVALID_AUTO_SIZE && this._prevAutoSize != null && this._prevAutoSize != this._autoSize)
                   {
                      if(!this.objInit)
                      {
@@ -745,23 +744,23 @@ package fl.text
                {
                   this._wordWrap = this._containerManager.lineBreak == LineBreak.TO_FIT;
                }
-               if(this._invalidState & INVALID_TEXT && this._invalidTextLayoutFormat != null)
+               if(Boolean(this._invalidState & tlf_internal::INVALID_TEXT) && this._invalidTextLayoutFormat != null)
                {
                   format = this._invalidTextLayoutFormat;
                   this._invalidTextLayoutFormat = null;
-                  tf = !!this.TCMUsesTextStringAndFormat ? null : this.textFlow;
+                  tf = this.tlf_internal::TCMUsesTextStringAndFormat ? null : this.textFlow;
                   this._containerManager.setFormatForAllElements(tf,format);
                }
             }
-            if(this._invalidState & (INVALID_TEXT | INVALID_DIMENSIONS | INVALID_WORD_WRAP | INVALID_AUTO_SIZE))
+            if(Boolean(this._invalidState & (tlf_internal::INVALID_TEXT | tlf_internal::INVALID_DIMENSIONS | tlf_internal::INVALID_WORD_WRAP | tlf_internal::INVALID_AUTO_SIZE)))
             {
                this._containerManager.update();
             }
-            if(this._invalidState & (INVALID_TEXT | INVALID_DIMENSIONS | INVALID_BORDER | INVALID_WORD_WRAP | INVALID_AUTO_SIZE))
+            if(Boolean(this._invalidState & (tlf_internal::INVALID_TEXT | tlf_internal::INVALID_DIMENSIONS | tlf_internal::INVALID_BORDER | tlf_internal::INVALID_WORD_WRAP | tlf_internal::INVALID_AUTO_SIZE)))
             {
                this.drawBorder(wmode);
             }
-            this._invalidState = INVALID_NONE;
+            this._invalidState = tlf_internal::INVALID_NONE;
          }
          finally
          {
@@ -771,6 +770,10 @@ package fl.text
       
       tlf_internal function doImport(importType:String, value:String) : void
       {
+         var cacheAutoSize:String;
+         var cacheEmbedFonts:Boolean;
+         var cacheSelectable:Boolean;
+         var tf:TextFlow;
          var txtFormat:ITextLayoutFormat = null;
          var cacheAntiAliasType:String = null;
          var cacheEmbedFontsSet:Boolean = false;
@@ -798,11 +801,11 @@ package fl.text
             xmlCondenseWhite = TextConverter.getImporter(TextConverter.TEXT_LAYOUT_FORMAT,condenseWhiteConfig);
             textImporter = TextConverter.getImporter(TextConverter.PLAIN_TEXT_FORMAT);
          }
-         var cacheEmbedFonts:Boolean = this._embedFonts;
-         var tf:TextFlow = this._containerManager.textFlow;
-         if(tf)
+         cacheEmbedFonts = this._embedFonts;
+         tf = this._containerManager.textFlow;
+         if(Boolean(tf))
          {
-            this.removeTextFlowEventListeners();
+            this.tlf_internal::removeTextFlowEventListeners();
             txtFormat = this._containerManager.hostFormat;
             cacheAntiAliasType = this.antiAliasType;
             cacheEmbedFonts = this.embedFonts;
@@ -849,14 +852,14 @@ package fl.text
             {
                tmpTextFlow = dataImporter.importToFlow(value);
             }
-            if(dataImporter.errors)
+            if(Boolean(dataImporter.errors))
             {
                for each(errorString in dataImporter.errors)
                {
                   errMsg += "Error: " + errorString + "\n";
                }
             }
-            if(tmpTextFlow)
+            if(Boolean(tmpTextFlow))
             {
                tmpTextFlow.flowComposer.removeAllControllers();
                for(i = 0; i < tf.flowComposer.numControllers; i++)
@@ -871,11 +874,11 @@ package fl.text
             dataImporter = textImporter;
             textFlow = dataImporter.importToFlow("");
          }
-         if(resolver)
+         if(Boolean(resolver))
          {
             this.textFlow.formatResolver = resolver;
          }
-         if(txtFormat)
+         if(Boolean(txtFormat))
          {
             this._containerManager.hostFormat = txtFormat;
          }
@@ -885,7 +888,7 @@ package fl.text
             this.defaultTextFormat = null;
             this.defaultTextFormat = cacheDefaultTextFormat;
          }
-         this.addTextFlowEventListeners();
+         this.tlf_internal::addTextFlowEventListeners();
          if(cacheAntiAliasType != null)
          {
             this.antiAliasType = cacheAntiAliasType;
@@ -904,13 +907,13 @@ package fl.text
             this.gridFitType = this._gridFitType;
          }
          this.wordWrap = this._wordWrap;
-         var cacheAutoSize:String = this._autoSize;
+         cacheAutoSize = this._autoSize;
          this._autoSize = "NA";
          this.autoSize = cacheAutoSize;
-         var cacheSelectable:Boolean = this._selectable;
+         cacheSelectable = this._selectable;
          this._selectable = !this._selectable;
          this.selectable = cacheSelectable;
-         this.invalidate(INVALID_ALL);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_ALL);
          this.scrollV = 0;
       }
       
@@ -946,7 +949,7 @@ package fl.text
                _containerManager.firstBaselineOffset = "auto";
             }
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function set columnWidth(value:Object) : void
@@ -972,30 +975,30 @@ package fl.text
                _containerManager.columnWidth = 8000;
             }
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       tlf_internal function getEditingMode(manager:ISelectionManager) : String
       {
-         return Boolean(manager) ? manager.editingMode : EditingMode.READ_ONLY;
+         return Boolean(manager) ? String(manager.editingMode) : EditingMode.READ_ONLY;
       }
       
       tlf_internal function get firstField() : TLFTextField
       {
          var firstController:TLFContainerController = null;
-         var tf:TextFlow = !!this.TCMUsesTextStringAndFormat ? null : this._containerManager.textFlow;
-         if(tf)
+         var tf:TextFlow = this.tlf_internal::TCMUsesTextStringAndFormat ? null : this._containerManager.textFlow;
+         if(Boolean(tf))
          {
             if(tf.flowComposer == null || tf.flowComposer.numControllers == 0)
             {
                return this;
             }
             firstController = tf.flowComposer.getControllerAt(0) as TLFContainerController;
-            if(firstController)
+            if(Boolean(firstController))
             {
                return firstController.ownerField;
             }
-            if(tf.flowComposer.getControllerAt(0))
+            if(Boolean(tf.flowComposer.getControllerAt(0)))
             {
                return this;
             }
@@ -1017,17 +1020,17 @@ package fl.text
             flowComp.addControllerAt(theNextTextField.controller,flowComp.getControllerIndex(this.controller) + 1);
          }
          theNextTextField.textFlow = this.textFlow;
-         this.invalidate(INVALID_TEXT);
-         theNextTextField.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
+         theNextTextField.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function get styleSheet() : StyleSheet
       {
          var resolver:CSSFormatResolver = null;
-         if(!this.TCMUsesTextStringAndFormat && this.textFlow)
+         if(!this.tlf_internal::TCMUsesTextStringAndFormat && Boolean(this.textFlow))
          {
             resolver = this.textFlow.formatResolver as CSSFormatResolver;
-            if(resolver)
+            if(Boolean(resolver))
             {
                return resolver.styleSheet;
             }
@@ -1038,7 +1041,7 @@ package fl.text
       public function getFirstCharInParagraph(charIndex:int) : int
       {
          var txtFlowLine:TextFlowLine = this.textFlow.flowComposer.findLineAtPosition(charIndex);
-         if(txtFlowLine)
+         if(Boolean(txtFlowLine))
          {
             return txtFlowLine.paragraph.getAbsoluteStart();
          }
@@ -1052,8 +1055,8 @@ package fl.text
       
       public function set scrollH(value:int) : void
       {
-         var blockProg:String = !!this.TCMUsesTextStringAndFormat ? this.hostFormat.blockProgression : this.textFlow.computedFormat.blockProgression;
-         var direction:String = !!this.TCMUsesTextStringAndFormat ? this.hostFormat.direction : this.textFlow.computedFormat.direction;
+         var blockProg:String = this.tlf_internal::TCMUsesTextStringAndFormat ? String(this.tlf_internal::hostFormat.blockProgression) : String(this.textFlow.computedFormat.blockProgression);
+         var direction:String = this.tlf_internal::TCMUsesTextStringAndFormat ? String(this.tlf_internal::hostFormat.direction) : String(this.textFlow.computedFormat.direction);
          if(value < 0)
          {
             value = 0;
@@ -1117,7 +1120,7 @@ package fl.text
          if(value != this._containerManager.compositionHeight)
          {
             this._containerManager.setCompositionSize(this._containerManager.compositionWidth,value);
-            this.invalidate(INVALID_DIMENSIONS);
+            this.tlf_internal::invalidate(tlf_internal::INVALID_DIMENSIONS);
          }
       }
       
@@ -1128,17 +1131,17 @@ package fl.text
       
       public function get selectionBeginIndex() : int
       {
-         if(this.textFlow.interactionManager)
+         if(Boolean(this.textFlow.interactionManager))
          {
-            return this.textFlow.interactionManager.absoluteStart < 0 ? int(0) : int(this.textFlow.interactionManager.absoluteStart);
+            return this.textFlow.interactionManager.absoluteStart < 0 ? 0 : int(this.textFlow.interactionManager.absoluteStart);
          }
          return this._priorSelectionBeginIndex;
       }
       
       public function get selectable() : Boolean
       {
-         var master:TLFTextField = this.firstField;
-         return Boolean(master) ? Boolean(master._selectable) : Boolean(this._selectable);
+         var master:TLFTextField = this.tlf_internal::firstField;
+         return Boolean(master) ? master._selectable : this._selectable;
       }
       
       public function set scrollV(value:int) : void
@@ -1152,7 +1155,7 @@ package fl.text
          {
             return;
          }
-         this.repaint();
+         this.tlf_internal::repaint();
          if(this._containerManager.container.scrollRect == null)
          {
             return;
@@ -1221,21 +1224,21 @@ package fl.text
       
       public function get pixelMaxScrollV() : int
       {
-         var blockProg:String = !!this.TCMUsesTextStringAndFormat ? this.hostFormat.blockProgression : this.textFlow.computedFormat.blockProgression;
+         var blockProg:String = this.tlf_internal::TCMUsesTextStringAndFormat ? String(this.tlf_internal::hostFormat.blockProgression) : String(this.textFlow.computedFormat.blockProgression);
          var maxScroll:int = blockProg == BlockProgression.RL ? int(this._containerManager.contentWidth - this._containerManager.compositionWidth) : int(this._containerManager.contentHeight - this._containerManager.compositionHeight);
-         return maxScroll > 0 ? int(maxScroll) : int(0);
+         return maxScroll > 0 ? maxScroll : 0;
       }
       
       public function set verticalAlign(value:String) : void
       {
          this._containerManager.verticalAlign = value;
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       tlf_internal function textFlow_ScrollHandler(event:TextLayoutEvent) : void
       {
-         this.invalidate(TLFTextField.INVALID_BORDER);
-         this.repaint();
+         this.tlf_internal::invalidate(TLFTextField.tlf_internal::INVALID_BORDER);
+         this.tlf_internal::repaint();
          dispatchEvent(new Event(Event.SCROLL,false,false));
       }
       
@@ -1247,7 +1250,7 @@ package fl.text
          }
          this._text = value;
          this._containerManager.text = value;
-         this.invalidate(INVALID_ALL);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_ALL);
          this.scrollH = 0;
          this.pixelScrollV = 0;
       }
@@ -1259,7 +1262,7 @@ package fl.text
             return;
          }
          this._background = value;
-         this.invalidate(INVALID_BORDER);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_BORDER);
       }
       
       public function set border(value:Boolean) : void
@@ -1269,7 +1272,7 @@ package fl.text
             return;
          }
          this._border = value;
-         this.invalidate(INVALID_BORDER);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_BORDER);
       }
       
       public function get antiAliasType() : String
@@ -1279,9 +1282,9 @@ package fl.text
       
       public function get selectionEndIndex() : int
       {
-         if(this.textFlow.interactionManager)
+         if(Boolean(this.textFlow.interactionManager))
          {
-            return this.textFlow.interactionManager.absoluteEnd < 0 ? int(0) : int(this.textFlow.interactionManager.absoluteEnd);
+            return this.textFlow.interactionManager.absoluteEnd < 0 ? 0 : int(this.textFlow.interactionManager.absoluteEnd);
          }
          return this._priorSelectionEndIndex;
       }
@@ -1289,10 +1292,10 @@ package fl.text
       public function set styleSheet(value:StyleSheet) : void
       {
          var resolver:IFormatResolver = value != null ? new CSSFormatResolver(value) : null;
-         if(this.textFlow)
+         if(Boolean(this.textFlow))
          {
             this.textFlow.formatResolver = resolver;
-            this.invalidate(INVALID_TEXT);
+            this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
          }
       }
       
@@ -1303,7 +1306,7 @@ package fl.text
          textFormat.color = value;
          this.defaultTextFormat = textFormat;
          this._containerManager.textColor = value;
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       tlf_internal function set generationID(value:int) : void
@@ -1332,7 +1335,7 @@ package fl.text
          {
             throw new ArgumentError("The type specified is not a member of flash.text.TextFieldType.");
          }
-         var master:TLFTextField = this.firstField;
+         var master:TLFTextField = this.tlf_internal::firstField;
          if(!master)
          {
             master = this;
@@ -1358,14 +1361,14 @@ package fl.text
          }
          if(tf.blockProgression == BlockProgression.RL)
          {
-            return this._maxScrollVFirstLineRect.right >= 0 ? int(1) : int(0);
+            return this._maxScrollVFirstLineRect.right >= 0 ? 1 : 0;
          }
-         return this._maxScrollVFirstLineRect.top <= 0 ? int(1) : int(0);
+         return this._maxScrollVFirstLineRect.top <= 0 ? 1 : 0;
       }
       
       public function get wordWrap() : Boolean
       {
-         if(this._invalidState & INVALID_WORD_WRAP)
+         if(Boolean(this._invalidState & tlf_internal::INVALID_WORD_WRAP))
          {
             return this._wordWrap;
          }
@@ -1375,7 +1378,7 @@ package fl.text
       public function getLineIndexOfChar(charIndex:int) : int
       {
          var txtFlowLine:TextFlowLine = this.textFlow.flowComposer.findLineAtPosition(charIndex);
-         if(txtFlowLine)
+         if(Boolean(txtFlowLine))
          {
             return this.textFlow.flowComposer.findLineIndexAtPosition(charIndex);
          }
@@ -1386,9 +1389,9 @@ package fl.text
       {
          var curLine:TextFlowLine = null;
          var curRect:Rectangle = null;
-         this.repaint();
+         this.tlf_internal::repaint();
          var flowComp:IFlowComposer = this.textFlow.flowComposer;
-         var firstLine:int = flowComp.findLineIndexAtPosition(this._containerManager.absoluteStart);
+         var firstLine:int = int(flowComp.findLineIndexAtPosition(this._containerManager.absoluteStart));
          var lastLine:int = this.numLines - 1;
          if(lastLine < 1)
          {
@@ -1411,7 +1414,7 @@ package fl.text
          {
             curLine = flowComp.getLineAt(lineIndex);
             curRect = curLine.getBounds();
-            if(curLine.textLineExists && curLine.getTextLine().parent)
+            if(curLine.textLineExists && Boolean(curLine.getTextLine().parent))
             {
                if(this._containerManager.textFlow.computedFormat.blockProgression == BlockProgression.RL)
                {
@@ -1438,24 +1441,24 @@ package fl.text
          {
             return;
          }
-         var master:TLFTextField = this.firstField;
+         var master:TLFTextField = this.tlf_internal::firstField;
          if(!master)
          {
             master = this;
          }
-         master._alwaysShowSelection = value;
+         master.tlf_internal::_alwaysShowSelection = value;
          var interactionMgr:ISelectionManager = master.textFlow.interactionManager;
          if(interactionMgr != null)
          {
-            if(interactionMgr.focusedSelectionFormat != focusedSelectionFormat)
+            if(interactionMgr.focusedSelectionFormat != tlf_internal::focusedSelectionFormat)
             {
-               interactionMgr.focusedSelectionFormat = focusedSelectionFormat;
+               interactionMgr.focusedSelectionFormat = tlf_internal::focusedSelectionFormat;
             }
-            if(interactionMgr.inactiveSelectionFormat != inactiveSelectionFormat)
+            if(interactionMgr.inactiveSelectionFormat != tlf_internal::inactiveSelectionFormat)
             {
-               interactionMgr.inactiveSelectionFormat = inactiveSelectionFormat;
+               interactionMgr.inactiveSelectionFormat = tlf_internal::inactiveSelectionFormat;
             }
-            newSelectionFormat = !!this.alwaysShowSelection ? alwaysShowSelectionOnFormat : alwaysShowSelectionOffFormat;
+            newSelectionFormat = this.alwaysShowSelection ? tlf_internal::alwaysShowSelectionOnFormat : tlf_internal::alwaysShowSelectionOffFormat;
             if(interactionMgr.unfocusedSelectionFormat != newSelectionFormat)
             {
                interactionMgr.unfocusedSelectionFormat = newSelectionFormat;
@@ -1471,13 +1474,13 @@ package fl.text
       {
          var index:int = 0;
          var prevController:TLFContainerController = null;
-         if(this.textFlow && this.textFlow.flowComposer)
+         if(Boolean(this.textFlow) && Boolean(this.textFlow.flowComposer))
          {
-            index = this.textFlow.flowComposer.getControllerIndex(this.controller);
+            index = int(this.textFlow.flowComposer.getControllerIndex(this.controller));
             if(index > 0)
             {
                prevController = this.textFlow.flowComposer.getControllerAt(index - 1) as TLFContainerController;
-               if(prevController)
+               if(Boolean(prevController))
                {
                   return prevController.ownerField;
                }
@@ -1522,7 +1525,7 @@ package fl.text
                theGraphics.beginFill(this._backgroundColor,this._backgroundAlpha);
             }
             theGraphics.lineStyle(this._borderWidth,this._borderColor,this._borderAlpha,false,LineScaleMode.NORMAL,CapsStyle.NONE,JointStyle.MITER,10);
-            if(this.isPointText || this._autoSize != TextFieldAutoSize.NONE)
+            if(this.tlf_internal::isPointText || this._autoSize != TextFieldAutoSize.NONE)
             {
                if(this._wordWrap)
                {
@@ -1591,7 +1594,7 @@ package fl.text
                this._bgShape2 = null;
             }
             theGraphics.beginFill(this._backgroundColor,this._backgroundAlpha);
-            if(this.isPointText || this._autoSize != TextFieldAutoSize.NONE)
+            if(this.tlf_internal::isPointText || this._autoSize != TextFieldAutoSize.NONE)
             {
                theGraphics.drawRect(0,0,this._containerManager.contentWidth,this._containerManager.contentHeight);
             }
@@ -1621,10 +1624,10 @@ package fl.text
       
       public function get textWidth() : Number
       {
-         this.repaint();
+         this.tlf_internal::repaint();
          this._containerManager.compose();
-         var leftPadding:Number = !!isNaN(Number(this.paddingLeft)) ? Number(0) : Number(Number(this.paddingLeft));
-         var rightPadding:Number = !!isNaN(Number(this.paddingRight)) ? Number(0) : Number(Number(this.paddingRight));
+         var leftPadding:Number = isNaN(Number(this.paddingLeft)) ? 0 : Number(this.paddingLeft);
+         var rightPadding:Number = isNaN(Number(this.paddingRight)) ? 0 : Number(this.paddingRight);
          return this._containerManager.contentWidth - (leftPadding + rightPadding);
       }
       
@@ -1643,7 +1646,7 @@ package fl.text
             this._prevAutoSize = this._autoSize;
          }
          this._autoSize = value;
-         this.invalidate(INVALID_AUTO_SIZE);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_AUTO_SIZE);
       }
       
       public function get useRichTextClipboard() : Boolean
@@ -1684,7 +1687,7 @@ package fl.text
                _containerManager.columnCount = 50;
             }
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function set selectable(value:Boolean) : void
@@ -1693,7 +1696,7 @@ package fl.text
          {
             return;
          }
-         var master:TLFTextField = this.firstField;
+         var master:TLFTextField = this.tlf_internal::firstField;
          if(!master)
          {
             master = this;
@@ -1704,7 +1707,7 @@ package fl.text
       
       public function get defaultTextFormat() : TextFormat
       {
-         if(this._defaultTextFormat == _initialDefaultTextFormat)
+         if(this._defaultTextFormat == tlf_internal::_initialDefaultTextFormat)
          {
             this._defaultTextFormat = this.duplicateTextFormat(this._defaultTextFormat);
          }
@@ -1743,10 +1746,10 @@ package fl.text
       
       public function get textHeight() : Number
       {
-         this.repaint();
+         this.tlf_internal::repaint();
          this._containerManager.compose();
-         var topPadding:Number = !!isNaN(Number(this.paddingTop)) ? Number(0) : Number(Number(this.paddingTop));
-         var botPadding:Number = !!isNaN(Number(this.paddingBottom)) ? Number(0) : Number(Number(this.paddingBottom));
+         var topPadding:Number = isNaN(Number(this.paddingTop)) ? 0 : Number(this.paddingTop);
+         var botPadding:Number = isNaN(Number(this.paddingBottom)) ? 0 : Number(this.paddingBottom);
          return this._containerManager.contentHeight - (topPadding + botPadding);
       }
       
@@ -1772,7 +1775,7 @@ package fl.text
       
       public function get gridFitType() : String
       {
-         if(!this.TCMUsesTextStringAndFormat && this.textFlow.cffHinting == CFFHinting.NONE || this.TCMUsesTextStringAndFormat && this.hostFormat && this.hostFormat.cffHinting == CFFHinting.NONE)
+         if(!this.tlf_internal::TCMUsesTextStringAndFormat && this.textFlow.cffHinting == CFFHinting.NONE || this.tlf_internal::TCMUsesTextStringAndFormat && this.tlf_internal::hostFormat && this.tlf_internal::hostFormat.cffHinting == CFFHinting.NONE)
          {
             this._gridFitType = GridFitType.NONE;
          }
@@ -1809,17 +1812,17 @@ package fl.text
       
       public function get maxChars() : int
       {
-         var master:TLFTextField = this.firstField;
+         var master:TLFTextField = this.tlf_internal::firstField;
          if(!master)
          {
             master = this;
          }
-         return Boolean(master) ? int(master._maxChars) : int(0);
+         return Boolean(master) ? master._maxChars : 0;
       }
       
       tlf_internal function get isPointText() : Boolean
       {
-         return this._isPointText && (this.TCMUsesTextStringAndFormat || this.textFlow != null);
+         return this._isPointText && (this.tlf_internal::TCMUsesTextStringAndFormat || this.textFlow != null);
       }
       
       tlf_internal function initController(container:Sprite) : TLFContainerController
@@ -1845,7 +1848,7 @@ package fl.text
          }
          this._invalidTextLayoutFormat.renderingMode = FormatValue.INHERIT;
          this._containerManager.antialiasType = value;
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function get length() : int
@@ -1867,17 +1870,17 @@ package fl.text
       {
          var increaseX:Number = NaN;
          var increaseY:Number = NaN;
-         if(event && !this.TCMUsesTextStringAndFormat && event.target as TextFlow != this.textFlow)
+         if(event && !this.tlf_internal::TCMUsesTextStringAndFormat && event.target as TextFlow != this.textFlow)
          {
             return;
          }
          this._maxScrollVCached = false;
          if(this.originalWidth == int.MAX_VALUE || this.originalHeight == int.MAX_VALUE)
          {
-            this.invalidate(INVALID_TEXT);
-            this.repaint();
+            this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
+            this.tlf_internal::repaint();
          }
-         var wmode:String = !!this.TCMUsesTextStringAndFormat ? this.hostFormat.blockProgression : this.textFlow.computedFormat.blockProgression;
+         var wmode:String = this.tlf_internal::TCMUsesTextStringAndFormat ? String(this.tlf_internal::hostFormat.blockProgression) : String(this.textFlow.computedFormat.blockProgression);
          if(this._autoSize != TextFieldAutoSize.NONE)
          {
             increaseX = 0;
@@ -1898,7 +1901,7 @@ package fl.text
             }
             else
             {
-               increaseX = this.contentWidth - this.contentWidth;
+               increaseX = this.tlf_internal::contentWidth - this.tlf_internal::contentWidth;
                if(!this._wordWrap)
                {
                   if(this._autoSize == TextFieldAutoSize.RIGHT)
@@ -1919,12 +1922,12 @@ package fl.text
             {
                this.y += increaseY;
             }
-            this.contentWidth = this.contentWidth;
-            this.contentHeight = this.contentHeight;
+            this.tlf_internal::contentWidth = this.tlf_internal::contentWidth;
+            this.tlf_internal::contentHeight = this.tlf_internal::contentHeight;
          }
          this.originalWidth = this._containerManager.contentWidth;
          this.originalHeight = this._containerManager.contentHeight;
-         if(this.isPointText || this._autoSize != TextFieldAutoSize.NONE)
+         if(this.tlf_internal::isPointText || this._autoSize != TextFieldAutoSize.NONE)
          {
             this.drawBorder(wmode);
          }
@@ -1932,7 +1935,7 @@ package fl.text
       
       private function duplicateTextFormat(inFormat:TextFormat) : TextFormat
       {
-         var prop:* = null;
+         var prop:String = null;
          var retVal:TextFormat = new TextFormat();
          for(prop in inFormat)
          {
@@ -1947,19 +1950,19 @@ package fl.text
          if(value == "")
          {
             this.text = "";
-            this.hostFormat = createTextLayoutFormat(_initialDefaultTextFormat);
+            this.tlf_internal::hostFormat = tlf_internal::createTextLayoutFormat(tlf_internal::_initialDefaultTextFormat);
             return;
          }
          var tf:TextFlow = this._containerManager.textFlow;
          if(this.styleSheet == null)
          {
             leaf = tf.getFirstLeaf();
-            if(leaf)
+            if(Boolean(leaf))
             {
                tf.hostFormat = leaf.computedFormat;
             }
          }
-         this.doImport(TextConverter.TEXT_FIELD_HTML_FORMAT,value);
+         this.tlf_internal::doImport(TextConverter.TEXT_FIELD_HTML_FORMAT,value);
          this._htmlText = this.htmlText;
       }
       
@@ -1975,7 +1978,7 @@ package fl.text
             throw new RangeError("The line number specified is out of range.");
          }
          var txtFlowLine:TextFlowLine = this.getValidTextFlowLine(lineIndex);
-         if(txtFlowLine)
+         if(Boolean(txtFlowLine))
          {
             textFlowLineHeight = txtFlowLine.height;
             if(textFlowLineHeight < txtFlowLine.ascent + txtFlowLine.descent)
@@ -1999,7 +2002,7 @@ package fl.text
       public function set direction(value:String) : void
       {
          this._containerManager.direction = value;
-         this.invalidate(INVALID_ALL);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_ALL);
       }
       
       tlf_internal function get contentHeight() : Number
@@ -2023,7 +2026,6 @@ package fl.text
             n = Number(value);
             if(isNaN(n))
             {
-               var value:Object;
                _containerManager.paddingTop = value = "auto";
             }
             else if(n < -1000)
@@ -2045,21 +2047,21 @@ package fl.text
             this._containerManager.paddingRight = value;
             this._containerManager.paddingBottom = value;
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function get caretIndex() : int
       {
-         if(this.textFlow.interactionManager)
+         if(Boolean(this.textFlow.interactionManager))
          {
-            return this.textFlow.interactionManager.activePosition < 0 ? int(0) : int(this.textFlow.interactionManager.activePosition);
+            return this.textFlow.interactionManager.activePosition < 0 ? 0 : int(this.textFlow.interactionManager.activePosition);
          }
          return this._priorSelectionBeginIndex;
       }
       
       tlf_internal function switchToEditingMode(textFlow:TextFlow, editingMode:String, updateContainers:Boolean = true) : void
       {
-         if(editingMode == null || this.getEditingMode(textFlow.interactionManager) == editingMode)
+         if(editingMode == null || this.tlf_internal::getEditingMode(textFlow.interactionManager) == editingMode)
          {
             return;
          }
@@ -2069,30 +2071,30 @@ package fl.text
             this._priorSelectionEndIndex = textFlow.interactionManager.activePosition;
          }
          this._containerManager.editMode = editingMode;
-         if(textFlow.interactionManager)
+         if(Boolean(textFlow.interactionManager))
          {
             this.setSelection(this._priorSelectionBeginIndex,this._priorSelectionEndIndex);
-            textFlow.interactionManager.focusedSelectionFormat = focusedSelectionFormat;
-            textFlow.interactionManager.inactiveSelectionFormat = inactiveSelectionFormat;
+            textFlow.interactionManager.focusedSelectionFormat = tlf_internal::focusedSelectionFormat;
+            textFlow.interactionManager.inactiveSelectionFormat = tlf_internal::inactiveSelectionFormat;
             if(this.alwaysShowSelection)
             {
-               textFlow.interactionManager.unfocusedSelectionFormat = alwaysShowSelectionOnFormat;
+               textFlow.interactionManager.unfocusedSelectionFormat = tlf_internal::alwaysShowSelectionOnFormat;
             }
             else
             {
-               textFlow.interactionManager.unfocusedSelectionFormat = alwaysShowSelectionOffFormat;
+               textFlow.interactionManager.unfocusedSelectionFormat = tlf_internal::alwaysShowSelectionOffFormat;
             }
          }
          if(updateContainers)
          {
-            this.invalidate(INVALID_TEXT);
+            this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
          }
       }
       
       public function set wordWrap(value:Boolean) : void
       {
          this._wordWrap = value;
-         this.invalidate(INVALID_WORD_WRAP);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_WORD_WRAP);
       }
       
       public function set paddingRight(value:Object) : void
@@ -2111,7 +2113,6 @@ package fl.text
             n = Number(value);
             if(isNaN(n))
             {
-               var value:Object;
                _containerManager.paddingRight = value = "auto";
             }
             else if(n < -1000)
@@ -2133,19 +2134,19 @@ package fl.text
             this._containerManager.paddingTop = value;
             this._containerManager.paddingBottom = value;
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function get maxScrollH() : int
       {
-         var blockProg:String = !!this.TCMUsesTextStringAndFormat ? this.hostFormat.blockProgression : this.textFlow.computedFormat.blockProgression;
+         var blockProg:String = this.tlf_internal::TCMUsesTextStringAndFormat ? String(this.tlf_internal::hostFormat.blockProgression) : String(this.textFlow.computedFormat.blockProgression);
          var maxScroll:int = blockProg == BlockProgression.RL ? int(this._containerManager.contentHeight - this._containerManager.compositionHeight) : int(this._containerManager.contentWidth - this._containerManager.compositionWidth);
-         return maxScroll > 0 ? int(maxScroll) : int(0);
+         return maxScroll > 0 ? maxScroll : 0;
       }
       
       public function get numLines() : int
       {
-         this.repaint();
+         this.tlf_internal::repaint();
          return this._containerManager.numLines;
       }
       
@@ -2174,7 +2175,7 @@ package fl.text
          {
             return this._maxScrollV;
          }
-         this.repaint();
+         this.tlf_internal::repaint();
          this._containerManager.compose();
          var flowComp:IFlowComposer = tf.flowComposer;
          if(flowComp.numControllers > 0 && flowComp.getControllerIndex(this._containerManager.controller) < flowComp.numControllers - 1)
@@ -2183,8 +2184,8 @@ package fl.text
             this._maxScrollV = 0;
             return this._maxScrollV;
          }
-         var totalLines:int = this._containerManager.numLines;
-         var colCount:int = !this._containerManager.columnCount || this._containerManager.columnCount == FormatValue.AUTO ? int(1) : int(int(this._containerManager.columnCount));
+         var totalLines:int = int(this._containerManager.numLines);
+         var colCount:int = !this._containerManager.columnCount || this._containerManager.columnCount == FormatValue.AUTO ? 1 : int(this._containerManager.columnCount);
          var lastColIndex:int = colCount - 1;
          this._maxScrollVFirstLineIndex = flowComp.findLineIndexAtPosition(this._containerManager.absoluteStart);
          var firstLine:TextFlowLine = flowComp.getLineAt(this._maxScrollVFirstLineIndex);
@@ -2256,7 +2257,7 @@ package fl.text
       {
          var graphicElement:InlineGraphicElement = null;
          var leaf:FlowLeafElement = this.textFlow.getFirstLeaf();
-         while(leaf)
+         while(Boolean(leaf))
          {
             if(leaf is InlineGraphicElement)
             {
@@ -2273,7 +2274,7 @@ package fl.text
       
       override public function get height() : Number
       {
-         this.repaint();
+         this.tlf_internal::repaint();
          return super.height;
       }
       
@@ -2283,7 +2284,7 @@ package fl.text
          var hsp:Number = NaN;
          var vsp:Number = NaN;
          var tf:TextFlow = this._containerManager.textFlow;
-         this.repaint();
+         this.tlf_internal::repaint();
          this._containerManager.compose();
          if(!this._maxScrollVCached)
          {
@@ -2293,7 +2294,7 @@ package fl.text
                return 0;
             }
          }
-         var totalLines:int = this._containerManager.numLines;
+         var totalLines:int = int(this._containerManager.numLines);
          for(var i:int = this._maxScrollVFirstLineIndex; i < totalLines; i++)
          {
             curRect = this._containerManager.getLineIndexBounds(i);
@@ -2322,7 +2323,7 @@ package fl.text
       
       public function get scrollH() : int
       {
-         var blockProg:String = !!this.TCMUsesTextStringAndFormat ? this.hostFormat.blockProgression : this.textFlow.computedFormat.blockProgression;
+         var blockProg:String = this.tlf_internal::TCMUsesTextStringAndFormat ? String(this.tlf_internal::hostFormat.blockProgression) : String(this.textFlow.computedFormat.blockProgression);
          return blockProg == BlockProgression.RL ? int(Math.abs(this._containerManager.verticalScrollPosition)) : int(Math.abs(this._containerManager.horizontalScrollPosition));
       }
       
@@ -2341,16 +2342,16 @@ package fl.text
          {
             this._borderAlpha = 1;
          }
-         this.invalidate(INVALID_BORDER);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_BORDER);
       }
       
       public function get text() : String
       {
-         if(this._displayAsPassword || !this.TCMUsesTextStringAndFormat && this.textFlow && this.textFlow.generation == this._generationID)
+         if(this._displayAsPassword || !this.tlf_internal::TCMUsesTextStringAndFormat && this.textFlow && this.textFlow.generation == this._generationID)
          {
             return this._text;
          }
-         if(this._text == "" || this.TCMUsesTextStringAndFormat || this.textFlow && this.textFlow.generation != this._generationID)
+         if(this._text == "" || this.tlf_internal::TCMUsesTextStringAndFormat || this.textFlow && this.textFlow.generation != this._generationID)
          {
             this._text = this._containerManager.text;
             return this._text;
@@ -2365,7 +2366,7 @@ package fl.text
       
       tlf_internal function updateComplete(event:UpdateCompleteEvent) : void
       {
-         this.composeComplete(null);
+         this.tlf_internal::composeComplete(null);
          dispatchEvent(new Event(Event.CHANGE,false,false));
       }
       
@@ -2374,7 +2375,7 @@ package fl.text
          var atomBounds:Rectangle = null;
          var tmpPoint1:Point = null;
          var tmpPoint:Point = null;
-         this.repaint();
+         this.tlf_internal::repaint();
          var line:TextFlowLine = this.textFlow.flowComposer.findLineAtPosition(charIndex);
          var textLine:TextLine = line.getTextLine(true);
          var atomIdx:int = textLine.getAtomIndexAtCharIndex(charIndex - line.paragraph.getAbsoluteStart());
@@ -2384,7 +2385,7 @@ package fl.text
          }
          var txtFlowLine:TextFlowLine = this.getValidTextFlowLine(this.getLineIndexOfChar(charIndex));
          var bounds:Rectangle = txtFlowLine.getBounds();
-         var bp:String = this.textFlow.computedFormat.blockProgression;
+         var bp:String = String(this.textFlow.computedFormat.blockProgression);
          var isTTB:Boolean = bp == BlockProgression.RL;
          if(!isTTB)
          {
@@ -2423,7 +2424,6 @@ package fl.text
             n = Number(value);
             if(isNaN(n))
             {
-               var value:Object;
                _containerManager.paddingBottom = value = "auto";
             }
             else if(n < -1000)
@@ -2445,25 +2445,25 @@ package fl.text
             this._containerManager.paddingTop = value;
             this._containerManager.paddingRight = value;
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function get type() : String
       {
-         var master:TLFTextField = this.firstField;
+         var master:TLFTextField = this.tlf_internal::firstField;
          return Boolean(master) ? master._type : this._type;
       }
       
       public function replaceSelectedText(value:String) : void
       {
-         if(this.textFlow && this.textFlow.formatResolver != null)
+         if(Boolean(this.textFlow) && this.textFlow.formatResolver != null)
          {
             throw new Error("This method cannot be used on a text field with a style sheet.");
          }
-         var priorEditingMode:String = this.getEditingMode(this.textFlow.interactionManager);
+         var priorEditingMode:String = this.tlf_internal::getEditingMode(this.textFlow.interactionManager);
          if(priorEditingMode != EditingMode.READ_WRITE)
          {
-            this.switchToEditingMode(this.textFlow,EditingMode.READ_WRITE);
+            this.tlf_internal::switchToEditingMode(this.textFlow,EditingMode.READ_WRITE);
          }
          var editManager:EditManager = EditManager(this.textFlow.interactionManager);
          editManager.beginCompositeOperation();
@@ -2472,17 +2472,17 @@ package fl.text
             editManager.selectRange(int.MAX_VALUE,int.MAX_VALUE);
          }
          var selStart:Number = editManager.anchorPosition;
-         this.insertWithParagraphs(editManager,value);
+         this.tlf_internal::insertWithParagraphs(editManager,value);
          this._containerManager.update();
          if(this._defaultTextFormat != null)
          {
             this.setTextFormat(this._defaultTextFormat,selStart,selStart + value.length);
          }
          editManager.endCompositeOperation();
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
          if(priorEditingMode != EditingMode.READ_WRITE)
          {
-            this.switchToEditingMode(this.textFlow,priorEditingMode);
+            this.tlf_internal::switchToEditingMode(this.textFlow,priorEditingMode);
          }
       }
       
@@ -2493,8 +2493,8 @@ package fl.text
       
       public function get alwaysShowSelection() : Boolean
       {
-         var master:TLFTextField = this.firstField;
-         return Boolean(master) ? Boolean(master._alwaysShowSelection) : Boolean(this._alwaysShowSelection);
+         var master:TLFTextField = this.tlf_internal::firstField;
+         return Boolean(master) ? master.tlf_internal::_alwaysShowSelection : this.tlf_internal::_alwaysShowSelection;
       }
       
       public function get sharpness() : Number
@@ -2510,22 +2510,22 @@ package fl.text
          {
             try
             {
-               stage.addEventListener(Event.RENDER,this.repaint,false,0,true);
+               stage.addEventListener(Event.RENDER,this.tlf_internal::repaint,false,0,true);
                stage.invalidate();
             }
             catch(se:SecurityError)
             {
-               addEventListener(Event.FRAME_CONSTRUCTED,repaint,false,0,true);
+               addEventListener(Event.FRAME_CONSTRUCTED,tlf_internal::repaint,false,0,true);
             }
          }
          else if(parent == null)
          {
-            addEventListener(Event.ADDED,this.repaint,false,0,true);
+            addEventListener(Event.ADDED,this.tlf_internal::repaint,false,0,true);
          }
          else
          {
-            addEventListener(Event.ADDED_TO_STAGE,this.repaint,false,0,true);
-            addEventListener(Event.FRAME_CONSTRUCTED,this.repaint,false,0,true);
+            addEventListener(Event.ADDED_TO_STAGE,this.tlf_internal::repaint,false,0,true);
+            addEventListener(Event.FRAME_CONSTRUCTED,this.tlf_internal::repaint,false,0,true);
          }
       }
       
@@ -2546,7 +2546,7 @@ package fl.text
             tmpString = arrNewText.shift();
             while(tmpString != null)
             {
-               if(tmpString.length)
+               if(Boolean(tmpString.length))
                {
                   editManager.insertText(tmpString);
                }
@@ -2573,7 +2573,7 @@ package fl.text
          {
             this._borderColor = 16777215;
          }
-         this.invalidate(INVALID_BORDER);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_BORDER);
       }
       
       public function set columnGap(value:Object) : void
@@ -2599,13 +2599,13 @@ package fl.text
                _containerManager.columnGap = 1000;
             }
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function set defaultTextFormat(value:TextFormat) : void
       {
          var master:TLFTextField = null;
-         if(!this.TCMUsesTextStringAndFormat && this.textFlow && this.textFlow.formatResolver != null)
+         if(!this.tlf_internal::TCMUsesTextStringAndFormat && this.textFlow && this.textFlow.formatResolver != null)
          {
             throw new Error("This method cannot be used on a text field with a style sheet.");
          }
@@ -2614,18 +2614,18 @@ package fl.text
             return;
          }
          this._defaultTextFormat = value;
-         if(value)
+         if(Boolean(value))
          {
             if(this._defaultTextFormat.font == null)
             {
                this._defaultTextFormat.font = "Times New Roman";
             }
-            master = this.firstField;
+            master = this.tlf_internal::firstField;
             if(!master)
             {
                master = this;
             }
-            master._containerManager.hostFormat = createTextLayoutFormat(value);
+            master._containerManager.hostFormat = tlf_internal::createTextLayoutFormat(value);
          }
       }
       
@@ -2657,10 +2657,10 @@ package fl.text
          {
             endIdx = this.length + 1;
          }
-         if(this.textFlow.interactionManager)
+         if(Boolean(this.textFlow.interactionManager))
          {
             this.textFlow.interactionManager.selectRange(begIdx,endIdx);
-            this.invalidate(INVALID_TEXT);
+            this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
          }
          else
          {
@@ -2681,7 +2681,7 @@ package fl.text
             return;
          }
          this._containerManager.embedFonts = value;
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function get columnCount() : Object
@@ -2692,7 +2692,7 @@ package fl.text
       public function set multiline(value:Boolean) : void
       {
          this._multiline = value;
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       tlf_internal function removeTextFlowEventListeners() : void
@@ -2715,10 +2715,10 @@ package fl.text
          if(value == "")
          {
             this.text = "";
-            this.hostFormat = new TextLayoutFormat();
+            this.tlf_internal::hostFormat = new TextLayoutFormat();
             return;
          }
-         this.doImport(TextConverter.TEXT_LAYOUT_FORMAT,value);
+         this.tlf_internal::doImport(TextConverter.TEXT_LAYOUT_FORMAT,value);
          this._tlfMarkup = this.tlfMarkup;
       }
       
@@ -2738,7 +2738,6 @@ package fl.text
             n = Number(value);
             if(isNaN(n))
             {
-               var value:Object;
                _containerManager.paddingLeft = value = "auto";
             }
             else if(n < -1000)
@@ -2760,7 +2759,7 @@ package fl.text
             this._containerManager.paddingRight = value;
             this._containerManager.paddingBottom = value;
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function get thickness() : Number
@@ -2809,7 +2808,7 @@ package fl.text
       
       public function set pixelScrollV(value:int) : void
       {
-         var blockProg:String = !!this.TCMUsesTextStringAndFormat ? this.hostFormat.blockProgression : this.textFlow.computedFormat.blockProgression;
+         var blockProg:String = this.tlf_internal::TCMUsesTextStringAndFormat ? String(this.tlf_internal::hostFormat.blockProgression) : String(this.textFlow.computedFormat.blockProgression);
          if(value < 0)
          {
             value = 0;
@@ -2850,17 +2849,17 @@ package fl.text
             this._invalidTextLayoutFormat = new TextLayoutFormat();
          }
          this._invalidTextLayoutFormat.cffHinting = FormatValue.INHERIT;
-         if(this.TCMUsesTextStringAndFormat)
+         if(this.tlf_internal::TCMUsesTextStringAndFormat)
          {
-            fmt = Boolean(this.hostFormat) ? TextLayoutFormat(this.hostFormat) : new TextLayoutFormat();
+            fmt = Boolean(this.tlf_internal::hostFormat) ? TextLayoutFormat(this.tlf_internal::hostFormat) : new TextLayoutFormat();
             fmt.cffHinting = value == GridFitType.NONE ? CFFHinting.NONE : CFFHinting.HORIZONTAL_STEM;
-            this.hostFormat = fmt;
+            this.tlf_internal::hostFormat = fmt;
          }
          else
          {
             this.textFlow.cffHinting = value == GridFitType.NONE ? CFFHinting.NONE : CFFHinting.HORIZONTAL_STEM;
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       override public function set width(value:Number) : void
@@ -2868,7 +2867,7 @@ package fl.text
          if(value != this._containerManager.compositionWidth)
          {
             this._containerManager.setCompositionSize(value,this._containerManager.compositionHeight);
-            this.invalidate(INVALID_DIMENSIONS);
+            this.tlf_internal::invalidate(tlf_internal::INVALID_DIMENSIONS);
          }
       }
       
@@ -2894,7 +2893,7 @@ package fl.text
                this._containerManager.text = this.text;
             }
          }
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       tlf_internal function textFlow_flowOperationBeginHandler(event:FlowOperationEvent) : void
@@ -2921,7 +2920,7 @@ package fl.text
          if(op is SplitParagraphOperation)
          {
             originalSelectionState = (op as SplitParagraphOperation).originalSelectionState;
-            numToDel = originalSelectionState == null ? int(0) : int(originalSelectionState.absoluteEnd - originalSelectionState.absoluteStart);
+            numToDel = originalSelectionState == null ? 0 : originalSelectionState.absoluteEnd - originalSelectionState.absoluteStart;
             if(this.maxChars != 0)
             {
                begLen = this._containerManager.textLength - numToDel;
@@ -2947,7 +2946,7 @@ package fl.text
                textToInsert = restrictChar(textToInsert,this.restrict);
             }
             delSelOp = insertTextOperation.deleteSelectionState;
-            delLen = delSelOp == null ? int(0) : int(delSelOp.absoluteEnd - delSelOp.absoluteStart);
+            delLen = delSelOp == null ? 0 : delSelOp.absoluteEnd - delSelOp.absoluteStart;
             if(this.maxChars != 0)
             {
                length1 = this._containerManager.textLength - delLen;
@@ -2964,7 +2963,7 @@ package fl.text
                   this._text = splice(this._text,delSelOp.absoluteStart,delSelOp.absoluteEnd,"");
                }
                this._text = splice(this._text,insertTextOperation.absoluteStart,insertTextOperation.absoluteEnd,textToInsert);
-               textToInsert = repeat(this._passwordCharacter,textToInsert);
+               textToInsert = tlf_internal::repeat(this._passwordCharacter,textToInsert);
             }
             insertTextOperation.text = textToInsert;
          }
@@ -3032,7 +3031,7 @@ package fl.text
             value = 16777215;
          }
          this._backgroundColor = value;
-         this.invalidate(INVALID_BORDER);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_BORDER);
       }
       
       public function set maxChars(value:int) : void
@@ -3041,7 +3040,7 @@ package fl.text
          {
             value = 0;
          }
-         var master:TLFTextField = this.firstField;
+         var master:TLFTextField = this.tlf_internal::firstField;
          if(!master)
          {
             master = this;
@@ -3056,8 +3055,8 @@ package fl.text
             return;
          }
          this._isPointText = pointText;
-         this._autoSize = !!pointText ? TextFieldAutoSize.LEFT : TextFieldAutoSize.NONE;
-         this.invalidate(INVALID_AUTO_SIZE);
+         this._autoSize = pointText ? TextFieldAutoSize.LEFT : TextFieldAutoSize.NONE;
+         this.tlf_internal::invalidate(tlf_internal::INVALID_AUTO_SIZE);
       }
       
       public function set backgroundAlpha(value:Number) : void
@@ -3075,13 +3074,13 @@ package fl.text
          {
             this._backgroundAlpha = 1;
          }
-         this.invalidate(INVALID_BORDER);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_BORDER);
       }
       
       private function doTypeSet(master:TLFTextField) : void
       {
          var newSelectionFormat:SelectionFormat = null;
-         var interactionMgr:ISelectionManager = !!master.TCMUsesTextStringAndFormat ? null : master.textFlow.interactionManager;
+         var interactionMgr:ISelectionManager = master.tlf_internal::TCMUsesTextStringAndFormat ? null : master.textFlow.interactionManager;
          if(interactionMgr != null)
          {
             this._priorSelectionBeginIndex = interactionMgr.absoluteStart;
@@ -3097,19 +3096,19 @@ package fl.text
             mode = EditingMode.READ_SELECT;
          }
          master._containerManager.editModeNoInteraction = mode;
-         interactionMgr = !!master.TCMUsesTextStringAndFormat ? null : master.textFlow.interactionManager;
+         interactionMgr = master.tlf_internal::TCMUsesTextStringAndFormat ? null : master.textFlow.interactionManager;
          if(interactionMgr != null)
          {
             this.setSelection(this._priorSelectionBeginIndex,this._priorSelectionEndIndex);
-            if(interactionMgr.focusedSelectionFormat != focusedSelectionFormat)
+            if(interactionMgr.focusedSelectionFormat != tlf_internal::focusedSelectionFormat)
             {
-               interactionMgr.focusedSelectionFormat = focusedSelectionFormat;
+               interactionMgr.focusedSelectionFormat = tlf_internal::focusedSelectionFormat;
             }
-            if(interactionMgr.inactiveSelectionFormat != inactiveSelectionFormat)
+            if(interactionMgr.inactiveSelectionFormat != tlf_internal::inactiveSelectionFormat)
             {
-               interactionMgr.inactiveSelectionFormat = inactiveSelectionFormat;
+               interactionMgr.inactiveSelectionFormat = tlf_internal::inactiveSelectionFormat;
             }
-            newSelectionFormat = !!this.alwaysShowSelection ? alwaysShowSelectionOnFormat : alwaysShowSelectionOffFormat;
+            newSelectionFormat = this.alwaysShowSelection ? tlf_internal::alwaysShowSelectionOnFormat : tlf_internal::alwaysShowSelectionOffFormat;
             if(interactionMgr.unfocusedSelectionFormat != newSelectionFormat)
             {
                interactionMgr.unfocusedSelectionFormat = newSelectionFormat;
@@ -3134,7 +3133,7 @@ package fl.text
       
       public function get pixelScrollV() : int
       {
-         var blockProg:String = !!this.TCMUsesTextStringAndFormat ? this.hostFormat.blockProgression : this.textFlow.computedFormat.blockProgression;
+         var blockProg:String = this.tlf_internal::TCMUsesTextStringAndFormat ? String(this.tlf_internal::hostFormat.blockProgression) : String(this.textFlow.computedFormat.blockProgression);
          return blockProg == BlockProgression.RL ? int(Math.abs(this._containerManager.horizontalScrollPosition)) : int(Math.abs(this._containerManager.verticalScrollPosition));
       }
       
@@ -3148,7 +3147,7 @@ package fl.text
          }
          paragraphLength = -1;
          txtFlowLine = this.getValidTextFlowLineFromCharIndex(charIndex);
-         if(txtFlowLine)
+         if(Boolean(txtFlowLine))
          {
             paragraphLength = txtFlowLine.paragraph.textLength;
          }
@@ -3157,7 +3156,7 @@ package fl.text
       
       override public function get width() : Number
       {
-         this.repaint();
+         this.tlf_internal::repaint();
          return super.width;
       }
       
@@ -3165,13 +3164,13 @@ package fl.text
       {
          var index:int = 0;
          var nextController:TLFContainerController = null;
-         if(this.textFlow && this.textFlow.flowComposer)
+         if(Boolean(this.textFlow) && Boolean(this.textFlow.flowComposer))
          {
-            index = this.textFlow.flowComposer.getControllerIndex(this.controller);
+            index = int(this.textFlow.flowComposer.getControllerIndex(this.controller));
             if(index + 1 < this.textFlow.flowComposer.numControllers)
             {
                nextController = this.textFlow.flowComposer.getControllerAt(index + 1) as TLFContainerController;
-               if(nextController)
+               if(Boolean(nextController))
                {
                   return nextController.ownerField;
                }
@@ -3193,7 +3192,7 @@ package fl.text
             this._containerManager.paddingTop = this.paddingLeft;
             this._containerManager.paddingRight = this.paddingLeft;
             this._containerManager.paddingBottom = this.paddingLeft;
-            this.invalidate(INVALID_TEXT);
+            this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
          }
       }
       
@@ -3203,12 +3202,12 @@ package fl.text
          var idx:int = 0;
          var rect:Rectangle = null;
          var tf:TextFlow = this._containerManager.textFlow;
-         if(tf)
+         if(Boolean(tf))
          {
             newPoint = globalToLocal(new Point(x,y));
-            idx = SelectionManager.computeSelectionIndex(tf,this,null,newPoint.x,newPoint.y);
+            idx = int(SelectionManager.tlf_internal::computeSelectionIndex(tf,this,null,newPoint.x,newPoint.y));
             rect = this.getCharBoundaries(idx);
-            return !!rect.containsPoint(newPoint) ? int(idx) : (idx > 0 ? int(idx - 1) : int(idx));
+            return rect.containsPoint(newPoint) ? idx : (idx > 0 ? idx - 1 : idx);
          }
          return -1;
       }
@@ -3232,7 +3231,7 @@ package fl.text
       public function set blockProgression(value:Object) : void
       {
          this._containerManager.blockProgression = value;
-         this.invalidate(INVALID_TEXT);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_TEXT);
       }
       
       public function get blockProgression() : Object
@@ -3247,7 +3246,7 @@ package fl.text
             throw new RangeError("The line number specified is out of range.");
          }
          var txtFlowLine:TextFlowLine = this.getValidTextFlowLine(lineIndex);
-         if(txtFlowLine)
+         if(Boolean(txtFlowLine))
          {
             return txtFlowLine.textLength - 1;
          }
@@ -3269,7 +3268,7 @@ package fl.text
          {
             this._borderWidth = 100;
          }
-         this.invalidate(INVALID_BORDER);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_BORDER);
       }
       
       public function set textFlow(theFlow:TextFlow) : void
@@ -3279,16 +3278,16 @@ package fl.text
          {
             return;
          }
-         this.invalidate(INVALID_ALL);
+         this.tlf_internal::invalidate(tlf_internal::INVALID_ALL);
          if(tf != null)
          {
-            this.removeTextFlowEventListeners();
+            this.tlf_internal::removeTextFlowEventListeners();
          }
          this._containerManager.textFlow = theFlow;
          if(this._containerManager.textFlow != null)
          {
             this._wordWrap = theFlow.computedFormat.lineBreak == LineBreak.TO_FIT;
-            this.addTextFlowEventListeners();
+            this.tlf_internal::addTextFlowEventListeners();
          }
       }
       
@@ -3297,7 +3296,7 @@ package fl.text
          if(!this._containerManager.textFlow)
          {
             this.text = "";
-            this._containerManager.textFlow.lineBreak = !!this._wordWrap ? LineBreak.TO_FIT : LineBreak.EXPLICIT;
+            this._containerManager.textFlow.lineBreak = this._wordWrap ? LineBreak.TO_FIT : LineBreak.EXPLICIT;
          }
          return this._containerManager.textFlow;
       }

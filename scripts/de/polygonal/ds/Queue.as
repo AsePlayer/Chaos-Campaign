@@ -6,7 +6,7 @@ package de.polygonal.ds
       
       function peek() : Object;
       
-      function enqueue(x:Object) : void;
+      function enqueue(param1:Object) : void;
       
       function dequeue() : Object;
       

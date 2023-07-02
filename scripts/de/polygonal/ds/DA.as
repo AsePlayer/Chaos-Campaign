@@ -16,7 +16,7 @@ package de.polygonal.ds
       
       public var _a:Array;
       
-      public function DA(reservedSize:int = 0, maxSize:int = -1)
+      public function DA(param1:int = 0, param2:int = -1)
       {
          var _loc3_:* = null as Array;
          if(Boot.skip_constructor)
@@ -25,10 +25,10 @@ package de.polygonal.ds
          }
          _size = 0;
          maxSize = -1;
-         if(reservedSize > 0)
+         if(param1 > 0)
          {
             null;
-            _loc3_ = new Array(reservedSize);
+            _loc3_ = new Array(param1);
             _a = _loc3_;
          }
          else
@@ -36,14 +36,14 @@ package de.polygonal.ds
             _a = [];
          }
          var _loc4_:int;
-         HashKey._counter = (_loc4_ = HashKey._counter) + 1;
+         HashKey._counter = (_loc4_ = int(HashKey._counter)) + 1;
          key = _loc4_;
       }
       
-      public function trim(x:int) : void
+      public function trim(param1:int) : void
       {
          null;
-         _size = x;
+         _size = param1;
       }
       
       public function toString() : String
@@ -66,7 +66,7 @@ package de.polygonal.ds
             _loc1_._a[_loc5_] = _a[_loc4_];
             if(_loc5_ >= _loc1_._size)
             {
-               _loc1_._size = _loc1_._size + 1;
+               ++_loc1_._size;
             }
          }
          return _loc1_;
@@ -88,50 +88,50 @@ package de.polygonal.ds
          return _loc1_;
       }
       
-      public function swp(i:int, j:int) : void
+      public function swp(param1:int, param2:int) : void
       {
          null;
          null;
-         var _loc3_:Object = _a[i];
+         var _loc3_:Object = _a[param1];
          null;
          null;
          null;
-         _a[i] = _a[j];
-         if(i >= _size)
+         _a[param1] = _a[param2];
+         if(param1 >= _size)
          {
-            _size = _size + 1;
+            ++_size;
          }
          null;
-         _a[j] = _loc3_;
-         if(j >= _size)
+         _a[param2] = _loc3_;
+         if(param2 >= _size)
          {
-            _size = _size + 1;
+            ++_size;
          }
       }
       
-      public function swapWithBack(i:int) : void
+      public function swapWithBack(param1:int) : void
       {
          var _loc3_:* = null as Object;
          null;
          var _loc2_:int = _size - 1;
-         if(i < _loc2_)
+         if(param1 < _loc2_)
          {
             null;
             _loc3_ = _a[_size - 1];
-            _a[_loc2_] = _a[i];
-            _a[i] = _loc3_;
+            _a[_loc2_] = _a[param1];
+            _a[param1] = _loc3_;
          }
       }
       
-      public function sort(compare:Function, useInsertionSort:Boolean = false) : void
+      public function sort(param1:Function, param2:Boolean = false) : void
       {
          var _loc3_:* = null as Array;
          var _loc4_:int = 0;
          if(_size > 1)
          {
-            if(compare == null)
+            if(param1 == null)
             {
-               if(useInsertionSort)
+               if(param2)
                {
                   _insertionSortComparable();
                }
@@ -140,9 +140,9 @@ package de.polygonal.ds
                   _quickSortComparable(0,_size);
                }
             }
-            else if(useInsertionSort)
+            else if(param2)
             {
-               _insertionSort(compare);
+               _insertionSort(param1);
             }
             else
             {
@@ -153,7 +153,7 @@ package de.polygonal.ds
                   _loc3_.length = _loc4_;
                }
                _loc3_;
-               _a.sort(compare);
+               _a.sort(param1);
             }
          }
       }
@@ -163,14 +163,14 @@ package de.polygonal.ds
          return _size;
       }
       
-      public function shuffle(rval:DA = undefined) : void
+      public function shuffle(param1:DA = undefined) : void
       {
          var _loc3_:* = null as Class;
          var _loc4_:int = 0;
          var _loc5_:* = null as Object;
          var _loc6_:int = 0;
          var _loc2_:int = _size;
-         if(rval == null)
+         if(param1 == null)
          {
             _loc3_ = Math;
             while(true)
@@ -180,7 +180,7 @@ package de.polygonal.ds
                {
                   break;
                }
-               _loc4_ = int(_loc3_.random() * _loc2_);
+               _loc4_ = int(Number(_loc3_.random()) * _loc2_);
                _loc5_ = _a[_loc2_];
                _a[_loc2_] = _a[_loc4_];
                _a[_loc4_] = _loc5_;
@@ -198,7 +198,7 @@ package de.polygonal.ds
                   break;
                }
                null;
-               _loc6_ = int(rval._a[_loc4_++] * _loc2_);
+               _loc6_ = int(Number(param1._a[_loc4_++]) * _loc2_);
                _loc5_ = _a[_loc2_];
                _a[_loc2_] = _a[_loc6_];
                _a[_loc6_] = _loc5_;
@@ -206,13 +206,13 @@ package de.polygonal.ds
          }
       }
       
-      public function set(i:int, x:Object) : void
+      public function set(param1:int, param2:Object) : void
       {
          null;
-         _a[i] = x;
-         if(i >= _size)
+         _a[param1] = param2;
+         if(param1 >= _size)
          {
-            _size = _size + 1;
+            ++_size;
          }
       }
       
@@ -234,20 +234,20 @@ package de.polygonal.ds
          _a.reverse();
       }
       
-      public function reserve(x:int) : void
+      public function reserve(param1:int) : void
       {
          var _loc4_:int = 0;
          var _loc5_:int = 0;
          var _loc6_:int = 0;
-         if(_size == x)
+         if(_size == param1)
          {
             return;
          }
          var _loc2_:Array = _a;
          null;
-         var _loc3_:Array = new Array(x);
+         var _loc3_:Array = new Array(param1);
          _a = _loc3_;
-         if(_size < x)
+         if(_size < param1)
          {
             _loc4_ = 0;
             _loc5_ = _size;
@@ -259,7 +259,7 @@ package de.polygonal.ds
          }
       }
       
-      public function removeRange(i:int, n:int, output:DA = undefined) : DA
+      public function removeRange(param1:int, param2:int, param3:DA = undefined) : DA
       {
          var _loc4_:int = 0;
          var _loc5_:int = 0;
@@ -268,56 +268,56 @@ package de.polygonal.ds
          var _loc8_:int = 0;
          null;
          null;
-         if(output == null)
+         if(param3 == null)
          {
             _loc4_ = _size;
-            _loc5_ = i + n;
+            _loc5_ = param1 + param2;
             while(_loc5_ < _loc4_)
             {
-               _a[_loc5_ - n] = _a[_loc5_];
+               _a[_loc5_ - param2] = _a[_loc5_];
                _loc5_++;
             }
          }
          else
          {
             _loc4_ = _size;
-            _loc5_ = i + n;
+            _loc5_ = param1 + param2;
             while(_loc5_ < _loc4_)
             {
-               _loc7_ = _loc5_ - n;
+               _loc7_ = _loc5_ - param2;
                _loc6_ = _a[_loc7_];
-               _loc8_ = output._size;
+               _loc8_ = param3._size;
                null;
-               output._a[_loc8_] = _loc6_;
-               if(_loc8_ >= output._size)
+               param3._a[_loc8_] = _loc6_;
+               if(_loc8_ >= param3._size)
                {
-                  output._size = output._size + 1;
+                  ++param3._size;
                }
                _a[_loc7_] = _a[_loc5_++];
             }
          }
-         _size -= n;
-         return output;
+         _size -= param2;
+         return param3;
       }
       
-      public function removeAt(i:int) : Object
+      public function removeAt(param1:int) : Object
       {
          null;
-         var _loc2_:Object = _a[i];
+         var _loc2_:Object = _a[param1];
          var _loc3_:int = _size - 1;
-         var _loc4_:int = i;
+         var _loc4_:int = param1;
          while(_loc4_ < _loc3_)
          {
             _a[_loc4_++] = _a[_loc4_];
          }
-         _size = _size - 1;
+         --_size;
          return _loc2_;
       }
       
-      public function remove(_tmp_x:Object) : Boolean
+      public function remove(param1:Object) : Boolean
       {
          var _loc5_:int = 0;
-         var _loc2_:Object = _tmp_x;
+         var _loc2_:Object = param1;
          if(_size == 0)
          {
             return false;
@@ -346,7 +346,7 @@ package de.polygonal.ds
          return _loc6_;
       }
       
-      public function pushFront(x:Object) : void
+      public function pushFront(param1:Object) : void
       {
          if(maxSize != -1)
          {
@@ -359,18 +359,18 @@ package de.polygonal.ds
          {
             _a[_loc2_--] = _a[_loc2_];
          }
-         _a[0] = x;
-         _size = _size + 1;
+         _a[0] = param1;
+         ++_size;
       }
       
-      public function pushBack(x:Object) : void
+      public function pushBack(param1:Object) : void
       {
          var _loc2_:int = _size;
          null;
-         _a[_loc2_] = x;
+         _a[_loc2_] = param1;
          if(_loc2_ >= _size)
          {
-            _size = _size + 1;
+            ++_size;
          }
       }
       
@@ -384,7 +384,7 @@ package de.polygonal.ds
          {
             _a[_loc3_++] = _a[_loc3_];
          }
-         _size = _size - 1;
+         --_size;
          return _loc1_;
       }
       
@@ -392,7 +392,7 @@ package de.polygonal.ds
       {
          null;
          var _loc1_:Object = _a[_size - 1];
-         _size = _size - 1;
+         --_size;
          return _loc1_;
       }
       
@@ -424,7 +424,7 @@ package de.polygonal.ds
          }
       }
       
-      public function memmove(destination:int, source:int, n:int) : void
+      public function memmove(param1:int, param2:int, param3:int) : void
       {
          var _loc4_:int = 0;
          var _loc5_:int = 0;
@@ -434,16 +434,16 @@ package de.polygonal.ds
          null;
          null;
          null;
-         if(source == destination)
+         if(param2 == param1)
          {
             return;
          }
-         if(source <= destination)
+         if(param2 <= param1)
          {
-            _loc4_ = source + n;
-            _loc5_ = destination + n;
+            _loc4_ = param2 + param3;
+            _loc5_ = param1 + param3;
             _loc6_ = 0;
-            while(_loc6_ < n)
+            while(_loc6_ < param3)
             {
                _loc7_ = _loc6_++;
                _loc4_--;
@@ -453,10 +453,10 @@ package de.polygonal.ds
          }
          else
          {
-            _loc4_ = source;
-            _loc5_ = destination;
+            _loc4_ = param2;
+            _loc5_ = param1;
             _loc6_ = 0;
-            while(_loc6_ < n)
+            while(_loc6_ < param3)
             {
                _loc7_ = _loc6_++;
                _a[_loc5_] = _a[_loc4_];
@@ -466,7 +466,7 @@ package de.polygonal.ds
          }
       }
       
-      public function lastIndexOf(x:Object, from:int = -1) : int
+      public function lastIndexOf(param1:Object, param2:int = -1) : int
       {
          var _loc3_:int = 0;
          var _loc4_:int = 0;
@@ -474,16 +474,16 @@ package de.polygonal.ds
          {
             return -1;
          }
-         if(from < 0)
+         if(param2 < 0)
          {
-            from = _size + from;
+            param2 = _size + param2;
          }
          null;
          _loc3_ = -1;
-         _loc4_ = from;
+         _loc4_ = param2;
          do
          {
-            if(_a[_loc4_] == x)
+            if(_a[_loc4_] == param1)
             {
                _loc3_ = _loc4_;
                break;
@@ -494,7 +494,7 @@ package de.polygonal.ds
          return _loc3_;
       }
       
-      public function join(x:String) : String
+      public function join(param1:String) : String
       {
          var _loc5_:int = 0;
          if(_size == 0)
@@ -507,7 +507,7 @@ package de.polygonal.ds
             return Std.string(_a[0]);
          }
          null;
-         var _loc2_:String = Std.string(_a[0]) + x;
+         var _loc2_:String = Std.string(_a[0]) + param1;
          var _loc3_:int = 1;
          var _loc4_:int = _size - 1;
          while(_loc3_ < _loc4_)
@@ -515,7 +515,7 @@ package de.polygonal.ds
             _loc5_ = _loc3_++;
             null;
             _loc2_ += Std.string(_a[_loc5_]);
-            _loc2_ += x;
+            _loc2_ += param1;
          }
          null;
          return _loc2_ + Std.string(_a[_size - 1]);
@@ -531,20 +531,20 @@ package de.polygonal.ds
          return _size == 0;
       }
       
-      public function insertAt(i:int, x:Object) : void
+      public function insertAt(param1:int, param2:Object) : void
       {
          null;
          null;
          var _loc3_:int = _size;
-         while(_loc3_ > i)
+         while(_loc3_ > param1)
          {
             _a[_loc3_--] = _a[_loc3_];
          }
-         _a[i] = x;
-         _size = _size + 1;
+         _a[param1] = param2;
+         ++_size;
       }
       
-      public function indexOf(x:Object, from:int = 0, binarySearch:Boolean = false, comparator:Object = undefined) : int
+      public function indexOf(param1:Object, param2:int = 0, param3:Boolean = false, param4:Object = undefined) : int
       {
          var _loc5_:* = null as Array;
          var _loc6_:int = 0;
@@ -556,9 +556,9 @@ package de.polygonal.ds
             return -1;
          }
          null;
-         if(binarySearch)
+         if(param3)
          {
-            if(comparator != null)
+            if(param4 != null)
             {
                _loc5_ = _a;
                _loc6_ = _size - 1;
@@ -566,12 +566,12 @@ package de.polygonal.ds
                null;
                null;
                null;
-               _loc7_ = from;
+               _loc7_ = param2;
                _loc9_ = _loc6_ + 1;
                while(_loc7_ < _loc9_)
                {
                   _loc8_ = _loc7_ + (_loc9_ - _loc7_ >> 1);
-                  if(int(comparator(_loc5_[_loc8_],x)) < 0)
+                  if(param4(_loc5_[_loc8_],param1) < 0)
                   {
                      _loc7_ = _loc8_ + 1;
                   }
@@ -580,17 +580,17 @@ package de.polygonal.ds
                      _loc9_ = _loc8_;
                   }
                }
-               return _loc7_ <= _loc6_ && int(comparator(_loc5_[_loc7_],x)) == 0 ? _loc7_ : ~_loc7_;
+               return _loc7_ <= _loc6_ && param4(_loc5_[_loc7_],param1) == 0 ? _loc7_ : ~_loc7_;
             }
             null;
             _loc6_ = _size;
-            _loc7_ = from;
+            _loc7_ = param2;
             _loc9_ = _loc6_;
             while(_loc7_ < _loc9_)
             {
                _loc8_ = _loc7_ + (_loc9_ - _loc7_ >> 1);
                null;
-               if(int(_a[_loc8_].compare(x)) < 0)
+               if(int(_a[_loc8_].compare(param1)) < 0)
                {
                   _loc7_ = _loc8_ + 1;
                }
@@ -600,14 +600,14 @@ package de.polygonal.ds
                }
             }
             null;
-            return _loc7_ <= _loc6_ && int(_a[_loc7_].compare(x)) == 0 ? _loc7_ : -_loc7_;
+            return _loc7_ <= _loc6_ && int(_a[_loc7_].compare(param1)) == 0 ? _loc7_ : -_loc7_;
          }
-         _loc6_ = from;
+         _loc6_ = param2;
          _loc7_ = -1;
          _loc8_ = _size - 1;
          do
          {
-            if(_a[_loc6_] == x)
+            if(_a[_loc6_] == param1)
             {
                _loc7_ = _loc6_;
                break;
@@ -618,21 +618,21 @@ package de.polygonal.ds
          return _loc7_;
       }
       
-      public function inRange(i:int) : Boolean
+      public function inRange(param1:int) : Boolean
       {
-         return i >= 0 && i <= _size;
+         return param1 >= 0 && param1 <= _size;
       }
       
-      public function getPrev(i:int) : Object
+      public function getPrev(param1:int) : Object
       {
          null;
-         return _a[i - 1 == -1 ? _size - 1 : i - 1];
+         return _a[param1 - 1 == -1 ? _size - 1 : param1 - 1];
       }
       
-      public function getNext(i:int) : Object
+      public function getNext(param1:int) : Object
       {
          null;
-         return _a[i + 1 == _size ? 0 : i + 1];
+         return _a[param1 + 1 == _size ? 0 : param1 + 1];
       }
       
       public function getArray() : Array
@@ -640,10 +640,10 @@ package de.polygonal.ds
          return _a;
       }
       
-      public function get(i:int) : Object
+      public function get(param1:int) : Object
       {
          null;
-         return _a[i];
+         return _a[param1];
       }
       
       public function front() : Object
@@ -666,43 +666,43 @@ package de.polygonal.ds
          _a = null;
       }
       
-      public function fill(x:Object, n:int = 0) : void
+      public function fill(param1:Object, param2:int = 0) : void
       {
          var _loc4_:int = 0;
          null;
-         if(n > 0)
+         if(param2 > 0)
          {
             null;
-            _size = n;
+            _size = param2;
          }
          else
          {
-            n = _size;
+            param2 = _size;
          }
          var _loc3_:int = 0;
-         while(_loc3_ < n)
+         while(_loc3_ < param2)
          {
             _loc4_ = _loc3_++;
-            _a[_loc4_] = x;
+            _a[_loc4_] = param1;
          }
       }
       
-      public function cpy(i:int, j:int) : void
+      public function cpy(param1:int, param2:int) : void
       {
          null;
          null;
          null;
-         _a[i] = _a[j];
-         if(i >= _size)
+         _a[param1] = _a[param2];
+         if(param1 >= _size)
          {
-            _size = _size + 1;
+            ++_size;
          }
       }
       
-      public function contains(_tmp_x:Object) : Boolean
+      public function contains(param1:Object) : Boolean
       {
          var _loc6_:int = 0;
-         var _loc2_:Object = _tmp_x;
+         var _loc2_:Object = param1;
          var _loc3_:Boolean = false;
          var _loc4_:int = 0;
          var _loc5_:int = _size;
@@ -718,7 +718,7 @@ package de.polygonal.ds
          return _loc3_;
       }
       
-      public function concat(x:DA, copy:Boolean = false) : DA
+      public function concat(param1:DA, param2:Boolean = false) : DA
       {
          var _loc3_:* = null as DA;
          var _loc4_:int = 0;
@@ -726,10 +726,10 @@ package de.polygonal.ds
          var _loc6_:int = 0;
          var _loc7_:int = 0;
          null;
-         if(copy)
+         if(param2)
          {
             _loc3_ = new DA();
-            _loc3_._size = _size + x._size;
+            _loc3_._size = _size + param1._size;
             _loc4_ = 0;
             _loc5_ = _size;
             while(_loc4_ < _loc5_)
@@ -739,48 +739,48 @@ package de.polygonal.ds
                _loc3_._a[_loc6_] = _a[_loc6_];
                if(_loc6_ >= _loc3_._size)
                {
-                  _loc3_._size = _loc3_._size + 1;
+                  ++_loc3_._size;
                }
             }
             _loc4_ = _size;
-            _loc5_ = _size + x._size;
+            _loc5_ = _size + param1._size;
             while(_loc4_ < _loc5_)
             {
                _loc6_ = _loc4_++;
                null;
                null;
-               _loc3_._a[_loc6_] = x._a[_loc6_ - _size];
+               _loc3_._a[_loc6_] = param1._a[_loc6_ - _size];
                if(_loc6_ >= _loc3_._size)
                {
-                  _loc3_._size = _loc3_._size + 1;
+                  ++_loc3_._size;
                }
             }
             return _loc3_;
          }
          null;
          _loc4_ = _size;
-         _size += x._size;
+         _size += param1._size;
          _loc5_ = 0;
-         _loc6_ = x._size;
+         _loc6_ = param1._size;
          while(_loc5_ < _loc6_)
          {
             _loc7_ = _loc5_++;
             null;
-            _a[_loc4_++] = x._a[_loc7_];
+            _a[_loc4_++] = param1._a[_loc7_];
          }
          return this;
       }
       
-      public function clone(assign:Boolean, _tmp_copier:Object = undefined) : Collection
+      public function clone(param1:Boolean, param2:Object = undefined) : Collection
       {
          var _loc5_:int = 0;
          var _loc6_:int = 0;
          var _loc7_:int = 0;
          var _loc8_:* = null as Cloneable;
-         var _loc3_:* = _tmp_copier;
+         var _loc3_:* = param2;
          var _loc4_:DA = new DA(_size,maxSize);
          _loc4_._size = _size;
-         if(assign)
+         if(param1)
          {
             _loc5_ = 0;
             _loc6_ = _size;
@@ -816,13 +816,13 @@ package de.polygonal.ds
          return _loc4_;
       }
       
-      public function clear(purge:Boolean = false) : void
+      public function clear(param1:Boolean = false) : void
       {
          var _loc2_:* = null as Object;
          var _loc3_:int = 0;
          var _loc4_:int = 0;
          var _loc5_:int = 0;
-         if(purge)
+         if(param1)
          {
             _loc2_ = null;
             _loc3_ = 0;
@@ -842,28 +842,28 @@ package de.polygonal.ds
          return _a[_size - 1];
       }
       
-      public function assign(C:Class, args:Array = undefined, n:int = 0) : void
+      public function assign(param1:Class, param2:Array = undefined, param3:int = 0) : void
       {
          var _loc5_:int = 0;
          null;
-         if(n > 0)
+         if(param3 > 0)
          {
             null;
-            _size = n;
+            _size = param3;
          }
          else
          {
-            n = _size;
+            param3 = _size;
          }
          var _loc4_:int = 0;
-         while(_loc4_ < n)
+         while(_loc4_ < param3)
          {
             _loc5_ = _loc4_++;
-            _a[_loc5_] = Instance.create(C,args);
+            _a[_loc5_] = Instance.create(param1,param2);
          }
       }
       
-      public function _quickSortComparable(first:int, k:int) : void
+      public function _quickSortComparable(param1:int, param2:int) : void
       {
          var _loc6_:int = 0;
          var _loc7_:int = 0;
@@ -874,14 +874,14 @@ package de.polygonal.ds
          var _loc12_:int = 0;
          var _loc13_:int = 0;
          var _loc14_:* = null as Object;
-         var _loc3_:int = first + k - 1;
-         var _loc4_:int = first;
+         var _loc3_:int = param1 + param2 - 1;
+         var _loc4_:int = param1;
          var _loc5_:int = _loc3_;
-         if(k > 1)
+         if(param2 > 1)
          {
-            _loc6_ = first;
-            _loc7_ = _loc6_ + (k >> 1);
-            _loc8_ = _loc6_ + k - 1;
+            _loc6_ = param1;
+            _loc7_ = _loc6_ + (param2 >> 1);
+            _loc8_ = _loc6_ + param2 - 1;
             _loc9_ = _a[_loc6_];
             _loc10_ = _a[_loc7_];
             _loc11_ = _a[_loc8_];
@@ -902,7 +902,7 @@ package de.polygonal.ds
                _loc12_ = int(_loc11_.compare(_loc9_)) < 0 ? _loc7_ : _loc6_;
             }
             _loc14_ = _a[_loc12_];
-            _a[_loc12_] = _a[first];
+            _a[_loc12_] = _a[param1];
             while(_loc4_ < _loc5_)
             {
                null;
@@ -928,12 +928,12 @@ package de.polygonal.ds
                }
             }
             _a[_loc4_] = _loc14_;
-            _quickSortComparable(first,_loc4_ - first);
+            _quickSortComparable(param1,_loc4_ - param1);
             _quickSortComparable(_loc4_ + 1,_loc3_ - _loc4_);
          }
       }
       
-      public function _quickSort(first:int, k:int, cmp:Function) : void
+      public function _quickSort(param1:int, param2:int, param3:Function) : void
       {
          var _loc7_:int = 0;
          var _loc8_:int = 0;
@@ -944,35 +944,35 @@ package de.polygonal.ds
          var _loc13_:int = 0;
          var _loc14_:int = 0;
          var _loc15_:* = null as Object;
-         var _loc4_:int = first + k - 1;
-         var _loc5_:int = first;
+         var _loc4_:int = param1 + param2 - 1;
+         var _loc5_:int = param1;
          var _loc6_:int = _loc4_;
-         if(k > 1)
+         if(param2 > 1)
          {
-            _loc7_ = first;
-            _loc8_ = _loc7_ + (k >> 1);
-            _loc9_ = _loc7_ + k - 1;
+            _loc7_ = param1;
+            _loc8_ = _loc7_ + (param2 >> 1);
+            _loc9_ = _loc7_ + param2 - 1;
             _loc10_ = _a[_loc7_];
             _loc11_ = _a[_loc8_];
             _loc12_ = _a[_loc9_];
-            _loc14_ = int(cmp(_loc10_,_loc12_));
-            if(_loc14_ < 0 && int(cmp(_loc10_,_loc11_)) < 0)
+            _loc14_ = param3(_loc10_,_loc12_);
+            if(_loc14_ < 0 && param3(_loc10_,_loc11_) < 0)
             {
-               _loc13_ = int(cmp(_loc11_,_loc12_)) < 0 ? _loc8_ : _loc9_;
+               _loc13_ = param3(_loc11_,_loc12_) < 0 ? _loc8_ : _loc9_;
             }
-            else if(int(cmp(_loc11_,_loc10_)) < 0 && int(cmp(_loc11_,_loc12_)) < 0)
+            else if(param3(_loc11_,_loc10_) < 0 && param3(_loc11_,_loc12_) < 0)
             {
                _loc13_ = _loc14_ < 0 ? _loc7_ : _loc9_;
             }
             else
             {
-               _loc13_ = int(cmp(_loc12_,_loc10_)) < 0 ? _loc8_ : _loc7_;
+               _loc13_ = param3(_loc12_,_loc10_) < 0 ? _loc8_ : _loc7_;
             }
             _loc15_ = _a[_loc13_];
-            _a[_loc13_] = _a[first];
+            _a[_loc13_] = _a[param1];
             while(_loc5_ < _loc6_)
             {
-               while(int(cmp(_loc15_,_a[_loc6_])) < 0 && _loc5_ < _loc6_)
+               while(param3(_loc15_,_a[_loc6_]) < 0 && _loc5_ < _loc6_)
                {
                   _loc6_--;
                }
@@ -981,7 +981,7 @@ package de.polygonal.ds
                   _a[_loc5_] = _a[_loc6_];
                   _loc5_++;
                }
-               while(int(cmp(_loc15_,_a[_loc5_])) > 0 && _loc5_ < _loc6_)
+               while(param3(_loc15_,_a[_loc5_]) > 0 && _loc5_ < _loc6_)
                {
                   _loc5_++;
                }
@@ -992,8 +992,8 @@ package de.polygonal.ds
                }
             }
             _a[_loc5_] = _loc15_;
-            _quickSort(first,_loc5_ - first,cmp);
-            _quickSort(_loc5_ + 1,_loc4_ - _loc5_,cmp);
+            _quickSort(param1,_loc5_ - param1,param3);
+            _quickSort(_loc5_ + 1,_loc4_ - _loc5_,param3);
          }
       }
       
@@ -1026,7 +1026,7 @@ package de.polygonal.ds
          }
       }
       
-      public function _insertionSort(cmp:Function) : void
+      public function _insertionSort(param1:Function) : void
       {
          var _loc4_:int = 0;
          var _loc5_:* = null as Object;
@@ -1042,7 +1042,7 @@ package de.polygonal.ds
             while(_loc6_ > 0)
             {
                _loc7_ = _a[_loc6_ - 1];
-               if(int(cmp(_loc7_,_loc5_)) <= 0)
+               if(param1(_loc7_,_loc5_) <= 0)
                {
                   break;
                }
@@ -1053,19 +1053,19 @@ package de.polygonal.ds
          }
       }
       
-      public function __set(i:int, x:Object) : void
+      public function __set(param1:int, param2:Object) : void
       {
-         _a[i] = x;
+         _a[param1] = param2;
       }
       
-      public function __get(i:int) : Object
+      public function __get(param1:int) : Object
       {
-         return _a[i];
+         return _a[param1];
       }
       
-      public function __cpy(i:int, j:int) : void
+      public function __cpy(param1:int, param2:int) : void
       {
-         _a[i] = _a[j];
+         _a[param1] = _a[param2];
       }
    }
 }

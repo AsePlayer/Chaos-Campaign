@@ -2,8 +2,6 @@ package flashx.textLayout.conversion
 {
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class ImportExportConfiguration
    {
@@ -17,42 +15,42 @@ package flashx.textLayout.conversion
       
       public function ImportExportConfiguration()
       {
-         this.flowElementInfoList = {};
-         this.flowElementClassList = {};
-         this.classToNameMap = {};
+         this.tlf_internal::flowElementInfoList = {};
+         this.tlf_internal::flowElementClassList = {};
+         this.tlf_internal::classToNameMap = {};
          super();
       }
       
       public function addIEInfo(name:String, flowClass:Class, parser:Function, exporter:Function) : void
       {
          var info:FlowElementInfo = new FlowElementInfo(flowClass,parser,exporter);
-         if(name)
+         if(Boolean(name))
          {
-            this.flowElementInfoList[name] = info;
+            this.tlf_internal::flowElementInfoList[name] = info;
          }
-         if(flowClass)
+         if(Boolean(flowClass))
          {
-            this.flowElementClassList[info.flowClassName] = info;
+            this.tlf_internal::flowElementClassList[info.flowClassName] = info;
          }
-         if(name && flowClass)
+         if(Boolean(name) && Boolean(flowClass))
          {
-            this.classToNameMap[info.flowClassName] = name;
+            this.tlf_internal::classToNameMap[info.flowClassName] = name;
          }
       }
       
       public function lookup(name:String) : FlowElementInfo
       {
-         return this.flowElementInfoList[name];
+         return this.tlf_internal::flowElementInfoList[name];
       }
       
       public function lookupName(classToMatch:String) : String
       {
-         return this.classToNameMap[classToMatch];
+         return this.tlf_internal::classToNameMap[classToMatch];
       }
       
       public function lookupByClass(classToMatch:String) : FlowElementInfo
       {
-         return this.flowElementClassList[classToMatch];
+         return this.tlf_internal::flowElementClassList[classToMatch];
       }
    }
 }

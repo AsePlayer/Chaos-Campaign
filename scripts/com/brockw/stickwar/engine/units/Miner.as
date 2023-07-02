@@ -2,11 +2,11 @@ package com.brockw.stickwar.engine.units
 {
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.ActionInterface;
-   import com.brockw.stickwar.engine.Ai.MinerAi;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.engine.Ai.*;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.Gold;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.Team.Tech;
+   import com.brockw.stickwar.engine.Team.*;
    import com.brockw.stickwar.market.MarketItem;
    import flash.display.MovieClip;
    
@@ -24,7 +24,7 @@ package com.brockw.stickwar.engine.units
       
       private var wallGoldCost:int;
       
-      private var wallSpell:SpellCooldown;
+      private var wallSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var isConstructing:Boolean;
       
@@ -36,7 +36,7 @@ package com.brockw.stickwar.engine.units
       
       protected var upgradedBagSize:int;
       
-      protected var wallConstructing:Wall;
+      protected var wallConstructing:com.brockw.stickwar.engine.units.Wall;
       
       private var wallConstructionTime:int;
       
@@ -70,14 +70,14 @@ package com.brockw.stickwar.engine.units
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
       {
          var m:_miner = _miner(mc);
-         if(m.mc.minerbag)
+         if(Boolean(m.mc.minerbag))
          {
             if(misc != "")
             {
                m.mc.minerbag.gotoAndStop(misc);
             }
          }
-         if(m.mc.pick)
+         if(Boolean(m.mc.pick))
          {
             if(weapon != "")
             {
@@ -122,7 +122,7 @@ package com.brockw.stickwar.engine.units
          MinerAi(ai).isGoingForOre = true;
          MinerAi(ai).isUnassigned = true;
          this.wallGoldCost = game.xml.xml.Order.Units.miner.wall.gold;
-         this.wallSpell = new SpellCooldown(game.xml.xml.Order.Units.miner.wall.effect,game.xml.xml.Order.Units.miner.wall.cooldown,game.xml.xml.Order.Units.miner.wall.mana);
+         this.wallSpell = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Order.Units.miner.wall.effect,game.xml.xml.Order.Units.miner.wall.cooldown,game.xml.xml.Order.Units.miner.wall.mana);
       }
       
       override public function stateFixForCutToWalk() : void

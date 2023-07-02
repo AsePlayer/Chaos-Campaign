@@ -11,7 +11,7 @@ package com.google.analytics.debug
       
       public var showHideKey:Number;
       
-      private var _mode:VisualDebugMode;
+      private var _mode:com.google.analytics.debug.VisualDebugMode;
       
       private var _verbose:Boolean = false;
       
@@ -29,7 +29,7 @@ package com.google.analytics.debug
       
       public var traceOutput:Boolean = false;
       
-      public var layout:ILayout;
+      public var layout:com.google.analytics.debug.ILayout;
       
       public var warningTimeout:Number = 1500;
       
@@ -79,7 +79,7 @@ package com.google.analytics.debug
       
       public function success(message:String) : void
       {
-         if(layout)
+         if(Boolean(layout))
          {
             layout.createSuccessAlert(message);
          }
@@ -96,7 +96,7 @@ package com.google.analytics.debug
       
       private function _initializeVisual() : void
       {
-         if(layout)
+         if(Boolean(layout))
          {
             layout.init();
             _visualInitialized = true;
@@ -105,19 +105,19 @@ package com.google.analytics.debug
       
       private function _destroyVisual() : void
       {
-         if(layout && _visualInitialized)
+         if(Boolean(layout) && _visualInitialized)
          {
             layout.destroy();
          }
       }
       
-      public function warning(message:String, mode:VisualDebugMode = null) : void
+      public function warning(message:String, mode:com.google.analytics.debug.VisualDebugMode = null) : void
       {
          if(_filter(mode))
          {
             return;
          }
-         if(layout && showWarnings)
+         if(Boolean(layout) && showWarnings)
          {
             layout.createWarning(message);
          }
@@ -127,14 +127,14 @@ package com.google.analytics.debug
          }
       }
       
-      private function _filter(mode:VisualDebugMode = null) : Boolean
+      private function _filter(mode:com.google.analytics.debug.VisualDebugMode = null) : Boolean
       {
-         return mode && int(mode) >= int(this.mode);
+         return Boolean(mode) && int(mode) >= int(this.mode);
       }
       
       public function failure(message:String) : void
       {
-         if(layout)
+         if(Boolean(layout))
          {
             layout.createFailureAlert(message);
          }
@@ -197,7 +197,7 @@ package com.google.analytics.debug
          {
             messages.push(pre0 + message);
          }
-         var len:int = messages.length;
+         var len:int = int(messages.length);
          for(var i:int = 0; i < len; i++)
          {
             trace(messages[i]);
@@ -206,7 +206,7 @@ package com.google.analytics.debug
       
       public function alert(message:String) : void
       {
-         if(layout)
+         if(Boolean(layout))
          {
             layout.createAlert(message);
          }
@@ -216,13 +216,13 @@ package com.google.analytics.debug
          }
       }
       
-      public function info(message:String, mode:VisualDebugMode = null) : void
+      public function info(message:String, mode:com.google.analytics.debug.VisualDebugMode = null) : void
       {
          if(_filter(mode))
          {
             return;
          }
-         if(layout && showInfos)
+         if(Boolean(layout) && showInfos)
          {
             layout.createInfo(message);
          }
@@ -234,7 +234,7 @@ package com.google.analytics.debug
       
       public function alertGifRequest(message:String, request:URLRequest, ref:GIFRequest) : void
       {
-         if(layout)
+         if(Boolean(layout))
          {
             layout.createGIFRequestAlert(message,request,ref);
          }

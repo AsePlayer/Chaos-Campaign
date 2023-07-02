@@ -1,6 +1,7 @@
 package gs.plugins
 {
-   import gs.TweenLite;
+   import flash.display.*;
+   import gs.*;
    
    public class AutoAlphaPlugin extends TweenPlugin
    {

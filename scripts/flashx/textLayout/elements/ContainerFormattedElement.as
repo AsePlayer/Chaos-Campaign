@@ -20,12 +20,12 @@ package flashx.textLayout.elements
       override tlf_internal function formatChanged(notifyModelChanged:Boolean = true) : void
       {
          var idx:int = 0;
-         super.formatChanged(notifyModelChanged);
-         if(this.flowComposer)
+         super.tlf_internal::formatChanged(notifyModelChanged);
+         if(Boolean(this.flowComposer))
          {
             for(idx = 0; idx < this.flowComposer.numControllers; idx++)
             {
-               this.flowComposer.getControllerAt(idx).formatChanged();
+               this.flowComposer.getControllerAt(idx).tlf_internal::formatChanged();
             }
          }
       }
@@ -37,15 +37,15 @@ package flashx.textLayout.elements
       override tlf_internal function normalizeRange(normalizeStart:uint, normalizeEnd:uint) : void
       {
          var p:ParagraphElement = null;
-         super.normalizeRange(normalizeStart,normalizeEnd);
+         super.tlf_internal::normalizeRange(normalizeStart,normalizeEnd);
          if(this.numChildren == 0)
          {
             p = new ParagraphElement();
-            if(this.canOwnFlowElement(p))
+            if(this.tlf_internal::canOwnFlowElement(p))
             {
                p.replaceChildren(0,0,new SpanElement());
                replaceChildren(0,0,p);
-               p.normalizeRange(0,p.textLength);
+               p.tlf_internal::normalizeRange(0,p.textLength);
             }
          }
       }

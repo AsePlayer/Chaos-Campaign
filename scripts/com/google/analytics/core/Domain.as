@@ -7,13 +7,13 @@ package com.google.analytics.core
    {
        
       
-      private var _mode:DomainNameMode;
+      private var _mode:com.google.analytics.core.DomainNameMode;
       
       private var _debug:DebugConfiguration;
       
       private var _name:String;
       
-      public function Domain(mode:DomainNameMode = null, name:String = "", debug:DebugConfiguration = null)
+      public function Domain(mode:com.google.analytics.core.DomainNameMode = null, name:String = "", debug:DebugConfiguration = null)
       {
          super();
          _debug = debug;
@@ -32,12 +32,12 @@ package com.google.analytics.core
          }
       }
       
-      public function get mode() : DomainNameMode
+      public function get mode() : com.google.analytics.core.DomainNameMode
       {
          return _mode;
       }
       
-      public function set mode(value:DomainNameMode) : void
+      public function set mode(value:com.google.analytics.core.DomainNameMode) : void
       {
          _mode = value;
          if(_mode == DomainNameMode.none)
@@ -53,7 +53,7 @@ package com.google.analytics.core
       
       public function set name(value:String) : void
       {
-         if(value.charAt(0) != "." && _debug)
+         if(value.charAt(0) != "." && Boolean(_debug))
          {
             _debug.warning("missing leading period \".\", cookie will only be accessible on " + value,VisualDebugMode.geek);
          }

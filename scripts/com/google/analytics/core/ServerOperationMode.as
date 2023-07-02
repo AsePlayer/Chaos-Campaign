@@ -3,11 +3,11 @@ package com.google.analytics.core
    public class ServerOperationMode
    {
       
-      public static const both:ServerOperationMode = new ServerOperationMode(2,"both");
+      public static const both:com.google.analytics.core.ServerOperationMode = new com.google.analytics.core.ServerOperationMode(2,"both");
       
-      public static const remote:ServerOperationMode = new ServerOperationMode(1,"remote");
+      public static const remote:com.google.analytics.core.ServerOperationMode = new com.google.analytics.core.ServerOperationMode(1,"remote");
       
-      public static const local:ServerOperationMode = new ServerOperationMode(0,"local");
+      public static const local:com.google.analytics.core.ServerOperationMode = new com.google.analytics.core.ServerOperationMode(0,"local");
        
       
       private var _value:int;

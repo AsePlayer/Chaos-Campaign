@@ -26,17 +26,17 @@ package com.brockw.stickwar.campaign
       
       private var keyboard:KeyboardState;
       
-      var isB:Boolean;
+      internal var isB:Boolean;
       
-      var isR:Boolean;
+      internal var isR:Boolean;
       
-      var isU:Boolean;
+      internal var isU:Boolean;
       
-      var isH:Boolean;
+      internal var isH:Boolean;
       
-      var counter:Number = 0;
+      internal var counter:Number = 0;
       
-      var devReset:Number = 20;
+      internal var devReset:Number = 20;
       
       private var techTreeLoaded:Boolean;
       

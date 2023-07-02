@@ -10,7 +10,7 @@ package de.polygonal.ds
       
       public var key:int;
       
-      public var _a:DA;
+      public var _a:de.polygonal.ds.DA;
       
       public function ListSet()
       {
@@ -18,18 +18,18 @@ package de.polygonal.ds
          {
             return;
          }
-         _a = new DA();
+         _a = new de.polygonal.ds.DA();
          var _loc1_:int;
-         HashKey._counter = (_loc1_ = HashKey._counter) + 1;
+         HashKey._counter = (_loc1_ = int(HashKey._counter)) + 1;
          key = _loc1_;
       }
       
       public function toString() : String
       {
-         return Sprintf.format("{ListSet, size: %d}",[int(size())]);
+         return Sprintf.format("{ListSet, size: %d}",[size()]);
       }
       
-      public function toDA() : DA
+      public function toDA() : de.polygonal.ds.DA
       {
          return _a.toDA();
       }
@@ -44,12 +44,12 @@ package de.polygonal.ds
          return _a._size;
       }
       
-      public function set(_tmp_x:Object) : Boolean
+      public function set(param1:Object) : Boolean
       {
-         var _loc3_:* = null as DA;
+         var _loc3_:* = null as de.polygonal.ds.DA;
          var _loc5_:int = 0;
          var _loc7_:int = 0;
-         var _loc2_:Object = _tmp_x;
+         var _loc2_:Object = param1;
          _loc3_ = _a;
          var _loc4_:Boolean = false;
          _loc5_ = 0;
@@ -73,42 +73,42 @@ package de.polygonal.ds
          _loc3_._a[_loc5_] = _loc2_;
          if(_loc5_ >= _loc3_._size)
          {
-            _loc3_._size = _loc3_._size + 1;
+            ++_loc3_._size;
          }
          return true;
       }
       
-      public function remove(_tmp_x:Object) : Boolean
+      public function remove(param1:Object) : Boolean
       {
-         var _loc2_:Object = _tmp_x;
-         return Boolean(_a.remove(_loc2_));
+         var _loc2_:Object = param1;
+         return _a.remove(_loc2_);
       }
       
-      public function merge(x:Set, assign:Boolean, copier:Object = undefined) : void
+      public function merge(param1:Set, param2:Boolean, param3:Object = undefined) : void
       {
          var _loc4_:* = null;
          var _loc5_:* = null as Object;
-         if(assign)
+         if(param2)
          {
-            _loc4_ = x.iterator();
+            _loc4_ = param1.iterator();
             while(_loc4_.hasNext())
             {
                _loc5_ = _loc4_.next();
                set(_loc5_);
             }
          }
-         else if(copier != null)
+         else if(param3 != null)
          {
-            _loc4_ = x.iterator();
+            _loc4_ = param1.iterator();
             while(_loc4_.hasNext())
             {
                _loc5_ = _loc4_.next();
-               set(copier(_loc5_));
+               set(param3(_loc5_));
             }
          }
          else
          {
-            _loc4_ = x.iterator();
+            _loc4_ = param1.iterator();
             while(_loc4_.hasNext())
             {
                _loc5_ = _loc4_.next();
@@ -128,11 +128,11 @@ package de.polygonal.ds
          return _a._size == 0;
       }
       
-      public function has(_tmp_x:Object) : Boolean
+      public function has(param1:Object) : Boolean
       {
          var _loc7_:int = 0;
-         var _loc2_:Object = _tmp_x;
-         var _loc3_:DA = _a;
+         var _loc2_:Object = param1;
+         var _loc3_:de.polygonal.ds.DA = _a;
          var _loc4_:Boolean = false;
          var _loc5_:int = 0;
          var _loc6_:int = _loc3_._size;
@@ -154,11 +154,11 @@ package de.polygonal.ds
          _a = null;
       }
       
-      public function contains(_tmp_x:Object) : Boolean
+      public function contains(param1:Object) : Boolean
       {
          var _loc7_:int = 0;
-         var _loc2_:Object = _tmp_x;
-         var _loc3_:DA = _a;
+         var _loc2_:Object = param1;
+         var _loc3_:de.polygonal.ds.DA = _a;
          var _loc4_:Boolean = false;
          var _loc5_:int = 0;
          var _loc6_:int = _loc3_._size;
@@ -174,25 +174,25 @@ package de.polygonal.ds
          return _loc4_;
       }
       
-      public function clone(assign:Boolean, _tmp_copier:Object = undefined) : Collection
+      public function clone(param1:Boolean, param2:Object = undefined) : Collection
       {
-         var _loc3_:* = _tmp_copier;
+         var _loc3_:* = param2;
          var _loc4_:ListSet = Instance.createEmpty(ListSet);
          var _loc5_:int;
-         HashKey._counter = (_loc5_ = HashKey._counter) + 1;
+         HashKey._counter = (_loc5_ = int(HashKey._counter)) + 1;
          _loc4_.key = _loc5_;
-         _loc4_._a = _a.clone(assign,_loc3_);
+         _loc4_._a = _a.clone(param1,_loc3_);
          return _loc4_;
       }
       
-      public function clear(purge:Boolean = false) : void
+      public function clear(param1:Boolean = false) : void
       {
          var _loc3_:* = null as Object;
          var _loc4_:int = 0;
          var _loc5_:int = 0;
          var _loc6_:int = 0;
-         var _loc2_:DA = _a;
-         if(purge)
+         var _loc2_:de.polygonal.ds.DA = _a;
+         if(param1)
          {
             _loc3_ = null;
             _loc4_ = 0;

@@ -7,7 +7,7 @@ package flashx.textLayout.conversion
    import flashx.textLayout.elements.TextFlow;
    
    [ExcludeClass]
-   class PlainTextImporter extends ConverterBase implements ITextImporter
+   internal class PlainTextImporter extends ConverterBase implements ITextImporter
    {
       
       private static const _newLineRegex:RegExp = /\n|\r\n?/g;
@@ -15,7 +15,7 @@ package flashx.textLayout.conversion
       
       protected var _config:IConfiguration = null;
       
-      function PlainTextImporter()
+      public function PlainTextImporter()
       {
          super();
       }

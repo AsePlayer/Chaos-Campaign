@@ -4,9 +4,7 @@ package flashx.textLayout.formats
    import flashx.textLayout.property.*;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
-   public class TabStopFormat implements ITabStopFormat
+   public class TabStopFormat implements flashx.textLayout.formats.ITabStopFormat
    {
       
       public static const positionProperty:Property = Property.NewNumberProperty("position",0,false,Vector.<String>([Category.TABSTOP]),0,10000);
@@ -21,9 +19,9 @@ package flashx.textLayout.formats
          "decimalAlignmentToken":decimalAlignmentTokenProperty
       };
       
-      private static var _emptyTabStopFormat:ITabStopFormat;
+      private static var _emptyTabStopFormat:flashx.textLayout.formats.ITabStopFormat;
       
-      private static var _defaults:TabStopFormat;
+      private static var _defaults:flashx.textLayout.formats.TabStopFormat;
        
       
       private var _position;
@@ -32,10 +30,10 @@ package flashx.textLayout.formats
       
       private var _decimalAlignmentToken;
       
-      public function TabStopFormat(initialValues:ITabStopFormat = null)
+      public function TabStopFormat(initialValues:flashx.textLayout.formats.ITabStopFormat = null)
       {
          super();
-         if(initialValues)
+         if(Boolean(initialValues))
          {
             this.apply(initialValues);
          }
@@ -46,24 +44,24 @@ package flashx.textLayout.formats
          return _description;
       }
       
-      tlf_internal static function get emptyTabStopFormat() : ITabStopFormat
+      tlf_internal static function get emptyTabStopFormat() : flashx.textLayout.formats.ITabStopFormat
       {
          if(_emptyTabStopFormat == null)
          {
-            _emptyTabStopFormat = new TabStopFormat();
+            _emptyTabStopFormat = new flashx.textLayout.formats.TabStopFormat();
          }
          return _emptyTabStopFormat;
       }
       
-      public static function isEqual(p1:ITabStopFormat, p2:ITabStopFormat) : Boolean
+      public static function isEqual(p1:flashx.textLayout.formats.ITabStopFormat, p2:flashx.textLayout.formats.ITabStopFormat) : Boolean
       {
          if(p1 == null)
          {
-            p1 = emptyTabStopFormat;
+            p1 = tlf_internal::emptyTabStopFormat;
          }
          if(p2 == null)
          {
-            p2 = emptyTabStopFormat;
+            p2 = tlf_internal::emptyTabStopFormat;
          }
          if(p1 == p2)
          {
@@ -84,11 +82,11 @@ package flashx.textLayout.formats
          return true;
       }
       
-      public static function get defaultFormat() : ITabStopFormat
+      public static function get defaultFormat() : flashx.textLayout.formats.ITabStopFormat
       {
          if(_defaults == null)
          {
-            _defaults = new TabStopFormat();
+            _defaults = new flashx.textLayout.formats.TabStopFormat();
             Property.defaultsAllHelper(_description,_defaults);
          }
          return _defaults;
@@ -135,32 +133,32 @@ package flashx.textLayout.formats
          this._decimalAlignmentToken = decimalAlignmentTokenProperty.setHelper(this._decimalAlignmentToken,newValue);
       }
       
-      public function copy(values:ITabStopFormat) : void
+      public function copy(values:flashx.textLayout.formats.ITabStopFormat) : void
       {
          if(values == null)
          {
-            values = emptyTabStopFormat;
+            values = tlf_internal::emptyTabStopFormat;
          }
          this.position = values.position;
          this.alignment = values.alignment;
          this.decimalAlignmentToken = values.decimalAlignmentToken;
       }
       
-      public function concat(incoming:ITabStopFormat) : void
+      public function concat(incoming:flashx.textLayout.formats.ITabStopFormat) : void
       {
          this.position = positionProperty.concatHelper(this.position,incoming.position);
          this.alignment = alignmentProperty.concatHelper(this.alignment,incoming.alignment);
          this.decimalAlignmentToken = decimalAlignmentTokenProperty.concatHelper(this.decimalAlignmentToken,incoming.decimalAlignmentToken);
       }
       
-      public function concatInheritOnly(incoming:ITabStopFormat) : void
+      public function concatInheritOnly(incoming:flashx.textLayout.formats.ITabStopFormat) : void
       {
          this.position = positionProperty.concatInheritOnlyHelper(this.position,incoming.position);
          this.alignment = alignmentProperty.concatInheritOnlyHelper(this.alignment,incoming.alignment);
          this.decimalAlignmentToken = decimalAlignmentTokenProperty.concatInheritOnlyHelper(this.decimalAlignmentToken,incoming.decimalAlignmentToken);
       }
       
-      public function apply(incoming:ITabStopFormat) : void
+      public function apply(incoming:flashx.textLayout.formats.ITabStopFormat) : void
       {
          var val:* = undefined;
          if((val = incoming.position) !== undefined)
@@ -177,7 +175,7 @@ package flashx.textLayout.formats
          }
       }
       
-      public function removeMatching(incoming:ITabStopFormat) : void
+      public function removeMatching(incoming:flashx.textLayout.formats.ITabStopFormat) : void
       {
          if(incoming == null)
          {
@@ -197,7 +195,7 @@ package flashx.textLayout.formats
          }
       }
       
-      public function removeClashing(incoming:ITabStopFormat) : void
+      public function removeClashing(incoming:flashx.textLayout.formats.ITabStopFormat) : void
       {
          if(incoming == null)
          {

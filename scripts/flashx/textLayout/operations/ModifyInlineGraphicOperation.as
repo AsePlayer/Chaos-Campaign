@@ -6,8 +6,6 @@ package flashx.textLayout.operations
    import flashx.textLayout.elements.InlineGraphicElement;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class ModifyInlineGraphicOperation extends FlowTextOperation
    {
        
@@ -77,7 +75,7 @@ package flashx.textLayout.operations
       {
          this.selPos = absoluteStart;
          var img:InlineGraphicElement = textFlow.findLeaf(this.selPos) as InlineGraphicElement;
-         if(img)
+         if(Boolean(img))
          {
             this.oldImage = img.shallowCopy(0,1);
             if(img.width != this.imageWidth)
@@ -92,7 +90,7 @@ package flashx.textLayout.operations
             {
                img.source = this._source;
             }
-            if(this.options && img.float != this.options.toString())
+            if(Boolean(this.options) && img.float != this.options.toString())
             {
                img.float = this.options.toString();
             }

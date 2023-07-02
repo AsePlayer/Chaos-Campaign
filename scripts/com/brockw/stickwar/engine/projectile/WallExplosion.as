@@ -8,11 +8,11 @@ package com.brockw.stickwar.engine.projectile
    {
        
       
-      var spellMc:MovieClip;
+      internal var spellMc:MovieClip;
       
-      var explosionRadius:Number;
+      internal var explosionRadius:Number;
       
-      var explosionDamage:Number;
+      internal var explosionDamage:Number;
       
       public function WallExplosion(game:StickWar)
       {

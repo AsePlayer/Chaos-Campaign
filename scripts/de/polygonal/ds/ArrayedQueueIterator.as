@@ -12,19 +12,19 @@ package de.polygonal.ds
       
       public var _front:int;
       
-      public var _f:ArrayedQueue;
+      public var _f:de.polygonal.ds.ArrayedQueue;
       
       public var _capacity:int;
       
       public var _a:Array;
       
-      public function ArrayedQueueIterator(f:ArrayedQueue = undefined)
+      public function ArrayedQueueIterator(param1:de.polygonal.ds.ArrayedQueue = undefined)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         _f = f;
+         _f = param1;
          _a = _f._a;
          _front = _f._front;
          _capacity = _f._capacity;
@@ -55,24 +55,24 @@ package de.polygonal.ds
          return _i < _size;
       }
       
-      public function __size(f:Object) : int
+      public function __size(param1:Object) : int
       {
-         return int(f._capacity);
+         return int(param1._capacity);
       }
       
-      public function __front(f:Object) : int
+      public function __front(param1:Object) : int
       {
-         return int(f._front);
+         return int(param1._front);
       }
       
-      public function __count(f:Object) : int
+      public function __count(param1:Object) : int
       {
-         return int(f._size);
+         return int(param1._size);
       }
       
-      public function __a(f:Object) : Array
+      public function __a(param1:Object) : Array
       {
-         return f._a;
+         return param1._a;
       }
    }
 }

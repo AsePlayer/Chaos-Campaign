@@ -22,11 +22,11 @@ package fl.motion
       private static var enterFrameBeacon:MovieClip = new MovieClip();
        
       
-      private var _motion:MotionBase;
+      private var _motion:fl.motion.MotionBase;
       
       private var _motionArray:Array;
       
-      protected var _lastMotionUsed:MotionBase;
+      protected var _lastMotionUsed:fl.motion.MotionBase;
       
       protected var _lastColorTransformApplied:ColorTransform;
       
@@ -78,7 +78,7 @@ package fl.motion
       
       private var _lastRenderedTime:int = -1;
       
-      private var _lastRenderedMotion:MotionBase = null;
+      private var _lastRenderedMotion:fl.motion.MotionBase = null;
       
       private var _time:int = -1;
       
@@ -154,7 +154,7 @@ package fl.motion
       {
          var _loc5_:int = 0;
          var _loc6_:int = 0;
-         if(param2 && param1)
+         if(Boolean(param2) && Boolean(param1))
          {
             if(param2.usingCurrentFrame)
             {
@@ -168,7 +168,7 @@ package fl.motion
                }
                if(_loc5_ >= param2.spanStart && _loc5_ <= param2.spanEnd)
                {
-                  _loc6_ = Boolean(param2.motionArray) ? int(_loc5_) : int(_loc5_ - param2.spanStart);
+                  _loc6_ = Boolean(param2.motionArray) ? _loc5_ : _loc5_ - param2.spanStart;
                   if(!param2.isPlaying)
                   {
                      param2.play(_loc6_,param3);
@@ -194,7 +194,7 @@ package fl.motion
                   param2.startFrameEvents();
                }
             }
-            else if(param2.targetParent && (param2.targetParent.hasOwnProperty(param2.targetName) && param2.targetParent[param2.targetName] == null || param2.targetParent.getChildByName(param2.targetName) == null))
+            else if(Boolean(param2.targetParent) && (param2.targetParent.hasOwnProperty(param2.targetName) && param2.targetParent[param2.targetName] == null || param2.targetParent.getChildByName(param2.targetName) == null))
             {
                if(param2.isPlaying)
                {
@@ -313,17 +313,17 @@ package fl.motion
          }
       }
       
-      public function get motion() : MotionBase
+      public function get motion() : fl.motion.MotionBase
       {
          return this._motion;
       }
       
-      public function set motion(param1:MotionBase) : void
+      public function set motion(param1:fl.motion.MotionBase) : void
       {
          this._motion = param1;
-         if(param1)
+         if(Boolean(param1))
          {
-            if(this.motionArray)
+            if(Boolean(this.motionArray))
             {
                this._spanStart = this._spanEnd = -1;
             }
@@ -339,8 +339,8 @@ package fl.motion
       public function set motionArray(param1:Array) : void
       {
          var _loc2_:int = 0;
-         this._motionArray = param1 && param1.length > 0 ? param1 : null;
-         if(this._motionArray)
+         this._motionArray = Boolean(param1) && param1.length > 0 ? param1 : null;
+         if(Boolean(this._motionArray))
          {
             this.motion = null;
             this._spanStart = this._motionArray[0].motion_internal::spanStart;
@@ -385,9 +385,9 @@ package fl.motion
          }
          this._lastTarget = param1;
          var _loc2_:Boolean = false;
-         if(this.targetParent && this.targetName != "")
+         if(Boolean(this.targetParent) && this.targetName != "")
          {
-            if(this.targetStateOriginal)
+            if(Boolean(this.targetStateOriginal))
             {
                this.targetState = this.targetStateOriginal;
                return;
@@ -426,7 +426,7 @@ package fl.motion
          {
             return;
          }
-         if(this._placeholderName)
+         if(Boolean(this._placeholderName))
          {
             _loc6_ = this._targetParent[this._placeholderName];
             if(!_loc6_)
@@ -438,8 +438,8 @@ package fl.motion
                this._targetParent.addChildAt(this._target,this._targetParent.getChildIndex(_loc6_) + 1);
             }
          }
-         var _loc2_:MotionBase = this.motion;
-         if(_loc2_)
+         var _loc2_:fl.motion.MotionBase = this.motion;
+         if(Boolean(_loc2_))
          {
             if(param1 > _loc2_.duration - 1)
             {
@@ -504,19 +504,19 @@ package fl.motion
                this.setTimeClassic(param1,_loc2_,_loc4_);
             }
             _loc8_ = _loc2_.getColorTransform(param1);
-            if(_loc3_)
+            if(Boolean(_loc3_))
             {
-               if(!_loc8_ && this._lastColorTransformApplied)
+               if(!_loc8_ && Boolean(this._lastColorTransformApplied))
                {
                   _loc8_ = new ColorTransform();
                }
-               if(_loc8_ && (!this._lastColorTransformApplied || !colorTransformsEqual(_loc8_,this._lastColorTransformApplied)))
+               if(Boolean(_loc8_) && (!this._lastColorTransformApplied || !colorTransformsEqual(_loc8_,this._lastColorTransformApplied)))
                {
                   this._target.transform.colorTransform = _loc8_;
                   this._lastColorTransformApplied = _loc8_;
                }
             }
-            else if(_loc8_)
+            else if(Boolean(_loc8_))
             {
                this._target.transform.colorTransform = _loc8_;
             }
@@ -526,7 +526,7 @@ package fl.motion
                this._target.filters = null;
                this._filtersApplied = false;
             }
-            else if(_loc9_)
+            else if(Boolean(_loc9_))
             {
                this._target.filters = _loc9_;
                this._filtersApplied = true;
@@ -554,12 +554,12 @@ package fl.motion
          this.dispatchEvent(new MotionEvent(MotionEvent.MOTION_UPDATE));
       }
       
-      protected function setTime3D(param1:int, param2:MotionBase) : Boolean
+      protected function setTime3D(param1:int, param2:fl.motion.MotionBase) : Boolean
       {
          return false;
       }
       
-      protected function setTimeClassic(param1:int, param2:MotionBase, param3:KeyframeBase) : Boolean
+      protected function setTimeClassic(param1:int, param2:fl.motion.MotionBase, param3:KeyframeBase) : Boolean
       {
          return false;
       }
@@ -652,7 +652,7 @@ package fl.motion
          {
             return this._spanEnd;
          }
-         if(this._motion && this._motion.duration > 0)
+         if(Boolean(this._motion) && this._motion.duration > 0)
          {
             return this._spanStart + this._motion.duration - 1;
          }
@@ -779,22 +779,22 @@ package fl.motion
          {
             if(this._target == null && this._targetParent && this._targetName != "")
             {
-               _loc3_ = !!this._targetParent.hasOwnProperty(this._targetName) ? this._targetParent[this._targetName] : this._targetParent.getChildByName(this._targetName);
-               if(this.instanceFactory == null || this.instanceFactory["isTargetForFrame"](_loc3_,param1,this.sceneName))
+               _loc3_ = this._targetParent.hasOwnProperty(this._targetName) ? this._targetParent[this._targetName] : this._targetParent.getChildByName(this._targetName);
+               if(this.instanceFactory == null || Boolean(this.instanceFactory["isTargetForFrame"](_loc3_,param1,this.sceneName)))
                {
                   this.target = _loc3_;
                }
                if(!this.target)
                {
                   _loc3_ = this._targetParent.getChildByName(this._targetName);
-                  if(this.instanceFactory == null || this.instanceFactory["isTargetForFrame"](_loc3_,param1,this.sceneName))
+                  if(this.instanceFactory == null || Boolean(this.instanceFactory["isTargetForFrame"](_loc3_,param1,this.sceneName)))
                   {
                      this.target = _loc3_;
                   }
-                  if(!this.target && this._placeholderName && this.instanceFactory)
+                  if(!this.target && this._placeholderName && Boolean(this.instanceFactory))
                   {
                      _loc4_ = this.instanceFactory["getInstance"](this._targetParent,this._targetName,param1,this.sceneName);
-                     if(_loc4_)
+                     if(Boolean(_loc4_))
                      {
                         _loc4_.name = this._targetName;
                         this._targetParent[this._targetName] = _loc4_;
@@ -803,7 +803,7 @@ package fl.motion
                         {
                            _loc5_ = this._targetParent.getChildByName(this._placeholderName);
                         }
-                        if(_loc5_)
+                        if(Boolean(_loc5_))
                         {
                            this._targetParent.addChildAt(_loc4_,this._targetParent.getChildIndex(_loc5_) + 1);
                         }
@@ -851,17 +851,17 @@ package fl.motion
          {
             this.rewind();
          }
-         else if(this.motion && this.time != this.motion.duration - 1)
+         else if(Boolean(this.motion) && this.time != this.motion.duration - 1)
          {
             this.time = this.motion.duration - 1;
          }
-         else if(this.motionArray && this.time != this._spanEnd)
+         else if(Boolean(this.motionArray) && this.time != this._spanEnd)
          {
             this.time = this._spanEnd;
          }
          if(param1)
          {
-            if(this._targetParent && this._targetName != "")
+            if(Boolean(this._targetParent) && this._targetName != "")
             {
                if(this._target && this.instanceFactory && this._targetParent is MovieClip && this._targetParent == this._target.parent)
                {
@@ -915,7 +915,7 @@ package fl.motion
       
       public function rewind() : void
       {
-         this.time = Boolean(this.motionArray) ? int(this._spanStart) : int(0);
+         this.time = Boolean(this.motionArray) ? this._spanStart : 0;
       }
       
       private function placeholderButtonEnterFrameHandler(param1:Event) : void

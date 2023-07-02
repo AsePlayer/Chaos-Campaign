@@ -87,7 +87,7 @@ package com.smartfoxserver.v2.core
       {
          var sfsObj:ISFSObject = new SFSObject();
          sfsObj.putByte(CONTROLLER_ID,message.targetController);
-         sfsObj.putInt(USER_ID,this.bitSwarm.sfs.mySelf != null ? int(this.bitSwarm.sfs.mySelf.id) : int(-1));
+         sfsObj.putInt(USER_ID,this.bitSwarm.sfs.mySelf != null ? int(this.bitSwarm.sfs.mySelf.id) : -1);
          sfsObj.putLong(UDP_PACKET_ID,this.bitSwarm.nextUdpPacketId());
          sfsObj.putSFSObject(PARAM_ID,message.content);
          return sfsObj;
@@ -125,7 +125,7 @@ package com.smartfoxserver.v2.core
          {
             message.packetId = requestObject.getLong(UDP_PACKET_ID);
          }
-         var controllerId:int = requestObject.getByte(CONTROLLER_ID);
+         var controllerId:int = int(requestObject.getByte(CONTROLLER_ID));
          var controller:IController = this.bitSwarm.getController(controllerId);
          if(controller == null)
          {

@@ -18,7 +18,7 @@ package com.brockw.stickwar.campaign.controllers
       
       override public function update(gameScreen:GameScreen) : void
       {
-         if(this.message && gameScreen.contains(this.message))
+         if(Boolean(this.message) && gameScreen.contains(this.message))
          {
             this.message.update();
             if(this.frames++ > 30 * 5)
@@ -28,7 +28,7 @@ package com.brockw.stickwar.campaign.controllers
          }
          else if(!this.message)
          {
-            if(gameScreen.team.forwardUnit && gameScreen.team.forwardUnit.px > gameScreen.game.map.width / 2)
+            if(Boolean(gameScreen.team.forwardUnit) && gameScreen.team.forwardUnit.px > gameScreen.game.map.width / 2)
             {
                this.message = new InGameMessage("",gameScreen.game);
                this.message.x = gameScreen.game.stage.stageWidth / 2;

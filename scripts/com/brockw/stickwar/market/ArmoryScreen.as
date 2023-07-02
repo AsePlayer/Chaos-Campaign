@@ -2,45 +2,27 @@ package com.brockw.stickwar.market
 {
    import com.brockw.game.Screen;
    import com.brockw.stickwar.Main;
-   import com.brockw.stickwar.engine.Team.Team;
-   import com.brockw.stickwar.engine.units.Archer;
-   import com.brockw.stickwar.engine.units.Bomber;
-   import com.brockw.stickwar.engine.units.Cat;
-   import com.brockw.stickwar.engine.units.Dead;
-   import com.brockw.stickwar.engine.units.EnslavedGiant;
-   import com.brockw.stickwar.engine.units.FlyingCrossbowman;
-   import com.brockw.stickwar.engine.units.Giant;
-   import com.brockw.stickwar.engine.units.Knight;
-   import com.brockw.stickwar.engine.units.Magikill;
-   import com.brockw.stickwar.engine.units.Medusa;
-   import com.brockw.stickwar.engine.units.Miner;
-   import com.brockw.stickwar.engine.units.MinerChaos;
-   import com.brockw.stickwar.engine.units.Monk;
-   import com.brockw.stickwar.engine.units.Ninja;
-   import com.brockw.stickwar.engine.units.Skelator;
-   import com.brockw.stickwar.engine.units.Spearton;
-   import com.brockw.stickwar.engine.units.Swordwrath;
-   import com.brockw.stickwar.engine.units.Unit;
-   import com.brockw.stickwar.engine.units.Wingidon;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
-   import flash.display.MovieClip;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
+   import com.brockw.stickwar.engine.Team.*;
+   import com.brockw.stickwar.engine.units.*;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
+   import flash.display.*;
+   import flash.events.*;
    import flash.external.ExternalInterface;
    import flash.geom.Rectangle;
    import flash.net.URLRequest;
    import flash.net.navigateToURL;
+   import flash.text.*;
    
    public class ArmoryScreen extends Screen
    {
        
       
-      var main:Main;
+      internal var main:Main;
       
       private var _mc:armoryScreenMc;
       
-      private var currentCard:ArmoryUnitCard;
+      private var currentCard:com.brockw.stickwar.market.ArmoryUnitCard;
       
       private var team:int;
       
@@ -52,13 +34,13 @@ package com.brockw.stickwar.market
       
       private var itemPreview:MovieClip;
       
-      var hasWeapon:Boolean;
+      internal var hasWeapon:Boolean;
       
-      var hasArmor:Boolean;
+      internal var hasArmor:Boolean;
       
-      var hasMisc:Boolean;
+      internal var hasMisc:Boolean;
       
-      private var currentEditMarketItem:MarketItem;
+      private var currentEditMarketItem:com.brockw.stickwar.market.MarketItem;
       
       public var empirePointsToShow:Number;
       
@@ -104,14 +86,14 @@ package com.brockw.stickwar.market
       
       private function initUnitCard(team:int, unitType:int, mc:MovieClip, c:Class, card:MovieClip) : void
       {
-         this.unitCards.push(new ArmoryUnitCard(this.main,team,unitType,mc,c,card));
+         this.unitCards.push(new com.brockw.stickwar.market.ArmoryUnitCard(this.main,team,unitType,mc,c,card));
          this.currentCard = this.unitCards[0];
          this.currentCard.setSelected();
       }
       
       public function initUnitCards() : void
       {
-         var unitCard:ArmoryUnitCard = null;
+         var unitCard:com.brockw.stickwar.market.ArmoryUnitCard = null;
          if(this.currentCard != null)
          {
             this.currentCard.removeUnitProfile(this.mc.unitDisplayBox);
@@ -170,7 +152,7 @@ package com.brockw.stickwar.market
       
       private function updateUnitCards(slide:Boolean = false) : void
       {
-         var unitCard:ArmoryUnitCard = null;
+         var unitCard:com.brockw.stickwar.market.ArmoryUnitCard = null;
          var rate:Number = NaN;
          var i:int = 0;
          this.visibleCount = 0;
@@ -202,10 +184,10 @@ package com.brockw.stickwar.market
       
       public function update(evt:Event) : void
       {
-         var _loc3_:ArmoryUnitCard = null;
-         var _loc4_:int = 0;
-         var _loc5_:ArmoryUnitCard = null;
-         var _loc2_:int = 0;
+         var unitCard:com.brockw.stickwar.market.ArmoryUnitCard = null;
+         var t:int = 0;
+         var card:com.brockw.stickwar.market.ArmoryUnitCard = null;
+         var newIndex:int = 0;
          this.mc.downButton.enabled = true;
          this.mc.upButton.enabled = true;
          this.mc.upButton.mouseEnabled = true;
@@ -214,19 +196,19 @@ package com.brockw.stickwar.market
          this.mc.upButton.visible = true;
          this.mc.upDisabled.visible = false;
          this.mc.downDisabled.visible = false;
-         _loc2_ = this.scrollIndex + 2;
-         _loc2_ = Math.min(this.visibleCount - 3,_loc2_);
-         _loc2_ = Math.max(_loc2_,0);
-         if(_loc2_ == this.scrollIndex)
+         newIndex = this.scrollIndex + 2;
+         newIndex = Math.min(this.visibleCount - 3,newIndex);
+         newIndex = Math.max(newIndex,0);
+         if(newIndex == this.scrollIndex)
          {
             this.mc.downButton.enabled = false;
             this.mc.downButton.mouseEnabled = false;
             this.mc.downButton.visible = false;
             this.mc.downDisabled.visible = true;
          }
-         _loc2_ = this.scrollIndex - 2;
-         _loc2_ = Math.max(_loc2_,0);
-         if(_loc2_ == this.scrollIndex)
+         newIndex = this.scrollIndex - 2;
+         newIndex = Math.max(newIndex,0);
+         if(newIndex == this.scrollIndex)
          {
             this.mc.upButton.enabled = false;
             this.mc.upButton.mouseEnabled = false;
@@ -276,14 +258,14 @@ package com.brockw.stickwar.market
             }
             if(this.currentCard != null)
             {
-               _loc4_ = this.currentCard.currentItemType;
+               t = this.currentCard.currentItemType;
                if(this.mc.weaponButton.hitTestPoint(stage.mouseX,stage.mouseY,true))
                {
                   if(this.isMouseDown && this.hasWeapon)
                   {
-                     for each(_loc5_ in this.unitCards)
+                     for each(card in this.unitCards)
                      {
-                        _loc5_.currentItemType = MarketItem.T_WEAPON;
+                        card.currentItemType = MarketItem.T_WEAPON;
                      }
                      this.scrollIndex = 0;
                      this.updateUnitCards();
@@ -298,9 +280,9 @@ package com.brockw.stickwar.market
                {
                   if(this.isMouseDown && this.hasArmor)
                   {
-                     for each(_loc5_ in this.unitCards)
+                     for each(card in this.unitCards)
                      {
-                        _loc5_.currentItemType = MarketItem.T_ARMOR;
+                        card.currentItemType = MarketItem.T_ARMOR;
                      }
                      this.scrollIndex = 0;
                      this.updateUnitCards();
@@ -315,9 +297,9 @@ package com.brockw.stickwar.market
                {
                   if(this.isMouseDown && this.hasMisc)
                   {
-                     for each(_loc5_ in this.unitCards)
+                     for each(card in this.unitCards)
                      {
-                        _loc5_.currentItemType = MarketItem.T_MISC;
+                        card.currentItemType = MarketItem.T_MISC;
                      }
                      this.scrollIndex = 0;
                      this.updateUnitCards();
@@ -328,15 +310,15 @@ package com.brockw.stickwar.market
                {
                   this.mc.miscButton.gotoAndStop(1);
                }
-               if(_loc4_ == MarketItem.T_WEAPON)
+               if(t == MarketItem.T_WEAPON)
                {
                   this.mc.weaponButton.gotoAndStop(3);
                }
-               else if(_loc4_ == MarketItem.T_ARMOR)
+               else if(t == MarketItem.T_ARMOR)
                {
                   this.mc.armorButton.gotoAndStop(3);
                }
-               else if(_loc4_ == MarketItem.T_MISC)
+               else if(t == MarketItem.T_MISC)
                {
                   this.mc.miscButton.gotoAndStop(3);
                }
@@ -352,40 +334,40 @@ package com.brockw.stickwar.market
                this._mc.paymentScreen.membershipButton.enabled = true;
             }
          }
-         for each(_loc3_ in this.unitCards)
+         for each(unitCard in this.unitCards)
          {
             if(!this.isUnlocking())
             {
-               if(_loc3_.isSelected)
+               if(unitCard.isSelected)
                {
-                  _loc3_.setSelected();
-                  if(_loc3_.hitTestPoint(stage.mouseX,stage.mouseY,true))
+                  unitCard.setSelected();
+                  if(unitCard.hitTestPoint(stage.mouseX,stage.mouseY,true))
                   {
-                     _loc3_.setHover();
+                     unitCard.setHover();
                   }
                }
-               else if(_loc3_.hitTestPoint(stage.mouseX,stage.mouseY,true))
+               else if(unitCard.hitTestPoint(stage.mouseX,stage.mouseY,true))
                {
                   if(this.isMouseDown)
                   {
                      this.currentCard.setNotSelected();
                      this.currentCard.removeUnitProfile(this.mc.unitDisplayBox);
-                     _loc3_.setSelected();
-                     this.currentCard = _loc3_;
+                     unitCard.setSelected();
+                     this.currentCard = unitCard;
                      this.currentCard.setUnitProfile(this.mc.unitDisplayBox);
-                     _loc3_.setHover();
+                     unitCard.setHover();
                   }
                   else
                   {
-                     _loc3_.setHover();
+                     unitCard.setHover();
                   }
                }
                else
                {
-                  _loc3_.setNotSelected();
+                  unitCard.setNotSelected();
                }
             }
-            _loc3_.update();
+            unitCard.update();
          }
          this.isMouseDown = false;
       }
@@ -514,7 +496,7 @@ package com.brockw.stickwar.market
          this.mc.editCard.visible = false;
       }
       
-      public function openEditCard(m:MarketItem) : void
+      public function openEditCard(m:com.brockw.stickwar.market.MarketItem) : void
       {
          this.mc.editCard.visible = true;
          this.mc.editCard.nameText.text = m.name;

@@ -118,7 +118,7 @@ package com.smartfoxserver.v2.controllers
          {
             log.info(this.getEvtName(message.id),message);
          }
-         var fnName:String = this.requestHandlers[message.id];
+         var fnName:String = String(this.requestHandlers[message.id]);
          if(fnName != null)
          {
             this[fnName](message);
@@ -131,7 +131,7 @@ package com.smartfoxserver.v2.controllers
       
       private function getEvtName(id:int) : String
       {
-         var fName:String = this.requestHandlers[id];
+         var fName:String = String(this.requestHandlers[id]);
          return fName.substr(2);
       }
       
@@ -162,7 +162,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = obj.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(obj.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,obj.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -191,7 +191,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = obj.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(obj.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,obj.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -236,7 +236,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -274,11 +274,11 @@ package com.smartfoxserver.v2.controllers
          var room:Room = this.sfs.roomManager.getRoomById(sfso.getInt("r"));
          if(room != null)
          {
-            uCount = sfso.getShort("uc");
+            uCount = int(sfso.getShort("uc"));
             sCount = 0;
             if(sfso.containsKey("sc"))
             {
-               sCount = sfso.getShort("sc");
+               sCount = int(sfso.getShort("sc"));
             }
             room.userCount = uCount;
             room.spectatorCount = sCount;
@@ -295,7 +295,7 @@ package com.smartfoxserver.v2.controllers
          var joinedRooms:Array = null;
          var room:Room = null;
          var sfso:ISFSObject = msg.content;
-         var uId:int = sfso.getInt("u");
+         var uId:int = int(sfso.getInt("u"));
          var user:User = this.sfs.userManager.getUserById(uId);
          if(user != null)
          {
@@ -317,7 +317,7 @@ package com.smartfoxserver.v2.controllers
          var user:User = null;
          var sfso:ISFSObject = msg.content;
          var evtParams:Object = {};
-         var rId:int = sfso.getInt("r");
+         var rId:int = int(sfso.getInt("r"));
          var room:Room = this.sfs.roomManager.getRoomById(rId);
          var globalUserManager:IUserManager = this.sfs.userManager;
          if(room != null)
@@ -335,7 +335,7 @@ package com.smartfoxserver.v2.controllers
       private function fnGenericMessage(msg:IMessage) : void
       {
          var sfso:ISFSObject = msg.content;
-         var msgType:int = sfso.getByte(GenericMessageRequest.KEY_MESSAGE_TYPE);
+         var msgType:int = int(sfso.getByte(GenericMessageRequest.KEY_MESSAGE_TYPE));
          switch(msgType)
          {
             case GenericMessageType.PUBLIC_MSG:
@@ -361,7 +361,7 @@ package com.smartfoxserver.v2.controllers
       private function handlePublicMessage(sfso:ISFSObject) : void
       {
          var evtParams:Object = {};
-         var rId:int = sfso.getInt(GenericMessageRequest.KEY_ROOM_ID);
+         var rId:int = int(sfso.getInt(GenericMessageRequest.KEY_ROOM_ID));
          var room:Room = this.sfs.roomManager.getRoomById(rId);
          if(room != null)
          {
@@ -380,7 +380,7 @@ package com.smartfoxserver.v2.controllers
       public function handlePrivateMessage(sfso:ISFSObject) : void
       {
          var evtParams:Object = {};
-         var senderId:int = sfso.getInt(GenericMessageRequest.KEY_USER_ID);
+         var senderId:int = int(sfso.getInt(GenericMessageRequest.KEY_USER_ID));
          var sender:User = this.sfs.userManager.getUserById(senderId);
          if(sender == null)
          {
@@ -400,7 +400,7 @@ package com.smartfoxserver.v2.controllers
       public function handleBuddyMessage(sfso:ISFSObject) : void
       {
          var evtParams:Object = {};
-         var senderId:int = sfso.getInt(GenericMessageRequest.KEY_USER_ID);
+         var senderId:int = int(sfso.getInt(GenericMessageRequest.KEY_USER_ID));
          var senderBuddy:Buddy = this.sfs.buddyManager.getBuddyById(senderId);
          evtParams.isItMe = this.sfs.mySelf.id == senderId;
          evtParams.buddy = senderBuddy;
@@ -430,7 +430,7 @@ package com.smartfoxserver.v2.controllers
       public function handleObjectMessage(sfso:ISFSObject) : void
       {
          var evtParams:Object = {};
-         var senderId:int = sfso.getInt(GenericMessageRequest.KEY_USER_ID);
+         var senderId:int = int(sfso.getInt(GenericMessageRequest.KEY_USER_ID));
          evtParams.sender = this.sfs.userManager.getUserById(senderId);
          evtParams.message = sfso.getSFSObject(GenericMessageRequest.KEY_XTRA_PARAMS);
          this.sfs.dispatchEvent(new SFSEvent(SFSEvent.OBJECT_MESSAGE,evtParams));
@@ -440,15 +440,15 @@ package com.smartfoxserver.v2.controllers
       {
          var sfso:ISFSObject = msg.content;
          var evtParams:Object = {};
-         var rId:int = sfso.getInt("r");
-         var uId:int = sfso.getInt("u");
+         var rId:int = int(sfso.getInt("r"));
+         var uId:int = int(sfso.getInt("u"));
          var room:Room = this.sfs.roomManager.getRoomById(rId);
          var user:User = this.sfs.userManager.getUserById(uId);
          if(room != null && user != null)
          {
             room.removeUser(user);
             this.sfs.userManager.removeUser(user);
-            if(user.isItMe && room.isJoined)
+            if(Boolean(user.isItMe) && Boolean(room.isJoined))
             {
                room.isJoined = false;
                if(this.sfs.joinedRooms.length == 0)
@@ -473,7 +473,7 @@ package com.smartfoxserver.v2.controllers
       private function fnClientDisconnection(msg:IMessage) : void
       {
          var sfso:ISFSObject = msg.content;
-         var reasonId:int = sfso.getByte("dr");
+         var reasonId:int = int(sfso.getByte("dr"));
          this.sfs.handleClientDisconnection(ClientDisconnectionReason.getReason(reasonId));
       }
       
@@ -483,7 +483,7 @@ package com.smartfoxserver.v2.controllers
          var roomVar:RoomVariable = null;
          var sfso:ISFSObject = msg.content;
          var evtParams:Object = {};
-         var rId:int = sfso.getInt(SetRoomVariablesRequest.KEY_VAR_ROOM);
+         var rId:int = int(sfso.getInt(SetRoomVariablesRequest.KEY_VAR_ROOM));
          var varListData:ISFSArray = sfso.getSFSArray(SetRoomVariablesRequest.KEY_VAR_LIST);
          var targetRoom:Room = this.sfs.roomManager.getRoomById(rId);
          var changedVarNames:Array = [];
@@ -511,7 +511,7 @@ package com.smartfoxserver.v2.controllers
          var userVar:UserVariable = null;
          var sfso:ISFSObject = msg.content;
          var evtParams:Object = {};
-         var uId:int = sfso.getInt(SetUserVariablesRequest.KEY_USER);
+         var uId:int = int(sfso.getInt(SetUserVariablesRequest.KEY_USER));
          var varListData:ISFSArray = sfso.getSFSArray(SetUserVariablesRequest.KEY_VAR_LIST);
          var user:User = this.sfs.userManager.getUserById(uId);
          var changedVarNames:Array = [];
@@ -543,7 +543,7 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            groupId = sfso.getUtfString(SubscribeRoomGroupRequest.KEY_GROUP_ID);
+            groupId = String(sfso.getUtfString(SubscribeRoomGroupRequest.KEY_GROUP_ID));
             roomListData = sfso.getSFSArray(SubscribeRoomGroupRequest.KEY_ROOM_LIST);
             if(this.sfs.roomManager.containsGroup(groupId))
             {
@@ -556,7 +556,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -575,7 +575,7 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            groupId = sfso.getUtfString(SubscribeRoomGroupRequest.KEY_GROUP_ID);
+            groupId = String(sfso.getUtfString(SubscribeRoomGroupRequest.KEY_GROUP_ID));
             if(!this.sfs.roomManager.containsGroup(groupId))
             {
                log.warn("UnsubscribeGroup Error. Group:",groupId,"is not subscribed!");
@@ -586,7 +586,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -606,7 +606,7 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            roomId = sfso.getInt(ChangeRoomNameRequest.KEY_ROOM);
+            roomId = int(sfso.getInt(ChangeRoomNameRequest.KEY_ROOM));
             targetRoom = this.sfs.roomManager.getRoomById(roomId);
             if(targetRoom != null)
             {
@@ -622,7 +622,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -642,7 +642,7 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            roomId = sfso.getInt(ChangeRoomPasswordStateRequest.KEY_ROOM);
+            roomId = int(sfso.getInt(ChangeRoomPasswordStateRequest.KEY_ROOM));
             targetRoom = this.sfs.roomManager.getRoomById(roomId);
             if(targetRoom != null)
             {
@@ -657,7 +657,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -677,7 +677,7 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            roomId = sfso.getInt(ChangeRoomCapacityRequest.KEY_ROOM);
+            roomId = int(sfso.getInt(ChangeRoomCapacityRequest.KEY_ROOM));
             targetRoom = this.sfs.roomManager.getRoomById(roomId);
             if(targetRoom != null)
             {
@@ -692,7 +692,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -724,9 +724,9 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            roomId = sfso.getInt(SpectatorToPlayerRequest.KEY_ROOM_ID);
-            userId = sfso.getInt(SpectatorToPlayerRequest.KEY_USER_ID);
-            playerId = sfso.getShort(SpectatorToPlayerRequest.KEY_PLAYER_ID);
+            roomId = int(sfso.getInt(SpectatorToPlayerRequest.KEY_ROOM_ID));
+            userId = int(sfso.getInt(SpectatorToPlayerRequest.KEY_USER_ID));
+            playerId = int(sfso.getShort(SpectatorToPlayerRequest.KEY_PLAYER_ID));
             user = this.sfs.userManager.getUserById(userId);
             targetRoom = this.sfs.roomManager.getRoomById(roomId);
             if(targetRoom != null)
@@ -758,7 +758,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -780,8 +780,8 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            roomId = sfso.getInt(PlayerToSpectatorRequest.KEY_ROOM_ID);
-            userId = sfso.getInt(PlayerToSpectatorRequest.KEY_USER_ID);
+            roomId = int(sfso.getInt(PlayerToSpectatorRequest.KEY_ROOM_ID));
+            userId = int(sfso.getInt(PlayerToSpectatorRequest.KEY_USER_ID));
             user = this.sfs.userManager.getUserById(userId);
             targetRoom = this.sfs.roomManager.getRoomById(roomId);
             if(targetRoom != null)
@@ -812,7 +812,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -862,7 +862,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -888,7 +888,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -908,7 +908,7 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            buddyName = sfso.getUtfString(RemoveBuddyRequest.KEY_BUDDY_NAME);
+            buddyName = String(sfso.getUtfString(RemoveBuddyRequest.KEY_BUDDY_NAME));
             buddy = this.sfs.buddyManager.removeBuddyByName(buddyName);
             if(buddy != null)
             {
@@ -922,7 +922,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -942,7 +942,7 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            buddyName = sfso.getUtfString(BlockBuddyRequest.KEY_BUDDY_NAME);
+            buddyName = String(sfso.getUtfString(BlockBuddyRequest.KEY_BUDDY_NAME));
             buddy = this.sfs.buddyManager.getBuddyByName(buddyName);
             if(buddy != null)
             {
@@ -957,7 +957,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -981,10 +981,10 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            buddyName = sfso.getUtfString(GoOnlineRequest.KEY_BUDDY_NAME);
+            buddyName = String(sfso.getUtfString(GoOnlineRequest.KEY_BUDDY_NAME));
             buddy = this.sfs.buddyManager.getBuddyByName(buddyName);
             isItMe = buddyName == this.sfs.mySelf.name;
-            onlineValue = sfso.getByte(GoOnlineRequest.KEY_ONLINE);
+            onlineValue = int(sfso.getByte(GoOnlineRequest.KEY_ONLINE));
             onlineState = onlineValue == BuddyOnlineState.ONLINE;
             fireEvent = true;
             if(isItMe)
@@ -1008,7 +1008,7 @@ package com.smartfoxserver.v2.controllers
                {
                   buddy.clearVolatileVariables();
                }
-               fireEvent = this.sfs.buddyManager.myOnlineState;
+               fireEvent = Boolean(this.sfs.buddyManager.myOnlineState);
             }
             if(fireEvent)
             {
@@ -1019,7 +1019,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -1046,7 +1046,7 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.isNull(BaseRequest.KEY_ERROR_CODE))
          {
-            buddyName = sfso.getUtfString(SetBuddyVariablesRequest.KEY_BUDDY_NAME);
+            buddyName = String(sfso.getUtfString(SetBuddyVariablesRequest.KEY_BUDDY_NAME));
             buddyVarsData = sfso.getSFSArray(SetBuddyVariablesRequest.KEY_BUDDY_VARS);
             buddy = this.sfs.buddyManager.getBuddyByName(buddyName);
             isItMe = buddyName == this.sfs.mySelf.name;
@@ -1071,7 +1071,7 @@ package com.smartfoxserver.v2.controllers
                   return;
                }
                buddy.setVariables(variables);
-               fireEvent = this.sfs.buddyManager.myOnlineState;
+               fireEvent = Boolean(this.sfs.buddyManager.myOnlineState);
             }
             if(fireEvent)
             {
@@ -1083,7 +1083,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -1141,8 +1141,8 @@ package com.smartfoxserver.v2.controllers
          {
             inviter = SFSUser.fromSFSArray(sfso.getSFSArray(InviteUsersRequest.KEY_USER));
          }
-         var expiryTime:int = sfso.getShort(InviteUsersRequest.KEY_TIME);
-         var invitationId:int = sfso.getInt(InviteUsersRequest.KEY_INVITATION_ID);
+         var expiryTime:int = int(sfso.getShort(InviteUsersRequest.KEY_TIME));
+         var invitationId:int = int(sfso.getInt(InviteUsersRequest.KEY_INVITATION_ID));
          var invParams:ISFSObject = sfso.getSFSObject(InviteUsersRequest.KEY_PARAMS);
          var invitation:Invitation = new SFSInvitation(inviter,this.sfs.mySelf,expiryTime,invParams);
          invitation.id = invitationId;
@@ -1170,7 +1170,7 @@ package com.smartfoxserver.v2.controllers
             {
                invitee = SFSUser.fromSFSArray(sfso.getSFSArray(InviteUsersRequest.KEY_USER));
             }
-            reply = sfso.getUnsignedByte(InviteUsersRequest.KEY_REPLY_ID);
+            reply = int(sfso.getUnsignedByte(InviteUsersRequest.KEY_REPLY_ID));
             data = sfso.getSFSObject(InviteUsersRequest.KEY_PARAMS);
             evtParams.invitee = invitee;
             evtParams.reply = reply;
@@ -1179,7 +1179,7 @@ package com.smartfoxserver.v2.controllers
          }
          else
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -1197,7 +1197,7 @@ package com.smartfoxserver.v2.controllers
          var evtParams:Object = {};
          if(sfso.containsKey(BaseRequest.KEY_ERROR_CODE))
          {
-            errorCd = sfso.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(sfso.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,sfso.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             evtParams = {
                "errorMessage":errorMsg,
@@ -1209,7 +1209,7 @@ package com.smartfoxserver.v2.controllers
       
       private function fnPingPong(msg:IMessage) : void
       {
-         var avg:int = this.sfs.kernel::lagMonitor.onPingPong();
+         var avg:int = int(this.sfs.kernel::lagMonitor.onPingPong());
          var newEvt:SFSEvent = new SFSEvent(SFSEvent.PING_PONG,{"lagValue":avg});
          this.sfs.dispatchEvent(newEvt);
       }
@@ -1231,7 +1231,7 @@ package com.smartfoxserver.v2.controllers
       {
          var uVars:ISFSArray = null;
          var i:int = 0;
-         var uId:int = userObj.getInt(0);
+         var uId:int = int(userObj.getInt(0));
          var user:User = this.sfs.userManager.getUserById(uId);
          if(user == null)
          {

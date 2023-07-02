@@ -2,15 +2,15 @@ package com.brockw.stickwar.engine.units
 {
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.ActionInterface;
-   import com.brockw.stickwar.engine.Ai.SpeartonAi;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.engine.Ai.*;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.Entity;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Tech;
    import com.brockw.stickwar.market.MarketItem;
    import flash.display.MovieClip;
    
-   public class Spearton extends Unit
+   public class Spearton extends com.brockw.stickwar.engine.units.Unit
    {
       
       private static var WEAPON_REACH:int;
@@ -26,7 +26,7 @@ package com.brockw.stickwar.engine.units
       
       private var shieldwallDamageReduction:Number;
       
-      private var shieldBashSpell:SpellCooldown;
+      private var shieldBashSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var isShieldBashing:Boolean;
       
@@ -34,7 +34,7 @@ package com.brockw.stickwar.engine.units
       
       private var stunTime:int;
       
-      private var stunned:Unit;
+      private var stunned:com.brockw.stickwar.engine.units.Unit;
       
       public function Spearton(game:StickWar)
       {
@@ -50,21 +50,21 @@ package com.brockw.stickwar.engine.units
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
       {
          var m:_speartonMc = _speartonMc(mc);
-         if(m.mc.helm)
+         if(Boolean(m.mc.helm))
          {
             if(armor != "")
             {
                m.mc.helm.gotoAndStop(armor);
             }
          }
-         if(m.mc.spear)
+         if(Boolean(m.mc.spear))
          {
             if(weapon != "")
             {
                m.mc.spear.gotoAndStop(weapon);
             }
          }
-         if(m.mc.shield)
+         if(Boolean(m.mc.shield))
          {
             if(misc != "")
             {
@@ -98,7 +98,7 @@ package com.brockw.stickwar.engine.units
          _mc.height *= _scale;
          _state = S_RUN;
          this.isShieldBashing = false;
-         this.shieldBashSpell = new SpellCooldown(0,game.xml.xml.Order.Units.spearton.shieldBash.cooldown,game.xml.xml.Order.Units.spearton.shieldBash.mana);
+         this.shieldBashSpell = new com.brockw.stickwar.engine.units.SpellCooldown(0,game.xml.xml.Order.Units.spearton.shieldBash.cooldown,game.xml.xml.Order.Units.spearton.shieldBash.mana);
          MovieClip(_mc.mc.gotoAndPlay(1));
          MovieClip(_mc.gotoAndStop(1));
          drawShadow();
@@ -257,7 +257,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      private function shieldHit(unit:Unit) : *
+      private function shieldHit(unit:com.brockw.stickwar.engine.units.Unit) : *
       {
          if(this.stunned == null && unit.team != this.team && unit.pz == 0)
          {
@@ -333,7 +333,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      override public function mayAttack(target:Unit) : Boolean
+      override public function mayAttack(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(framesInAttack > team.game.frame - attackStartFrame)
          {

@@ -6,8 +6,6 @@ package flashx.textLayout.operations
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class ClearFormatOnElementOperation extends FlowElementOperation
    {
        
@@ -35,14 +33,14 @@ package flashx.textLayout.operations
       override public function doOperation() : Boolean
       {
          var newFormat:TextLayoutFormat = null;
-         var prop:* = null;
+         var prop:String = null;
          var targetElement:FlowElement = getTargetElement();
          adjustForDoOperation(targetElement);
          this._undoStyles = new TextLayoutFormat(targetElement.format);
-         if(this._format)
+         if(Boolean(this._format))
          {
             newFormat = new TextLayoutFormat(targetElement.format);
-            for(prop in TextLayoutFormat.description)
+            for(prop in TextLayoutFormat.tlf_internal::description)
             {
                if(this._format[prop] !== undefined)
                {

@@ -8,8 +8,8 @@ package fl.controls
    import flash.events.TimerEvent;
    import flash.utils.Timer;
    
-   [Style(name="repeatInterval",format="Time",type="Number")]
-   [Style(name="repeatDelay",format="Time",type="Number")]
+   [Style(name="repeatInterval",type="Number",format="Time")]
+   [Style(name="repeatDelay",type="Number",format="Time")]
    [Style(name="selectedOverSkin",type="Class")]
    [Style(name="selectedDownSkin",type="Class")]
    [Style(name="selectedUpSkin",type="Class")]
@@ -207,7 +207,7 @@ package fl.controls
       
       protected function drawBackground() : void
       {
-         var _loc1_:String = !!enabled ? mouseState : "disabled";
+         var _loc1_:String = enabled ? mouseState : "disabled";
          if(selected)
          {
             _loc1_ = "selected" + _loc1_.substr(0,1).toUpperCase() + _loc1_.substr(1);

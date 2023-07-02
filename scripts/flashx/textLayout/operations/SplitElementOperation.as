@@ -11,13 +11,11 @@ package flashx.textLayout.operations
    import flashx.textLayout.formats.ListMarkerFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class SplitElementOperation extends FlowTextOperation
    {
        
       
-      private var delSelOp:DeleteTextOperation;
+      private var delSelOp:flashx.textLayout.operations.DeleteTextOperation;
       
       private var _targetMark:ElementMark;
       
@@ -58,13 +56,13 @@ package flashx.textLayout.operations
          {
             targStart = target.getAbsoluteStart();
             targEnd = targStart + target.textLength;
-            this.delSelOp = new DeleteTextOperation(originalSelectionState);
+            this.delSelOp = new flashx.textLayout.operations.DeleteTextOperation(originalSelectionState);
             this.delSelOp.doOperation();
             if(absoluteStart <= targStart && targEnd <= absoluteEnd)
             {
                if(target is ParagraphElement)
                {
-                  target = textFlow.findAbsoluteParagraph(absoluteStart);
+                  target = textFlow.tlf_internal::findAbsoluteParagraph(absoluteStart);
                }
                else
                {
@@ -98,7 +96,7 @@ package flashx.textLayout.operations
       
       override public function undo() : SelectionState
       {
-         if(this._memento)
+         if(Boolean(this._memento))
          {
             this._memento.undo();
          }

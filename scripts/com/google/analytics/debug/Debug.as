@@ -50,7 +50,7 @@ package com.google.analytics.debug
             {
                _linediff += direction;
             }
-            start = _lines.length - maxLines + _linediff;
+            start = uint(_lines.length - maxLines + _linediff);
             end = start + maxLines;
             lines = _lines.slice(start,end);
          }
@@ -84,7 +84,7 @@ package com.google.analytics.debug
       
       override public function get forcedWidth() : uint
       {
-         if(this.parent)
+         if(Boolean(this.parent))
          {
             if(UISprite(this.parent).forcedWidth > _preferredForcedWidth)
             {

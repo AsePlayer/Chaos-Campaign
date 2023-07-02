@@ -14,7 +14,7 @@ package com.brockw.stickwar.engine.units
       private static const WEAPON_REACH:int = 90;
        
       
-      private var target:Unit;
+      private var target:com.brockw.stickwar.engine.units.Unit;
       
       private var scaleI:Number;
       
@@ -65,7 +65,7 @@ package com.brockw.stickwar.engine.units
          _maxVelocity = game.xml.xml.Order.Units.giant.maxVelocity;
          this.scaleI = game.xml.xml.Order.Units.giant.growthIScale;
          this.scaleII = game.xml.xml.Order.Units.giant.growthIIScale;
-         type = Unit.U_ENSLAVED_GIANT;
+         type = com.brockw.stickwar.engine.units.Unit.U_ENSLAVED_GIANT;
          loadDamage(game.xml.xml.Order.Units.giant);
          _mc.stop();
          _mc.width *= _scale;
@@ -206,10 +206,10 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      override public function aim(target:Unit) : void
+      override public function aim(target:com.brockw.stickwar.engine.units.Unit) : void
       {
          var a:Number = angleToTarget(target);
-         if(target != null && this._state == Unit.S_ATTACK && !inRange(target))
+         if(target != null && this._state == com.brockw.stickwar.engine.units.Unit.S_ATTACK && !inRange(target))
          {
             return;
          }
@@ -223,7 +223,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      override public function shoot(game:StickWar, target:Unit) : void
+      override public function shoot(game:StickWar, target:com.brockw.stickwar.engine.units.Unit) : void
       {
          var id:int = 0;
          if(_state != S_ATTACK)

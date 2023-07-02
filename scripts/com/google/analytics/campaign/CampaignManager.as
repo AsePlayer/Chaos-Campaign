@@ -165,7 +165,7 @@ package com.google.analytics.campaign
          var value:String = "";
          if(variables.hasOwnProperty(key.UCNO))
          {
-            value = variables[key.UCNO];
+            value = String(variables[key.UCNO]);
             switch(value)
             {
                case "1":
@@ -220,7 +220,7 @@ package com.google.analytics.campaign
          {
             camp.term = variables[key.UCTR];
          }
-         else if(organicCampaign && organicCampaign.term != "")
+         else if(Boolean(organicCampaign) && organicCampaign.term != "")
          {
             camp.term = organicCampaign.term;
          }
@@ -251,10 +251,10 @@ package com.google.analytics.campaign
                switch(tmp.length)
                {
                   case 2:
-                     name = tmp[0];
+                     name = String(tmp[0]);
                      break;
                   case 3:
-                     name = tmp[1];
+                     name = String(tmp[1]);
                }
             }
          }
@@ -282,7 +282,7 @@ package com.google.analytics.campaign
       
       public function isIgnoredKeyword(tracker:CampaignTracker) : Boolean
       {
-         if(tracker && tracker.medium == "organic")
+         if(Boolean(tracker) && tracker.medium == "organic")
          {
             return _config.organic.isIgnoredKeyword(tracker.term);
          }
@@ -291,7 +291,7 @@ package com.google.analytics.campaign
       
       public function isIgnoredReferral(tracker:CampaignTracker) : Boolean
       {
-         if(tracker && tracker.medium == "referral")
+         if(Boolean(tracker) && tracker.medium == "referral")
          {
             return _config.organic.isIgnoredReferral(tracker.source);
          }
@@ -300,7 +300,7 @@ package com.google.analytics.campaign
       
       public function isValid(tracker:CampaignTracker) : Boolean
       {
-         if(tracker && tracker.isValid())
+         if(Boolean(tracker) && tracker.isValid())
          {
             return true;
          }

@@ -1,13 +1,7 @@
 package com.brockw.stickwar.engine.dual
 {
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.units.Archer;
-   import com.brockw.stickwar.engine.units.Cat;
-   import com.brockw.stickwar.engine.units.Knight;
-   import com.brockw.stickwar.engine.units.Miner;
-   import com.brockw.stickwar.engine.units.Spearton;
-   import com.brockw.stickwar.engine.units.Swordwrath;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.units.*;
    import flash.utils.Dictionary;
    
    public class DualFactory
@@ -18,8 +12,8 @@ package com.brockw.stickwar.engine.dual
       
       public function DualFactory(game:StickWar)
       {
-         var unitA:* = null;
-         var unitB:* = null;
+         var unitA:String = null;
+         var unitB:String = null;
          super();
          var units:Array = [new Swordwrath(game),new Miner(game),new Archer(game),new Spearton(game),new Cat(game),new Knight(game)];
          this.duals = new Dictionary();
@@ -39,8 +33,8 @@ package com.brockw.stickwar.engine.dual
       
       private function createDuals(unitA:Unit, unitB:Unit) : Array
       {
-         var a:* = null;
-         var b:* = null;
+         var a:String = null;
+         var b:String = null;
          var dual:Dual = null;
          var duals:Array = [];
          for(a in unitA.syncAttackLabels)

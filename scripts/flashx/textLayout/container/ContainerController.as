@@ -55,8 +55,6 @@ package flashx.textLayout.container
    import flashx.textLayout.tlf_internal;
    import flashx.textLayout.utils.Twips;
    
-   use namespace tlf_internal;
-   
    public class ContainerController implements IInteractionEventHandler, ITextLayoutFormat, ISandboxSupport
    {
       
@@ -79,7 +77,7 @@ package flashx.textLayout.container
       
       protected var _computedFormat:TextLayoutFormat;
       
-      private var _columnState:ColumnState;
+      private var _columnState:flashx.textLayout.container.ColumnState;
       
       private var _compositionWidth:Number = 0;
       
@@ -212,12 +210,12 @@ package flashx.textLayout.container
          this._containerRoot = null;
          this._textLength = 0;
          this._absoluteStart = -1;
-         this._columnState = new ColumnState(null,null,null,0,0);
+         this._columnState = new flashx.textLayout.container.ColumnState(null,null,null,0,0);
          this._xScroll = this._yScroll = 0;
          this._contentWidth = this._contentHeight = 0;
          this._uncomposedTextLength = 0;
          this._container.doubleClickEnabled = true;
-         this._horizontalScrollPolicy = this._verticalScrollPolicy = String(ScrollPolicy.scrollPolicyPropertyDefinition.defaultValue);
+         this._horizontalScrollPolicy = this._verticalScrollPolicy = String(ScrollPolicy.tlf_internal::scrollPolicyPropertyDefinition.defaultValue);
          this._hasScrollRect = false;
          this._shapeChildren = [];
          this._linesInView = [];
@@ -227,13 +225,13 @@ package flashx.textLayout.container
       
       tlf_internal function get effectiveBlockProgression() : String
       {
-         return Boolean(this._rootElement) ? this._rootElement.computedFormat.blockProgression : BlockProgression.TB;
+         return Boolean(this._rootElement) ? String(this._rootElement.computedFormat.blockProgression) : BlockProgression.TB;
       }
       
       tlf_internal function getContainerRoot() : DisplayObject
       {
          var x:int = 0;
-         if(this._containerRoot == null && this._container && this._container.stage)
+         if(this._containerRoot == null && this._container && Boolean(this._container.stage))
          {
             try
             {
@@ -263,7 +261,7 @@ package flashx.textLayout.container
          this._shapesInvalid = val;
       }
       
-      public function get columnState() : ColumnState
+      public function get columnState() : flashx.textLayout.container.ColumnState
       {
          if(this._rootElement == null)
          {
@@ -273,7 +271,7 @@ package flashx.textLayout.container
          {
             this.computedFormat;
          }
-         this._columnState.computeColumns();
+         this._columnState.tlf_internal::computeColumns();
          return this._columnState;
       }
       
@@ -312,28 +310,28 @@ package flashx.textLayout.container
             this._measureHeight = isNaN(this._compositionHeight);
             this._compositionWidth = w;
             this._measureWidth = isNaN(this._compositionWidth);
-            if(this._computedFormat)
+            if(Boolean(this._computedFormat))
             {
-               this.resetColumnState();
+               this.tlf_internal::resetColumnState();
             }
-            if(this.effectiveBlockProgression == BlockProgression.TB ? Boolean(widthChanged) : Boolean(heightChanged))
+            if(this.tlf_internal::effectiveBlockProgression == BlockProgression.TB ? widthChanged : heightChanged)
             {
-               if(this.textFlow && this._textLength)
+               if(Boolean(this.textFlow) && Boolean(this._textLength))
                {
-                  this.textFlow.damage(this.absoluteStart,this._textLength,TextLineValidity.INVALID,false);
+                  this.textFlow.tlf_internal::damage(this.absoluteStart,this._textLength,TextLineValidity.INVALID,false);
                }
             }
             else
             {
                this.invalidateContents();
             }
-            this.attachTransparentBackgroundForHit(false);
+            this.tlf_internal::attachTransparentBackgroundForHit(false);
          }
       }
       
       public function get textFlow() : TextFlow
       {
-         if(!this._textFlowCache && this._rootElement)
+         if(!this._textFlowCache && Boolean(this._rootElement))
          {
             this._textFlowCache = this._rootElement.getTextFlow();
          }
@@ -349,7 +347,7 @@ package flashx.textLayout.container
       {
          if(this._rootElement != value)
          {
-            if(this._mouseEventManager)
+            if(Boolean(this._mouseEventManager))
             {
                this._mouseEventManager.stopHitTests();
             }
@@ -361,18 +359,18 @@ package flashx.textLayout.container
             {
                this._mouseEventManager = new FlowElementMouseEventManager(this.container,null);
             }
-            this.clearCompositionResults();
+            this.tlf_internal::clearCompositionResults();
             this.detachContainer();
             this._rootElement = value;
             this._textFlowCache = null;
             this._textLength = 0;
             this._absoluteStart = -1;
-            this.attachContainer();
-            if(this._rootElement)
+            this.tlf_internal::attachContainer();
+            if(Boolean(this._rootElement))
             {
-               this.formatChanged();
+               this.tlf_internal::formatChanged();
             }
-            if(this._container && Configuration.playerEnablesSpicyFeatures)
+            if(Boolean(this._container) && Boolean(Configuration.tlf_internal::playerEnablesSpicyFeatures))
             {
                this._container["needsSoftKeyboard"] = this.interactionManager && this.interactionManager.editingMode == EditingMode.READ_WRITE;
             }
@@ -409,9 +407,9 @@ package flashx.textLayout.container
          }
          var rslt:int = 0;
          var composer:IFlowComposer = this.flowComposer;
-         if(composer)
+         if(Boolean(composer))
          {
-            stopIdx = composer.getControllerIndex(this);
+            stopIdx = int(composer.getControllerIndex(this));
             if(stopIdx != 0)
             {
                prevController = composer.getControllerAt(stopIdx - 1);
@@ -439,7 +437,7 @@ package flashx.textLayout.container
             if(this._absoluteStart != -1)
             {
                composer = this.flowComposer;
-               if(composer)
+               if(Boolean(composer))
                {
                   idx = composer.getControllerIndex(this) + 1;
                   while(idx < this.flowComposer.numControllers)
@@ -463,9 +461,9 @@ package flashx.textLayout.container
          var flowComposer:IFlowComposer = null;
          var containerAbsoluteStart:int = 0;
          var uncomposedTextLength:int = 0;
-         if(this.textFlow)
+         if(Boolean(this.textFlow))
          {
-            verticalText = this.effectiveBlockProgression == BlockProgression.RL;
+            verticalText = this.tlf_internal::effectiveBlockProgression == BlockProgression.RL;
             flowComposer = this.textFlow.flowComposer;
             if(numChars != 0 && flowComposer.getControllerIndex(this) == flowComposer.numControllers - 1 && (!verticalText && this._verticalScrollPolicy != ScrollPolicy.OFF || verticalText && this._horizontalScrollPolicy != ScrollPolicy.OFF))
             {
@@ -474,13 +472,13 @@ package flashx.textLayout.container
                numChars = this.textFlow.textLength - containerAbsoluteStart;
             }
          }
-         this.setTextLengthOnly(numChars);
+         this.tlf_internal::setTextLengthOnly(numChars);
          this._uncomposedTextLength = uncomposedTextLength;
       }
       
       tlf_internal function updateLength(pos:int, lengthToAdd:int) : void
       {
-         this.setTextLengthOnly(this._textLength + lengthToAdd);
+         this.tlf_internal::setTextLengthOnly(this._textLength + lengthToAdd);
       }
       
       public function isDamaged() : Boolean
@@ -496,16 +494,16 @@ package flashx.textLayout.container
       
       tlf_internal function styleSelectorChanged() : void
       {
-         this.modelChanged(ModelChange.STYLE_SELECTOR_CHANGED,this,0,this._textLength);
+         this.tlf_internal::modelChanged(ModelChange.STYLE_SELECTOR_CHANGED,this,0,this._textLength);
          this._computedFormat = null;
       }
       
       tlf_internal function modelChanged(changeType:String, element:ContainerController, changeStart:int, changeLen:int, needNormalize:Boolean = true, bumpGeneration:Boolean = true) : void
       {
          var tf:TextFlow = this._rootElement.getTextFlow();
-         if(tf)
+         if(Boolean(tf))
          {
-            tf.processModelChanged(changeType,element,this.absoluteStart + changeStart,changeLen,needNormalize,bumpGeneration);
+            tf.tlf_internal::processModelChanged(changeType,element,this.absoluteStart + changeStart,changeLen,needNormalize,bumpGeneration);
          }
       }
       
@@ -513,28 +511,28 @@ package flashx.textLayout.container
       {
          var curLine:TextFlowLine = null;
          var textLine:TextLine = null;
-         var width:Number = !!this._measureWidth ? Number(this._contentWidth) : Number(this._compositionWidth);
-         var height:Number = !!this._measureHeight ? Number(this._contentHeight) : Number(this._compositionHeight);
-         var adjustX:Number = wmode == BlockProgression.RL ? Number(this._xScroll - width) : Number(this._xScroll);
+         var width:Number = this._measureWidth ? this._contentWidth : this._compositionWidth;
+         var height:Number = this._measureHeight ? this._contentHeight : this._compositionHeight;
+         var adjustX:Number = wmode == BlockProgression.RL ? this._xScroll - width : this._xScroll;
          var adjustY:Number = this._yScroll;
          var scrollAdjustXTW:int = Twips.roundTo(adjustX);
          var scrollAdjustYTW:int = Twips.roundTo(adjustY);
          var scrollAdjustWidthTW:int = Twips.to(width);
          var scrollAdjustHeightTW:int = Twips.to(height);
          var flowComposer:IFlowComposer = this.flowComposer;
-         var firstLine:int = flowComposer.findLineIndexAtPosition(this.absoluteStart);
-         var lastLine:int = flowComposer.findLineIndexAtPosition(this.absoluteStart + this._textLength - 1);
+         var firstLine:int = int(flowComposer.findLineIndexAtPosition(this.absoluteStart));
+         var lastLine:int = int(flowComposer.findLineIndexAtPosition(this.absoluteStart + this._textLength - 1));
          for(var lineIndex:int = firstLine; lineIndex <= lastLine; lineIndex++)
          {
             curLine = flowComposer.getLineAt(lineIndex);
             if(!(curLine == null || curLine.controller != this))
             {
-               textLine = this.isLineVisible(wmode,scrollAdjustXTW,scrollAdjustYTW,scrollAdjustWidthTW,scrollAdjustHeightTW,curLine,null);
-               if(textLine)
+               textLine = this.tlf_internal::isLineVisible(wmode,scrollAdjustXTW,scrollAdjustYTW,scrollAdjustWidthTW,scrollAdjustHeightTW,curLine,null);
+               if(Boolean(textLine))
                {
                   if(createShape)
                   {
-                     curLine.createShape(wmode,textLine);
+                     curLine.tlf_internal::createShape(wmode,textLine);
                   }
                   this._linesInView.push(textLine);
                }
@@ -554,7 +552,7 @@ package flashx.textLayout.container
          {
             return;
          }
-         var wmode:String = this.effectiveBlockProgression;
+         var wmode:String = this.tlf_internal::effectiveBlockProgression;
          if(this._linesInView.length == 0)
          {
             this.gatherVisibleLines(wmode,true);
@@ -562,8 +560,8 @@ package flashx.textLayout.container
          var adjustLines:Boolean = wmode == BlockProgression.RL && (this._horizontalScrollPolicy == ScrollPolicy.OFF && this._verticalScrollPolicy == ScrollPolicy.OFF);
          if(adjustLines)
          {
-            width = !!this._measureWidth ? Number(this._contentWidth) : Number(this._compositionWidth);
-            height = !!this._measureHeight ? Number(this._contentHeight) : Number(this._compositionHeight);
+            width = this._measureWidth ? this._contentWidth : this._compositionWidth;
+            height = this._measureHeight ? this._contentHeight : this._compositionHeight;
             adjustX = this._xScroll - width;
             adjustY = this._yScroll;
             if(adjustX != 0 || adjustY != 0)
@@ -592,7 +590,7 @@ package flashx.textLayout.container
       
       public function set horizontalScrollPolicy(scrollPolicy:String) : void
       {
-         var newScrollPolicy:String = ScrollPolicy.scrollPolicyPropertyDefinition.setHelper(this._horizontalScrollPolicy,scrollPolicy) as String;
+         var newScrollPolicy:String = ScrollPolicy.tlf_internal::scrollPolicyPropertyDefinition.setHelper(this._horizontalScrollPolicy,scrollPolicy) as String;
          if(newScrollPolicy != this._horizontalScrollPolicy)
          {
             this._horizontalScrollPolicy = newScrollPolicy;
@@ -600,7 +598,7 @@ package flashx.textLayout.container
             {
                this.horizontalScrollPosition = 0;
             }
-            this.formatChanged();
+            this.tlf_internal::formatChanged();
          }
       }
       
@@ -610,7 +608,7 @@ package flashx.textLayout.container
          var visibleHeight:Number = NaN;
          var measuring:Boolean = false;
          var needToScroll:Boolean = false;
-         if(this.effectiveBlockProgression == BlockProgression.RL)
+         if(this.tlf_internal::effectiveBlockProgression == BlockProgression.RL)
          {
             newHeight = this._contentWidth;
             visibleHeight = this.compositionWidth;
@@ -625,15 +623,15 @@ package flashx.textLayout.container
          if(this.textFlow && this._container && !this._minListenersAttached)
          {
             needToScroll = !measuring && newHeight > visibleHeight;
-            if(needToScroll != this._mouseWheelListenerAttached)
+            if(needToScroll != this.tlf_internal::_mouseWheelListenerAttached)
             {
-               if(this._mouseWheelListenerAttached)
+               if(this.tlf_internal::_mouseWheelListenerAttached)
                {
-                  this.removeMouseWheelListener();
+                  this.tlf_internal::removeMouseWheelListener();
                }
                else
                {
-                  this.addMouseWheelListener();
+                  this.tlf_internal::addMouseWheelListener();
                }
             }
          }
@@ -646,7 +644,7 @@ package flashx.textLayout.container
       
       public function set verticalScrollPolicy(scrollPolicy:String) : void
       {
-         var newScrollPolicy:String = ScrollPolicy.scrollPolicyPropertyDefinition.setHelper(this._verticalScrollPolicy,scrollPolicy) as String;
+         var newScrollPolicy:String = ScrollPolicy.tlf_internal::scrollPolicyPropertyDefinition.setHelper(this._verticalScrollPolicy,scrollPolicy) as String;
          if(newScrollPolicy != this._verticalScrollPolicy)
          {
             this._verticalScrollPolicy = newScrollPolicy;
@@ -654,7 +652,7 @@ package flashx.textLayout.container
             {
                this.verticalScrollPosition = 0;
             }
-            this.formatChanged();
+            this.tlf_internal::formatChanged();
          }
       }
       
@@ -686,8 +684,8 @@ package flashx.textLayout.container
       
       private function computeHorizontalScrollPosition(x:Number, okToCompose:Boolean) : Number
       {
-         var wmode:String = this.effectiveBlockProgression;
-         var curEstimatedWidth:Number = this.contentWidth;
+         var wmode:String = this.tlf_internal::effectiveBlockProgression;
+         var curEstimatedWidth:Number = this.tlf_internal::contentWidth;
          var newScroll:Number = 0;
          if(curEstimatedWidth > this._compositionWidth && !this._measureWidth)
          {
@@ -742,8 +740,8 @@ package flashx.textLayout.container
       private function computeVerticalScrollPosition(y:Number, okToCompose:Boolean) : Number
       {
          var newScroll:Number = 0;
-         var curcontentHeight:Number = this.contentHeight;
-         var wmode:String = this.effectiveBlockProgression;
+         var curcontentHeight:Number = this.tlf_internal::contentHeight;
+         var wmode:String = this.tlf_internal::effectiveBlockProgression;
          if(curcontentHeight > this._compositionHeight)
          {
             newScroll = pinValue(y,this._contentTop,this._contentTop + (curcontentHeight - this._compositionHeight));
@@ -763,7 +761,7 @@ package flashx.textLayout.container
       
       public function getContentBounds() : Rectangle
       {
-         return new Rectangle(this._contentLeft,this._contentTop,this.contentWidth,this.contentHeight);
+         return new Rectangle(this._contentLeft,this._contentTop,this.tlf_internal::contentWidth,this.tlf_internal::contentHeight);
       }
       
       tlf_internal function get contentLeft() : Number
@@ -785,20 +783,20 @@ package flashx.textLayout.container
       
       tlf_internal function get contentHeight() : Number
       {
-         if(this._uncomposedTextLength == 0 || this.effectiveBlockProgression != BlockProgression.TB)
+         if(this._uncomposedTextLength == 0 || this.tlf_internal::effectiveBlockProgression != BlockProgression.TB)
          {
             return this._contentHeight;
          }
-         return this.computeScaledContentMeasure(this._contentHeight);
+         return this.tlf_internal::computeScaledContentMeasure(this._contentHeight);
       }
       
       tlf_internal function get contentWidth() : Number
       {
-         if(this._uncomposedTextLength == 0 || this.effectiveBlockProgression != BlockProgression.RL)
+         if(this._uncomposedTextLength == 0 || this.tlf_internal::effectiveBlockProgression != BlockProgression.RL)
          {
             return this._contentWidth;
          }
-         return this.computeScaledContentMeasure(this._contentWidth);
+         return this.tlf_internal::computeScaledContentMeasure(this._contentWidth);
       }
       
       tlf_internal function setContentBounds(contentLeft:Number, contentTop:Number, contentWidth:Number, contentHeight:Number) : void
@@ -807,7 +805,7 @@ package flashx.textLayout.container
          this._contentHeight = contentHeight;
          this._contentLeft = contentLeft;
          this._contentTop = contentTop;
-         this.checkScrollBounds();
+         this.tlf_internal::checkScrollBounds();
       }
       
       private function updateForScroll(direction:String, delta:Number) : void
@@ -815,7 +813,7 @@ package flashx.textLayout.container
          this._linesInView.length = 0;
          var flowComposer:IFlowComposer = this.textFlow.flowComposer;
          flowComposer.updateToController(flowComposer.getControllerIndex(this));
-         this.attachTransparentBackgroundForHit(false);
+         this.tlf_internal::attachTransparentBackgroundForHit(false);
          if(this.textFlow.hasEventListener(TextLayoutEvent.SCROLL))
          {
             this.textFlow.dispatchEvent(new ScrollEvent(TextLayoutEvent.SCROLL,false,false,direction,delta));
@@ -831,14 +829,14 @@ package flashx.textLayout.container
          }
          else
          {
-            rslt = this.effectiveBlockProgression == BlockProgression.RL ? Number(this.horizontalScrollPosition - this.compositionWidth) : Number(this.horizontalScrollPosition);
+            rslt = this.tlf_internal::effectiveBlockProgression == BlockProgression.RL ? this.horizontalScrollPosition - this.compositionWidth : this.horizontalScrollPosition;
          }
          return rslt;
       }
       
       private function get containerScrollRectRight() : Number
       {
-         return Number(this.containerScrollRectLeft + this.compositionWidth);
+         return this.containerScrollRectLeft + this.compositionWidth;
       }
       
       private function get containerScrollRectTop() : Number
@@ -857,7 +855,7 @@ package flashx.textLayout.container
       
       private function get containerScrollRectBottom() : Number
       {
-         return Number(this.containerScrollRectTop + this.compositionHeight);
+         return this.containerScrollRectTop + this.compositionHeight;
       }
       
       public function scrollToRange(activePosition:int, anchorPosition:int) : void
@@ -873,11 +871,11 @@ package flashx.textLayout.container
          var lastPosition:int = Math.min(controllerStart + this._textLength,this.textFlow.textLength - 1);
          activePosition = Math.max(controllerStart,Math.min(activePosition,lastPosition));
          anchorPosition = Math.max(controllerStart,Math.min(anchorPosition,lastPosition));
-         var verticalText:Boolean = this.effectiveBlockProgression == BlockProgression.RL;
+         var verticalText:Boolean = this.tlf_internal::effectiveBlockProgression == BlockProgression.RL;
          var begPos:int = Math.min(activePosition,anchorPosition);
          var endPos:int = Math.max(activePosition,anchorPosition);
-         var begLineIndex:int = this.flowComposer.findLineIndexAtPosition(begPos,begPos == this.textFlow.textLength);
-         var endLineIndex:int = this.flowComposer.findLineIndexAtPosition(endPos,endPos == this.textFlow.textLength);
+         var begLineIndex:int = int(this.flowComposer.findLineIndexAtPosition(begPos,begPos == this.textFlow.textLength));
+         var endLineIndex:int = int(this.flowComposer.findLineIndexAtPosition(endPos,endPos == this.textFlow.textLength));
          var scrollRectLeft:Number = this.containerScrollRectLeft;
          var scrollRectTop:Number = this.containerScrollRectTop;
          var scrollRectRight:Number = this.containerScrollRectRight;
@@ -886,11 +884,11 @@ package flashx.textLayout.container
          {
             endPos = Math.min(begPos + 100,endPos + 1);
             this.flowComposer.composeToPosition(endPos);
-            begLineIndex = this.flowComposer.findLineIndexAtPosition(begPos,begPos == this.textFlow.textLength);
-            endLineIndex = this.flowComposer.findLineIndexAtPosition(endPos,endPos == this.textFlow.textLength);
+            begLineIndex = int(this.flowComposer.findLineIndexAtPosition(begPos,begPos == this.textFlow.textLength));
+            endLineIndex = int(this.flowComposer.findLineIndexAtPosition(endPos,endPos == this.textFlow.textLength));
          }
          var rect:Rectangle = this.rangeToRectangle(begPos,endPos,begLineIndex,endLineIndex);
-         if(rect)
+         if(Boolean(rect))
          {
             if(verticalText)
             {
@@ -965,7 +963,7 @@ package flashx.textLayout.container
          var pos:int = 0;
          var startLine:TextFlowLine = null;
          var endLine:TextFlowLine = null;
-         var blockProgression:String = this.effectiveBlockProgression;
+         var blockProgression:String = this.tlf_internal::effectiveBlockProgression;
          var flowComposer:IFlowComposer = this.textFlow.flowComposer;
          if(!this.container || !flowComposer)
          {
@@ -974,7 +972,7 @@ package flashx.textLayout.container
          if(startLineIndex == endLineIndex)
          {
             line = flowComposer.getLineAt(startLineIndex);
-            if(line.isDamaged())
+            if(line.tlf_internal::isDamaged())
             {
                return null;
             }
@@ -1054,17 +1052,17 @@ package flashx.textLayout.container
       
       tlf_internal function resetColumnState() : void
       {
-         if(this._rootElement)
+         if(Boolean(this._rootElement))
          {
-            this._columnState.updateInputs(this.effectiveBlockProgression,this._rootElement.computedFormat.direction,this,this._compositionWidth,this._compositionHeight);
+            this._columnState.tlf_internal::updateInputs(this.tlf_internal::effectiveBlockProgression,this._rootElement.computedFormat.direction,this,this._compositionWidth,this._compositionHeight);
          }
       }
       
       public function invalidateContents() : void
       {
-         if(this.textFlow)
+         if(Boolean(this.textFlow))
          {
-            this.textFlow.damage(this.absoluteStart,Math.min(this._textLength,1),FlowDamageType.GEOMETRY,false);
+            this.textFlow.tlf_internal::damage(this.absoluteStart,Math.min(this._textLength,1),FlowDamageType.GEOMETRY,false);
          }
       }
       
@@ -1076,10 +1074,10 @@ package flashx.textLayout.container
          var adjustHorizontalScroll:Boolean = false;
          var bgx:Number = NaN;
          var bgy:Number = NaN;
-         if((this._minListenersAttached || this._mouseWheelListenerAttached) && this.attachTransparentBackground)
+         if((this._minListenersAttached || this.tlf_internal::_mouseWheelListenerAttached) && this.attachTransparentBackground)
          {
             s = this._container;
-            if(s)
+            if(Boolean(s))
             {
                if(justClear)
                {
@@ -1088,10 +1086,10 @@ package flashx.textLayout.container
                }
                else
                {
-                  bgwidth = !!this._measureWidth ? Number(this._contentWidth) : Number(this._compositionWidth);
-                  bgheight = !!this._measureHeight ? Number(this._contentHeight) : Number(this._compositionHeight);
-                  adjustHorizontalScroll = this.effectiveBlockProgression == BlockProgression.RL && this._horizontalScrollPolicy != ScrollPolicy.OFF;
-                  bgx = !!adjustHorizontalScroll ? Number(this._xScroll - bgwidth) : Number(this._xScroll);
+                  bgwidth = this._measureWidth ? this._contentWidth : this._compositionWidth;
+                  bgheight = this._measureHeight ? this._contentHeight : this._compositionHeight;
+                  adjustHorizontalScroll = this.tlf_internal::effectiveBlockProgression == BlockProgression.RL && this._horizontalScrollPolicy != ScrollPolicy.OFF;
+                  bgx = adjustHorizontalScroll ? this._xScroll - bgwidth : this._xScroll;
                   bgy = this._yScroll;
                   if(bgx != this._transparentBGX || bgy != this._transparentBGY || bgwidth != this._transparentBGWidth || bgheight != this._transparentBGHeight)
                   {
@@ -1118,13 +1116,13 @@ package flashx.textLayout.container
          {
             this.detachContainer();
          }
-         this.attachContainer();
-         this.checkScrollBounds();
-         if(this._mouseEventManager)
+         this.tlf_internal::attachContainer();
+         this.tlf_internal::checkScrollBounds();
+         if(Boolean(this._mouseEventManager))
          {
             this._mouseEventManager.needsCtrlKey = this.interactionManager != null && this.interactionManager.editingMode == EditingMode.READ_WRITE;
          }
-         if(this._container && Configuration.playerEnablesSpicyFeatures)
+         if(Boolean(this._container) && Boolean(Configuration.tlf_internal::playerEnablesSpicyFeatures))
          {
             this._container["needsSoftKeyboard"] = this.interactionManager && this.interactionManager.editingMode == EditingMode.READ_WRITE;
          }
@@ -1132,15 +1130,15 @@ package flashx.textLayout.container
       
       tlf_internal function attachContainer() : void
       {
-         if(!this._minListenersAttached && this.textFlow && this.textFlow.interactionManager)
+         if(!this._minListenersAttached && this.textFlow && Boolean(this.textFlow.interactionManager))
          {
             this._minListenersAttached = true;
-            if(this._container)
+            if(Boolean(this._container))
             {
-               this._container.addEventListener(FocusEvent.FOCUS_IN,this.requiredFocusInHandler);
-               this._container.addEventListener(MouseEvent.MOUSE_OVER,this.requiredMouseOverHandler);
-               this.attachTransparentBackgroundForHit(false);
-               if(this._container.stage && this._container.stage.focus == this._container)
+               this._container.addEventListener(FocusEvent.FOCUS_IN,this.tlf_internal::requiredFocusInHandler);
+               this._container.addEventListener(MouseEvent.MOUSE_OVER,this.tlf_internal::requiredMouseOverHandler);
+               this.tlf_internal::attachTransparentBackgroundForHit(false);
+               if(Boolean(this._container.stage) && this._container.stage.focus == this._container)
                {
                   this.attachAllListeners();
                }
@@ -1150,19 +1148,19 @@ package flashx.textLayout.container
       
       tlf_internal function attachInteractionHandlers() : void
       {
-         var receiver:IInteractionEventHandler = this.getInteractionHandler();
-         this._container.addEventListener(MouseEvent.MOUSE_DOWN,this.requiredMouseDownHandler);
-         this._container.addEventListener(FocusEvent.FOCUS_OUT,this.requiredFocusOutHandler);
+         var receiver:IInteractionEventHandler = this.tlf_internal::getInteractionHandler();
+         this._container.addEventListener(MouseEvent.MOUSE_DOWN,this.tlf_internal::requiredMouseDownHandler);
+         this._container.addEventListener(FocusEvent.FOCUS_OUT,this.tlf_internal::requiredFocusOutHandler);
          this._container.addEventListener(MouseEvent.DOUBLE_CLICK,receiver.mouseDoubleClickHandler);
          this._container.addEventListener(Event.ACTIVATE,receiver.activateHandler);
          this._container.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,receiver.focusChangeHandler);
          this._container.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,receiver.focusChangeHandler);
          this._container.addEventListener(TextEvent.TEXT_INPUT,receiver.textInputHandler);
          this._container.addEventListener(MouseEvent.MOUSE_OUT,receiver.mouseOutHandler);
-         this.addMouseWheelListener();
+         this.tlf_internal::addMouseWheelListener();
          this._container.addEventListener(Event.DEACTIVATE,receiver.deactivateHandler);
          this._container.addEventListener("imeStartComposition",receiver.imeStartCompositionHandler);
-         if(this._container.contextMenu)
+         if(Boolean(this._container.contextMenu))
          {
             this._container.contextMenu.addEventListener(ContextMenuEvent.MENU_SELECT,receiver.menuSelectHandler);
          }
@@ -1175,19 +1173,19 @@ package flashx.textLayout.container
       
       tlf_internal function removeInteractionHandlers() : void
       {
-         var receiver:IInteractionEventHandler = this.getInteractionHandler();
-         this._container.removeEventListener(MouseEvent.MOUSE_DOWN,this.requiredMouseDownHandler);
-         this._container.removeEventListener(FocusEvent.FOCUS_OUT,this.requiredFocusOutHandler);
+         var receiver:IInteractionEventHandler = this.tlf_internal::getInteractionHandler();
+         this._container.removeEventListener(MouseEvent.MOUSE_DOWN,this.tlf_internal::requiredMouseDownHandler);
+         this._container.removeEventListener(FocusEvent.FOCUS_OUT,this.tlf_internal::requiredFocusOutHandler);
          this._container.removeEventListener(MouseEvent.DOUBLE_CLICK,receiver.mouseDoubleClickHandler);
          this._container.removeEventListener(Event.ACTIVATE,receiver.activateHandler);
          this._container.removeEventListener(FocusEvent.MOUSE_FOCUS_CHANGE,receiver.focusChangeHandler);
          this._container.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE,receiver.focusChangeHandler);
          this._container.removeEventListener(TextEvent.TEXT_INPUT,receiver.textInputHandler);
          this._container.removeEventListener(MouseEvent.MOUSE_OUT,receiver.mouseOutHandler);
-         this.removeMouseWheelListener();
+         this.tlf_internal::removeMouseWheelListener();
          this._container.removeEventListener(Event.DEACTIVATE,receiver.deactivateHandler);
          this._container.removeEventListener("imeStartComposition",receiver.imeStartCompositionHandler);
-         if(this._container.contextMenu)
+         if(Boolean(this._container.contextMenu))
          {
             this._container.contextMenu.removeEventListener(ContextMenuEvent.MENU_SELECT,receiver.menuSelectHandler);
          }
@@ -1203,51 +1201,51 @@ package flashx.textLayout.container
       {
          if(this._minListenersAttached)
          {
-            if(this._container)
+            if(Boolean(this._container))
             {
-               this._container.removeEventListener(FocusEvent.FOCUS_IN,this.requiredFocusInHandler);
-               this._container.removeEventListener(MouseEvent.MOUSE_OVER,this.requiredMouseOverHandler);
+               this._container.removeEventListener(FocusEvent.FOCUS_IN,this.tlf_internal::requiredFocusInHandler);
+               this._container.removeEventListener(MouseEvent.MOUSE_OVER,this.tlf_internal::requiredMouseOverHandler);
                if(this._allListenersAttached)
                {
-                  this.removeInteractionHandlers();
-                  this.removeContextMenu();
-                  this.attachTransparentBackgroundForHit(true);
+                  this.tlf_internal::removeInteractionHandlers();
+                  this.tlf_internal::removeContextMenu();
+                  this.tlf_internal::attachTransparentBackgroundForHit(true);
                   this._allListenersAttached = false;
                }
             }
             this._minListenersAttached = false;
          }
-         this.removeMouseWheelListener();
+         this.tlf_internal::removeMouseWheelListener();
       }
       
       private function attachAllListeners() : void
       {
-         if(!this._allListenersAttached && this.textFlow && this.textFlow.interactionManager)
+         if(!this._allListenersAttached && this.textFlow && Boolean(this.textFlow.interactionManager))
          {
             this._allListenersAttached = true;
-            if(this._container)
+            if(Boolean(this._container))
             {
-               this.attachContextMenu();
-               this.attachInteractionHandlers();
+               this.tlf_internal::attachContextMenu();
+               this.tlf_internal::attachInteractionHandlers();
             }
          }
       }
       
       tlf_internal function addMouseWheelListener() : void
       {
-         if(!this._mouseWheelListenerAttached)
+         if(!this.tlf_internal::_mouseWheelListenerAttached)
          {
-            this._container.addEventListener(MouseEvent.MOUSE_WHEEL,this.getInteractionHandler().mouseWheelHandler);
-            this._mouseWheelListenerAttached = true;
+            this._container.addEventListener(MouseEvent.MOUSE_WHEEL,this.tlf_internal::getInteractionHandler().mouseWheelHandler);
+            this.tlf_internal::_mouseWheelListenerAttached = true;
          }
       }
       
       tlf_internal function removeMouseWheelListener() : void
       {
-         if(this._mouseWheelListenerAttached)
+         if(this.tlf_internal::_mouseWheelListenerAttached)
          {
-            this._container.removeEventListener(MouseEvent.MOUSE_WHEEL,this.getInteractionHandler().mouseWheelHandler);
-            this._mouseWheelListenerAttached = false;
+            this._container.removeEventListener(MouseEvent.MOUSE_WHEEL,this.tlf_internal::getInteractionHandler().mouseWheelHandler);
+            this.tlf_internal::_mouseWheelListenerAttached = false;
          }
       }
       
@@ -1263,7 +1261,7 @@ package flashx.textLayout.container
       
       protected function createContextMenu() : ContextMenu
       {
-         return createDefaultContextMenu();
+         return tlf_internal::createDefaultContextMenu();
       }
       
       tlf_internal function scrollTimerHandler(event:Event) : void
@@ -1278,27 +1276,48 @@ package flashx.textLayout.container
          }
          if(this.textFlow.interactionManager == null || this.textFlow.interactionManager.activePosition < this.absoluteStart || this.textFlow.interactionManager.activePosition > this.absoluteStart + this.textLength)
          {
-            var event:Event = null;
+            event = null;
          }
          if(event is MouseEvent)
          {
             this._scrollTimer.stop();
-            this._scrollTimer.removeEventListener(TimerEvent.TIMER,this.scrollTimerHandler);
-            event.currentTarget.removeEventListener(MouseEvent.MOUSE_UP,this.scrollTimerHandler);
+            this._scrollTimer.removeEventListener(TimerEvent.TIMER,this.tlf_internal::scrollTimerHandler);
+            event.currentTarget.removeEventListener(MouseEvent.MOUSE_UP,this.tlf_internal::scrollTimerHandler);
             this._scrollTimer = null;
          }
          else if(!event)
          {
             this._scrollTimer.stop();
-            this._scrollTimer.removeEventListener(TimerEvent.TIMER,this.scrollTimerHandler);
-            if(this.getContainerRoot())
+            this._scrollTimer.removeEventListener(TimerEvent.TIMER,this.tlf_internal::scrollTimerHandler);
+            if(Boolean(this.tlf_internal::getContainerRoot()))
             {
-               this.getContainerRoot().removeEventListener(MouseEvent.MOUSE_UP,this.scrollTimerHandler);
+               this.tlf_internal::getContainerRoot().removeEventListener(MouseEvent.MOUSE_UP,this.tlf_internal::scrollTimerHandler);
             }
             this._scrollTimer = null;
          }
-         else if(this._container.stage)
+         else if(Boolean(this._container.stage))
          {
+            containerPoint = new Point(this._container.stage.mouseX,this._container.stage.mouseY);
+            containerPoint = this._container.globalToLocal(containerPoint);
+            scrollChange = this.autoScrollIfNecessaryInternal(containerPoint);
+            if(scrollChange != 0 && Boolean(this.interactionManager))
+            {
+               mouseEvent = new PsuedoMouseEvent(MouseEvent.MOUSE_MOVE,false,false,this._container.stage.mouseX,this._container.stage.mouseY,this._container.stage,false,false,false,true);
+               stashedScrollTimer = this._scrollTimer;
+               try
+               {
+                  this._scrollTimer = null;
+                  this.interactionManager.mouseMoveHandler(mouseEvent);
+               }
+               catch(e:Error)
+               {
+                  throw e;
+               }
+               finally
+               {
+                  this._scrollTimer = stashedScrollTimer;
+               }
+            }
          }
       }
       
@@ -1309,7 +1328,7 @@ package flashx.textLayout.container
          var r:Rectangle = null;
          if(this.flowComposer.getControllerAt(this.flowComposer.numControllers - 1) != this)
          {
-            verticalText = this.effectiveBlockProgression == BlockProgression.RL;
+            verticalText = this.tlf_internal::effectiveBlockProgression == BlockProgression.RL;
             lastController = this.flowComposer.getControllerAt(this.flowComposer.numControllers - 1);
             if(verticalText && this._horizontalScrollPolicy == ScrollPolicy.OFF || !verticalText && this._verticalScrollPolicy == ScrollPolicy.OFF)
             {
@@ -1363,10 +1382,10 @@ package flashx.textLayout.container
          if(scrollDirection != 0 && !this._scrollTimer)
          {
             this._scrollTimer = new Timer(this.textFlow.configuration.scrollDragDelay);
-            this._scrollTimer.addEventListener(TimerEvent.TIMER,this.scrollTimerHandler,false,0,true);
-            if(this.getContainerRoot())
+            this._scrollTimer.addEventListener(TimerEvent.TIMER,this.tlf_internal::scrollTimerHandler,false,0,true);
+            if(Boolean(this.tlf_internal::getContainerRoot()))
             {
-               this.getContainerRoot().addEventListener(MouseEvent.MOUSE_UP,this.scrollTimerHandler,false,0,true);
+               this.tlf_internal::getContainerRoot().addEventListener(MouseEvent.MOUSE_UP,this.tlf_internal::scrollTimerHandler,false,0,true);
                this.beginMouseCapture();
             }
             this._scrollTimer.start();
@@ -1398,17 +1417,17 @@ package flashx.textLayout.container
          {
             return 0;
          }
-         var firstVisibleLine:TextFlowLine = this.getFirstVisibleLine();
+         var firstVisibleLine:TextFlowLine = this.tlf_internal::getFirstVisibleLine();
          if(!firstVisibleLine)
          {
             return 0;
          }
-         var lastVisibleLine:TextFlowLine = this.getLastVisibleLine();
+         var lastVisibleLine:TextFlowLine = this.tlf_internal::getLastVisibleLine();
          if(numLines > 0)
          {
-            lineIndex = flowComposer.findLineIndexAtPosition(lastVisibleLine.absoluteStart);
+            lineIndex = int(flowComposer.findLineIndexAtPosition(lastVisibleLine.absoluteStart));
             lastTextLine = lastVisibleLine.getTextLine(true);
-            if(this.effectiveBlockProgression == BlockProgression.TB)
+            if(this.tlf_internal::effectiveBlockProgression == BlockProgression.TB)
             {
                if(lastTextLine.y + lastTextLine.descent - this.containerScrollRectBottom > 2)
                {
@@ -1421,7 +1440,7 @@ package flashx.textLayout.container
             }
             while(lineIndex + numLines > flowComposer.numLines - 1 && flowComposer.damageAbsoluteStart < this.textFlow.textLength)
             {
-               previousDamageStart = flowComposer.damageAbsoluteStart;
+               previousDamageStart = int(flowComposer.damageAbsoluteStart);
                flowComposer.composeToPosition(flowComposer.damageAbsoluteStart + 1000);
                if(flowComposer.damageAbsoluteStart == previousDamageStart)
                {
@@ -1432,8 +1451,8 @@ package flashx.textLayout.container
          }
          if(numLines < 0)
          {
-            lineIndex = flowComposer.findLineIndexAtPosition(firstVisibleLine.absoluteStart);
-            if(this.effectiveBlockProgression == BlockProgression.TB)
+            lineIndex = int(flowComposer.findLineIndexAtPosition(firstVisibleLine.absoluteStart));
+            if(this.tlf_internal::effectiveBlockProgression == BlockProgression.TB)
             {
                if(firstVisibleLine.y + 2 < this.containerScrollRectTop)
                {
@@ -1458,19 +1477,19 @@ package flashx.textLayout.container
             this.textFlow.flowComposer.composeToPosition(paragraph.getAbsoluteStart() + paragraph.textLength);
             line = flowComposer.getLineAt(newLineIndex);
          }
-         var verticalText:Boolean = this.effectiveBlockProgression == BlockProgression.RL;
+         var verticalText:Boolean = this.tlf_internal::effectiveBlockProgression == BlockProgression.RL;
          if(verticalText)
          {
-            newScrollPosition = numLines < 0 ? Number(line.x + line.textHeight) : Number(line.x - line.descent + this._compositionWidth);
+            newScrollPosition = numLines < 0 ? line.x + line.textHeight : line.x - line.descent + this._compositionWidth;
             return newScrollPosition - this.horizontalScrollPosition;
          }
-         newScrollPosition = numLines < 0 ? Number(line.y) : Number(line.y + line.textHeight - this._compositionHeight);
+         newScrollPosition = numLines < 0 ? line.y : line.y + line.textHeight - this._compositionHeight;
          return newScrollPosition - this.verticalScrollPosition;
       }
       
       public function mouseOverHandler(event:MouseEvent) : void
       {
-         if(this.interactionManager && !event.isDefaultPrevented())
+         if(Boolean(this.interactionManager) && !event.isDefaultPrevented())
          {
             this.interactionManager.mouseOverHandler(event);
          }
@@ -1479,12 +1498,12 @@ package flashx.textLayout.container
       tlf_internal function requiredMouseOverHandler(event:MouseEvent) : void
       {
          this.attachAllListeners();
-         this.getInteractionHandler().mouseOverHandler(event);
+         this.tlf_internal::getInteractionHandler().mouseOverHandler(event);
       }
       
       public function mouseOutHandler(event:MouseEvent) : void
       {
-         if(this.interactionManager && !event.isDefaultPrevented())
+         if(Boolean(this.interactionManager) && !event.isDefaultPrevented())
          {
             this.interactionManager.mouseOutHandler(event);
          }
@@ -1496,16 +1515,16 @@ package flashx.textLayout.container
          {
             return;
          }
-         var verticalText:Boolean = this.effectiveBlockProgression == BlockProgression.RL;
+         var verticalText:Boolean = this.tlf_internal::effectiveBlockProgression == BlockProgression.RL;
          if(verticalText)
          {
-            if(this.contentWidth > this._compositionWidth && !this._measureWidth)
+            if(this.tlf_internal::contentWidth > this._compositionWidth && !this._measureWidth)
             {
                this.horizontalScrollPosition += event.delta * this.textFlow.configuration.scrollMouseWheelMultiplier;
                event.preventDefault();
             }
          }
-         else if(this.contentHeight > this._compositionHeight && !this._measureHeight)
+         else if(this.tlf_internal::contentHeight > this._compositionHeight && !this._measureHeight)
          {
             this.verticalScrollPosition -= event.delta * this.textFlow.configuration.scrollMouseWheelMultiplier;
             event.preventDefault();
@@ -1514,12 +1533,12 @@ package flashx.textLayout.container
       
       public function mouseDownHandler(event:MouseEvent) : void
       {
-         if(this.interactionManager && !event.isDefaultPrevented())
+         if(Boolean(this.interactionManager) && !event.isDefaultPrevented())
          {
             this.interactionManager.mouseDownHandler(event);
             if(this.interactionManager.hasSelection())
             {
-               this.setFocus();
+               this.tlf_internal::setFocus();
             }
          }
       }
@@ -1529,16 +1548,16 @@ package flashx.textLayout.container
          var containerRoot:DisplayObject = null;
          if(!this._selectListenersAttached)
          {
-            containerRoot = this.getContainerRoot();
-            if(containerRoot)
+            containerRoot = this.tlf_internal::getContainerRoot();
+            if(Boolean(containerRoot))
             {
-               containerRoot.addEventListener(MouseEvent.MOUSE_MOVE,this.rootMouseMoveHandler,false,0,true);
-               containerRoot.addEventListener(MouseEvent.MOUSE_UP,this.rootMouseUpHandler,false,0,true);
+               containerRoot.addEventListener(MouseEvent.MOUSE_MOVE,this.tlf_internal::rootMouseMoveHandler,false,0,true);
+               containerRoot.addEventListener(MouseEvent.MOUSE_UP,this.tlf_internal::rootMouseUpHandler,false,0,true);
                this.beginMouseCapture();
                this._selectListenersAttached = true;
             }
          }
-         this.getInteractionHandler().mouseDownHandler(event);
+         this.tlf_internal::getInteractionHandler().mouseDownHandler(event);
       }
       
       public function mouseUpHandler(event:MouseEvent) : void
@@ -1552,15 +1571,15 @@ package flashx.textLayout.container
       tlf_internal function rootMouseUpHandler(event:MouseEvent) : void
       {
          this.clearSelectHandlers();
-         this.getInteractionHandler().mouseUpHandler(event);
+         this.tlf_internal::getInteractionHandler().mouseUpHandler(event);
       }
       
       private function clearSelectHandlers() : void
       {
          if(this._selectListenersAttached)
          {
-            this.getContainerRoot().removeEventListener(MouseEvent.MOUSE_MOVE,this.rootMouseMoveHandler);
-            this.getContainerRoot().removeEventListener(MouseEvent.MOUSE_UP,this.rootMouseUpHandler);
+            this.tlf_internal::getContainerRoot().removeEventListener(MouseEvent.MOUSE_MOVE,this.tlf_internal::rootMouseMoveHandler);
+            this.tlf_internal::getContainerRoot().removeEventListener(MouseEvent.MOUSE_UP,this.tlf_internal::rootMouseUpHandler);
             this.endMouseCapture();
             this._selectListenersAttached = false;
          }
@@ -1568,8 +1587,8 @@ package flashx.textLayout.container
       
       public function beginMouseCapture() : void
       {
-         var sandboxManager:ISandboxSupport = this.getInteractionHandler() as ISandboxSupport;
-         if(sandboxManager && sandboxManager != this)
+         var sandboxManager:ISandboxSupport = this.tlf_internal::getInteractionHandler() as ISandboxSupport;
+         if(Boolean(sandboxManager) && sandboxManager != this)
          {
             sandboxManager.beginMouseCapture();
          }
@@ -1577,8 +1596,8 @@ package flashx.textLayout.container
       
       public function endMouseCapture() : void
       {
-         var sandboxManager:ISandboxSupport = this.getInteractionHandler() as ISandboxSupport;
-         if(sandboxManager && sandboxManager != this)
+         var sandboxManager:ISandboxSupport = this.tlf_internal::getInteractionHandler() as ISandboxSupport;
+         if(Boolean(sandboxManager) && sandboxManager != this)
          {
             sandboxManager.endMouseCapture();
          }
@@ -1586,8 +1605,8 @@ package flashx.textLayout.container
       
       public function mouseUpSomewhere(event:Event) : void
       {
-         this.rootMouseUpHandler(null);
-         this.scrollTimerHandler(null);
+         this.tlf_internal::rootMouseUpHandler(null);
+         this.tlf_internal::scrollTimerHandler(null);
       }
       
       public function mouseMoveSomewhere(event:Event) : void
@@ -1602,7 +1621,7 @@ package flashx.textLayout.container
          if(event.target is TextLine)
          {
             tfl = TextLine(event.target).userData as TextFlowLine;
-            if(tfl)
+            if(Boolean(tfl))
             {
                para = tfl.paragraph;
                if(para.getTextFlow() == this.textFlow)
@@ -1626,7 +1645,7 @@ package flashx.textLayout.container
       
       public function mouseMoveHandler(event:MouseEvent) : void
       {
-         if(this.interactionManager && !event.isDefaultPrevented())
+         if(Boolean(this.interactionManager) && !event.isDefaultPrevented())
          {
             if(event.buttonDown && !this.hitOnMyFlowExceptLastContainer(event))
             {
@@ -1638,24 +1657,24 @@ package flashx.textLayout.container
       
       tlf_internal function rootMouseMoveHandler(event:MouseEvent) : void
       {
-         this.getInteractionHandler().mouseMoveHandler(event);
+         this.tlf_internal::getInteractionHandler().mouseMoveHandler(event);
       }
       
       public function mouseDoubleClickHandler(event:MouseEvent) : void
       {
-         if(this.interactionManager && !event.isDefaultPrevented())
+         if(Boolean(this.interactionManager) && !event.isDefaultPrevented())
          {
             this.interactionManager.mouseDoubleClickHandler(event);
             if(this.interactionManager.hasSelection())
             {
-               this.setFocus();
+               this.tlf_internal::setFocus();
             }
          }
       }
       
       tlf_internal function setFocus() : void
       {
-         if(this._container.stage)
+         if(Boolean(this._container.stage))
          {
             this._container.stage.focus = this._container;
          }
@@ -1668,7 +1687,7 @@ package flashx.textLayout.container
          var controller:ContainerController = null;
          try
          {
-            while(container)
+            while(Boolean(container))
             {
                flowComposer = this.flowComposer;
                for(i = 0; i < flowComposer.numControllers; i++)
@@ -1679,7 +1698,7 @@ package flashx.textLayout.container
                      return controller;
                   }
                }
-               var container:DisplayObject = container.parent;
+               container = container.parent;
             }
          }
          catch(e:Error)
@@ -1690,8 +1709,8 @@ package flashx.textLayout.container
       
       public function focusChangeHandler(event:FocusEvent) : void
       {
-         var focusController:ContainerController = this.getContainerController(DisplayObject(event.target));
-         var newFocusController:ContainerController = this.getContainerController(event.relatedObject);
+         var focusController:ContainerController = this.tlf_internal::getContainerController(DisplayObject(event.target));
+         var newFocusController:ContainerController = this.tlf_internal::getContainerController(event.relatedObject);
          if(newFocusController == focusController)
          {
             event.preventDefault();
@@ -1701,12 +1720,12 @@ package flashx.textLayout.container
       public function focusInHandler(event:FocusEvent) : void
       {
          var blinkRate:int = 0;
-         if(this.interactionManager)
+         if(Boolean(this.interactionManager))
          {
             this.interactionManager.focusInHandler(event);
             if(this.interactionManager.editingMode == EditingMode.READ_WRITE)
             {
-               blinkRate = this.interactionManager.focusedSelectionFormat.pointBlinkRate;
+               blinkRate = int(this.interactionManager.focusedSelectionFormat.pointBlinkRate);
             }
          }
          this.setBlinkInterval(blinkRate);
@@ -1715,19 +1734,19 @@ package flashx.textLayout.container
       tlf_internal function requiredFocusInHandler(event:FocusEvent) : void
       {
          this.attachAllListeners();
-         this._container.addEventListener(KeyboardEvent.KEY_DOWN,this.getInteractionHandler().keyDownHandler);
-         this._container.addEventListener(KeyboardEvent.KEY_UP,this.getInteractionHandler().keyUpHandler);
-         this._container.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,this.getInteractionHandler().keyFocusChangeHandler);
-         if(Configuration.playerEnablesSpicyFeatures && Configuration.hasTouchScreen)
+         this._container.addEventListener(KeyboardEvent.KEY_DOWN,this.tlf_internal::getInteractionHandler().keyDownHandler);
+         this._container.addEventListener(KeyboardEvent.KEY_UP,this.tlf_internal::getInteractionHandler().keyUpHandler);
+         this._container.addEventListener(FocusEvent.KEY_FOCUS_CHANGE,this.tlf_internal::getInteractionHandler().keyFocusChangeHandler);
+         if(Boolean(Configuration.tlf_internal::playerEnablesSpicyFeatures) && Boolean(Configuration.tlf_internal::hasTouchScreen))
          {
-            this._container.addEventListener("softKeyboardActivating",this.getInteractionHandler().softKeyboardActivatingHandler);
+            this._container.addEventListener("softKeyboardActivating",this.tlf_internal::getInteractionHandler().softKeyboardActivatingHandler);
          }
-         this.getInteractionHandler().focusInHandler(event);
+         this.tlf_internal::getInteractionHandler().focusInHandler(event);
       }
       
       public function focusOutHandler(event:FocusEvent) : void
       {
-         if(this.interactionManager)
+         if(Boolean(this.interactionManager))
          {
             this.interactionManager.focusOutHandler(event);
             this.setBlinkInterval(this.interactionManager.unfocusedSelectionFormat.pointBlinkRate);
@@ -1740,19 +1759,19 @@ package flashx.textLayout.container
       
       tlf_internal function requiredFocusOutHandler(event:FocusEvent) : void
       {
-         this._container.removeEventListener(KeyboardEvent.KEY_DOWN,this.getInteractionHandler().keyDownHandler);
-         this._container.removeEventListener(KeyboardEvent.KEY_UP,this.getInteractionHandler().keyUpHandler);
-         this._container.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE,this.getInteractionHandler().keyFocusChangeHandler);
-         if(Configuration.playerEnablesSpicyFeatures && Configuration.hasTouchScreen)
+         this._container.removeEventListener(KeyboardEvent.KEY_DOWN,this.tlf_internal::getInteractionHandler().keyDownHandler);
+         this._container.removeEventListener(KeyboardEvent.KEY_UP,this.tlf_internal::getInteractionHandler().keyUpHandler);
+         this._container.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE,this.tlf_internal::getInteractionHandler().keyFocusChangeHandler);
+         if(Boolean(Configuration.tlf_internal::playerEnablesSpicyFeatures) && Boolean(Configuration.tlf_internal::hasTouchScreen))
          {
-            this._container.removeEventListener("softKeyboardActivating",this.getInteractionHandler().softKeyboardActivatingHandler);
+            this._container.removeEventListener("softKeyboardActivating",this.tlf_internal::getInteractionHandler().softKeyboardActivatingHandler);
          }
-         this.getInteractionHandler().focusOutHandler(event);
+         this.tlf_internal::getInteractionHandler().focusOutHandler(event);
       }
       
       public function activateHandler(event:Event) : void
       {
-         if(this.interactionManager)
+         if(Boolean(this.interactionManager))
          {
             this.interactionManager.activateHandler(event);
          }
@@ -1760,7 +1779,7 @@ package flashx.textLayout.container
       
       public function deactivateHandler(event:Event) : void
       {
-         if(this.interactionManager)
+         if(Boolean(this.interactionManager))
          {
             this.interactionManager.deactivateHandler(event);
          }
@@ -1768,7 +1787,7 @@ package flashx.textLayout.container
       
       public function keyDownHandler(event:KeyboardEvent) : void
       {
-         if(this.interactionManager && !event.isDefaultPrevented())
+         if(Boolean(this.interactionManager) && !event.isDefaultPrevented())
          {
             this.interactionManager.keyDownHandler(event);
          }
@@ -1776,7 +1795,7 @@ package flashx.textLayout.container
       
       public function keyUpHandler(event:KeyboardEvent) : void
       {
-         if(this.interactionManager && !event.isDefaultPrevented())
+         if(Boolean(this.interactionManager) && !event.isDefaultPrevented())
          {
             this.interactionManager.keyUpHandler(event);
          }
@@ -1784,7 +1803,7 @@ package flashx.textLayout.container
       
       public function keyFocusChangeHandler(event:FocusEvent) : void
       {
-         if(this.interactionManager)
+         if(Boolean(this.interactionManager))
          {
             this.interactionManager.keyFocusChangeHandler(event);
          }
@@ -1792,7 +1811,7 @@ package flashx.textLayout.container
       
       public function textInputHandler(event:TextEvent) : void
       {
-         if(this.interactionManager && !event.isDefaultPrevented())
+         if(Boolean(this.interactionManager) && !event.isDefaultPrevented())
          {
             this.interactionManager.textInputHandler(event);
          }
@@ -1800,7 +1819,7 @@ package flashx.textLayout.container
       
       public function softKeyboardActivatingHandler(event:Event) : void
       {
-         if(this.interactionManager)
+         if(Boolean(this.interactionManager))
          {
             this.interactionManager.softKeyboardActivatingHandler(event);
          }
@@ -1808,7 +1827,7 @@ package flashx.textLayout.container
       
       public function imeStartCompositionHandler(event:IMEEvent) : void
       {
-         if(this.interactionManager)
+         if(Boolean(this.interactionManager))
          {
             this.interactionManager.imeStartCompositionHandler(event);
          }
@@ -1818,14 +1837,14 @@ package flashx.textLayout.container
       {
          var contextMenu:ContextMenu = null;
          var cbItems:ContextMenuClipboardItems = null;
-         if(this.interactionManager)
+         if(Boolean(this.interactionManager))
          {
             this.interactionManager.menuSelectHandler(event);
          }
          else
          {
             contextMenu = this._container.contextMenu;
-            if(contextMenu)
+            if(Boolean(contextMenu))
             {
                cbItems = contextMenu.clipboardItems;
                cbItems.copy = false;
@@ -1839,12 +1858,12 @@ package flashx.textLayout.container
       
       public function editHandler(event:Event) : void
       {
-         if(this.interactionManager && !event.isDefaultPrevented())
+         if(Boolean(this.interactionManager) && !event.isDefaultPrevented())
          {
             this.interactionManager.editHandler(event);
          }
          var contextMenu:ContextMenu = this._container.contextMenu;
-         if(contextMenu)
+         if(Boolean(contextMenu))
          {
             contextMenu.clipboardItems.clear = true;
             contextMenu.clipboardItems.copy = true;
@@ -1856,7 +1875,7 @@ package flashx.textLayout.container
       
       public function selectRange(anchorIndex:int, activeIndex:int) : void
       {
-         if(this.interactionManager && this.interactionManager.editingMode != EditingMode.READ_ONLY)
+         if(Boolean(this.interactionManager) && this.interactionManager.editingMode != EditingMode.READ_ONLY)
          {
             this.interactionManager.selectRange(anchorIndex,activeIndex);
          }
@@ -1875,7 +1894,7 @@ package flashx.textLayout.container
       
       protected function stopBlinkingCursor() : void
       {
-         if(this.blinkTimer)
+         if(Boolean(this.blinkTimer))
          {
             this.blinkTimer.stop();
          }
@@ -1884,7 +1903,7 @@ package flashx.textLayout.container
       
       private function blinkTimerHandler(event:TimerEvent) : void
       {
-         this.blinkObject.alpha = this.blinkObject.alpha == 1 ? Number(0) : Number(1);
+         this.blinkObject.alpha = this.blinkObject.alpha == 1 ? 0 : 1;
       }
       
       protected function setBlinkInterval(intervalMS:int) : void
@@ -1892,19 +1911,19 @@ package flashx.textLayout.container
          var blinkInterval:int = intervalMS;
          if(blinkInterval == 0)
          {
-            if(this.blinkTimer)
+            if(Boolean(this.blinkTimer))
             {
                this.blinkTimer.stop();
             }
-            if(this.blinkObject)
+            if(Boolean(this.blinkObject))
             {
                this.blinkObject.alpha = 1;
             }
          }
-         else if(this.blinkTimer)
+         else if(Boolean(this.blinkTimer))
          {
             this.blinkTimer.delay = blinkInterval;
-            if(this.blinkObject)
+            if(Boolean(this.blinkObject))
             {
                this.blinkTimer.start();
             }
@@ -1916,7 +1935,7 @@ package flashx.textLayout.container
          var selObj:Shape = new Shape();
          if(this._hasScrollRect)
          {
-            if(this.effectiveBlockProgression == BlockProgression.TB)
+            if(this.tlf_internal::effectiveBlockProgression == BlockProgression.TB)
             {
                if(x >= this.containerScrollRectRight)
                {
@@ -1935,7 +1954,7 @@ package flashx.textLayout.container
          {
             this.startBlinkingCursor(selObj,selFormat.pointBlinkRate);
          }
-         this.addSelectionChild(selObj);
+         this.tlf_internal::addSelectionChild(selObj);
       }
       
       tlf_internal function addSelectionShapes(selFormat:SelectionFormat, selectionAbsoluteStart:int, selectionAbsoluteEnd:int) : void
@@ -1975,8 +1994,8 @@ package flashx.textLayout.container
             {
                return;
             }
-            begLine = this.flowComposer.findLineIndexAtPosition(selectionAbsoluteStart);
-            endLine = selectionAbsoluteStart == selectionAbsoluteEnd ? int(begLine) : int(this.flowComposer.findLineIndexAtPosition(selectionAbsoluteEnd));
+            begLine = int(this.flowComposer.findLineIndexAtPosition(selectionAbsoluteStart));
+            endLine = selectionAbsoluteStart == selectionAbsoluteEnd ? begLine : int(this.flowComposer.findLineIndexAtPosition(selectionAbsoluteEnd));
             if(endLine >= this.flowComposer.numLines)
             {
                endLine = this.flowComposer.numLines - 1;
@@ -1987,16 +2006,16 @@ package flashx.textLayout.container
             for(idx = begLine; idx <= endLine; idx++)
             {
                nextLine = idx != this.flowComposer.numLines - 1 ? this.flowComposer.getLineAt(idx + 1) : null;
-               line.hiliteBlockSelection(selObj,selFormat,this._container,selectionAbsoluteStart < line.absoluteStart ? int(line.absoluteStart) : int(selectionAbsoluteStart),selectionAbsoluteEnd > line.absoluteStart + line.textLength ? int(line.absoluteStart + line.textLength) : int(selectionAbsoluteEnd),prevLine,nextLine);
+               line.tlf_internal::hiliteBlockSelection(selObj,selFormat,this._container,selectionAbsoluteStart < line.absoluteStart ? line.absoluteStart : selectionAbsoluteStart,selectionAbsoluteEnd > line.absoluteStart + line.textLength ? line.absoluteStart + line.textLength : selectionAbsoluteEnd,prevLine,nextLine);
                temp = line;
                line = nextLine;
                prevLine = temp;
             }
-            this.addSelectionChild(selObj);
+            this.tlf_internal::addSelectionChild(selObj);
          }
          else
          {
-            lineIdx = this.flowComposer.findLineIndexAtPosition(selectionAbsoluteStart);
+            lineIdx = int(this.flowComposer.findLineIndexAtPosition(selectionAbsoluteStart));
             if(lineIdx == this.flowComposer.numLines)
             {
                lineIdx--;
@@ -2005,7 +2024,7 @@ package flashx.textLayout.container
             {
                prevLine = lineIdx != 0 ? this.flowComposer.getLineAt(lineIdx - 1) : null;
                nextLine = lineIdx != this.flowComposer.numLines - 1 ? this.flowComposer.getLineAt(lineIdx + 1) : null;
-               this.flowComposer.getLineAt(lineIdx).hilitePointSelection(selFormat,selectionAbsoluteStart,this._container,prevLine,nextLine);
+               this.flowComposer.getLineAt(lineIdx).tlf_internal::hilitePointSelection(selFormat,selectionAbsoluteStart,this._container,prevLine,nextLine);
             }
          }
       }
@@ -2013,10 +2032,10 @@ package flashx.textLayout.container
       tlf_internal function clearSelectionShapes() : void
       {
          this.stopBlinkingCursor();
-         var selectionSprite:DisplayObjectContainer = this.getSelectionSprite(false);
+         var selectionSprite:DisplayObjectContainer = this.tlf_internal::getSelectionSprite(false);
          if(selectionSprite != null)
          {
-            if(selectionSprite.parent)
+            if(Boolean(selectionSprite.parent))
             {
                this.removeSelectionContainer(selectionSprite);
             }
@@ -2030,14 +2049,14 @@ package flashx.textLayout.container
       
       tlf_internal function addSelectionChild(child:DisplayObject) : void
       {
-         var selectionSprite:DisplayObjectContainer = this.getSelectionSprite(true);
+         var selectionSprite:DisplayObjectContainer = this.tlf_internal::getSelectionSprite(true);
          if(selectionSprite == null)
          {
             return;
          }
          var selFormat:SelectionFormat = this.interactionManager.currentSelectionFormat;
          var curBlendMode:String = this.interactionManager.activePosition == this.interactionManager.anchorPosition ? selFormat.pointBlendMode : selFormat.rangeBlendMode;
-         var curAlpha:Number = this.interactionManager.activePosition == this.interactionManager.anchorPosition ? Number(selFormat.pointAlpha) : Number(selFormat.rangeAlpha);
+         var curAlpha:Number = this.interactionManager.activePosition == this.interactionManager.anchorPosition ? selFormat.pointAlpha : selFormat.rangeAlpha;
          if(selectionSprite.blendMode != curBlendMode)
          {
             selectionSprite.blendMode = curBlendMode;
@@ -2055,7 +2074,7 @@ package flashx.textLayout.container
       
       tlf_internal function containsSelectionChild(child:DisplayObject) : Boolean
       {
-         var selectionSprite:DisplayObjectContainer = this.getSelectionSprite(false);
+         var selectionSprite:DisplayObjectContainer = this.tlf_internal::getSelectionSprite(false);
          if(selectionSprite == null)
          {
             return false;
@@ -2075,42 +2094,42 @@ package flashx.textLayout.container
       
       tlf_internal function getEffectivePaddingLeft() : Number
       {
-         return this.computedFormat.paddingLeft == FormatValue.AUTO ? Number(0) : Number(this.computedFormat.paddingLeft);
+         return this.computedFormat.paddingLeft == FormatValue.AUTO ? 0 : Number(this.computedFormat.paddingLeft);
       }
       
       tlf_internal function getEffectivePaddingRight() : Number
       {
-         return this.computedFormat.paddingRight == FormatValue.AUTO ? Number(0) : Number(this.computedFormat.paddingRight);
+         return this.computedFormat.paddingRight == FormatValue.AUTO ? 0 : Number(this.computedFormat.paddingRight);
       }
       
       tlf_internal function getEffectivePaddingTop() : Number
       {
-         return this.computedFormat.paddingTop == FormatValue.AUTO ? Number(0) : Number(this.computedFormat.paddingTop);
+         return this.computedFormat.paddingTop == FormatValue.AUTO ? 0 : Number(this.computedFormat.paddingTop);
       }
       
       tlf_internal function getEffectivePaddingBottom() : Number
       {
-         return this.computedFormat.paddingBottom == FormatValue.AUTO ? Number(0) : Number(this.computedFormat.paddingBottom);
+         return this.computedFormat.paddingBottom == FormatValue.AUTO ? 0 : Number(this.computedFormat.paddingBottom);
       }
       
       tlf_internal function getTotalPaddingLeft() : Number
       {
-         return this.getEffectivePaddingLeft() + (Boolean(this._rootElement) ? this._rootElement.getEffectivePaddingLeft() : 0);
+         return this.tlf_internal::getEffectivePaddingLeft() + (Boolean(this._rootElement) ? this._rootElement.tlf_internal::getEffectivePaddingLeft() : 0);
       }
       
       tlf_internal function getTotalPaddingRight() : Number
       {
-         return this.getEffectivePaddingRight() + (Boolean(this._rootElement) ? this._rootElement.getEffectivePaddingRight() : 0);
+         return this.tlf_internal::getEffectivePaddingRight() + (Boolean(this._rootElement) ? this._rootElement.tlf_internal::getEffectivePaddingRight() : 0);
       }
       
       tlf_internal function getTotalPaddingTop() : Number
       {
-         return this.getEffectivePaddingTop() + (Boolean(this._rootElement) ? this._rootElement.getEffectivePaddingTop() : 0);
+         return this.tlf_internal::getEffectivePaddingTop() + (Boolean(this._rootElement) ? this._rootElement.tlf_internal::getEffectivePaddingTop() : 0);
       }
       
       tlf_internal function getTotalPaddingBottom() : Number
       {
-         return this.getEffectivePaddingBottom() + (Boolean(this._rootElement) ? this._rootElement.getEffectivePaddingBottom() : 0);
+         return this.tlf_internal::getEffectivePaddingBottom() + (Boolean(this._rootElement) ? this._rootElement.tlf_internal::getEffectivePaddingBottom() : 0);
       }
       
       tlf_internal function getSelectionSprite(createForDrawing:Boolean) : DisplayObjectContainer
@@ -2135,18 +2154,18 @@ package flashx.textLayout.container
       tlf_internal function clearCompositionResults() : void
       {
          var textLine:TextLine = null;
-         this.setTextLength(0);
+         this.tlf_internal::setTextLength(0);
          for each(textLine in this._shapeChildren)
          {
             this.removeTextLine(textLine);
          }
          this._shapeChildren.length = 0;
          this._linesInView.length = 0;
-         if(this._floatsInContainer)
+         if(Boolean(this._floatsInContainer))
          {
             this._floatsInContainer.length = 0;
          }
-         if(this._composedFloats)
+         if(Boolean(this._composedFloats))
          {
             this._composedFloats.length = 0;
          }
@@ -2160,7 +2179,7 @@ package flashx.textLayout.container
          var prevTextLine:TextLine = null;
          var newChild:TextLine = null;
          var newChildIdx:int = 0;
-         if(!this.shapesInvalid)
+         if(!this.tlf_internal::shapesInvalid)
          {
             return;
          }
@@ -2179,7 +2198,7 @@ package flashx.textLayout.container
          {
             this._linesInView.length = 0;
          }
-         this.fillShapeChildren();
+         this.tlf_internal::fillShapeChildren();
          var newShapeChildren:Array = this._linesInView;
          var childIdx:int = this.getFirstTextLineChildIndex();
          var newIdx:int = 0;
@@ -2189,7 +2208,7 @@ package flashx.textLayout.container
             firstTextLine = newShapeChildren[0];
             firstLine = TextFlowLine(firstTextLine.userData);
             prevLine = this.flowComposer.findLineAtPosition(firstLine.absoluteStart - 1);
-            prevTextLine = prevLine.peekTextLine();
+            prevTextLine = prevLine.tlf_internal::peekTextLine();
             shapeChildrenStartIdx = this._shapeChildren.indexOf(prevTextLine);
             if(shapeChildrenStartIdx >= 0)
             {
@@ -2241,27 +2260,27 @@ package flashx.textLayout.container
          }
          if(this._floatsInContainer && this._floatsInContainer.length > 0 || this._composedFloats && this._composedFloats.length > 0)
          {
-            this.updateGraphics(this._updateStart);
+            this.tlf_internal::updateGraphics(this._updateStart);
          }
-         this.shapesInvalid = false;
+         this.tlf_internal::shapesInvalid = false;
          this.updateVisibleRectangle();
          var tf:TextFlow = this.textFlow;
          var needsCtrlKey:Boolean = this.interactionManager != null && this.interactionManager.editingMode == EditingMode.READ_WRITE;
-         var firstVisibleLine:TextFlowLine = this.getFirstVisibleLine();
-         var lastVisibleLine:TextFlowLine = this.getLastVisibleLine();
+         var firstVisibleLine:TextFlowLine = this.tlf_internal::getFirstVisibleLine();
+         var lastVisibleLine:TextFlowLine = this.tlf_internal::getLastVisibleLine();
          scratchRectangle.left = this._contentLeft;
          scratchRectangle.top = this._contentTop;
          scratchRectangle.width = this._contentWidth;
          scratchRectangle.height = this._contentHeight;
-         this._mouseEventManager.updateHitTests(this.effectiveBlockProgression == BlockProgression.RL && this._hasScrollRect ? Number(this._contentWidth) : Number(0),scratchRectangle,tf,Boolean(firstVisibleLine) ? int(firstVisibleLine.absoluteStart) : int(this._absoluteStart),Boolean(lastVisibleLine) ? int(lastVisibleLine.absoluteStart + lastVisibleLine.textLength - 1) : int(this._absoluteStart),needsCtrlKey);
+         this._mouseEventManager.updateHitTests(this.tlf_internal::effectiveBlockProgression == BlockProgression.RL && this._hasScrollRect ? this._contentWidth : 0,scratchRectangle,tf,Boolean(firstVisibleLine) ? firstVisibleLine.absoluteStart : this._absoluteStart,Boolean(lastVisibleLine) ? lastVisibleLine.absoluteStart + lastVisibleLine.textLength - 1 : this._absoluteStart,needsCtrlKey);
          this._updateStart = this._rootElement.textLength;
          if(this._measureWidth || this._measureHeight)
          {
-            this.attachTransparentBackgroundForHit(false);
+            this.tlf_internal::attachTransparentBackgroundForHit(false);
          }
-         if(tf.backgroundManager)
+         if(Boolean(tf.tlf_internal::backgroundManager))
          {
-            tf.backgroundManager.onUpdateComplete(this);
+            tf.tlf_internal::backgroundManager.onUpdateComplete(this);
          }
          if(scrolled && tf.hasEventListener(TextLayoutEvent.SCROLL))
          {
@@ -2294,21 +2313,21 @@ package flashx.textLayout.container
          var i:int = 0;
          var floatToRemove:DisplayObject = null;
          var visibleFloats:Array = [];
-         var firstLine:TextFlowLine = this.getFirstVisibleLine();
-         var lastLine:TextFlowLine = this.getLastVisibleLine();
-         var firstVisiblePosition:int = Boolean(firstLine) ? int(firstLine.absoluteStart) : int(this.absoluteStart);
-         var lastVisiblePosition:int = Boolean(lastLine) ? int(lastLine.absoluteStart + lastLine.textLength) : int(this.absoluteStart + this.textLength);
+         var firstLine:TextFlowLine = this.tlf_internal::getFirstVisibleLine();
+         var lastLine:TextFlowLine = this.tlf_internal::getLastVisibleLine();
+         var firstVisiblePosition:int = Boolean(firstLine) ? firstLine.absoluteStart : this.absoluteStart;
+         var lastVisiblePosition:int = Boolean(lastLine) ? lastLine.absoluteStart + lastLine.textLength : this.absoluteStart + this.textLength;
          var followingLine:TextFlowLine = this.flowComposer.findLineAtPosition(lastVisiblePosition);
-         var lastPossibleFloatPosition:int = Boolean(followingLine) ? int(followingLine.absoluteStart + followingLine.textLength) : int(this.absoluteStart + this.textLength);
+         var lastPossibleFloatPosition:int = Boolean(followingLine) ? followingLine.absoluteStart + followingLine.textLength : this.absoluteStart + this.textLength;
          lastPossibleFloatPosition = Math.min(lastPossibleFloatPosition,this.absoluteStart + this.textLength);
          lastPossibleFloatPosition = Math.min(lastPossibleFloatPosition,lastVisiblePosition + 2000);
          lastPossibleFloatPosition = Math.min(lastPossibleFloatPosition,this.flowComposer.damageAbsoluteStart);
-         var wmode:String = this.effectiveBlockProgression;
-         var width:Number = !!this._measureWidth ? Number(this._contentWidth) : Number(this._compositionWidth);
-         var height:Number = !!this._measureHeight ? Number(this._contentHeight) : Number(this._compositionHeight);
-         var adjustX:Number = wmode == BlockProgression.RL ? Number(this._xScroll - width) : Number(this._xScroll);
+         var wmode:String = this.tlf_internal::effectiveBlockProgression;
+         var width:Number = this._measureWidth ? this._contentWidth : this._compositionWidth;
+         var height:Number = this._measureHeight ? this._contentHeight : this._compositionHeight;
+         var adjustX:Number = wmode == BlockProgression.RL ? this._xScroll - width : this._xScroll;
          var adjustY:Number = this._yScroll;
-         var floatIndex:int = this.findFloatIndexAtOrAfter(updateStart);
+         var floatIndex:int = this.tlf_internal::findFloatIndexAtOrAfter(updateStart);
          var containerListIndex:int = 0;
          var childIdx:int = this.getFirstTextLineChildIndex();
          if(floatIndex > 0)
@@ -2335,8 +2354,8 @@ package flashx.textLayout.container
          {
             this._floatsInContainer = [];
          }
-         var numContainerList:int = this._floatsInContainer.length;
-         var numFloats:int = this._composedFloats.length;
+         var numContainerList:int = int(this._floatsInContainer.length);
+         var numFloats:int = int(this._composedFloats.length);
          while(floatIndex < numFloats)
          {
             floatInfo = this._composedFloats[floatIndex];
@@ -2371,7 +2390,7 @@ package flashx.textLayout.container
                if(floatInfo.floatType == Float.NONE)
                {
                   tl = parent as TextLine;
-                  if(tl)
+                  if(Boolean(tl))
                   {
                      tfl = tl.userData as TextFlowLine;
                      if(!tfl || floatInfo.absolutePosition < tfl.absoluteStart || floatInfo.absolutePosition >= tfl.absoluteStart + tfl.textLength || tl.parent == null || tl.validity == TextLineValidity.INVALID)
@@ -2391,7 +2410,7 @@ package flashx.textLayout.container
                inlineHolder = float.parent;
                if(containerListIndex < numContainerList && floatInfo.parent == this._container && inlineHolder && inlineHolder.parent == this._container && float == this._floatsInContainer[containerListIndex])
                {
-                  if(floatInfo.matrix)
+                  if(Boolean(floatInfo.matrix))
                   {
                      inlineHolder.transform.matrix = floatInfo.matrix;
                   }
@@ -2412,7 +2431,7 @@ package flashx.textLayout.container
                   if(index > containerListIndex && parent == this._container)
                   {
                      floatToRemove = this._floatsInContainer[containerListIndex++];
-                     if(floatToRemove.parent)
+                     if(Boolean(floatToRemove.parent))
                      {
                         this.removeInlineGraphicElement(this._container,floatToRemove.parent);
                      }
@@ -2424,7 +2443,7 @@ package flashx.textLayout.container
                         containerListIndex++;
                      }
                      inlineHolder = new Sprite();
-                     if(floatInfo.matrix)
+                     if(Boolean(floatInfo.matrix))
                      {
                         inlineHolder.transform.matrix = floatInfo.matrix;
                      }
@@ -2449,7 +2468,7 @@ package flashx.textLayout.container
          while(containerListIndex < this._floatsInContainer.length)
          {
             float = this._floatsInContainer[containerListIndex++];
-            if(float.parent)
+            if(Boolean(float.parent))
             {
                this.removeInlineGraphicElement(this._container,float.parent);
             }
@@ -2460,7 +2479,7 @@ package flashx.textLayout.container
       private function floatIsVisible(wmode:String, scrollX:Number, scrollY:Number, scrollWidth:Number, scrollHeight:Number, floatInfo:FloatCompositionData) : Boolean
       {
          var inlineGraphicElement:InlineGraphicElement = this.textFlow.findLeaf(floatInfo.absolutePosition) as InlineGraphicElement;
-         return wmode == BlockProgression.TB ? floatInfo.y + inlineGraphicElement.elementHeight >= scrollY && floatInfo.y <= scrollY + scrollHeight : floatInfo.x + inlineGraphicElement.elementWidth >= scrollX && floatInfo.x <= scrollX + scrollWidth;
+         return wmode == BlockProgression.TB ? floatInfo.y + inlineGraphicElement.tlf_internal::elementHeight >= scrollY && floatInfo.y <= scrollY + scrollHeight : floatInfo.x + inlineGraphicElement.tlf_internal::elementWidth >= scrollX && floatInfo.x <= scrollX + scrollWidth;
       }
       
       private function releaseLinesInBlock(textBlock:TextBlock) : void
@@ -2468,21 +2487,21 @@ package flashx.textLayout.container
          var para:ParagraphElement = null;
          var line:TextFlowLine = null;
          var textLine:TextLine = textBlock.firstLine;
-         while(textLine && textLine.parent == null)
+         while(Boolean(textLine) && textLine.parent == null)
          {
             textLine = textLine.nextLine;
          }
-         if(!textLine && textBlock.firstLine)
+         if(!textLine && Boolean(textBlock.firstLine))
          {
             line = textBlock.firstLine.userData as TextFlowLine;
-            if(line)
+            if(Boolean(line))
             {
                para = line.paragraph;
             }
             textBlock.releaseLines(textBlock.firstLine,textBlock.lastLine);
-            if(para)
+            if(Boolean(para))
             {
-               para.releaseTextBlock();
+               para.tlf_internal::releaseTextBlock();
             }
          }
       }
@@ -2492,21 +2511,21 @@ package flashx.textLayout.container
          var child:TextLine = null;
          var textBlock:TextBlock = null;
          var tfl:TextFlowLine = null;
-         var backgroundManager:BackgroundManager = this.textFlow.backgroundManager;
+         var backgroundManager:BackgroundManager = this.textFlow.tlf_internal::backgroundManager;
          for(var index:int = beginIndex; index < endIndex; index++)
          {
             child = this._shapeChildren[index];
             this.removeTextLine(child);
             if(child.textBlock != textBlock)
             {
-               if(textBlock)
+               if(Boolean(textBlock))
                {
                   this.releaseLinesInBlock(textBlock);
                }
                textBlock = child.textBlock;
             }
          }
-         if(textBlock)
+         if(Boolean(textBlock))
          {
             this.releaseLinesInBlock(textBlock);
          }
@@ -2520,7 +2539,7 @@ package flashx.textLayout.container
                   if(child.userData == null)
                   {
                      TextLineRecycler.addLineForReuse(child);
-                     if(backgroundManager)
+                     if(Boolean(backgroundManager))
                      {
                         backgroundManager.removeLineFromCache(child);
                      }
@@ -2528,13 +2547,13 @@ package flashx.textLayout.container
                   else
                   {
                      tfl = child.userData as TextFlowLine;
-                     if(!(tfl && tfl.controller != this))
+                     if(!(Boolean(tfl) && tfl.controller != this))
                      {
                         if(child.validity == TextLineValidity.INVALID || child.nextLine == null && child.previousLine == null && (!child.textBlock || child.textBlock.firstLine != child))
                         {
                            child.userData = null;
                            TextLineRecycler.addLineForReuse(child);
-                           if(backgroundManager)
+                           if(Boolean(backgroundManager))
                            {
                               backgroundManager.removeLineFromCache(child);
                            }
@@ -2579,7 +2598,7 @@ package flashx.textLayout.container
       
       protected function removeBackgroundShape(shape:Shape) : void
       {
-         if(shape.parent)
+         if(Boolean(shape.parent))
          {
             shape.parent.removeChild(shape);
          }
@@ -2642,11 +2661,11 @@ package flashx.textLayout.container
          }
          else
          {
-            contentRight = this._contentLeft + this.contentWidth;
-            contentBottom = this._contentTop + this.contentHeight;
+            contentRight = this._contentLeft + this.tlf_internal::contentWidth;
+            contentBottom = this._contentTop + this.tlf_internal::contentHeight;
             if(this._measureWidth)
             {
-               width = this.contentWidth;
+               width = this.tlf_internal::contentWidth;
                compositionRight = this._contentLeft + width;
             }
             else
@@ -2656,7 +2675,7 @@ package flashx.textLayout.container
             }
             if(this._measureHeight)
             {
-               height = this.contentHeight;
+               height = this.tlf_internal::contentHeight;
                compositionBottom = this._contentTop + height;
             }
             else
@@ -2664,7 +2683,7 @@ package flashx.textLayout.container
                height = this._compositionHeight;
                compositionBottom = height;
             }
-            xOrigin = this.effectiveBlockProgression == BlockProgression.RL ? Number(-width) : Number(0);
+            xOrigin = this.tlf_internal::effectiveBlockProgression == BlockProgression.RL ? -width : 0;
             xpos = this.horizontalScrollPosition + xOrigin;
             ypos = this.verticalScrollPosition;
             if(this.textLength == 0 || xpos == 0 && ypos == 0 && this._contentLeft >= xOrigin && this._contentTop >= 0 && contentRight <= compositionRight && contentBottom <= compositionBottom)
@@ -2685,7 +2704,7 @@ package flashx.textLayout.container
                }
             }
          }
-         this.attachTransparentBackgroundForHit(false);
+         this.tlf_internal::attachTransparentBackgroundForHit(false);
       }
       
       public function get color() : *
@@ -2696,7 +2715,7 @@ package flashx.textLayout.container
       public function set color(colorValue:*) : void
       {
          this.writableTextLayoutFormat().color = colorValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get backgroundColor() : *
@@ -2707,7 +2726,7 @@ package flashx.textLayout.container
       public function set backgroundColor(backgroundColorValue:*) : void
       {
          this.writableTextLayoutFormat().backgroundColor = backgroundColorValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="true,false,inherit")]
@@ -2719,7 +2738,7 @@ package flashx.textLayout.container
       public function set lineThrough(lineThroughValue:*) : void
       {
          this.writableTextLayoutFormat().lineThrough = lineThroughValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get textAlpha() : *
@@ -2730,7 +2749,7 @@ package flashx.textLayout.container
       public function set textAlpha(textAlphaValue:*) : void
       {
          this.writableTextLayoutFormat().textAlpha = textAlphaValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get backgroundAlpha() : *
@@ -2741,7 +2760,7 @@ package flashx.textLayout.container
       public function set backgroundAlpha(backgroundAlphaValue:*) : void
       {
          this.writableTextLayoutFormat().backgroundAlpha = backgroundAlphaValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get fontSize() : *
@@ -2752,7 +2771,7 @@ package flashx.textLayout.container
       public function set fontSize(fontSizeValue:*) : void
       {
          this.writableTextLayoutFormat().fontSize = fontSizeValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get baselineShift() : *
@@ -2763,7 +2782,7 @@ package flashx.textLayout.container
       public function set baselineShift(baselineShiftValue:*) : void
       {
          this.writableTextLayoutFormat().baselineShift = baselineShiftValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get trackingLeft() : *
@@ -2774,7 +2793,7 @@ package flashx.textLayout.container
       public function set trackingLeft(trackingLeftValue:*) : void
       {
          this.writableTextLayoutFormat().trackingLeft = trackingLeftValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get trackingRight() : *
@@ -2785,7 +2804,7 @@ package flashx.textLayout.container
       public function set trackingRight(trackingRightValue:*) : void
       {
          this.writableTextLayoutFormat().trackingRight = trackingRightValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get lineHeight() : *
@@ -2796,7 +2815,7 @@ package flashx.textLayout.container
       public function set lineHeight(lineHeightValue:*) : void
       {
          this.writableTextLayoutFormat().lineHeight = lineHeightValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="all,any,auto,none,inherit")]
@@ -2808,7 +2827,7 @@ package flashx.textLayout.container
       public function set breakOpportunity(breakOpportunityValue:*) : void
       {
          this.writableTextLayoutFormat().breakOpportunity = breakOpportunityValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="default,lining,oldStyle,inherit")]
@@ -2820,7 +2839,7 @@ package flashx.textLayout.container
       public function set digitCase(digitCaseValue:*) : void
       {
          this.writableTextLayoutFormat().digitCase = digitCaseValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="default,proportional,tabular,inherit")]
@@ -2832,7 +2851,7 @@ package flashx.textLayout.container
       public function set digitWidth(digitWidthValue:*) : void
       {
          this.writableTextLayoutFormat().digitWidth = digitWidthValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="auto,roman,ascent,descent,ideographicTop,ideographicCenter,ideographicBottom,inherit")]
@@ -2844,7 +2863,7 @@ package flashx.textLayout.container
       public function set dominantBaseline(dominantBaselineValue:*) : void
       {
          this.writableTextLayoutFormat().dominantBaseline = dominantBaselineValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="on,off,auto,inherit")]
@@ -2856,7 +2875,7 @@ package flashx.textLayout.container
       public function set kerning(kerningValue:*) : void
       {
          this.writableTextLayoutFormat().kerning = kerningValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="minimum,common,uncommon,exotic,inherit")]
@@ -2868,7 +2887,7 @@ package flashx.textLayout.container
       public function set ligatureLevel(ligatureLevelValue:*) : void
       {
          this.writableTextLayoutFormat().ligatureLevel = ligatureLevelValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="roman,ascent,descent,ideographicTop,ideographicCenter,ideographicBottom,useDominantBaseline,inherit")]
@@ -2880,7 +2899,7 @@ package flashx.textLayout.container
       public function set alignmentBaseline(alignmentBaselineValue:*) : void
       {
          this.writableTextLayoutFormat().alignmentBaseline = alignmentBaselineValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get locale() : *
@@ -2891,7 +2910,7 @@ package flashx.textLayout.container
       public function set locale(localeValue:*) : void
       {
          this.writableTextLayoutFormat().locale = localeValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="default,capsToSmallCaps,uppercase,lowercase,lowercaseToSmallCaps,inherit")]
@@ -2903,7 +2922,7 @@ package flashx.textLayout.container
       public function set typographicCase(typographicCaseValue:*) : void
       {
          this.writableTextLayoutFormat().typographicCase = typographicCaseValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get fontFamily() : *
@@ -2914,7 +2933,7 @@ package flashx.textLayout.container
       public function set fontFamily(fontFamilyValue:*) : void
       {
          this.writableTextLayoutFormat().fontFamily = fontFamilyValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="none,underline,inherit")]
@@ -2926,7 +2945,7 @@ package flashx.textLayout.container
       public function set textDecoration(textDecorationValue:*) : void
       {
          this.writableTextLayoutFormat().textDecoration = textDecorationValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="normal,bold,inherit")]
@@ -2938,7 +2957,7 @@ package flashx.textLayout.container
       public function set fontWeight(fontWeightValue:*) : void
       {
          this.writableTextLayoutFormat().fontWeight = fontWeightValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="normal,italic,inherit")]
@@ -2950,7 +2969,7 @@ package flashx.textLayout.container
       public function set fontStyle(fontStyleValue:*) : void
       {
          this.writableTextLayoutFormat().fontStyle = fontStyleValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="preserve,collapse,inherit")]
@@ -2962,7 +2981,7 @@ package flashx.textLayout.container
       public function set whiteSpaceCollapse(whiteSpaceCollapseValue:*) : void
       {
          this.writableTextLayoutFormat().whiteSpaceCollapse = whiteSpaceCollapseValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="normal,cff,inherit")]
@@ -2974,7 +2993,7 @@ package flashx.textLayout.container
       public function set renderingMode(renderingModeValue:*) : void
       {
          this.writableTextLayoutFormat().renderingMode = renderingModeValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="none,horizontalStem,inherit")]
@@ -2986,7 +3005,7 @@ package flashx.textLayout.container
       public function set cffHinting(cffHintingValue:*) : void
       {
          this.writableTextLayoutFormat().cffHinting = cffHintingValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="device,embeddedCFF,inherit")]
@@ -2998,7 +3017,7 @@ package flashx.textLayout.container
       public function set fontLookup(fontLookupValue:*) : void
       {
          this.writableTextLayoutFormat().fontLookup = fontLookupValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="rotate0,rotate180,rotate270,rotate90,auto,inherit")]
@@ -3010,7 +3029,7 @@ package flashx.textLayout.container
       public function set textRotation(textRotationValue:*) : void
       {
          this.writableTextLayoutFormat().textRotation = textRotationValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get textIndent() : *
@@ -3021,7 +3040,7 @@ package flashx.textLayout.container
       public function set textIndent(textIndentValue:*) : void
       {
          this.writableTextLayoutFormat().textIndent = textIndentValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get paragraphStartIndent() : *
@@ -3032,7 +3051,7 @@ package flashx.textLayout.container
       public function set paragraphStartIndent(paragraphStartIndentValue:*) : void
       {
          this.writableTextLayoutFormat().paragraphStartIndent = paragraphStartIndentValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get paragraphEndIndent() : *
@@ -3043,7 +3062,7 @@ package flashx.textLayout.container
       public function set paragraphEndIndent(paragraphEndIndentValue:*) : void
       {
          this.writableTextLayoutFormat().paragraphEndIndent = paragraphEndIndentValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get paragraphSpaceBefore() : *
@@ -3054,7 +3073,7 @@ package flashx.textLayout.container
       public function set paragraphSpaceBefore(paragraphSpaceBeforeValue:*) : void
       {
          this.writableTextLayoutFormat().paragraphSpaceBefore = paragraphSpaceBeforeValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get paragraphSpaceAfter() : *
@@ -3065,7 +3084,7 @@ package flashx.textLayout.container
       public function set paragraphSpaceAfter(paragraphSpaceAfterValue:*) : void
       {
          this.writableTextLayoutFormat().paragraphSpaceAfter = paragraphSpaceAfterValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="left,right,center,justify,start,end,inherit")]
@@ -3077,7 +3096,7 @@ package flashx.textLayout.container
       public function set textAlign(textAlignValue:*) : void
       {
          this.writableTextLayoutFormat().textAlign = textAlignValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="left,right,center,justify,start,end,inherit")]
@@ -3089,7 +3108,7 @@ package flashx.textLayout.container
       public function set textAlignLast(textAlignLastValue:*) : void
       {
          this.writableTextLayoutFormat().textAlignLast = textAlignLastValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="interWord,distribute,inherit")]
@@ -3101,7 +3120,7 @@ package flashx.textLayout.container
       public function set textJustify(textJustifyValue:*) : void
       {
          this.writableTextLayoutFormat().textJustify = textJustifyValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="eastAsian,space,auto,inherit")]
@@ -3113,7 +3132,7 @@ package flashx.textLayout.container
       public function set justificationRule(justificationRuleValue:*) : void
       {
          this.writableTextLayoutFormat().justificationRule = justificationRuleValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="prioritizeLeastAdjustment,pushInKinsoku,pushOutOnly,auto,inherit")]
@@ -3125,7 +3144,7 @@ package flashx.textLayout.container
       public function set justificationStyle(justificationStyleValue:*) : void
       {
          this.writableTextLayoutFormat().justificationStyle = justificationStyleValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="ltr,rtl,inherit")]
@@ -3137,7 +3156,7 @@ package flashx.textLayout.container
       public function set direction(directionValue:*) : void
       {
          this.writableTextLayoutFormat().direction = directionValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get wordSpacing() : *
@@ -3148,7 +3167,7 @@ package flashx.textLayout.container
       public function set wordSpacing(wordSpacingValue:*) : void
       {
          this.writableTextLayoutFormat().wordSpacing = wordSpacingValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get tabStops() : *
@@ -3159,7 +3178,7 @@ package flashx.textLayout.container
       public function set tabStops(tabStopsValue:*) : void
       {
          this.writableTextLayoutFormat().tabStops = tabStopsValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="romanUp,ideographicTopUp,ideographicCenterUp,ideographicTopDown,ideographicCenterDown,approximateTextField,ascentDescentUp,box,auto,inherit")]
@@ -3171,7 +3190,7 @@ package flashx.textLayout.container
       public function set leadingModel(leadingModelValue:*) : void
       {
          this.writableTextLayoutFormat().leadingModel = leadingModelValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get columnGap() : *
@@ -3182,7 +3201,7 @@ package flashx.textLayout.container
       public function set columnGap(columnGapValue:*) : void
       {
          this.writableTextLayoutFormat().columnGap = columnGapValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get paddingLeft() : *
@@ -3193,7 +3212,7 @@ package flashx.textLayout.container
       public function set paddingLeft(paddingLeftValue:*) : void
       {
          this.writableTextLayoutFormat().paddingLeft = paddingLeftValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get paddingTop() : *
@@ -3204,7 +3223,7 @@ package flashx.textLayout.container
       public function set paddingTop(paddingTopValue:*) : void
       {
          this.writableTextLayoutFormat().paddingTop = paddingTopValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get paddingRight() : *
@@ -3215,7 +3234,7 @@ package flashx.textLayout.container
       public function set paddingRight(paddingRightValue:*) : void
       {
          this.writableTextLayoutFormat().paddingRight = paddingRightValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get paddingBottom() : *
@@ -3226,7 +3245,7 @@ package flashx.textLayout.container
       public function set paddingBottom(paddingBottomValue:*) : void
       {
          this.writableTextLayoutFormat().paddingBottom = paddingBottomValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get columnCount() : *
@@ -3237,7 +3256,7 @@ package flashx.textLayout.container
       public function set columnCount(columnCountValue:*) : void
       {
          this.writableTextLayoutFormat().columnCount = columnCountValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get columnWidth() : *
@@ -3248,7 +3267,7 @@ package flashx.textLayout.container
       public function set columnWidth(columnWidthValue:*) : void
       {
          this.writableTextLayoutFormat().columnWidth = columnWidthValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get firstBaselineOffset() : *
@@ -3259,7 +3278,7 @@ package flashx.textLayout.container
       public function set firstBaselineOffset(firstBaselineOffsetValue:*) : void
       {
          this.writableTextLayoutFormat().firstBaselineOffset = firstBaselineOffsetValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="top,middle,bottom,justify,inherit")]
@@ -3271,7 +3290,7 @@ package flashx.textLayout.container
       public function set verticalAlign(verticalAlignValue:*) : void
       {
          this.writableTextLayoutFormat().verticalAlign = verticalAlignValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="rl,tb,inherit")]
@@ -3283,7 +3302,7 @@ package flashx.textLayout.container
       public function set blockProgression(blockProgressionValue:*) : void
       {
          this.writableTextLayoutFormat().blockProgression = blockProgressionValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="explicit,toFit,inherit")]
@@ -3295,7 +3314,7 @@ package flashx.textLayout.container
       public function set lineBreak(lineBreakValue:*) : void
       {
          this.writableTextLayoutFormat().lineBreak = lineBreakValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="upperAlpha,lowerAlpha,upperRoman,lowerRoman,none,disc,circle,square,box,check,diamond,hyphen,arabicIndic,bengali,decimal,decimalLeadingZero,devanagari,gujarati,gurmukhi,kannada,persian,thai,urdu,cjkEarthlyBranch,cjkHeavenlyStem,hangul,hangulConstant,hiragana,hiraganaIroha,katakana,katakanaIroha,lowerAlpha,lowerGreek,lowerLatin,upperAlpha,upperGreek,upperLatin,inherit")]
@@ -3307,7 +3326,7 @@ package flashx.textLayout.container
       public function set listStyleType(listStyleTypeValue:*) : void
       {
          this.writableTextLayoutFormat().listStyleType = listStyleTypeValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="inside,outside,inherit")]
@@ -3319,7 +3338,7 @@ package flashx.textLayout.container
       public function set listStylePosition(listStylePositionValue:*) : void
       {
          this.writableTextLayoutFormat().listStylePosition = listStylePositionValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get listAutoPadding() : *
@@ -3330,7 +3349,7 @@ package flashx.textLayout.container
       public function set listAutoPadding(listAutoPaddingValue:*) : void
       {
          this.writableTextLayoutFormat().listAutoPadding = listAutoPaddingValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       [Inspectable(enumeration="start,end,left,right,both,none,inherit")]
@@ -3342,7 +3361,7 @@ package flashx.textLayout.container
       public function set clearFloats(clearFloatsValue:*) : void
       {
          this.writableTextLayoutFormat().clearFloats = clearFloatsValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get styleName() : *
@@ -3353,7 +3372,7 @@ package flashx.textLayout.container
       public function set styleName(styleNameValue:*) : void
       {
          this.writableTextLayoutFormat().styleName = styleNameValue;
-         this.styleSelectorChanged();
+         this.tlf_internal::styleSelectorChanged();
       }
       
       public function get linkNormalFormat() : *
@@ -3364,7 +3383,7 @@ package flashx.textLayout.container
       public function set linkNormalFormat(linkNormalFormatValue:*) : void
       {
          this.writableTextLayoutFormat().linkNormalFormat = linkNormalFormatValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get linkActiveFormat() : *
@@ -3375,7 +3394,7 @@ package flashx.textLayout.container
       public function set linkActiveFormat(linkActiveFormatValue:*) : void
       {
          this.writableTextLayoutFormat().linkActiveFormat = linkActiveFormatValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get linkHoverFormat() : *
@@ -3386,7 +3405,7 @@ package flashx.textLayout.container
       public function set linkHoverFormat(linkHoverFormatValue:*) : void
       {
          this.writableTextLayoutFormat().linkHoverFormat = linkHoverFormatValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get listMarkerFormat() : *
@@ -3397,7 +3416,7 @@ package flashx.textLayout.container
       public function set listMarkerFormat(listMarkerFormatValue:*) : void
       {
          this.writableTextLayoutFormat().listMarkerFormat = listMarkerFormatValue;
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
       }
       
       public function get userStyles() : Object
@@ -3407,7 +3426,7 @@ package flashx.textLayout.container
       
       public function set userStyles(styles:Object) : void
       {
-         var val:* = null;
+         var val:String = null;
          for(val in this.userStyles)
          {
             this.setStyle(val,undefined);
@@ -3442,16 +3461,16 @@ package flashx.textLayout.container
          var oldStyleName:String = this.styleName;
          if(value == null)
          {
-            this._format.clearStyles();
+            this._format.tlf_internal::clearStyles();
          }
          else
          {
             this.writableTextLayoutFormat().copy(value);
          }
-         this.formatChanged();
+         this.tlf_internal::formatChanged();
          if(oldStyleName != this.styleName)
          {
-            this.styleSelectorChanged();
+            this.tlf_internal::styleSelectorChanged();
          }
       }
       
@@ -3466,7 +3485,7 @@ package flashx.textLayout.container
       
       public function getStyle(styleProp:String) : *
       {
-         if(TextLayoutFormat.description.hasOwnProperty(styleProp))
+         if(TextLayoutFormat.tlf_internal::description.hasOwnProperty(styleProp))
          {
             return this.computedFormat.getStyle(styleProp);
          }
@@ -3475,7 +3494,7 @@ package flashx.textLayout.container
          {
             return this.computedFormat.getStyle(styleProp);
          }
-         return this.getUserStyleWorker(styleProp);
+         return this.tlf_internal::getUserStyleWorker(styleProp);
       }
       
       tlf_internal function getUserStyleWorker(styleProp:String) : *
@@ -3486,7 +3505,7 @@ package flashx.textLayout.container
             return userStyle;
          }
          var tf:TextFlow = Boolean(this._rootElement) ? this._rootElement.getTextFlow() : null;
-         if(tf && tf.formatResolver)
+         if(Boolean(tf) && Boolean(tf.formatResolver))
          {
             userStyle = tf.formatResolver.resolveUserFormat(this,styleProp);
             if(userStyle !== undefined)
@@ -3494,19 +3513,19 @@ package flashx.textLayout.container
                return userStyle;
             }
          }
-         return Boolean(this._rootElement) ? this._rootElement.getUserStyleWorker(styleProp) : undefined;
+         return Boolean(this._rootElement) ? this._rootElement.tlf_internal::getUserStyleWorker(styleProp) : undefined;
       }
       
       public function setStyle(styleProp:String, newValue:*) : void
       {
-         if(TextLayoutFormat.description[styleProp])
+         if(Boolean(TextLayoutFormat.tlf_internal::description[styleProp]))
          {
             this[styleProp] = newValue;
          }
          else
          {
             this.writableTextLayoutFormat().setStyle(styleProp,newValue);
-            this.formatChanged();
+            this.tlf_internal::formatChanged();
          }
       }
       
@@ -3521,8 +3540,8 @@ package flashx.textLayout.container
          if(!this._computedFormat)
          {
             parentPrototype = Boolean(this._rootElement) ? TextLayoutFormat(this._rootElement.computedFormat) : null;
-            this._computedFormat = FlowElement.createTextLayoutFormatPrototype(this.formatForCascade,parentPrototype);
-            this.resetColumnState();
+            this._computedFormat = FlowElement.tlf_internal::createTextLayoutFormatPrototype(this.tlf_internal::formatForCascade,parentPrototype);
+            this.tlf_internal::resetColumnState();
          }
          return this._computedFormat;
       }
@@ -3533,13 +3552,13 @@ package flashx.textLayout.container
          var elemStyle:TextLayoutFormat = null;
          var localFormat:ITextLayoutFormat = null;
          var rslt:TextLayoutFormat = null;
-         if(this._rootElement)
+         if(Boolean(this._rootElement))
          {
             tf = this._rootElement.getTextFlow();
-            if(tf)
+            if(Boolean(tf))
             {
-               elemStyle = tf.getTextLayoutFormatStyle(this);
-               if(elemStyle)
+               elemStyle = tf.tlf_internal::getTextLayoutFormatStyle(this);
+               if(Boolean(elemStyle))
                {
                   localFormat = this._format;
                   if(localFormat == null)
@@ -3558,35 +3577,35 @@ package flashx.textLayout.container
       tlf_internal function isLineVisible(wmode:String, scrollXTW:int, scrollYTW:int, scrollWidthTW:int, scrollHeightTW:int, textFlowLine:TextFlowLine, textLine:TextLine) : TextLine
       {
          var lineBounds:Rectangle = null;
-         if(!textFlowLine.hasLineBounds())
+         if(!textFlowLine.tlf_internal::hasLineBounds())
          {
             if(!textLine)
             {
                textLine = textFlowLine.getTextLine(true);
             }
-            textFlowLine.createShape(wmode,textLine);
+            textFlowLine.tlf_internal::createShape(wmode,textLine);
             if(textLine.numChildren == 0)
             {
                if(wmode == BlockProgression.TB)
                {
-                  textFlowLine.cacheLineBounds(wmode,textLine.x,textLine.y - textLine.ascent,textLine.textWidth,textLine.textHeight);
+                  textFlowLine.tlf_internal::cacheLineBounds(wmode,textLine.x,textLine.y - textLine.ascent,textLine.textWidth,textLine.textHeight);
                }
                else
                {
-                  textFlowLine.cacheLineBounds(wmode,textLine.x - textLine.descent,textLine.y,textLine.textHeight,textLine.textWidth);
+                  textFlowLine.tlf_internal::cacheLineBounds(wmode,textLine.x - textLine.descent,textLine.y,textLine.textHeight,textLine.textWidth);
                }
             }
             else
             {
-               lineBounds = this.getPlacedTextLineBounds(textLine);
+               lineBounds = this.tlf_internal::getPlacedTextLineBounds(textLine);
                if(textLine.hasGraphicElement)
                {
                   lineBounds = this.computeLineBoundsWithGraphics(textFlowLine,textLine,lineBounds);
                }
-               textFlowLine.cacheLineBounds(wmode,lineBounds.x,lineBounds.y,lineBounds.width,lineBounds.height);
+               textFlowLine.tlf_internal::cacheLineBounds(wmode,lineBounds.x,lineBounds.y,lineBounds.width,lineBounds.height);
             }
          }
-         if((wmode == BlockProgression.TB ? Boolean(this._measureHeight) : Boolean(this._measureWidth)) || textFlowLine.isLineVisible(wmode,scrollXTW,scrollYTW,scrollWidthTW,scrollHeightTW))
+         if((wmode == BlockProgression.TB ? this._measureHeight : this._measureWidth) || textFlowLine.tlf_internal::isLineVisible(wmode,scrollXTW,scrollYTW,scrollWidthTW,scrollHeightTW))
          {
             return Boolean(textLine) ? textLine : textFlowLine.getTextLine(true);
          }
@@ -3602,10 +3621,10 @@ package flashx.textLayout.container
          var floatInfo:FloatCompositionData = null;
          var inlineGraphicElement:InlineGraphicElement = null;
          var inlineHolder:DisplayObject = null;
-         if(this._composedFloats)
+         if(Boolean(this._composedFloats))
          {
-            floatIndex = this.findFloatIndexAtOrAfter(line.absoluteStart);
-            lastFloatIndex = this.findFloatIndexAtOrAfter(line.absoluteStart + line.textLength);
+            floatIndex = this.tlf_internal::findFloatIndexAtOrAfter(line.absoluteStart);
+            lastFloatIndex = this.tlf_internal::findFloatIndexAtOrAfter(line.absoluteStart + line.textLength);
             inlineRect = new Rectangle();
             topLeft = new Point();
             while(floatIndex < lastFloatIndex)
@@ -3614,13 +3633,13 @@ package flashx.textLayout.container
                if(floatInfo.floatType == Float.NONE)
                {
                   inlineGraphicElement = this.textFlow.findLeaf(floatInfo.absolutePosition) as InlineGraphicElement;
-                  inlineHolder = inlineGraphicElement.placeholderGraphic.parent;
-                  if(inlineHolder)
+                  inlineHolder = inlineGraphicElement.tlf_internal::placeholderGraphic.parent;
+                  if(Boolean(inlineHolder))
                   {
                      inlineRect.x = textLine.x + inlineHolder.x;
                      inlineRect.y = textLine.y + inlineHolder.y;
-                     inlineRect.width = inlineGraphicElement.elementWidth;
-                     inlineRect.height = inlineGraphicElement.elementHeight;
+                     inlineRect.width = inlineGraphicElement.tlf_internal::elementWidth;
+                     inlineRect.height = inlineGraphicElement.tlf_internal::elementHeight;
                      boundsRect = boundsRect.union(inlineRect);
                   }
                }
@@ -3673,7 +3692,7 @@ package flashx.textLayout.container
       
       tlf_internal function get numFloats() : int
       {
-         return Boolean(this._composedFloats) ? int(this._composedFloats.length) : int(0);
+         return Boolean(this._composedFloats) ? int(this._composedFloats.length) : 0;
       }
       
       tlf_internal function getFloatAt(index:int) : FloatCompositionData
@@ -3687,7 +3706,7 @@ package flashx.textLayout.container
          {
             return null;
          }
-         var i:int = this.findFloatIndexAtOrAfter(absolutePosition);
+         var i:int = this.tlf_internal::findFloatIndexAtOrAfter(absolutePosition);
          return i < this._composedFloats.length ? this._composedFloats[i] : null;
       }
       
@@ -3705,14 +3724,14 @@ package flashx.textLayout.container
          }
          else
          {
-            index = this.findFloatIndexAtOrAfter(absolutePosition);
+            index = this.tlf_internal::findFloatIndexAtOrAfter(absolutePosition);
             this._composedFloats.splice(index,0,floatInfo);
          }
       }
       
       tlf_internal function clearFloatsAt(absolutePosition:int) : void
       {
-         if(this._composedFloats)
+         if(Boolean(this._composedFloats))
          {
             if(absolutePosition == this.absoluteStart)
             {
@@ -3720,7 +3739,7 @@ package flashx.textLayout.container
             }
             else
             {
-               this._composedFloats.length = this.findFloatIndexAtOrAfter(absolutePosition);
+               this._composedFloats.length = this.tlf_internal::findFloatIndexAtOrAfter(absolutePosition);
             }
          }
       }
@@ -3759,7 +3778,7 @@ class PsuedoMouseEvent extends MouseEvent
 {
     
    
-   function PsuedoMouseEvent(type:String, bubbles:Boolean = true, cancelable:Boolean = false, localX:Number = NaN, localY:Number = NaN, relatedObject:InteractiveObject = null, ctrlKey:Boolean = false, altKey:Boolean = false, shiftKey:Boolean = false, buttonDown:Boolean = false)
+   public function PsuedoMouseEvent(type:String, bubbles:Boolean = true, cancelable:Boolean = false, localX:Number = NaN, localY:Number = NaN, relatedObject:InteractiveObject = null, ctrlKey:Boolean = false, altKey:Boolean = false, shiftKey:Boolean = false, buttonDown:Boolean = false)
    {
       super(type,bubbles,cancelable,localX,localY,relatedObject,ctrlKey,altKey,shiftKey,buttonDown);
    }

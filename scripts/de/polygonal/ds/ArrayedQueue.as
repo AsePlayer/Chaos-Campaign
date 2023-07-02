@@ -26,26 +26,26 @@ package de.polygonal.ds
       
       public var _a:Array;
       
-      public function ArrayedQueue(capacity:int = 0, isResizable:Boolean = true, maxSize:int = -1)
+      public function ArrayedQueue(param1:int = 0, param2:Boolean = true, param3:int = -1)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
          maxSize = -1;
-         _capacity = capacity;
-         _isResizable = isResizable;
+         _capacity = param1;
+         _isResizable = param2;
          _sizeLevel = 0;
-         _size = _front = int(0);
+         _size = _front = 0;
          null;
          var _loc5_:Array = new Array(_capacity);
          _a = _loc5_;
          var _loc4_:int;
-         HashKey._counter = (_loc4_ = HashKey._counter) + 1;
+         HashKey._counter = (_loc4_ = int(HashKey._counter)) + 1;
          key = _loc4_;
       }
       
-      public function walk(process:Function) : void
+      public function walk(param1:Function) : void
       {
          var _loc4_:int = 0;
          var _loc5_:int = 0;
@@ -55,7 +55,7 @@ package de.polygonal.ds
          {
             _loc4_ = _loc2_++;
             _loc5_ = int((_loc4_ + _front) % _capacity);
-            _a[_loc5_] = process(_a[_loc5_],_loc4_);
+            _a[_loc5_] = param1(_a[_loc5_],_loc4_);
          }
       }
       
@@ -79,7 +79,7 @@ package de.polygonal.ds
             _loc1_._a[_loc5_] = _a[int((_loc4_ + _front) % _capacity)];
             if(_loc5_ >= _loc1_._size)
             {
-               _loc1_._size = _loc1_._size + 1;
+               ++_loc1_._size;
             }
          }
          return _loc1_;
@@ -101,7 +101,7 @@ package de.polygonal.ds
          return _loc1_;
       }
       
-      public function swp(i:int, j:int) : void
+      public function swp(param1:int, param2:int) : void
       {
          null;
          null;
@@ -109,7 +109,7 @@ package de.polygonal.ds
          null;
          null;
          null;
-         var _loc3_:Object = _a[int((i + _front) % _capacity)];
+         var _loc3_:Object = _a[int((param1 + _front) % _capacity)];
          null;
          null;
          null;
@@ -118,10 +118,10 @@ package de.polygonal.ds
          null;
          null;
          null;
-         _a[int((i + _front) % _capacity)] = _a[int((j + _front) % _capacity)];
+         _a[int((param1 + _front) % _capacity)] = _a[int((param2 + _front) % _capacity)];
          null;
          null;
-         _a[int((j + _front) % _capacity)] = _loc3_;
+         _a[int((param2 + _front) % _capacity)] = _loc3_;
       }
       
       public function size() : int
@@ -129,20 +129,20 @@ package de.polygonal.ds
          return _size;
       }
       
-      public function shuffle(rval:DA = undefined) : void
+      public function shuffle(param1:DA = undefined) : void
       {
          var _loc3_:* = null as Class;
          var _loc4_:int = 0;
          var _loc5_:* = null as Object;
          var _loc6_:int = 0;
          var _loc2_:int = _size;
-         if(rval == null)
+         if(param1 == null)
          {
             _loc3_ = Math;
             while(_loc2_ > 1)
             {
                _loc2_--;
-               _loc4_ = int((int(_loc3_.random() * _loc2_) + _front) % _capacity);
+               _loc4_ = int((int(Number(_loc3_.random()) * _loc2_) + _front) % _capacity);
                _loc5_ = _a[_loc2_];
                _a[_loc2_] = _a[_loc4_];
                _a[_loc4_] = _loc5_;
@@ -156,7 +156,7 @@ package de.polygonal.ds
             {
                _loc2_--;
                null;
-               _loc6_ = int((int(rval._a[_loc4_++] * _loc2_) + _front) % _capacity);
+               _loc6_ = int((int(Number(param1._a[_loc4_++]) * _loc2_) + _front) % _capacity);
                _loc5_ = _a[_loc2_];
                _a[_loc2_] = _a[_loc6_];
                _a[_loc6_] = _loc5_;
@@ -164,14 +164,14 @@ package de.polygonal.ds
          }
       }
       
-      public function set(i:int, x:Object) : void
+      public function set(param1:int, param2:Object) : void
       {
          null;
          null;
-         _a[int((i + _front) % _capacity)] = x;
+         _a[int((param1 + _front) % _capacity)] = param2;
       }
       
-      public function remove(_tmp_x:Object) : Boolean
+      public function remove(param1:Object) : Boolean
       {
          var _loc6_:int = 0;
          var _loc7_:int = 0;
@@ -182,7 +182,7 @@ package de.polygonal.ds
          var _loc12_:int = 0;
          var _loc13_:* = null as Array;
          var _loc14_:* = null as Array;
-         var _loc2_:Object = _tmp_x;
+         var _loc2_:Object = param1;
          if(_size == 0)
          {
             return false;
@@ -204,15 +204,15 @@ package de.polygonal.ds
                   _a[int((_loc8_ + _front) % _capacity)] = _loc3_;
                   if(_loc8_ == 0)
                   {
-                     if((_front = int(_front + 1)) == _capacity)
+                     if((_front = _front + 1) == _capacity)
                      {
                         _front = 0;
                      }
-                     _size = _size - 1;
+                     --_size;
                   }
                   else if(_loc8_ == _size - 1)
                   {
-                     _size = _size - 1;
+                     --_size;
                   }
                   else
                   {
@@ -225,7 +225,7 @@ package de.polygonal.ds
                         _a[int(_loc12_ % _capacity)] = _a[int((_loc12_ + 1) % _capacity)];
                      }
                      _a[int(_loc10_ % _capacity)] = _loc3_;
-                     _size = _size - 1;
+                     --_size;
                   }
                   break;
                }
@@ -235,7 +235,7 @@ package de.polygonal.ds
                break;
             }
          }
-         if(!!_isResizable && _size < _loc4_)
+         if(_isResizable && _size < _loc4_)
          {
             if(_sizeLevel > 0 && _capacity > 2)
             {
@@ -243,7 +243,7 @@ package de.polygonal.ds
                while(_size <= _loc6_ >> 2)
                {
                   _loc6_ >>= 2;
-                  _sizeLevel = _sizeLevel - 1;
+                  --_sizeLevel;
                }
                null;
                _loc14_ = new Array(_loc6_);
@@ -302,11 +302,11 @@ package de.polygonal.ds
          return _size == 0;
       }
       
-      public function get(i:int) : Object
+      public function get(param1:int) : Object
       {
          null;
          null;
-         return _a[int((i + _front) % _capacity)];
+         return _a[int((param1 + _front) % _capacity)];
       }
       
       public function free() : void
@@ -322,28 +322,28 @@ package de.polygonal.ds
          _a = null;
       }
       
-      public function fill(x:Object, n:int = 0) : void
+      public function fill(param1:Object, param2:int = 0) : void
       {
          var _loc4_:int = 0;
          null;
-         if(n > 0)
+         if(param2 > 0)
          {
             null;
          }
          else
          {
-            n = _capacity;
+            param2 = _capacity;
          }
          var _loc3_:int = 0;
-         while(_loc3_ < n)
+         while(_loc3_ < param2)
          {
             _loc4_ = _loc3_++;
-            _a[int((_loc4_ + _front) % _capacity)] = x;
+            _a[int((_loc4_ + _front) % _capacity)] = param1;
          }
-         _size = n;
+         _size = param2;
       }
       
-      public function enqueue(_tmp_x:Object) : void
+      public function enqueue(param1:Object) : void
       {
          var _loc3_:* = null as Array;
          var _loc4_:* = null as Array;
@@ -351,12 +351,12 @@ package de.polygonal.ds
          var _loc6_:int = 0;
          var _loc7_:int = 0;
          var _loc8_:int = 0;
-         var _loc2_:Object = _tmp_x;
+         var _loc2_:Object = param1;
          if(_capacity == _size)
          {
             if(_isResizable)
             {
-               _sizeLevel = _sizeLevel + 1;
+               ++_sizeLevel;
                null;
                _loc4_ = new Array(_capacity << 1);
                _loc3_ = _loc4_;
@@ -402,12 +402,12 @@ package de.polygonal.ds
          {
             _front = 0;
          }
-         _size = _size - 1;
-         if(!!_isResizable && _sizeLevel > 0)
+         --_size;
+         if(_isResizable && _sizeLevel > 0)
          {
             if(_size == _capacity >> 2)
             {
-               _sizeLevel = _sizeLevel - 1;
+               --_sizeLevel;
                null;
                _loc4_ = new Array(_capacity >> 2);
                _loc3_ = _loc4_;
@@ -431,7 +431,7 @@ package de.polygonal.ds
          return _loc1_;
       }
       
-      public function cpy(i:int, j:int) : void
+      public function cpy(param1:int, param2:int) : void
       {
          null;
          null;
@@ -441,13 +441,13 @@ package de.polygonal.ds
          null;
          null;
          null;
-         _a[int((i + _front) % _capacity)] = _a[int((j + _front) % _capacity)];
+         _a[int((param1 + _front) % _capacity)] = _a[int((param2 + _front) % _capacity)];
       }
       
-      public function contains(_tmp_x:Object) : Boolean
+      public function contains(param1:Object) : Boolean
       {
          var _loc5_:int = 0;
-         var _loc2_:Object = _tmp_x;
+         var _loc2_:Object = param1;
          var _loc3_:int = 0;
          var _loc4_:int = _size;
          while(_loc3_ < _loc4_)
@@ -461,13 +461,13 @@ package de.polygonal.ds
          return false;
       }
       
-      public function clone(assign:Boolean, _tmp_copier:Object = undefined) : Collection
+      public function clone(param1:Boolean, param2:Object = undefined) : Collection
       {
          var _loc6_:int = 0;
          var _loc7_:int = 0;
          var _loc8_:int = 0;
          var _loc9_:* = null as Cloneable;
-         var _loc3_:* = _tmp_copier;
+         var _loc3_:* = param2;
          var _loc4_:ArrayedQueue = new ArrayedQueue(_capacity,_isResizable,maxSize);
          _loc4_._sizeLevel = _sizeLevel;
          if(_capacity == 0)
@@ -475,7 +475,7 @@ package de.polygonal.ds
             return _loc4_;
          }
          var _loc5_:Array = _loc4_._a;
-         if(assign)
+         if(param1)
          {
             _loc6_ = 0;
             _loc7_ = _size;
@@ -513,7 +513,7 @@ package de.polygonal.ds
          return _loc4_;
       }
       
-      public function clear(purge:Boolean = false) : void
+      public function clear(param1:Boolean = false) : void
       {
          var _loc2_:int = 0;
          var _loc3_:* = null as Object;
@@ -521,7 +521,7 @@ package de.polygonal.ds
          var _loc5_:int = 0;
          var _loc6_:int = 0;
          var _loc7_:* = null as Array;
-         if(purge)
+         if(param1)
          {
             _loc2_ = _front;
             _loc3_ = null;
@@ -532,7 +532,7 @@ package de.polygonal.ds
                _loc6_ = _loc4_++;
                _a[int(_loc2_++ % _capacity)] = _loc3_;
             }
-            if(!!_isResizable && _sizeLevel > 0)
+            if(_isResizable && _sizeLevel > 0)
             {
                _capacity >>= _sizeLevel;
                _sizeLevel = 0;
@@ -541,7 +541,7 @@ package de.polygonal.ds
                _a = _loc7_;
             }
          }
-         _front = _size = int(0);
+         _front = _size = 0;
       }
       
       public function back() : Object
@@ -550,33 +550,33 @@ package de.polygonal.ds
          return _a[int((_size - 1 + _front) % _capacity)];
       }
       
-      public function assign(C:Class, args:Array = undefined, n:int = 0) : void
+      public function assign(param1:Class, param2:Array = undefined, param3:int = 0) : void
       {
          var _loc5_:int = 0;
          null;
-         if(n > 0)
+         if(param3 > 0)
          {
             null;
          }
          else
          {
-            n = _capacity;
+            param3 = _capacity;
          }
          var _loc4_:int = 0;
-         while(_loc4_ < n)
+         while(_loc4_ < param3)
          {
             _loc5_ = _loc4_++;
-            _a[int((_loc5_ + _front) % _capacity)] = Instance.create(C,args);
+            _a[int((_loc5_ + _front) % _capacity)] = Instance.create(param1,param2);
          }
-         _size = n;
+         _size = param3;
       }
       
-      public function _pack(newSize:int) : void
+      public function _pack(param1:int) : void
       {
          var _loc6_:int = 0;
          var _loc7_:int = 0;
          null;
-         var _loc3_:Array = new Array(newSize);
+         var _loc3_:Array = new Array(param1);
          var _loc2_:Array = _loc3_;
          var _loc4_:int = 0;
          var _loc5_:int = _size;
@@ -598,14 +598,14 @@ package de.polygonal.ds
          return _capacity;
       }
       
-      public function __set(i:int, x:Object) : void
+      public function __set(param1:int, param2:Object) : void
       {
-         _a[i] = x;
+         _a[param1] = param2;
       }
       
-      public function __get(i:int) : Object
+      public function __get(param1:int) : Object
       {
-         return _a[i];
+         return _a[param1];
       }
    }
 }

@@ -12,8 +12,6 @@ package flashx.textLayout.edit
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class ElementRange
    {
        
@@ -85,9 +83,9 @@ package flashx.textLayout.edit
          if(rslt.firstLeaf.getAbsoluteStart() == rslt.absoluteStart)
          {
             previousNode = rslt.firstLeaf.getPreviousLeaf(rslt.firstParagraph);
-            if(previousNode && previousNode.getParagraph() == rslt.firstLeaf.getParagraph())
+            if(Boolean(previousNode) && previousNode.getParagraph() == rslt.firstLeaf.getParagraph())
             {
-               if((!(previousNode.parent is SubParagraphGroupElementBase) || (previousNode.parent as SubParagraphGroupElementBase).acceptTextAfter()) && (!(rslt.firstLeaf.parent is SubParagraphGroupElementBase) || previousNode.parent === rslt.firstLeaf.parent))
+               if((!(previousNode.parent is SubParagraphGroupElementBase) || Boolean((previousNode.parent as SubParagraphGroupElementBase).tlf_internal::acceptTextAfter())) && (!(rslt.firstLeaf.parent is SubParagraphGroupElementBase) || previousNode.parent === rslt.firstLeaf.parent))
                {
                   rslt.firstLeaf = previousNode;
                }
@@ -170,9 +168,9 @@ package flashx.textLayout.edit
          var container:ContainerController = null;
          var idx:int = 0;
          var flowComposer:IFlowComposer = this._textFlow.flowComposer;
-         if(flowComposer)
+         if(Boolean(flowComposer))
          {
-            idx = flowComposer.findControllerIndexAtPosition(this.absoluteStart);
+            idx = int(flowComposer.findControllerIndexAtPosition(this.absoluteStart));
             if(idx != -1)
             {
                container = flowComposer.getControllerAt(idx);
@@ -203,7 +201,7 @@ package flashx.textLayout.edit
             leaf = leaf.getNextLeaf();
             attr.removeClashing(leaf.computedFormat);
          }
-         return Property.extractInCategory(TextLayoutFormat,TextLayoutFormat.description,attr,Category.CHARACTER,false) as TextLayoutFormat;
+         return Property.extractInCategory(TextLayoutFormat,TextLayoutFormat.tlf_internal::description,attr,Category.CHARACTER,false) as TextLayoutFormat;
       }
       
       public function getCommonParagraphFormat() : TextLayoutFormat
@@ -215,10 +213,10 @@ package flashx.textLayout.edit
             {
                break;
             }
-            para = this._textFlow.findAbsoluteParagraph(para.getAbsoluteStart() + para.textLength);
+            para = this._textFlow.tlf_internal::findAbsoluteParagraph(para.getAbsoluteStart() + para.textLength);
             attr.removeClashing(para.computedFormat);
          }
-         return Property.extractInCategory(TextLayoutFormat,TextLayoutFormat.description,attr,Category.PARAGRAPH,false) as TextLayoutFormat;
+         return Property.extractInCategory(TextLayoutFormat,TextLayoutFormat.tlf_internal::description,attr,Category.PARAGRAPH,false) as TextLayoutFormat;
       }
       
       public function getCommonContainerFormat() : TextLayoutFormat
@@ -228,7 +226,7 @@ package flashx.textLayout.edit
          {
             return null;
          }
-         var index:int = flowComposer.findControllerIndexAtPosition(this.absoluteStart);
+         var index:int = int(flowComposer.findControllerIndexAtPosition(this.absoluteStart));
          if(index == -1)
          {
             return null;
@@ -245,7 +243,7 @@ package flashx.textLayout.edit
             controller = flowComposer.getControllerAt(index);
             attr.removeClashing(controller.computedFormat);
          }
-         return Property.extractInCategory(TextLayoutFormat,TextLayoutFormat.description,attr,Category.CONTAINER,false) as TextLayoutFormat;
+         return Property.extractInCategory(TextLayoutFormat,TextLayoutFormat.tlf_internal::description,attr,Category.CONTAINER,false) as TextLayoutFormat;
       }
    }
 }

@@ -7,12 +7,12 @@ package com.smartfoxserver.v2.protocol
    {
        
       
-      function onPacketRead(packet:*) : void;
+      function onPacketRead(param1:*) : void;
       
-      function onPacketWrite(message:IMessage) : void;
+      function onPacketWrite(param1:IMessage) : void;
       
       function get ioHandler() : IoHandler;
       
-      function set ioHandler(handler:IoHandler) : void;
+      function set ioHandler(param1:IoHandler) : void;
    }
 }

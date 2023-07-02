@@ -104,14 +104,14 @@ package flashx.undo
       private function trimUndoRedoStacks() : void
       {
          var numToSplice:int = 0;
-         var numItems:int = this.undoStack.length + this.redoStack.length;
+         var numItems:int = int(this.undoStack.length + this.redoStack.length);
          if(numItems > this._undoAndRedoItemLimit)
          {
             numToSplice = Math.min(numItems - this._undoAndRedoItemLimit,this.redoStack.length);
-            if(numToSplice)
+            if(Boolean(numToSplice))
             {
                this.redoStack.splice(0,numToSplice);
-               numItems = this.undoStack.length + this.redoStack.length;
+               numItems = int(this.undoStack.length + this.redoStack.length);
             }
             if(numItems > this._undoAndRedoItemLimit)
             {

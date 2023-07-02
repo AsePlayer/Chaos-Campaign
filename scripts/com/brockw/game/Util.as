@@ -1,9 +1,7 @@
 package com.brockw.game
 {
    import com.smartfoxserver.v2.entities.data.SFSObject;
-   import flash.display.DisplayObject;
-   import flash.display.MovieClip;
-   import flash.display.Sprite;
+   import flash.display.*;
    
    public class Util
    {
@@ -69,7 +67,7 @@ package com.brockw.game
       
       public static function clearSFSObject(sfsObject:SFSObject) : void
       {
-         var key:* = null;
+         var key:String = null;
          var keys:Array = sfsObject.getKeys();
          for(key in keys)
          {

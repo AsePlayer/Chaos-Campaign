@@ -30,7 +30,7 @@ package fl.motion
       
       protected static function getSign(param1:Number) : int
       {
-         return param1 < -EPSILON ? int(-1) : (param1 > EPSILON ? int(1) : int(0));
+         return param1 < -EPSILON ? -1 : (param1 > EPSILON ? 1 : 0);
       }
       
       protected static function convertMatrixToMatrix3D(param1:Matrix) : Matrix3D
@@ -107,10 +107,10 @@ package fl.motion
          var _loc12_:Matrix = null;
          var _loc13_:Matrix3D = null;
          var _loc3_:Matrix3D = param2.getMatrix3D(param1) as Matrix3D;
-         if(motionArray && param2 != _lastMotionUsed)
+         if(Boolean(motionArray) && param2 != _lastMotionUsed)
          {
             this.transformationPoint = Boolean(param2.motion_internal::transformationPoint) ? param2.motion_internal::transformationPoint : new Point(0,0);
-            if(param2.motion_internal::initialPosition)
+            if(Boolean(param2.motion_internal::initialPosition))
             {
                this.initialPosition = param2.motion_internal::initialPosition;
             }
@@ -120,12 +120,12 @@ package fl.motion
             }
             _lastMotionUsed = param2;
          }
-         if(_loc3_)
+         if(Boolean(_loc3_))
          {
             if(!motionArray || !_lastMatrix3DApplied || !matrices3DEqual(_loc3_,Matrix3D(_lastMatrix3DApplied)))
             {
                _loc4_ = _loc3_.clone();
-               if(this._initialMatrixOfTarget)
+               if(Boolean(this._initialMatrixOfTarget))
                {
                   _loc4_.append(this._initialMatrixOfTarget);
                }
@@ -151,14 +151,14 @@ package fl.motion
                _loc5_.appendTranslation(_loc9_,_loc10_,_loc11_);
             }
             _loc5_.prependTranslation(-this.transformationPoint.x,-this.transformationPoint.y,-this.transformationPointZ);
-            if(this._initialPosition)
+            if(Boolean(this._initialPosition))
             {
                _loc5_.appendTranslation(this._initialPosition.x,this._initialPosition.y,this._initialPosition.z);
             }
             _loc12_ = this.getScaleSkewMatrix(param2,param1,this.transformationPoint.x,this.transformationPoint.y);
             _loc13_ = convertMatrixToMatrix3D(_loc12_);
             _loc5_.prepend(_loc13_);
-            if(this._initialMatrixOfTarget)
+            if(Boolean(this._initialMatrixOfTarget))
             {
                _loc5_.append(this._initialMatrixOfTarget);
             }

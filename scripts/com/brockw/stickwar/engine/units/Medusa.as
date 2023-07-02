@@ -11,7 +11,7 @@ package com.brockw.stickwar.engine.units
    import flash.display.MovieClip;
    import flash.utils.Dictionary;
    
-   public class Medusa extends Unit
+   public class Medusa extends com.brockw.stickwar.engine.units.Unit
    {
        
       
@@ -21,15 +21,15 @@ package com.brockw.stickwar.engine.units
       
       private var snakeFrames:Dictionary;
       
-      private var poisonSpell:SpellCooldown;
+      private var poisonSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
-      private var stoneSpell:SpellCooldown;
+      private var stoneSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var inPoisonSpell:Boolean;
       
       public var inStoneSpell:Boolean;
       
-      private var targetUnit:Unit;
+      private var targetUnit:com.brockw.stickwar.engine.units.Unit;
       
       private var stoneReady:Boolean = true;
       
@@ -92,7 +92,7 @@ package com.brockw.stickwar.engine.units
          this.createTime = int(game.xml.xml.Chaos.Units.medusa.cooldown);
          maxHealth = int(health = Number(game.xml.xml.Chaos.Units.medusa.health));
          loadDamage(game.xml.xml.Chaos.Units.medusa);
-         type = Unit.U_MEDUSA;
+         type = com.brockw.stickwar.engine.units.Unit.U_MEDUSA;
          _mc.stop();
          _mc.width *= _scale;
          _mc.height *= _scale;
@@ -111,8 +111,8 @@ package com.brockw.stickwar.engine.units
             }
             i++;
          }
-         this.poisonSpell = new SpellCooldown(game.xml.xml.Chaos.Units.medusa.poison.effect,game.xml.xml.Chaos.Units.medusa.poison.cooldown,game.xml.xml.Chaos.Units.medusa.poison.mana);
-         this.stoneSpell = new SpellCooldown(game.xml.xml.Chaos.Units.medusa.stone.effect,game.xml.xml.Chaos.Units.medusa.stone.cooldown,game.xml.xml.Chaos.Units.medusa.stone.mana);
+         this.poisonSpell = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Chaos.Units.medusa.poison.effect,game.xml.xml.Chaos.Units.medusa.poison.cooldown,game.xml.xml.Chaos.Units.medusa.poison.mana);
+         this.stoneSpell = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Chaos.Units.medusa.stone.effect,game.xml.xml.Chaos.Units.medusa.stone.cooldown,game.xml.xml.Chaos.Units.medusa.stone.mana);
       }
       
       override public function isBusy() : Boolean
@@ -150,7 +150,7 @@ package com.brockw.stickwar.engine.units
          return this.stoneSpell.cooldown();
       }
       
-      public function stone(unit:Unit) : void
+      public function stone(unit:com.brockw.stickwar.engine.units.Unit) : void
       {
          if(this.stoneSpell.spellActivate(team))
          {
@@ -334,7 +334,7 @@ package com.brockw.stickwar.engine.units
          this.scale = Number(team.game.xml.xml.Chaos.Units.medusa.superScale);
          _damageToArmour = Number(team.game.xml.xml.Chaos.Units.medusa.superDamage);
          _damageToNotArmour = Number(team.game.xml.xml.Chaos.Units.medusa.superDamage);
-         this.stoneSpell = new SpellCooldown(team.game.xml.xml.Chaos.Units.medusa.stone.effect,team.game.xml.xml.Chaos.Units.medusa.stone.superCooldown,team.game.xml.xml.Chaos.Units.medusa.stone.mana);
+         this.stoneSpell = new com.brockw.stickwar.engine.units.SpellCooldown(team.game.xml.xml.Chaos.Units.medusa.stone.effect,team.game.xml.xml.Chaos.Units.medusa.stone.superCooldown,team.game.xml.xml.Chaos.Units.medusa.stone.mana);
          maxHealth = this.maxHealth;
          healthBar.totalHealth = maxHealth;
       }
@@ -354,7 +354,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      override public function mayAttack(target:Unit) : Boolean
+      override public function mayAttack(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(framesInAttack > team.game.frame - attackStartFrame)
          {

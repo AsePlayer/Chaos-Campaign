@@ -1,16 +1,9 @@
 package com.brockw.stickwar.engine.Ai
 {
-   import com.brockw.stickwar.engine.Ai.command.AttackMoveCommand;
-   import com.brockw.stickwar.engine.Ai.command.CureCommand;
-   import com.brockw.stickwar.engine.Ai.command.HealCommand;
-   import com.brockw.stickwar.engine.Ai.command.HoldCommand;
-   import com.brockw.stickwar.engine.Ai.command.StandCommand;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Tech;
-   import com.brockw.stickwar.engine.units.Monk;
-   import com.brockw.stickwar.engine.units.Statue;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.units.*;
    
    public class MonkAi extends UnitAi
    {
@@ -108,7 +101,7 @@ package com.brockw.stickwar.engine.Ai
                game.spatialHash.mapInArea(unit.px - range,unit.py - range,unit.px + range,unit.py + range,this.lowestUnit,false);
                if(this.inRange != null && this.inRange.health != this.inRange.maxHealth)
                {
-                  if(!Monk(unit).healSpell(this.inRange))
+                  if(Monk(unit).healSpell(this.inRange))
                   {
                   }
                   return;

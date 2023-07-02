@@ -2,8 +2,6 @@ package flashx.textLayout.property
 {
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class SpacingLimitPropertyHandler extends PropertyHandler
    {
@@ -47,7 +45,7 @@ package flashx.textLayout.property
                return newVal;
             }
          }
-         else if(newVal.hasOwnProperty("optimumSpacing") && newVal.hasOwnProperty("minimumSpacing") && newVal.hasOwnProperty("maximumSpacing"))
+         else if(Boolean(newVal.hasOwnProperty("optimumSpacing")) && Boolean(newVal.hasOwnProperty("minimumSpacing")) && Boolean(newVal.hasOwnProperty("maximumSpacing")))
          {
             return newVal;
          }

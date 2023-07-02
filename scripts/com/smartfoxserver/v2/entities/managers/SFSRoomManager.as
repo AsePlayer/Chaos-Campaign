@@ -76,7 +76,7 @@ package com.smartfoxserver.v2.entities.managers
       
       public function changeRoomName(room:Room, newName:String) : void
       {
-         var oldName:String = room.name;
+         var oldName:String = String(room.name);
          room.name = newName;
          this._roomsByName.set(newName,room);
          this._roomsByName.clr(oldName);

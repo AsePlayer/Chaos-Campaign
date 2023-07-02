@@ -9,8 +9,6 @@ package flashx.textLayout.container
    import flashx.textLayout.tlf_internal;
    import flashx.textLayout.utils.Twips;
    
-   use namespace tlf_internal;
-   
    public class ColumnState
    {
        
@@ -60,8 +58,8 @@ package flashx.textLayout.container
          this._columnCount = 0;
          if(blockProgression != null)
          {
-            this.updateInputs(blockProgression,columnDirection,controller,compositionWidth,compositionHeight);
-            this.computeColumns();
+            this.tlf_internal::updateInputs(blockProgression,columnDirection,controller,compositionWidth,compositionHeight);
+            this.tlf_internal::computeColumns();
          }
       }
       
@@ -87,15 +85,15 @@ package flashx.textLayout.container
       
       tlf_internal function updateInputs(newBlockProgression:String, newColumnDirection:String, controller:ContainerController, newCompositionWidth:Number, newCompositionHeight:Number) : void
       {
-         var newPaddingTop:Number = controller.getTotalPaddingTop();
-         var newPaddingBottom:Number = controller.getTotalPaddingBottom();
-         var newPaddingLeft:Number = controller.getTotalPaddingLeft();
-         var newPaddingRight:Number = controller.getTotalPaddingRight();
+         var newPaddingTop:Number = Number(controller.tlf_internal::getTotalPaddingTop());
+         var newPaddingBottom:Number = Number(controller.tlf_internal::getTotalPaddingBottom());
+         var newPaddingLeft:Number = Number(controller.tlf_internal::getTotalPaddingLeft());
+         var newPaddingRight:Number = Number(controller.tlf_internal::getTotalPaddingRight());
          var containerAttr:ITextLayoutFormat = controller.computedFormat;
          var newColumnWidth:Object = containerAttr.columnWidth;
-         var newColumnGap:Number = containerAttr.columnGap;
+         var newColumnGap:Number = Number(containerAttr.columnGap);
          var newColumnCount:Object = containerAttr.columnCount;
-         var newForceSingleColumn:Boolean = containerAttr.columnCount == FormatValue.AUTO && (containerAttr.columnWidth == FormatValue.AUTO || Number(containerAttr.columnWidth) == 0) || controller.rootElement.computedFormat.lineBreak == LineBreak.EXPLICIT || isNaN(newBlockProgression == BlockProgression.RL ? Number(newCompositionHeight) : Number(newCompositionWidth));
+         var newForceSingleColumn:Boolean = containerAttr.columnCount == FormatValue.AUTO && (containerAttr.columnWidth == FormatValue.AUTO || Number(containerAttr.columnWidth) == 0) || controller.rootElement.computedFormat.lineBreak == LineBreak.EXPLICIT || isNaN(newBlockProgression == BlockProgression.RL ? newCompositionHeight : newCompositionWidth);
          if(this._inputsChanged == false)
          {
             this._inputsChanged = newCompositionWidth != this._compositionHeight || newCompositionHeight != this._compositionHeight || this._paddingTop != newPaddingTop || this._paddingBottom != newPaddingBottom || this._paddingLeft != newPaddingLeft || this._paddingRight != newPaddingRight || this._blockProgression != this._blockProgression || this._columnDirection != newColumnDirection || this._forceSingleColumn != newForceSingleColumn || this._inputColumnWidth != newColumnWidth || this._inputColumnGap != newColumnGap || this._inputColumnCount != newColumnCount;
@@ -134,9 +132,9 @@ package flashx.textLayout.container
          {
             return;
          }
-         var totalColumnWidth:Number = this._blockProgression == BlockProgression.RL ? Number(this._compositionHeight) : Number(this._compositionWidth);
-         var newColumnInset:Number = this._blockProgression == BlockProgression.RL ? Number(this._paddingTop + this._paddingBottom) : Number(this._paddingLeft + this._paddingRight);
-         totalColumnWidth = totalColumnWidth > newColumnInset && !isNaN(totalColumnWidth) ? Number(totalColumnWidth - newColumnInset) : Number(0);
+         var totalColumnWidth:Number = this._blockProgression == BlockProgression.RL ? this._compositionHeight : this._compositionWidth;
+         var newColumnInset:Number = this._blockProgression == BlockProgression.RL ? this._paddingTop + this._paddingBottom : this._paddingLeft + this._paddingRight;
+         totalColumnWidth = totalColumnWidth > newColumnInset && !isNaN(totalColumnWidth) ? totalColumnWidth - newColumnInset : 0;
          if(this._forceSingleColumn)
          {
             newColumnCount = 1;
@@ -213,23 +211,23 @@ package flashx.textLayout.container
             }
             else
             {
-               xPos = !!isNaN(this._compositionWidth) ? Number(this._paddingLeft) : Number(this._compositionWidth - this._paddingRight - this._columnWidth);
+               xPos = isNaN(this._compositionWidth) ? this._paddingLeft : this._compositionWidth - this._paddingRight - this._columnWidth;
                delX = -(this._columnWidth + this._columnGap);
                colW = this._columnWidth;
             }
             yPos = this._paddingTop;
             delY = 0;
             insetHeight = this._paddingTop + this._paddingBottom;
-            colH = this._compositionHeight > insetHeight && !isNaN(this._compositionHeight) ? Number(this._compositionHeight - insetHeight) : Number(0);
+            colH = this._compositionHeight > insetHeight && !isNaN(this._compositionHeight) ? this._compositionHeight - insetHeight : 0;
          }
          else if(this._blockProgression == BlockProgression.RL)
          {
-            xPos = !!isNaN(this._compositionWidth) ? Number(-this._paddingRight) : Number(this._paddingLeft - this._compositionWidth);
+            xPos = isNaN(this._compositionWidth) ? -this._paddingRight : this._paddingLeft - this._compositionWidth;
             yPos = this._paddingTop;
             delX = 0;
             delY = this._columnWidth + this._columnGap;
             insetHeight = this._paddingLeft + this._paddingRight;
-            colW = this._compositionWidth > insetHeight ? Number(this._compositionWidth - insetHeight) : Number(0);
+            colW = this._compositionWidth > insetHeight ? this._compositionWidth - insetHeight : 0;
             colH = this._columnWidth;
          }
          if(colW == 0)
@@ -256,7 +254,7 @@ package flashx.textLayout.container
          }
          else
          {
-            if(this._columnArray)
+            if(Boolean(this._columnArray))
             {
                this._columnArray.splice(0);
             }

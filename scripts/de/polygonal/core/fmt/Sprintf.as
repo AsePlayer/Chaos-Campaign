@@ -55,7 +55,7 @@ package de.polygonal.core.fmt
       
       public static var MASK_SPECIFIERS:int = 16776960;
       
-      public static var _I:Sprintf = null;
+      public static var _I:de.polygonal.core.fmt.Sprintf = null;
        
       
       public var _bits:Array;
@@ -85,123 +85,123 @@ package de.polygonal.core.fmt
          }
       }
       
-      public static function get() : Sprintf
+      public static function get() : de.polygonal.core.fmt.Sprintf
       {
-         if(Sprintf._I == null)
+         if(de.polygonal.core.fmt.Sprintf._I == null)
          {
-            Sprintf._I = new Sprintf();
+            de.polygonal.core.fmt.Sprintf._I = new de.polygonal.core.fmt.Sprintf();
          }
-         return Sprintf._I;
+         return de.polygonal.core.fmt.Sprintf._I;
       }
       
-      public static function format(fmt:String, arg:Array) : String
+      public static function format(param1:String, param2:Array) : String
       {
-         if(Sprintf._I == null)
+         if(de.polygonal.core.fmt.Sprintf._I == null)
          {
-            Sprintf._I = new Sprintf();
+            de.polygonal.core.fmt.Sprintf._I = new de.polygonal.core.fmt.Sprintf();
          }
-         return Sprintf._I._format(fmt,arg);
+         return de.polygonal.core.fmt.Sprintf._I._format(param1,param2);
       }
       
-      public function cca(s:String, pos:int) : int
+      public function cca(param1:String, param2:int) : int
       {
-         return int(s.charCodeAt(pos));
+         return int(param1.charCodeAt(param2));
       }
       
-      public function _rpad(s:String, c:String, k:int) : String
+      public function _rpad(param1:String, param2:String, param3:int) : String
       {
          var _loc7_:int = 0;
-         var _loc4_:String = c;
+         var _loc4_:String = param2;
          var _loc5_:int = 0;
-         var _loc6_:int = k - 1;
+         var _loc6_:int = param3 - 1;
          while(_loc5_ < _loc6_)
          {
             _loc7_ = _loc5_++;
-            _loc4_ += c;
+            _loc4_ += param2;
          }
-         return s + _loc4_;
+         return param1 + _loc4_;
       }
       
-      public function _padNumber(x:String, n:Number, bits:int, width:int) : String
+      public function _padNumber(param1:String, param2:Number, param3:int, param4:int) : String
       {
          var _loc6_:* = null as String;
          var _loc7_:int = 0;
          var _loc8_:int = 0;
          var _loc9_:int = 0;
          var _loc10_:* = null as String;
-         var _loc5_:int = x.length;
-         if(width > 0 && _loc5_ < width)
+         var _loc5_:int = param1.length;
+         if(param4 > 0 && _loc5_ < param4)
          {
-            width -= _loc5_;
-            if((bits & 1) != 0)
+            param4 -= _loc5_;
+            if((param3 & 1) != 0)
             {
                _loc6_ = " ";
                _loc7_ = 0;
-               _loc8_ = width - 1;
+               _loc8_ = param4 - 1;
                while(_loc7_ < _loc8_)
                {
                   _loc9_ = _loc7_++;
                   _loc6_ += " ";
                }
-               x += _loc6_;
+               param1 += _loc6_;
             }
-            else if(n >= 0)
+            else if(param2 >= 0)
             {
-               _loc6_ = (bits & 16) != 0 ? "0" : " ";
+               _loc6_ = (param3 & 16) != 0 ? "0" : " ";
                _loc10_ = _loc6_;
                _loc7_ = 0;
-               _loc8_ = width - 1;
+               _loc8_ = param4 - 1;
                while(_loc7_ < _loc8_)
                {
                   _loc9_ = _loc7_++;
                   _loc10_ += _loc6_;
                }
-               x = _loc10_ + x;
+               param1 = _loc10_ + param1;
             }
-            else if((bits & 16) != 0)
+            else if((param3 & 16) != 0)
             {
                _loc6_ = "0";
                _loc7_ = 0;
-               _loc8_ = width - 1;
+               _loc8_ = param4 - 1;
                §§push("-");
                while(_loc7_ < _loc8_)
                {
                   _loc9_ = _loc7_++;
                   _loc6_ += "0";
                }
-               x = §§pop() + (_loc6_ + x.substr(1));
+               param1 = §§pop() + (_loc6_ + param1.substr(1));
             }
             else
             {
                _loc6_ = " ";
                _loc7_ = 0;
-               _loc8_ = width - 1;
+               _loc8_ = param4 - 1;
                while(_loc7_ < _loc8_)
                {
                   _loc9_ = _loc7_++;
                   _loc6_ += " ";
                }
-               x = _loc6_ + x;
+               param1 = _loc6_ + param1;
             }
          }
-         return x;
+         return param1;
       }
       
-      public function _lpad(s:String, c:String, k:int) : String
+      public function _lpad(param1:String, param2:String, param3:int) : String
       {
          var _loc7_:int = 0;
-         var _loc4_:String = c;
+         var _loc4_:String = param2;
          var _loc5_:int = 0;
-         var _loc6_:int = k - 1;
+         var _loc6_:int = param3 - 1;
          while(_loc5_ < _loc6_)
          {
             _loc7_ = _loc5_++;
-            _loc4_ += c;
+            _loc4_ += param2;
          }
-         return _loc4_ + s;
+         return _loc4_ + param1;
       }
       
-      public function _format(fmt:String, arg:Array) : String
+      public function _format(param1:String, param2:Array) : String
       {
          var _loc7_:int = 0;
          var _loc8_:int = 0;
@@ -225,13 +225,13 @@ package de.polygonal.core.fmt
          var _loc3_:int = 0;
          var _loc4_:String = "";
          var _loc5_:int = 0;
-         var _loc6_:int = fmt.length;
+         var _loc6_:int = param1.length;
          while(_loc5_ < _loc6_)
          {
-            _loc7_ = int(fmt.charCodeAt(_loc5_++));
+            _loc7_ = int(param1.charCodeAt(_loc5_++));
             if(_loc7_ == 37)
             {
-               _loc7_ = int(fmt.charCodeAt(_loc5_++));
+               _loc7_ = int(param1.charCodeAt(_loc5_++));
                if(_loc7_ == 37)
                {
                   _loc4_ += "%";
@@ -242,7 +242,7 @@ package de.polygonal.core.fmt
                   while((int(_bits[_loc7_]) & 31) != 0)
                   {
                      _loc8_ |= int(_bits[_loc7_]);
-                     _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                     _loc7_ = int(param1.charCodeAt(_loc5_++));
                   }
                   if((_loc8_ & 17) == 17)
                   {
@@ -257,21 +257,21 @@ package de.polygonal.core.fmt
                   if(_loc7_ == 42)
                   {
                      _loc9_ = true;
-                     _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                     _loc7_ = int(param1.charCodeAt(_loc5_++));
                   }
                   else if(_loc7_ >= 48 && _loc7_ <= 57)
                   {
                      _loc10_ = _loc7_ - 48;
-                     _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                     _loc7_ = int(param1.charCodeAt(_loc5_++));
                      if(_loc7_ >= 48 && _loc7_ <= 57)
                      {
                         _loc10_ = _loc7_ - 48 + _loc10_ * 10;
-                        _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                        _loc7_ = int(param1.charCodeAt(_loc5_++));
                         if(_loc7_ >= 48 && _loc7_ <= 57)
                         {
                            while(_loc7_ >= 48 && _loc7_ <= 57)
                            {
-                              _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                              _loc7_ = int(param1.charCodeAt(_loc5_++));
                            }
                         }
                      }
@@ -279,25 +279,25 @@ package de.polygonal.core.fmt
                   _loc11_ = -1;
                   if(_loc7_ == 46)
                   {
-                     _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                     _loc7_ = int(param1.charCodeAt(_loc5_++));
                      if(_loc7_ == 42)
                      {
-                        _loc11_ = int(Number(arg[_loc3_++]));
-                        _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                        _loc11_ = int(Number(param2[_loc3_++]));
+                        _loc7_ = int(param1.charCodeAt(_loc5_++));
                      }
                      else if(_loc7_ >= 48 && _loc7_ <= 57)
                      {
                         _loc11_ = _loc7_ - 48;
-                        _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                        _loc7_ = int(param1.charCodeAt(_loc5_++));
                         if(_loc7_ >= 48 && _loc7_ <= 57)
                         {
                            _loc11_ = _loc7_ - 48 + _loc11_ * 10;
-                           _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                           _loc7_ = int(param1.charCodeAt(_loc5_++));
                            if(_loc7_ >= 48 && _loc7_ <= 57)
                            {
                               while(_loc7_ >= 48 && _loc7_ <= 57)
                               {
-                                 _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                                 _loc7_ = int(param1.charCodeAt(_loc5_++));
                               }
                            }
                         }
@@ -310,12 +310,12 @@ package de.polygonal.core.fmt
                   while((int(_bits[_loc7_]) & 224) != 0)
                   {
                      _loc8_ |= int(_bits[_loc7_]);
-                     _loc7_ = int(fmt.charCodeAt(_loc5_++));
+                     _loc7_ = int(param1.charCodeAt(_loc5_++));
                   }
                   _loc12_ = "";
                   if(_loc9_)
                   {
-                     _loc10_ = int(arg[_loc3_++]);
+                     _loc10_ = int(param2[_loc3_++]);
                   }
                   _loc13_ = int(_bits[_loc7_]);
                   if((_loc13_ & 16776960) == 0)
@@ -329,10 +329,10 @@ package de.polygonal.core.fmt
                      {
                         _loc11_ = 6;
                      }
-                     _loc14_ = Number(arg[_loc3_++]);
+                     _loc14_ = Number(param2[_loc3_++]);
                      if(_loc11_ == 0)
                      {
-                        _loc12_ = Std.string(int(_loc14_ > 0 ? Number(_loc14_ + 0.5) : (_loc14_ < 0 ? _loc14_ - 0.5 : Number(0))));
+                        _loc12_ = Std.string(int(_loc14_ > 0 ? _loc14_ + 0.5 : (_loc14_ < 0 ? _loc14_ - 0.5 : 0)));
                         if((_loc8_ & 8) != 0)
                         {
                            _loc12_ += ".";
@@ -340,9 +340,9 @@ package de.polygonal.core.fmt
                      }
                      else
                      {
-                        _loc15_ = Number(Math.pow(0.1,_loc11_));
+                        _loc15_ = Math.pow(0.1,_loc11_);
                         _loc16_ = _loc14_ / _loc15_;
-                        _loc14_ = (int(_loc16_ > 0 ? Number(_loc16_ + 0.5) : (_loc16_ < 0 ? _loc16_ - 0.5 : Number(0)))) * _loc15_;
+                        _loc14_ = (int(_loc16_ > 0 ? _loc16_ + 0.5 : (_loc16_ < 0 ? _loc16_ - 0.5 : 0))) * _loc15_;
                         _loc12_ = NumberFormat.toFixed(_loc14_,_loc11_);
                      }
                      if((_loc8_ & 2) != 0 && _loc14_ >= 0)
@@ -433,7 +433,7 @@ package de.polygonal.core.fmt
                      }
                      if(_loc13_ == 131072)
                      {
-                        _loc12_ = Std.string(arg[_loc3_++]);
+                        _loc12_ = Std.string(param2[_loc3_++]);
                         if(_loc11_ > 0)
                         {
                            _loc12_ = _loc12_.substr(0,_loc11_);
@@ -441,7 +441,7 @@ package de.polygonal.core.fmt
                      }
                      else
                      {
-                        _loc12_ = String.fromCharCode(int(arg[_loc3_++]));
+                        _loc12_ = String.fromCharCode(int(param2[_loc3_++]));
                      }
                      _loc18_ = _loc12_.length;
                      if(_loc10_ > 0 && _loc18_ < _loc10_)
@@ -480,7 +480,7 @@ package de.polygonal.core.fmt
                      {
                         _loc11_ = 1;
                      }
-                     _loc18_ = int(arg[_loc3_++]);
+                     _loc18_ = int(param2[_loc3_++]);
                      if(_loc11_ == 0 && _loc18_ == 0)
                      {
                         _loc12_ = "";
@@ -644,7 +644,7 @@ package de.polygonal.core.fmt
                      {
                         _loc11_ = 6;
                      }
-                     _loc14_ = Number(arg[_loc3_++]);
+                     _loc14_ = Number(param2[_loc3_++]);
                      _loc18_ = _loc14_ > 0 ? 1 : (_loc14_ < 0 ? -1 : 0);
                      _loc14_ = _loc14_ < 0 ? -_loc14_ : _loc14_;
                      _loc19_ = 0;
@@ -673,7 +673,7 @@ package de.polygonal.core.fmt
                         _loc15_ *= 0.1;
                      }
                      _loc16_ = _loc14_ / _loc15_;
-                     _loc14_ = (int(_loc16_ > 0 ? Number(_loc16_ + 0.5) : (_loc16_ < 0 ? _loc16_ - 0.5 : Number(0)))) * _loc15_;
+                     _loc14_ = (int(_loc16_ > 0 ? _loc16_ + 0.5 : (_loc16_ < 0 ? _loc16_ - 0.5 : 0))) * _loc15_;
                      _loc12_ += (_loc18_ < 0 ? "-" : ((_loc8_ & 2) != 0 ? "+" : "")) + Std.string(_loc14_).substr(0,_loc11_ + 2);
                      _loc12_ += (_loc13_ & 2048) != 0 ? "e" : "E";
                      _loc12_ += _loc19_ > 0 ? "+" : "-";
@@ -724,12 +724,12 @@ package de.polygonal.core.fmt
                      {
                         _loc17_ += "0";
                      }
-                     _loc14_ = Number(arg[_loc3_++]);
+                     _loc14_ = Number(param2[_loc3_++]);
                      _loc20_ = _format("%" + _loc17_ + "." + _loc11_ + "f",[_loc14_]);
                      _loc24_ = _format("%" + _loc17_ + "." + _loc11_ + (_loc7_ == 71 ? "E" : "e"),[_loc14_]);
                      if((_loc8_ & 8) != 0)
                      {
-                        if(int(_loc20_.indexOf(".")) != -1)
+                        if(_loc20_.indexOf(".") != -1)
                         {
                            _loc18_ = _loc20_.length - 1;
                            while(int(_loc20_.charCodeAt(_loc18_)) == 48)
@@ -750,7 +750,7 @@ package de.polygonal.core.fmt
             }
             else
             {
-               _loc4_ += fmt.charAt(_loc5_ - 1);
+               _loc4_ += param1.charAt(_loc5_ - 1);
             }
          }
          return _loc4_;

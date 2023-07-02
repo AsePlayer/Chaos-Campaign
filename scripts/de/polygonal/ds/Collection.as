@@ -10,7 +10,7 @@ package de.polygonal.ds
       
       function size() : int;
       
-      function remove(x:Object) : Boolean;
+      function remove(param1:Object) : Boolean;
       
       function iterator() : Itr;
       
@@ -18,10 +18,10 @@ package de.polygonal.ds
       
       function free() : void;
       
-      function contains(x:Object) : Boolean;
+      function contains(param1:Object) : Boolean;
       
-      function clone(assign:Boolean, copier:Object = undefined) : Collection;
+      function clone(param1:Boolean, param2:Object = undefined) : Collection;
       
-      function clear(purge:Boolean = undefined) : void;
+      function clear(param1:Boolean = undefined) : void;
    }
 }

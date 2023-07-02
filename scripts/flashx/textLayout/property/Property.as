@@ -4,27 +4,25 @@ package flashx.textLayout.property
    import flashx.textLayout.formats.FormatValue;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class Property
    {
       
       public static var errorHandler:Function = defaultErrorHandler;
       
-      tlf_internal static const sharedStringHandler:StringPropertyHandler = new StringPropertyHandler();
+      tlf_internal static const sharedStringHandler:flashx.textLayout.property.StringPropertyHandler = new flashx.textLayout.property.StringPropertyHandler();
       
-      tlf_internal static const sharedInheritEnumHandler:EnumPropertyHandler = new EnumPropertyHandler([FormatValue.INHERIT]);
+      tlf_internal static const sharedInheritEnumHandler:flashx.textLayout.property.EnumPropertyHandler = new flashx.textLayout.property.EnumPropertyHandler([FormatValue.INHERIT]);
       
-      tlf_internal static const sharedUndefinedHandler:UndefinedPropertyHandler = new UndefinedPropertyHandler();
+      tlf_internal static const sharedUndefinedHandler:flashx.textLayout.property.UndefinedPropertyHandler = new flashx.textLayout.property.UndefinedPropertyHandler();
       
-      tlf_internal static const sharedUintHandler:UintPropertyHandler = new UintPropertyHandler();
+      tlf_internal static const sharedUintHandler:flashx.textLayout.property.UintPropertyHandler = new flashx.textLayout.property.UintPropertyHandler();
       
-      tlf_internal static const sharedBooleanHandler:BooleanPropertyHandler = new BooleanPropertyHandler();
+      tlf_internal static const sharedBooleanHandler:flashx.textLayout.property.BooleanPropertyHandler = new flashx.textLayout.property.BooleanPropertyHandler();
       
-      tlf_internal static const sharedTextLayoutFormatHandler:FormatPropertyHandler = new FormatPropertyHandler();
+      tlf_internal static const sharedTextLayoutFormatHandler:flashx.textLayout.property.FormatPropertyHandler = new flashx.textLayout.property.FormatPropertyHandler();
       
-      tlf_internal static const sharedListMarkerFormatHandler:FormatPropertyHandler = new FormatPropertyHandler();
+      tlf_internal static const sharedListMarkerFormatHandler:flashx.textLayout.property.FormatPropertyHandler = new flashx.textLayout.property.FormatPropertyHandler();
       
       private static const undefinedValue = undefined;
       
@@ -52,9 +50,9 @@ package flashx.textLayout.property
       
       private var _hasCustomExporterHandler:Boolean;
       
-      private var _numberPropertyHandler:NumberPropertyHandler;
+      private var _numberPropertyHandler:flashx.textLayout.property.NumberPropertyHandler;
       
-      protected var _handlers:Vector.<PropertyHandler>;
+      protected var _handlers:Vector.<flashx.textLayout.property.PropertyHandler>;
       
       public function Property(nameValue:String, defaultValue:*, inherited:Boolean, categories:Vector.<String>)
       {
@@ -79,70 +77,70 @@ package flashx.textLayout.property
       public static function NewBooleanProperty(nameValue:String, defaultValue:Boolean, inherited:Boolean, categories:Vector.<String>) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,sharedBooleanHandler,sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,tlf_internal::sharedBooleanHandler,tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewStringProperty(nameValue:String, defaultValue:String, inherited:Boolean, categories:Vector.<String>) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,sharedStringHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,tlf_internal::sharedStringHandler);
          return rslt;
       }
       
       public static function NewUintProperty(nameValue:String, defaultValue:uint, inherited:Boolean, categories:Vector.<String>) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,sharedUintHandler,sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,tlf_internal::sharedUintHandler,tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewEnumStringProperty(nameValue:String, defaultValue:String, inherited:Boolean, categories:Vector.<String>, ... rest) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,new EnumPropertyHandler(rest),sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,new flashx.textLayout.property.EnumPropertyHandler(rest),tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewIntOrEnumProperty(nameValue:String, defaultValue:Object, inherited:Boolean, categories:Vector.<String>, minValue:int, maxValue:int, ... rest) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,new EnumPropertyHandler(rest),new IntPropertyHandler(minValue,maxValue),sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,new flashx.textLayout.property.EnumPropertyHandler(rest),new IntPropertyHandler(minValue,maxValue),tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewUintOrEnumProperty(nameValue:String, defaultValue:Object, inherited:Boolean, categories:Vector.<String>, ... rest) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,new EnumPropertyHandler(rest),sharedUintHandler,sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,new flashx.textLayout.property.EnumPropertyHandler(rest),tlf_internal::sharedUintHandler,tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewNumberProperty(nameValue:String, defaultValue:Number, inherited:Boolean, categories:Vector.<String>, minValue:Number, maxValue:Number) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,new NumberPropertyHandler(minValue,maxValue),sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,new flashx.textLayout.property.NumberPropertyHandler(minValue,maxValue),tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewNumberOrPercentOrEnumProperty(nameValue:String, defaultValue:Object, inherited:Boolean, categories:Vector.<String>, minValue:Number, maxValue:Number, minPercentValue:String, maxPercentValue:String, ... rest) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,new EnumPropertyHandler(rest),new PercentPropertyHandler(minPercentValue,maxPercentValue),new NumberPropertyHandler(minValue,maxValue),sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,new flashx.textLayout.property.EnumPropertyHandler(rest),new PercentPropertyHandler(minPercentValue,maxPercentValue),new flashx.textLayout.property.NumberPropertyHandler(minValue,maxValue),tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewNumberOrPercentProperty(nameValue:String, defaultValue:Object, inherited:Boolean, categories:Vector.<String>, minValue:Number, maxValue:Number, minPercentValue:String, maxPercentValue:String) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,new PercentPropertyHandler(minPercentValue,maxPercentValue),new NumberPropertyHandler(minValue,maxValue),sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,new PercentPropertyHandler(minPercentValue,maxPercentValue),new flashx.textLayout.property.NumberPropertyHandler(minValue,maxValue),tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewNumberOrEnumProperty(nameValue:String, defaultValue:Object, inherited:Boolean, categories:Vector.<String>, minValue:Number, maxValue:Number, ... rest) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,new EnumPropertyHandler(rest),new NumberPropertyHandler(minValue,maxValue),sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,new flashx.textLayout.property.EnumPropertyHandler(rest),new flashx.textLayout.property.NumberPropertyHandler(minValue,maxValue),tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
@@ -154,21 +152,21 @@ package flashx.textLayout.property
       public static function NewSpacingLimitProperty(nameValue:String, defaultValue:Object, inherited:Boolean, categories:Vector.<String>, minPercentValue:String, maxPercentValue:String) : Property
       {
          var rslt:Property = new Property(nameValue,defaultValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,new SpacingLimitPropertyHandler(minPercentValue,maxPercentValue),sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,new SpacingLimitPropertyHandler(minPercentValue,maxPercentValue),tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewTextLayoutFormatProperty(nameValue:String, defaultValue:Object, inherited:Boolean, categories:Vector.<String>) : Property
       {
          var rslt:Property = new Property(nameValue,undefinedValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,sharedTextLayoutFormatHandler,sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,tlf_internal::sharedTextLayoutFormatHandler,tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
       public static function NewListMarkerFormatProperty(nameValue:String, defaultValue:Object, inherited:Boolean, categories:Vector.<String>) : Property
       {
          var rslt:Property = new Property(nameValue,undefinedValue,inherited,categories);
-         rslt.addHandlers(sharedUndefinedHandler,sharedListMarkerFormatHandler,sharedInheritEnumHandler);
+         rslt.addHandlers(tlf_internal::sharedUndefinedHandler,tlf_internal::sharedListMarkerFormatHandler,tlf_internal::sharedInheritEnumHandler);
          return rslt;
       }
       
@@ -240,7 +238,7 @@ package flashx.textLayout.property
       
       public static function shallowCopy(src:Object) : Object
       {
-         var val:* = null;
+         var val:Object = null;
          var rslt:Object = new Object();
          for(val in src)
          {
@@ -251,7 +249,7 @@ package flashx.textLayout.property
       
       public static function shallowCopyInFilter(src:Object, filter:Object) : Object
       {
-         var val:* = null;
+         var val:Object = null;
          var rslt:Object = new Object();
          for(val in src)
          {
@@ -265,7 +263,7 @@ package flashx.textLayout.property
       
       public static function shallowCopyNotInFilter(src:Object, filter:Object) : Object
       {
-         var val:* = null;
+         var val:Object = null;
          var rslt:Object = new Object();
          for(val in src)
          {
@@ -279,7 +277,7 @@ package flashx.textLayout.property
       
       private static function compareStylesLoop(o1:Object, o2:Object, description:Object) : Boolean
       {
-         var val:* = null;
+         var val:String = null;
          var o1val:Object = null;
          var o2val:Object = null;
          var prop:ArrayProperty = null;
@@ -294,7 +292,7 @@ package flashx.textLayout.property
                   return false;
                }
                prop = description[val];
-               if(!prop || !equalAllHelper(prop.memberType.description,o1val,o2val))
+               if(!prop || !equalAllHelper(prop.memberType.tlf_internal::description,o1val,o2val))
                {
                   return false;
                }
@@ -307,11 +305,11 @@ package flashx.textLayout.property
       {
          if(o1 == null)
          {
-            o1 = nullStyleObject;
+            o1 = tlf_internal::nullStyleObject;
          }
          if(o2 == null)
          {
-            o2 = nullStyleObject;
+            o2 = tlf_internal::nullStyleObject;
          }
          return compareStylesLoop(o1,o2,description) && compareStylesLoop(o2,o1,description);
       }
@@ -324,7 +322,7 @@ package flashx.textLayout.property
          }
          var s:String = String(o);
          var len:int = s.length;
-         return len != 0 && s.charAt(len - 1) == "%" ? Number(parseFloat(s)) : Number(NaN);
+         return len != 0 && s.charAt(len - 1) == "%" ? parseFloat(s) : NaN;
       }
       
       public static function createObjectWithPrototype(parent:Object) : Object
@@ -360,7 +358,7 @@ package flashx.textLayout.property
       
       public function addHandlers(... rest) : void
       {
-         var handler:PropertyHandler = null;
+         var handler:flashx.textLayout.property.PropertyHandler = null;
          this._handlers = new Vector.<PropertyHandler>(rest.length,true);
          for(var idx:int = 0; idx < rest.length; idx++)
          {
@@ -377,9 +375,9 @@ package flashx.textLayout.property
          }
       }
       
-      public function findHandler(handlerClass:Class) : PropertyHandler
+      public function findHandler(handlerClass:Class) : flashx.textLayout.property.PropertyHandler
       {
-         var prop:PropertyHandler = null;
+         var prop:flashx.textLayout.property.PropertyHandler = null;
          for each(prop in this._handlers)
          {
             if(prop is handlerClass)
@@ -392,7 +390,7 @@ package flashx.textLayout.property
       
       public function setHelper(currVal:*, newVal:*) : *
       {
-         var handler:PropertyHandler = null;
+         var handler:flashx.textLayout.property.PropertyHandler = null;
          var checkRslt:* = undefined;
          for each(handler in this._handlers)
          {
@@ -431,7 +429,7 @@ package flashx.textLayout.property
       
       public function toXMLString(val:Object) : String
       {
-         var prop:PropertyHandler = null;
+         var prop:flashx.textLayout.property.PropertyHandler = null;
          if(this._hasCustomExporterHandler)
          {
             for each(prop in this._handlers)
@@ -448,35 +446,35 @@ package flashx.textLayout.property
       public function get maxPercentValue() : Number
       {
          var handler:PercentPropertyHandler = this.findHandler(PercentPropertyHandler) as PercentPropertyHandler;
-         return Boolean(handler) ? Number(handler.maxValue) : Number(NaN);
+         return Boolean(handler) ? handler.maxValue : NaN;
       }
       
       public function get minPercentValue() : Number
       {
          var handler:PercentPropertyHandler = this.findHandler(PercentPropertyHandler) as PercentPropertyHandler;
-         return Boolean(handler) ? Number(handler.minValue) : Number(NaN);
+         return Boolean(handler) ? handler.minValue : NaN;
       }
       
       public function get minValue() : Number
       {
-         var numberHandler:NumberPropertyHandler = this.findHandler(NumberPropertyHandler) as NumberPropertyHandler;
-         if(numberHandler)
+         var numberHandler:flashx.textLayout.property.NumberPropertyHandler = this.findHandler(NumberPropertyHandler) as NumberPropertyHandler;
+         if(Boolean(numberHandler))
          {
             return numberHandler.minValue;
          }
          var intHandler:IntPropertyHandler = this.findHandler(IntPropertyHandler) as IntPropertyHandler;
-         return Boolean(intHandler) ? Number(intHandler.minValue) : Number(NaN);
+         return Boolean(intHandler) ? intHandler.minValue : NaN;
       }
       
       public function get maxValue() : Number
       {
-         var numberHandler:NumberPropertyHandler = this.findHandler(NumberPropertyHandler) as NumberPropertyHandler;
-         if(numberHandler)
+         var numberHandler:flashx.textLayout.property.NumberPropertyHandler = this.findHandler(NumberPropertyHandler) as NumberPropertyHandler;
+         if(Boolean(numberHandler))
          {
             return numberHandler.maxValue;
          }
          var intHandler:IntPropertyHandler = this.findHandler(IntPropertyHandler) as IntPropertyHandler;
-         return Boolean(intHandler) ? Number(intHandler.maxValue) : Number(NaN);
+         return Boolean(intHandler) ? intHandler.maxValue : NaN;
       }
       
       public function computeActualPropertyValue(propertyValue:Object, percentInput:Number) : Number
@@ -487,7 +485,7 @@ package flashx.textLayout.property
             return Number(propertyValue);
          }
          var rslt:Number = percentInput * (percent / 100);
-         return Boolean(this._numberPropertyHandler) ? Number(this._numberPropertyHandler.clampToRange(rslt)) : Number(rslt);
+         return Boolean(this._numberPropertyHandler) ? this._numberPropertyHandler.clampToRange(rslt) : rslt;
       }
    }
 }

@@ -117,7 +117,7 @@ package com.brockw.stickwar
          var id:int = 0;
          if(this.sfs && this.sfs.mySelf != null)
          {
-            id = this.sfs.mySelf.getVariable("dbid").getIntValue();
+            id = int(this.sfs.mySelf.getVariable("dbid").getIntValue());
             return id % 2 == 0;
          }
          return true;

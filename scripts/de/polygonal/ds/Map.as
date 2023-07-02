@@ -8,18 +8,18 @@ package de.polygonal.ds
       
       function toKeySet() : Set;
       
-      function set(key:Object, x:Object) : Boolean;
+      function set(param1:Object, param2:Object) : Boolean;
       
-      function remap(key:Object, x:Object) : Boolean;
+      function remap(param1:Object, param2:Object) : Boolean;
       
       function keys() : Itr;
       
-      function hasKey(key:Object) : Boolean;
+      function hasKey(param1:Object) : Boolean;
       
-      function has(x:Object) : Boolean;
+      function has(param1:Object) : Boolean;
       
-      function get(key:Object) : Object;
+      function get(param1:Object) : Object;
       
-      function clr(key:Object) : Boolean;
+      function clr(param1:Object) : Boolean;
    }
 }

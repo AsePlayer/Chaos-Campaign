@@ -7,17 +7,17 @@ package com.smartfoxserver.v2.requests
    {
        
       
-      function validate(sfs:SmartFox) : void;
+      function validate(param1:SmartFox) : void;
       
-      function execute(sfs:SmartFox) : void;
+      function execute(param1:SmartFox) : void;
       
       function get targetController() : int;
       
-      function set targetController(target:int) : void;
+      function set targetController(param1:int) : void;
       
       function get isEncrypted() : Boolean;
       
-      function set isEncrypted(flag:Boolean) : void;
+      function set isEncrypted(param1:Boolean) : void;
       
       function getMessage() : IMessage;
    }

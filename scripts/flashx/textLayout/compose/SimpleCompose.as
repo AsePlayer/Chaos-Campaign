@@ -12,14 +12,12 @@ package flashx.textLayout.compose
    import flashx.textLayout.formats.VerticalAlign;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class SimpleCompose extends BaseCompose
    {
        
       
-      protected var workingLine:TextFlowLine;
+      protected var workingLine:flashx.textLayout.compose.TextFlowLine;
       
       public var _lines:Array;
       
@@ -37,7 +35,7 @@ package flashx.textLayout.compose
       
       public function SimpleCompose()
       {
-         this.workingLine = new TextFlowLine(null,null);
+         this.workingLine = new flashx.textLayout.compose.TextFlowLine(null,null);
          super();
          this._lines = new Array();
          this._vjLines = new Array();
@@ -45,12 +43,12 @@ package flashx.textLayout.compose
       
       override protected function createParcelList() : ParcelList
       {
-         return ParcelList.getParcelList();
+         return ParcelList.tlf_internal::getParcelList();
       }
       
       override protected function releaseParcelList(list:ParcelList) : void
       {
-         ParcelList.releaseParcelList(list);
+         ParcelList.tlf_internal::releaseParcelList(list);
       }
       
       override protected function initializeForComposer(composer:IFlowComposer, composeToPosition:int, controllerStartIndex:int, controllerEndIndex:int) : void
@@ -84,17 +82,17 @@ package flashx.textLayout.compose
             controller = _curParcel.controller;
             beginFloatIndex = 0;
             endFloatIndex = 0;
-            if(controller.numFloats > 0)
+            if(controller.tlf_internal::numFloats > 0)
             {
-               beginFloatIndex = controller.findFloatIndexAtOrAfter(_curParcelStart);
-               endFloatIndex = controller.findFloatIndexAfter(_curElementStart + _curElementOffset);
+               beginFloatIndex = int(controller.tlf_internal::findFloatIndexAtOrAfter(_curParcelStart));
+               endFloatIndex = int(controller.tlf_internal::findFloatIndexAfter(_curElementStart + _curElementOffset));
             }
             applyVerticalAlignmentToColumn(vjParcel.controller,this.vjType,this._vjLines,0,this._vjLines.length,beginFloatIndex,endFloatIndex);
          }
          this._vjLines.splice(0);
          this.vjBeginLineIndex = this._lines.length;
          this.vjDisableThisParcel = false;
-         if(nextParcel)
+         if(Boolean(nextParcel))
          {
             this.vjType = nextParcel.controller.computedFormat.verticalAlign;
          }
@@ -108,10 +106,10 @@ package flashx.textLayout.compose
       override protected function endLine(textLine:TextLine) : void
       {
          super.endLine(textLine);
-         _curLine.createShape(_blockProgression,textLine);
-         if(this.textFlow.backgroundManager)
+         _curLine.tlf_internal::createShape(_blockProgression,textLine);
+         if(Boolean(this.textFlow.tlf_internal::backgroundManager))
          {
-            this.textFlow.backgroundManager.finalizeLine(_curLine);
+            this.textFlow.tlf_internal::backgroundManager.finalizeLine(_curLine);
          }
          textLine.userData = this._totalLength;
          this._totalLength += textLine.rawTextLength;
@@ -153,10 +151,10 @@ package flashx.textLayout.compose
          var textLine:TextLine = null;
          var isRTL:Boolean = false;
          var newDepth:Number = NaN;
-         if(_listItemElement && _listItemElement.getAbsoluteStart() == _curElementStart + _curElementOffset)
+         if(Boolean(_listItemElement) && _listItemElement.getAbsoluteStart() == _curElementStart + _curElementOffset)
          {
             isRTL = _curParaElement.computedFormat.direction == Direction.RTL;
-            numberLine = TextFlowLine.createNumberLine(_listItemElement,_curParaElement,_flowComposer.swfContext,!!isRTL ? Number(_parcelList.rightMargin) : Number(_parcelList.leftMargin));
+            numberLine = TextFlowLine.tlf_internal::createNumberLine(_listItemElement,_curParaElement,_flowComposer.swfContext,isRTL ? _parcelList.rightMargin : _parcelList.leftMargin);
             pushInsideListItemMargins(numberLine);
          }
          if(!_parcelList.getLineSlug(_lineSlug,0,0,_textIndent,_curParaFormat.direction == Direction.LTR))
@@ -168,7 +166,7 @@ package flashx.textLayout.compose
             while(true)
             {
                textLine = createTextLine(_lineSlug.width,!_lineSlug.wrapsKnockOut);
-               if(textLine)
+               if(Boolean(textLine))
                {
                   break;
                }
@@ -183,12 +181,11 @@ package flashx.textLayout.compose
                         continue;
                      }
                   }
+                  popInsideListItemMargins(numberLine);
+                  return null;
                }
                _parcelList.addTotalDepth(newDepth - _lineSlug.depth);
                _parcelList.getLineSlug(_lineSlug,0,1,_textIndent,_curParaFormat.direction == Direction.LTR);
-               continue;
-               popInsideListItemMargins(numberLine);
-               return null;
             }
             if(fitLineToParcel(textLine,true,numberLine))
             {
@@ -275,17 +272,17 @@ package flashx.textLayout.compose
                   paddingVerticalAdjust = 0;
                   paddingHorizontalAdjust = 0;
                   fge = para;
-                  while(fge && fge.parent)
+                  while(Boolean(fge) && Boolean(fge.parent))
                   {
                      if(verticalText)
                      {
-                        paddingVerticalAdjust += fge.getEffectivePaddingRight();
-                        paddingHorizontalAdjust += fge.getEffectivePaddingTop();
+                        paddingVerticalAdjust += fge.tlf_internal::getEffectivePaddingRight();
+                        paddingHorizontalAdjust += fge.tlf_internal::getEffectivePaddingTop();
                      }
                      else
                      {
-                        paddingVerticalAdjust += fge.getEffectivePaddingTop();
-                        paddingHorizontalAdjust += fge.getEffectivePaddingLeft();
+                        paddingVerticalAdjust += fge.tlf_internal::getEffectivePaddingTop();
+                        paddingHorizontalAdjust += fge.tlf_internal::getEffectivePaddingLeft();
                      }
                      fge = fge.parent;
                   }
@@ -295,7 +292,7 @@ package flashx.textLayout.compose
                if(textLine.numChildren > 0)
                {
                   leafStart = leaf.getAbsoluteStart();
-                  inlineAscent = TextFlowLine.getTextLineTypographicAscent(textLine,leaf,leafStart,startPos + textLine.rawTextLength);
+                  inlineAscent = Number(TextFlowLine.tlf_internal::getTextLineTypographicAscent(textLine,leaf,leafStart,startPos + textLine.rawTextLength));
                }
                if(curPara != para)
                {
@@ -303,21 +300,21 @@ package flashx.textLayout.compose
                   if(curParaFormat.direction == Direction.LTR)
                   {
                      firstLineAdjust = Math.max(curParaFormat.textIndent,0);
-                     effectiveIndent = curParaFormat.paragraphStartIndent;
+                     effectiveIndent = Number(curParaFormat.paragraphStartIndent);
                   }
                   else
                   {
                      firstLineAdjust = 0;
-                     effectiveIndent = curParaFormat.paragraphEndIndent;
+                     effectiveIndent = Number(curParaFormat.paragraphEndIndent);
                   }
                }
                effectiveIndent += paddingHorizontalAdjust;
-               edgeAdjust = textLine.textBlockBeginIndex == 0 ? Number(effectiveIndent + firstLineAdjust) : Number(effectiveIndent);
-               edgeAdjust = !!verticalText ? Number(textLine.y - edgeAdjust) : Number(textLine.x - edgeAdjust);
-               numberLine = TextFlowLine.findNumberLine(textLine);
-               if(numberLine)
+               edgeAdjust = textLine.textBlockBeginIndex == 0 ? effectiveIndent + firstLineAdjust : effectiveIndent;
+               edgeAdjust = verticalText ? textLine.y - edgeAdjust : textLine.x - edgeAdjust;
+               numberLine = TextFlowLine.tlf_internal::findNumberLine(textLine);
+               if(Boolean(numberLine))
                {
-                  numberLineStart = !!verticalText ? Number(numberLine.y + textLine.y) : Number(numberLine.x + textLine.x);
+                  numberLineStart = verticalText ? numberLine.y + textLine.y : numberLine.x + textLine.x;
                   edgeAdjust = Math.min(edgeAdjust,numberLineStart);
                }
                if(verticalText)
@@ -353,8 +350,8 @@ package flashx.textLayout.compose
       
       override tlf_internal function releaseAnyReferences() : void
       {
-         super.releaseAnyReferences();
-         this.workingLine.initialize(null,0,0,0,0,null);
+         super.tlf_internal::releaseAnyReferences();
+         this.workingLine.tlf_internal::initialize(null,0,0,0,0,null);
          this.resetLineHandler = null;
       }
    }
@@ -371,7 +368,7 @@ class VJHelper implements IVerticalJustificationLine
    
    private var _height:Number;
    
-   function VJHelper(line:TextLine, h:Number)
+   public function VJHelper(line:TextLine, h:Number)
    {
       super();
       this._line = line;

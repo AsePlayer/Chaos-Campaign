@@ -1,6 +1,6 @@
 package com.brockw.stickwar.market
 {
-   import com.smartfoxserver.v2.entities.data.SFSObject;
+   import com.smartfoxserver.v2.entities.data.*;
    import flash.display.FrameLabel;
    import flash.display.MovieClip;
    import flash.utils.Dictionary;
@@ -19,8 +19,8 @@ package com.brockw.stickwar.market
       
       public function toString() : String
       {
-         var unit:* = null;
-         var part:* = null;
+         var unit:String = null;
+         var part:String = null;
          var loadoutString:String = "";
          for(unit in this.data)
          {
@@ -69,7 +69,7 @@ package com.brockw.stickwar.market
                unitData = units[i].split(":");
                if(unitData.length != 0)
                {
-                  unit = unitData[0];
+                  unit = int(unitData[0]);
                   weaponString = unitData[1];
                   weaponArray = weaponString.split("-");
                   for(j = 0; j < weaponArray.length; j++)

@@ -2,13 +2,11 @@ package com.brockw.stickwar.engine.multiplayer
 {
    import com.brockw.game.Screen;
    import com.brockw.stickwar.Main;
-   import com.smartfoxserver.v2.entities.data.ISFSArray;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
    import fl.controls.ScrollPolicy;
    import flash.display.MovieClip;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
+   import flash.events.*;
    
    public class LeaderboardScreen extends Screen
    {
@@ -26,7 +24,7 @@ package com.brockw.stickwar.engine.multiplayer
       
       private var main:Main;
       
-      var leaderboardCards:Array;
+      internal var leaderboardCards:Array;
       
       private var leaderboardContainer:MovieClip;
       
@@ -46,28 +44,28 @@ package com.brockw.stickwar.engine.multiplayer
       
       public function loadLeaderboardData(data:ISFSArray) : void
       {
-         var _loc2_:LeaderboardCard = null;
-         var _loc3_:LeaderboardCard = null;
-         var _loc4_:int = 0;
-         var _loc5_:SFSObject = null;
-         for each(_loc2_ in this.leaderboardCards)
+         var c:LeaderboardCard = null;
+         var l:LeaderboardCard = null;
+         var i:int = 0;
+         var o:SFSObject = null;
+         for each(c in this.leaderboardCards)
          {
-            if(this.leaderboardContainer.contains(_loc2_))
+            if(this.leaderboardContainer.contains(c))
             {
-               this.leaderboardContainer.removeChild(_loc2_);
+               this.leaderboardContainer.removeChild(c);
             }
          }
          this.leaderboardCards = [];
-         for(_loc4_ = 0; _loc4_ < data.size(); _loc4_++)
+         for(i = 0; i < data.size(); i++)
          {
-            _loc5_ = SFSObject(data.getSFSObject(_loc4_));
-            this.leaderboardCards.push(_loc3_ = new LeaderboardCard(_loc5_));
-            _loc3_.setRank(_loc4_ + 1);
+            o = SFSObject(data.getSFSObject(i));
+            this.leaderboardCards.push(l = new LeaderboardCard(o));
+            l.setRank(i + 1);
          }
          this.leaderboardCards.sort(this.leaderboardCompare);
-         for(_loc4_ = 0; _loc4_ < data.size(); _loc4_++)
+         for(i = 0; i < data.size(); i++)
          {
-            this.leaderboardCards[_loc4_].setRank(_loc4_ + 1);
+            this.leaderboardCards[i].setRank(i + 1);
          }
       }
       

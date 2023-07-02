@@ -12,7 +12,7 @@ package unitAssets_fla
          addFrameScript(61,this.frame62);
       }
       
-      function frame62() : *
+      internal function frame62() : *
       {
       }
    }

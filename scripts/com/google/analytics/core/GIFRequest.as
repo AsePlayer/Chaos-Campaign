@@ -29,13 +29,13 @@ package com.google.analytics.core
       
       private var _lastRequest:URLRequest;
       
-      private var _buffer:Buffer;
+      private var _buffer:com.google.analytics.core.Buffer;
       
       private var _config:Configuration;
       
       private var _requests:Array;
       
-      public function GIFRequest(config:Configuration, debug:DebugConfiguration, buffer:Buffer, info:Environment)
+      public function GIFRequest(config:Configuration, debug:DebugConfiguration, buffer:com.google.analytics.core.Buffer, info:Environment)
       {
          super();
          _config = config;
@@ -63,7 +63,7 @@ package com.google.analytics.core
             {
                if(url.indexOf("?") > -1)
                {
-                  url = url.split("?")[0];
+                  url = String(url.split("?")[0]);
                }
                url = _shortenURL(url);
             }
@@ -224,9 +224,10 @@ package com.google.analytics.core
       
       public function sendRequest(request:URLRequest) : void
       {
+         var context:LoaderContext;
          var loader:Loader = new Loader();
          loader.name = String(_count++);
-         var context:LoaderContext = new LoaderContext(false);
+         context = new LoaderContext(false);
          loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,onIOError);
          loader.contentLoaderInfo.addEventListener(Event.COMPLETE,onComplete);
          _lastRequest = request;
@@ -300,7 +301,7 @@ package com.google.analytics.core
                url = request.url;
                if(url.indexOf("?") > -1)
                {
-                  url = url.split("?")[0];
+                  url = String(url.split("?")[0]);
                }
                url = _shortenURL(url);
                data = "Send Gif Request #" + _alertcount + ":\n" + url + " ?";
@@ -315,17 +316,17 @@ package com.google.analytics.core
       
       public function onComplete(event:Event) : void
       {
-         var id:String = event.target.loader.name;
+         var id:String = String(event.target.loader.name);
          _requests[id].complete();
          var msg:String = "Gif Request #" + id + " sent";
-         var url:String = _requests[id].request.url;
+         var url:String = String(_requests[id].request.url);
          if(_debug.GIFRequests)
          {
             if(!_debug.verbose)
             {
                if(url.indexOf("?") > -1)
                {
-                  url = url.split("?")[0];
+                  url = String(url.split("?")[0]);
                }
                url = _shortenURL(url);
             }

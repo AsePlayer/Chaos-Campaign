@@ -4,7 +4,7 @@ package com.brockw.stickwar.engine
    import com.brockw.stickwar.engine.units.Miner;
    import flash.display.*;
    
-   public class Gold extends Entity implements Ore
+   public class Gold extends com.brockw.stickwar.engine.Entity implements Ore
    {
       
       private static const scale:Number = 0.4;
@@ -12,9 +12,9 @@ package com.brockw.stickwar.engine
       
       private var amount:Number;
       
-      public var ore:Entity;
+      public var ore:com.brockw.stickwar.engine.Entity;
       
-      public var frontOre:Entity;
+      public var frontOre:com.brockw.stickwar.engine.Entity;
       
       private var _total:Number;
       
@@ -22,13 +22,13 @@ package com.brockw.stickwar.engine
       
       private var numMiners:int;
       
-      var gold:_ore;
+      internal var gold:_ore;
       
       public function Gold(game:StickWar)
       {
-         this.ore = new Entity();
+         this.ore = new com.brockw.stickwar.engine.Entity();
          this.ore.addChild(this.gold = new _ore());
-         this.frontOre = new Entity();
+         this.frontOre = new com.brockw.stickwar.engine.Entity();
          this.frontOre.addChild(new _oreFront());
          this.miners = new Vector.<Miner>(2);
          for(var i:int = 0; i < this.miners.length; i++)
@@ -55,13 +55,13 @@ package com.brockw.stickwar.engine
          this.frontOre.px = this.frontOre.x;
          this.frontOre.py = this.frontOre.y;
          this._total = this.amount = amount;
-         var mapHeight:Number = game.xml.xml.battlefieldHeight;
+         var mapHeight:Number = Number(game.xml.xml.battlefieldHeight);
          this.ore.scaleX = scale * (game.backScale + y / mapHeight * (game.frontScale - game.backScale));
          this.ore.scaleY = scale * (game.backScale + y / mapHeight * (game.frontScale - game.backScale));
          this.frontOre.scaleX = scale * (game.backScale + y / mapHeight * (game.frontScale - game.backScale));
          this.frontOre.scaleY = scale * (game.backScale + y / mapHeight * (game.frontScale - game.backScale));
          id = game.getNextUnitId();
-         if(this.gold.glow)
+         if(Boolean(this.gold.glow))
          {
             this.gold.glow.gotoAndStop(1);
          }

@@ -35,7 +35,7 @@ package flashx.textLayout.operations
          var targetElement:FlowElement = getTargetElement();
          adjustForDoOperation(targetElement);
          this._undoStyles = new TextLayoutFormat(targetElement.format);
-         if(this._format)
+         if(Boolean(this._format))
          {
             newFormat = new TextLayoutFormat(targetElement.format);
             newFormat.apply(this._format);

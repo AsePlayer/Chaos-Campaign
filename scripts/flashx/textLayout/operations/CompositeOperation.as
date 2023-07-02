@@ -4,8 +4,6 @@ package flashx.textLayout.operations
    import flashx.textLayout.elements.TextFlow;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class CompositeOperation extends FlowOperation
    {
        
@@ -16,9 +14,9 @@ package flashx.textLayout.operations
       {
          super(null);
          this.operations = operations;
-         if(this._operations.length)
+         if(Boolean(this._operations.length))
          {
-            setGenerations(this._operations[0].beginGeneration,this._operations[this._operations.length - 1].endGeneration);
+            tlf_internal::setGenerations(this._operations[0].beginGeneration,this._operations[this._operations.length - 1].endGeneration);
          }
       }
       
@@ -51,7 +49,7 @@ package flashx.textLayout.operations
          var success:Boolean = true;
          for(var i:int = 0; i < this._operations.length; i++)
          {
-            success = success && FlowOperation(this._operations[i]).doOperation();
+            success &&= FlowOperation(this._operations[i]).doOperation();
          }
          return true;
       }
@@ -80,8 +78,8 @@ package flashx.textLayout.operations
       {
          var op:FlowOperation = null;
          var undoable:Boolean = true;
-         var generation:int = beginGeneration;
-         var opCount:int = this._operations.length;
+         var generation:int = int(beginGeneration);
+         var opCount:int = int(this._operations.length);
          var i:int = 0;
          while(i < opCount && undoable)
          {
@@ -90,7 +88,7 @@ package flashx.textLayout.operations
             {
                undoable = false;
             }
-            generation = op.endGeneration;
+            generation = int(op.endGeneration);
             i++;
          }
          if(opCount > 0 && this._operations[opCount - 1].endGeneration != endGeneration)
@@ -110,12 +108,12 @@ package flashx.textLayout.operations
             {
                return null;
             }
-            lastOp = this._operations && this._operations.length ? FlowOperation(this._operations[this._operations.length - 1]) : null;
-            if(lastOp)
+            lastOp = Boolean(this._operations) && Boolean(this._operations.length) ? FlowOperation(this._operations[this._operations.length - 1]) : null;
+            if(Boolean(lastOp))
             {
-               mergedOp = lastOp.merge(operation);
+               mergedOp = lastOp.tlf_internal::merge(operation);
             }
-            if(mergedOp && !(mergedOp is CompositeOperation))
+            if(Boolean(mergedOp) && !(mergedOp is CompositeOperation))
             {
                this._operations[this._operations.length - 1] = mergedOp;
             }
@@ -123,7 +121,7 @@ package flashx.textLayout.operations
             {
                this._operations.push(operation);
             }
-            setGenerations(beginGeneration,operation.endGeneration);
+            tlf_internal::setGenerations(beginGeneration,operation.endGeneration);
             return this;
          }
          return null;

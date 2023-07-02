@@ -6,40 +6,40 @@ package com.brockw.stickwar.engine
    {
        
       
-      function getMiningSpot(unit:Miner) : Number;
+      function getMiningSpot(param1:Miner) : Number;
       
-      function reserveMiningSpot(unit:Miner) : Boolean;
+      function reserveMiningSpot(param1:Miner) : Boolean;
       
-      function hasMiningSpot(unit:Miner) : Boolean;
+      function hasMiningSpot(param1:Miner) : Boolean;
       
-      function releaseMiningSpot(unit:Miner) : void;
+      function releaseMiningSpot(param1:Miner) : void;
       
-      function mayMine(unit:Miner) : Boolean;
+      function mayMine(param1:Miner) : Boolean;
       
-      function startMining(unit:Miner) : void;
+      function startMining(param1:Miner) : void;
       
-      function stopMining(unit:Miner) : void;
+      function stopMining(param1:Miner) : void;
       
-      function hitTest(x:int, y:int) : Boolean;
+      function hitTest(param1:int, param2:int) : Boolean;
       
-      function miningRate(lvl:int) : Number;
+      function miningRate(param1:int) : Number;
       
-      function mine(lvl:int, unit:Miner) : Number;
+      function mine(param1:int, param2:Miner) : Number;
       
       function isMineFull() : Boolean;
       
-      function inMineRange(unit:Miner) : Boolean;
+      function inMineRange(param1:Miner) : Boolean;
       
       function get id() : int;
       
-      function set id(value:int) : void;
+      function set id(param1:int) : void;
       
       function get x() : Number;
       
-      function set x(n:Number) : void;
+      function set x(param1:Number) : void;
       
       function get y() : Number;
       
-      function set y(n:Number) : void;
+      function set y(param1:Number) : void;
    }
 }

@@ -11,19 +11,19 @@ package com.smartfoxserver.v2.entities.managers
       
       function setInited() : void;
       
-      function addBuddy(buddy:Buddy) : void;
+      function addBuddy(param1:Buddy) : void;
       
-      function removeBuddyById(id:int) : Buddy;
+      function removeBuddyById(param1:int) : Buddy;
       
-      function removeBuddyByName(name:String) : Buddy;
+      function removeBuddyByName(param1:String) : Buddy;
       
-      function containsBuddy(name:String) : Boolean;
+      function containsBuddy(param1:String) : Boolean;
       
-      function getBuddyById(id:int) : Buddy;
+      function getBuddyById(param1:int) : Buddy;
       
-      function getBuddyByName(name:String) : Buddy;
+      function getBuddyByName(param1:String) : Buddy;
       
-      function getBuddyByNickName(nickName:String) : Buddy;
+      function getBuddyByNickName(param1:String) : Buddy;
       
       function get offlineBuddies() : Array;
       
@@ -33,7 +33,7 @@ package com.smartfoxserver.v2.entities.managers
       
       function get buddyStates() : Array;
       
-      function getMyVariable(varName:String) : BuddyVariable;
+      function getMyVariable(param1:String) : BuddyVariable;
       
       function get myVariables() : Array;
       
@@ -43,17 +43,17 @@ package com.smartfoxserver.v2.entities.managers
       
       function get myState() : String;
       
-      function setMyVariable(bVar:BuddyVariable) : void;
+      function setMyVariable(param1:BuddyVariable) : void;
       
-      function setMyVariables(variables:Array) : void;
+      function setMyVariables(param1:Array) : void;
       
-      function setMyOnlineState(isOnline:Boolean) : void;
+      function setMyOnlineState(param1:Boolean) : void;
       
-      function setMyNickName(nickName:String) : void;
+      function setMyNickName(param1:String) : void;
       
-      function setMyState(state:String) : void;
+      function setMyState(param1:String) : void;
       
-      function setBuddyStates(states:Array) : void;
+      function setBuddyStates(param1:Array) : void;
       
       function clearAll() : void;
    }

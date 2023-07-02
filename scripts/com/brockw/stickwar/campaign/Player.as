@@ -1,6 +1,6 @@
 package com.brockw.stickwar.campaign
 {
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.units.*;
    import com.brockw.stickwar.market.ItemMap;
    import flash.utils.Dictionary;
    
@@ -28,24 +28,24 @@ package com.brockw.stickwar.campaign
       
       public function Player(xml:XMLList)
       {
-         var _loc2_:* = undefined;
+         var x:* = undefined;
          super();
          this.unitsAvailable = new Dictionary();
          this.race = xml.attribute("race");
          this._statueHealth = xml.attribute("statueHealth");
          this._startingUnits = [];
-         for each(_loc2_ in xml.startingUnit)
+         for each(x in xml.startingUnit)
          {
-            this._startingUnits.push(ItemMap.unitNameToType(_loc2_));
+            this._startingUnits.push(ItemMap.unitNameToType(x));
          }
-         for each(_loc2_ in xml.unit)
+         for each(x in xml.unit)
          {
-            this.unitsAvailable[ItemMap.unitNameToType(_loc2_)] = 1;
+            this.unitsAvailable[ItemMap.unitNameToType(x)] = 1;
          }
          this._castleArcherLevel = 0;
-         for each(_loc2_ in xml.castleArcher)
+         for each(x in xml.castleArcher)
          {
-            this._castleArcherLevel = _loc2_;
+            this._castleArcherLevel = x;
          }
          if(this.race == "Chaos")
          {
@@ -63,18 +63,18 @@ package com.brockw.stickwar.campaign
          }
          this._mana = 0;
          this._gold = 500;
-         for each(_loc2_ in xml.mana)
+         for each(x in xml.mana)
          {
-            this._mana = _loc2_;
+            this._mana = x;
          }
-         for each(_loc2_ in xml.gold)
+         for each(x in xml.gold)
          {
-            this._gold = _loc2_;
+            this._gold = x;
          }
          this.raceName = "Order";
-         for each(_loc2_ in xml.raceName)
+         for each(x in xml.raceName)
          {
-            this.raceName = _loc2_;
+            this.raceName = x;
          }
       }
       

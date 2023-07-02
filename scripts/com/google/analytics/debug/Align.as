@@ -3,25 +3,25 @@ package com.google.analytics.debug
    public class Align
    {
       
-      public static const bottomRight:Align = new Align(18,"bottomRight");
+      public static const bottomRight:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(18,"bottomRight");
       
-      public static const right:Align = new Align(16,"right");
+      public static const right:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(16,"right");
       
-      public static const left:Align = new Align(32,"left");
+      public static const left:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(32,"left");
       
-      public static const topRight:Align = new Align(17,"topRight");
+      public static const topRight:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(17,"topRight");
       
-      public static const bottom:Align = new Align(2,"bottom");
+      public static const bottom:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(2,"bottom");
       
-      public static const bottomLeft:Align = new Align(34,"bottomLeft");
+      public static const bottomLeft:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(34,"bottomLeft");
       
-      public static const topLeft:Align = new Align(33,"topLeft");
+      public static const topLeft:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(33,"topLeft");
       
-      public static const center:Align = new Align(256,"center");
+      public static const center:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(256,"center");
       
-      public static const none:Align = new Align(0,"none");
+      public static const none:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(0,"none");
       
-      public static const top:Align = new Align(1,"top");
+      public static const top:com.google.analytics.debug.Align = new com.google.analytics.debug.Align(1,"top");
        
       
       private var _value:int;

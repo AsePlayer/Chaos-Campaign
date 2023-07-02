@@ -18,10 +18,10 @@ package flashx.textLayout.factory
       
       override tlf_internal function callTheComposer(absoluteEndPosition:int, controllerEndIndex:int) : ContainerController
       {
-         clearCompositionResults();
-         var state:SimpleCompose = TextLineFactoryBase._factoryComposer;
+         tlf_internal::clearCompositionResults();
+         var state:SimpleCompose = TextLineFactoryBase.tlf_internal::_factoryComposer;
          state.composeTextFlow(textFlow,-1,-1);
-         state.releaseAnyReferences();
+         state.tlf_internal::releaseAnyReferences();
          return getControllerAt(0);
       }
       
@@ -45,7 +45,7 @@ class FactoryBackgroundManager extends BackgroundManager
 {
     
    
-   function FactoryBackgroundManager()
+   public function FactoryBackgroundManager()
    {
       super();
    }
@@ -55,10 +55,10 @@ class FactoryBackgroundManager extends BackgroundManager
       var obj:Object = null;
       var textLine:TextLine = line.getTextLine();
       var array:Array = _lineDict[textLine];
-      if(array)
+      if(Boolean(array))
       {
          obj = array[0];
-         if(obj)
+         if(Boolean(obj))
          {
             obj.columnRect = line.controller.columnState.getColumnAt(line.columnIndex);
          }

@@ -20,7 +20,7 @@ package AS.encryption
          var c:int = -1732584194;
          var d:int = 271733878;
          var x:Array = createBlocks(s);
-         var len:int = x.length;
+         var len:int = int(x.length);
          for(var i:int = 0; i < len; i += 16)
          {
             aa = a;

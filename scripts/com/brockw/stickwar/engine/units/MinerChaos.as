@@ -25,7 +25,7 @@ package com.brockw.stickwar.engine.units
       
       private var towerGoldCost:int;
       
-      private var towerSpell:SpellCooldown;
+      private var towerSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var isConstructing:Boolean;
       
@@ -33,7 +33,7 @@ package com.brockw.stickwar.engine.units
       
       private var buildY:Number;
       
-      private var towerConstructing:ChaosTower;
+      private var towerConstructing:com.brockw.stickwar.engine.units.ChaosTower;
       
       private var wallConstructionTime:int;
       
@@ -115,7 +115,7 @@ package com.brockw.stickwar.engine.units
          drawShadow();
          this.valueOfOre = 0;
          this.towerGoldCost = game.xml.xml.Chaos.Units.miner.tower.gold;
-         this.towerSpell = new SpellCooldown(game.xml.xml.Chaos.Units.miner.tower.effect,game.xml.xml.Chaos.Units.miner.tower.cooldown,game.xml.xml.Chaos.Units.miner.tower.mana);
+         this.towerSpell = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Chaos.Units.miner.tower.effect,game.xml.xml.Chaos.Units.miner.tower.cooldown,game.xml.xml.Chaos.Units.miner.tower.mana);
          this.towerConstructing = null;
          this.wallConstructionTime = game.xml.xml.Chaos.Units.miner.tower.constructTime;
          this.wallConstructionFrame = 0;

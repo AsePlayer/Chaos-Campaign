@@ -34,7 +34,7 @@ package flashx.textLayout.property
       
       override public function owningHandlerCheck(newVal:*) : *
       {
-         return newVal is String && _orderedPattern.test(newVal) || newVal.hasOwnProperty("ordered") ? newVal : undefined;
+         return newVal is String && _orderedPattern.test(newVal) || Boolean(newVal.hasOwnProperty("ordered")) ? newVal : undefined;
       }
       
       override public function setHelper(newVal:*) : *
@@ -46,7 +46,7 @@ package flashx.textLayout.property
          }
          _orderedBeginPattern.lastIndex = 0;
          _orderedBeginPattern.test(s);
-         var number:int = _orderedBeginPattern.lastIndex != s.length ? int(parseInt(s.substr(_orderedBeginPattern.lastIndex))) : int(this._defaultNumber);
+         var number:int = _orderedBeginPattern.lastIndex != s.length ? int(parseInt(s.substr(_orderedBeginPattern.lastIndex))) : this._defaultNumber;
          return {"ordered":number};
       }
    }

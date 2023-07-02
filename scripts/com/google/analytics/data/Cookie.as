@@ -4,7 +4,7 @@ package com.google.analytics.data
    {
        
       
-      function fromSharedObject(data:Object) : void;
+      function fromSharedObject(param1:Object) : void;
       
       function toURLString() : String;
       
@@ -14,9 +14,9 @@ package com.google.analytics.data
       
       function isExpired() : Boolean;
       
-      function set creation(value:Date) : void;
+      function set creation(param1:Date) : void;
       
-      function set expiration(value:Date) : void;
+      function set expiration(param1:Date) : void;
       
       function get expiration() : Date;
    }

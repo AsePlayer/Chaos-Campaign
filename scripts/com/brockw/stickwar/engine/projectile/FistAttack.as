@@ -1,14 +1,14 @@
 package com.brockw.stickwar.engine.projectile
 {
-   import com.brockw.stickwar.engine.StickWar;
+   import com.brockw.stickwar.engine.*;
    import com.brockw.stickwar.engine.units.Unit;
-   import flash.display.MovieClip;
+   import flash.display.*;
    
    public class FistAttack extends Projectile
    {
        
       
-      var spellMc:MovieClip;
+      internal var spellMc:MovieClip;
       
       public var startX:Number;
       

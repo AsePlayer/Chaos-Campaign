@@ -1,14 +1,14 @@
 package com.brockw.stickwar.engine.projectile
 {
-   import com.brockw.stickwar.engine.StickWar;
+   import com.brockw.stickwar.engine.*;
    import com.brockw.stickwar.engine.units.Unit;
-   import flash.display.MovieClip;
+   import flash.display.*;
    
    public class PoisonSpray extends Projectile
    {
        
       
-      var spellMc:MovieClip;
+      internal var spellMc:MovieClip;
       
       public var startX:Number;
       
@@ -40,7 +40,7 @@ package com.brockw.stickwar.engine.projectile
          this.scaleX = 1 * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
          this.scaleY = 1 * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
          var units:Array = team.enemyTeam.units;
-         var n:int = units.length;
+         var n:int = int(units.length);
          var r:Number = this.spellMc.currentFrame / 20;
          if(r > 1)
          {

@@ -23,7 +23,7 @@ package fl.core
    
    [Style(name="disabledTextFormat",type="flash.text.TextFormat")]
    [Style(name="textFormat",type="flash.text.TextFormat")]
-   [Style(name="focusRectPadding",format="Length",type="Number")]
+   [Style(name="focusRectPadding",type="Number",format="Length")]
    [Style(name="focusRectSkin",type="Class")]
    [Event(name="hide",type="fl.events.ComponentEvent")]
    [Event(name="show",type="fl.events.ComponentEvent")]
@@ -129,9 +129,9 @@ package fl.core
       public static function mergeStyles(... rest) : Object
       {
          var _loc5_:Object = null;
-         var _loc6_:* = null;
+         var _loc6_:String = null;
          var _loc2_:Object = {};
-         var _loc3_:uint = rest.length;
+         var _loc3_:uint = uint(rest.length);
          var _loc4_:uint = 0;
          while(_loc4_ < _loc3_)
          {
@@ -257,7 +257,7 @@ package fl.core
       
       override public function get x() : Number
       {
-         return !!isNaN(_x) ? Number(super.x) : Number(_x);
+         return isNaN(_x) ? super.x : _x;
       }
       
       override public function set x(param1:Number) : void
@@ -267,7 +267,7 @@ package fl.core
       
       override public function get y() : Number
       {
-         return !!isNaN(_y) ? Number(super.y) : Number(_y);
+         return isNaN(_y) ? super.y : _y;
       }
       
       override public function set y(param1:Number) : void
@@ -328,7 +328,7 @@ package fl.core
             return;
          }
          super.visible = param1;
-         var _loc2_:String = !!param1 ? ComponentEvent.SHOW : ComponentEvent.HIDE;
+         var _loc2_:String = param1 ? ComponentEvent.SHOW : ComponentEvent.HIDE;
          dispatchEvent(new ComponentEvent(_loc2_,true));
       }
       
@@ -383,7 +383,7 @@ package fl.core
       public function get focusManager() : IFocusManager
       {
          var o:DisplayObject = this;
-         while(o)
+         while(Boolean(o))
          {
             if(UIComponent.focusManagers[o] != null)
             {
@@ -433,7 +433,7 @@ package fl.core
       
       public function setFocus() : void
       {
-         if(stage)
+         if(Boolean(stage))
          {
             stage.focus = this;
          }
@@ -441,7 +441,7 @@ package fl.core
       
       public function getFocus() : InteractiveObject
       {
-         if(stage)
+         if(Boolean(stage))
          {
             return stage.focus;
          }
@@ -525,13 +525,13 @@ package fl.core
       
       protected function isInvalid(param1:String, ... rest) : Boolean
       {
-         if(invalidHash[param1] || invalidHash[InvalidationType.ALL])
+         if(Boolean(invalidHash[param1]) || Boolean(invalidHash[InvalidationType.ALL]))
          {
             return true;
          }
          while(rest.length > 0)
          {
-            if(invalidHash[rest.pop()])
+            if(Boolean(invalidHash[rest.pop()]))
             {
                return true;
             }
@@ -548,7 +548,7 @@ package fl.core
       {
          if(isInvalid(InvalidationType.SIZE,InvalidationType.STYLES))
          {
-            if(isFocused && focusManager.showFocusIndicator)
+            if(isFocused && Boolean(focusManager.showFocusIndicator))
             {
                drawFocus(true);
             }
@@ -598,7 +598,7 @@ package fl.core
       
       protected function copyStylesToChild(param1:UIComponent, param2:Object) : void
       {
-         var _loc3_:* = null;
+         var _loc3_:String = null;
          for(_loc3_ in param2)
          {
             param1.setStyle(_loc3_,getStyleValue(param2[_loc3_]));
@@ -633,6 +633,7 @@ package fl.core
       
       private function callLaterDispatcher(param1:Event) : void
       {
+         var methods:Dictionary;
          var method:Object = null;
          var event:Event = param1;
          if(event.type == Event.ADDED_TO_STAGE)
@@ -666,7 +667,7 @@ package fl.core
             }
          }
          inCallLaterPhase = true;
-         var methods:Dictionary = callLaterMethods;
+         methods = callLaterMethods;
          for(method in methods)
          {
             method();
@@ -753,6 +754,7 @@ package fl.core
       
       protected function createFocusManager() : void
       {
+         var myTopLevel:DisplayObjectContainer;
          var stageAccessOK:Boolean = true;
          try
          {
@@ -762,7 +764,7 @@ package fl.core
          {
             stageAccessOK = false;
          }
-         var myTopLevel:DisplayObjectContainer = null;
+         myTopLevel = null;
          if(stageAccessOK)
          {
             myTopLevel = stage;
@@ -798,7 +800,7 @@ package fl.core
          if(isOurFocus(param1.target as DisplayObject))
          {
             _loc2_ = focusManager;
-            if(_loc2_ && _loc2_.showFocusIndicator)
+            if(Boolean(_loc2_) && Boolean(_loc2_.showFocusIndicator))
             {
                drawFocus(true);
                isFocused = true;

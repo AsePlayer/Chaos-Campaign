@@ -6,16 +6,11 @@ package com.brockw.stickwar.engine.multiplayer
    import com.brockw.stickwar.engine.maps.Map;
    import com.brockw.stickwar.market.ArmoryScreen;
    import com.smartfoxserver.v2.core.SFSEvent;
-   import com.smartfoxserver.v2.entities.Room;
-   import com.smartfoxserver.v2.entities.User;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
-   import com.smartfoxserver.v2.requests.LoginRequest;
-   import com.smartfoxserver.v2.requests.LogoutRequest;
+   import com.smartfoxserver.v2.entities.*;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
    import flash.display.MovieClip;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
-   import flash.events.TimerEvent;
+   import flash.events.*;
    import flash.utils.Timer;
    import flash.utils.getTimer;
    
@@ -139,7 +134,7 @@ package com.brockw.stickwar.engine.multiplayer
       public function onConnection(evt:SFSEvent) : void
       {
          var params:SFSObject = null;
-         if(evt.params.success)
+         if(Boolean(evt.params.success))
          {
             trace("Connected to server!");
             trace("Attempting to login to game server");
@@ -250,17 +245,17 @@ package com.brockw.stickwar.engine.multiplayer
          this.isSelectingRace = false;
          this.raceSelectionParams = params;
          trace("received race selection");
-         a = this.main.gameRoom.playerList[0].id;
-         b = this.main.gameRoom.playerList[1].id;
+         a = int(this.main.gameRoom.playerList[0].id);
+         b = int(this.main.gameRoom.playerList[1].id);
          var aLabel:String = "race_" + User(this.main.gameRoom.playerList[0]).name;
          var bLabel:String = "race_" + User(this.main.gameRoom.playerList[1]).name;
          var teamAName:int = params.getInt(this.main.gameRoom.playerList[0].name);
          var teamBName:int = params.getInt(this.main.gameRoom.playerList[1].name);
          trace(teamAName,teamBName);
-         var teamARealName:String = User(this.main.gameRoom.playerList[0]).name;
-         var teamBRealName:String = User(this.main.gameRoom.playerList[1]).name;
-         var teamARating:Number = User(this.main.gameRoom.playerList[0]).getVariable("rating").getDoubleValue();
-         var teamBRating:Number = User(this.main.gameRoom.playerList[1]).getVariable("rating").getDoubleValue();
+         var teamARealName:String = String(User(this.main.gameRoom.playerList[0]).name);
+         var teamBRealName:String = String(User(this.main.gameRoom.playerList[1]).name);
+         var teamARating:Number = Number(User(this.main.gameRoom.playerList[0]).getVariable("rating").getDoubleValue());
+         var teamBRating:Number = Number(User(this.main.gameRoom.playerList[1]).getVariable("rating").getDoubleValue());
          var realNameA:String = "";
          var realNameB:String = "";
          if(a > b)
@@ -345,7 +340,7 @@ package com.brockw.stickwar.engine.multiplayer
          {
             for each(room in this.main.gameServer.roomList)
             {
-               if(room.isGame && room.name == this.main.gameRoomName)
+               if(Boolean(room.isGame) && room.name == this.main.gameRoomName)
                {
                   this.main.gameRoom = room;
                   this.gotGameRoom = true;
@@ -372,7 +367,7 @@ package com.brockw.stickwar.engine.multiplayer
             this.loadingScreen.visible = true;
             this.raceSelectMc.visible = false;
             this.initInNFrames = 5;
-            if(this.mapDisplayPic)
+            if(Boolean(this.mapDisplayPic))
             {
                if(this.loadingScreen.container.contains(this.mapDisplayPic))
                {

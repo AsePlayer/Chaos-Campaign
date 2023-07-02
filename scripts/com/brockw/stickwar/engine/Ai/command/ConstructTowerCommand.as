@@ -4,10 +4,9 @@ package com.brockw.stickwar.engine.Ai.command
    import com.brockw.stickwar.engine.Entity;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Team;
-   import com.brockw.stickwar.engine.units.MinerChaos;
-   import com.brockw.stickwar.engine.units.Unit;
-   import flash.display.Bitmap;
-   import flash.display.Sprite;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.brockw.stickwar.engine.units.*;
+   import flash.display.*;
    import flash.geom.ColorTransform;
    
    public class ConstructTowerCommand extends UnitCommand

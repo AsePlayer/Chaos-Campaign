@@ -30,8 +30,6 @@ package flashx.textLayout.elements
    import flashx.textLayout.utils.CharacterUtil;
    import flashx.textLayout.utils.LocaleUtil;
    
-   use namespace tlf_internal;
-   
    public final class ParagraphElement extends ParagraphFormattedElement
    {
       
@@ -44,7 +42,7 @@ package flashx.textLayout.elements
       
       private var _textBlock:TextBlock;
       
-      private var _terminatorSpan:SpanElement;
+      private var _terminatorSpan:flashx.textLayout.elements.SpanElement;
       
       public function ParagraphElement()
       {
@@ -106,7 +104,7 @@ package flashx.textLayout.elements
          for(var i:int = 0; i < numChildren; i++)
          {
             child = getChildAt(i);
-            child.createContentElement();
+            child.tlf_internal::createContentElement();
          }
          this.updateTextBlock();
       }
@@ -120,14 +118,14 @@ package flashx.textLayout.elements
          {
             return;
          }
-         if(this._textBlock.firstLine)
+         if(Boolean(this._textBlock.firstLine))
          {
             for(textLineTest = this._textBlock.firstLine; textLineTest != null; textLineTest = textLineTest.nextLine)
             {
                if(textLineTest.numChildren != 0)
                {
                   tfl = textLineTest.userData as TextFlowLine;
-                  if(tfl.adornCount != textLineTest.numChildren)
+                  if(tfl.tlf_internal::adornCount != textLineTest.numChildren)
                   {
                      return;
                   }
@@ -139,10 +137,10 @@ package flashx.textLayout.elements
          for(var i:int = 0; i < numChildren; i++)
          {
             child = getChildAt(i);
-            child.releaseContentElement();
+            child.tlf_internal::releaseContentElement();
          }
          this._textBlock = null;
-         if(_computedFormat)
+         if(Boolean(_computedFormat))
          {
             _computedFormat = null;
          }
@@ -152,7 +150,7 @@ package flashx.textLayout.elements
       {
          if(!this._textBlock)
          {
-            this.createTextBlock();
+            this.tlf_internal::createTextBlock();
          }
          return this._textBlock;
       }
@@ -164,7 +162,7 @@ package flashx.textLayout.elements
       
       tlf_internal function releaseLineCreationData() : void
       {
-         if(this._textBlock)
+         if(Boolean(this._textBlock))
          {
             this._textBlock["releaseLineCreationData"]();
          }
@@ -181,18 +179,18 @@ package flashx.textLayout.elements
             originalContent = this._textBlock.content;
             group = new GroupElement();
             this._textBlock.content = group;
-            if(originalContent)
+            if(Boolean(originalContent))
             {
                gc = new Vector.<ContentElement>();
                gc.push(originalContent);
                group.replaceElements(0,0,gc);
             }
-            if(this._textBlock.firstLine && textLength)
+            if(Boolean(this._textBlock.firstLine) && Boolean(textLength))
             {
                textFlow = getTextFlow();
-               if(textFlow)
+               if(Boolean(textFlow))
                {
-                  textFlow.damage(getAbsoluteStart(),textLength,TextLineValidity.INVALID,false);
+                  textFlow.tlf_internal::damage(getAbsoluteStart(),textLength,TextLineValidity.INVALID,false);
                }
             }
          }
@@ -236,7 +234,7 @@ package flashx.textLayout.elements
       
       override tlf_internal function createContentElement() : void
       {
-         this.createTextBlock();
+         this.tlf_internal::createTextBlock();
       }
       
       override tlf_internal function insertBlockElement(child:FlowElement, block:ContentElement) : void
@@ -246,8 +244,8 @@ package flashx.textLayout.elements
          var idx:int = 0;
          if(this._textBlock == null)
          {
-            child.releaseContentElement();
-            this.createTextBlock();
+            child.tlf_internal::releaseContentElement();
+            this.tlf_internal::createTextBlock();
             return;
          }
          if(numChildren == 1)
@@ -266,7 +264,7 @@ package flashx.textLayout.elements
          }
          else
          {
-            group = this.createContentAsGroup();
+            group = this.tlf_internal::createContentAsGroup();
             idx = this.getChildIndex(child);
             gc = new Vector.<ContentElement>();
             gc.push(block);
@@ -300,40 +298,40 @@ package flashx.textLayout.elements
             }
          }
          super.replaceChildren.apply(this,applyParams);
-         this.ensureTerminatorAfterReplace();
+         this.tlf_internal::ensureTerminatorAfterReplace();
       }
       
       tlf_internal function ensureTerminatorAfterReplace() : void
       {
-         var s:SpanElement = null;
+         var s:flashx.textLayout.elements.SpanElement = null;
          var newLastLeaf:FlowLeafElement = getLastLeaf();
          if(this._terminatorSpan != newLastLeaf)
          {
-            if(this._terminatorSpan)
+            if(Boolean(this._terminatorSpan))
             {
-               this._terminatorSpan.removeParaTerminator();
+               this._terminatorSpan.tlf_internal::removeParaTerminator();
                this._terminatorSpan = null;
             }
-            if(newLastLeaf)
+            if(Boolean(newLastLeaf))
             {
                if(newLastLeaf is SpanElement)
                {
-                  (newLastLeaf as SpanElement).addParaTerminator();
+                  (newLastLeaf as SpanElement).tlf_internal::addParaTerminator();
                   this._terminatorSpan = newLastLeaf as SpanElement;
                }
                else
                {
-                  s = new SpanElement();
+                  s = new flashx.textLayout.elements.SpanElement();
                   super.replaceChildren(numChildren,numChildren,s);
                   s.format = newLastLeaf.format;
-                  s.addParaTerminator();
+                  s.tlf_internal::addParaTerminator();
                   this._terminatorSpan = s;
                }
             }
          }
       }
       
-      tlf_internal function updateTerminatorSpan(splitSpan:SpanElement, followingSpan:SpanElement) : void
+      tlf_internal function updateTerminatorSpan(splitSpan:flashx.textLayout.elements.SpanElement, followingSpan:flashx.textLayout.elements.SpanElement) : void
       {
          if(this._terminatorSpan == splitSpan)
          {
@@ -345,7 +343,7 @@ package flashx.textLayout.elements
       override public function set mxmlChildren(array:Array) : void
       {
          var child:Object = null;
-         var s:SpanElement = null;
+         var s:flashx.textLayout.elements.SpanElement = null;
          this.replaceChildren(0,numChildren);
          for each(child in array)
          {
@@ -359,9 +357,9 @@ package flashx.textLayout.elements
             }
             else if(child is String)
             {
-               s = new SpanElement();
+               s = new flashx.textLayout.elements.SpanElement();
                s.text = String(child);
-               s.bindableElement = true;
+               s.tlf_internal::bindableElement = true;
                super.replaceChildren(numChildren,numChildren,s);
             }
             else if(child != null)
@@ -369,15 +367,15 @@ package flashx.textLayout.elements
                throw new TypeError(GlobalSettings.resourceStringFunction("badMXMLChildrenArgument",[getQualifiedClassName(child)]));
             }
          }
-         this.ensureTerminatorAfterReplace();
+         this.tlf_internal::ensureTerminatorAfterReplace();
       }
       
       override public function getText(relativeStart:int = 0, relativeEnd:int = -1, paragraphSeparator:String = "\n") : String
       {
          var text:String = null;
-         if(relativeStart == 0 && (relativeEnd == -1 || relativeEnd >= textLength - 1) && this._textBlock)
+         if(relativeStart == 0 && (relativeEnd == -1 || relativeEnd >= textLength - 1) && Boolean(this._textBlock))
          {
-            if(this._textBlock.content)
+            if(Boolean(this._textBlock.content))
             {
                text = this._textBlock.content.rawText;
                return text.substring(0,text.length - 1);
@@ -401,17 +399,17 @@ package flashx.textLayout.elements
       
       public function findPreviousAtomBoundary(relativePosition:int) : int
       {
-         return this.getTextBlock().findPreviousAtomBoundary(relativePosition);
+         return this.tlf_internal::getTextBlock().findPreviousAtomBoundary(relativePosition);
       }
       
       public function findNextAtomBoundary(relativePosition:int) : int
       {
-         return this.getTextBlock().findNextAtomBoundary(relativePosition);
+         return this.tlf_internal::getTextBlock().findNextAtomBoundary(relativePosition);
       }
       
       override public function getCharAtPosition(relativePosition:int) : String
       {
-         return this.getTextBlock().content.rawText.charAt(relativePosition);
+         return this.tlf_internal::getTextBlock().content.rawText.charAt(relativePosition);
       }
       
       public function findPreviousWordBoundary(relativePosition:int) : int
@@ -430,7 +428,7 @@ package flashx.textLayout.elements
             }
             return relativePosition;
          }
-         return this.getTextBlock().findPreviousWordBoundary(relativePosition);
+         return this.tlf_internal::getTextBlock().findPreviousWordBoundary(relativePosition);
       }
       
       public function findNextWordBoundary(relativePosition:int) : int
@@ -449,7 +447,7 @@ package flashx.textLayout.elements
             }
             return relativePosition;
          }
-         return this.getTextBlock().findNextWordBoundary(relativePosition);
+         return this.tlf_internal::getTextBlock().findNextWordBoundary(relativePosition);
       }
       
       private function updateTextBlock() : void
@@ -466,7 +464,7 @@ package flashx.textLayout.elements
          var alignment:String = null;
          var tabStop:TabStop = null;
          var garbage:String = null;
-         var containerElement:ContainerFormattedElement = getAncestorWithContainer();
+         var containerElement:ContainerFormattedElement = tlf_internal::getAncestorWithContainer();
          if(!containerElement)
          {
             return;
@@ -484,13 +482,13 @@ package flashx.textLayout.elements
          {
             lineJust = LineJustification.UNJUSTIFIED;
          }
-         var makeJustRuleStyle:String = this.getEffectiveJustificationStyle();
-         var justRule:String = this.getEffectiveJustificationRule();
+         var makeJustRuleStyle:String = this.tlf_internal::getEffectiveJustificationStyle();
+         var justRule:String = this.tlf_internal::getEffectiveJustificationRule();
          if(justRule == JustificationRule.SPACE)
          {
             spaceJustifier = new SpaceJustifier(_computedFormat.locale,lineJust,false);
-            spaceJustifier.letterSpacing = _computedFormat.textJustify == TextJustify.DISTRIBUTE ? Boolean(true) : Boolean(false);
-            if(Configuration.playerEnablesArgoFeatures)
+            spaceJustifier.letterSpacing = _computedFormat.textJustify == TextJustify.DISTRIBUTE ? true : false;
+            if(Configuration.tlf_internal::playerEnablesArgoFeatures)
             {
                newMinimumSpacing = Property.toNumberIfPercent(_computedFormat.wordSpacing.minimumSpacing) / 100;
                newMaximumSpacing = Property.toNumberIfPercent(_computedFormat.wordSpacing.maximumSpacing) / 100;
@@ -502,15 +500,15 @@ package flashx.textLayout.elements
                spaceJustifier["maximumSpacing"] = newMaximumSpacing;
             }
             this._textBlock.textJustifier = spaceJustifier;
-            this._textBlock.baselineZero = getLeadingBasis(this.getEffectiveLeadingModel());
+            this._textBlock.baselineZero = tlf_internal::getLeadingBasis(this.tlf_internal::getEffectiveLeadingModel());
          }
          else
          {
             eastAsianJustifier = new EastAsianJustifier(_computedFormat.locale,lineJust,makeJustRuleStyle);
             this._textBlock.textJustifier = eastAsianJustifier;
-            this._textBlock.baselineZero = getLeadingBasis(this.getEffectiveLeadingModel());
+            this._textBlock.baselineZero = tlf_internal::getLeadingBasis(this.tlf_internal::getEffectiveLeadingModel());
          }
-         this._textBlock.bidiLevel = _computedFormat.direction == Direction.LTR ? int(0) : int(1);
+         this._textBlock.bidiLevel = _computedFormat.direction == Direction.LTR ? 0 : 1;
          this._textBlock.lineRotation = containerElementFormat.blockProgression == BlockProgression.RL ? TextRotation.ROTATE_90 : TextRotation.ROTATE_0;
          if(_computedFormat.tabStops && _computedFormat.tabStops.length != 0)
          {
@@ -528,7 +526,7 @@ package flashx.textLayout.elements
             }
             this._textBlock.tabStops = tabStops;
          }
-         else if(GlobalSettings.enableDefaultTabStops && !Configuration.playerEnablesArgoFeatures)
+         else if(Boolean(GlobalSettings.tlf_internal::enableDefaultTabStops) && !Configuration.tlf_internal::playerEnablesArgoFeatures)
          {
             if(_defaultTabStops == null)
             {
@@ -547,7 +545,7 @@ package flashx.textLayout.elements
          if(!_computedFormat)
          {
             super.computedFormat;
-            if(this._textBlock)
+            if(Boolean(this._textBlock))
             {
                this.updateTextBlock();
             }
@@ -567,7 +565,7 @@ package flashx.textLayout.elements
          var newChildEnd:int = 0;
          var prevElement:FlowElement = null;
          var lastChild:FlowElement = null;
-         var s:SpanElement = null;
+         var s:flashx.textLayout.elements.SpanElement = null;
          var idx:int = findChildIndexAtPosition(normalizeStart);
          if(idx != -1 && idx < numChildren)
          {
@@ -575,17 +573,17 @@ package flashx.textLayout.elements
             for(normalizeStart -= child.parentRelativeStart; true; )
             {
                origChildEnd = child.parentRelativeStart + child.textLength;
-               child.normalizeRange(normalizeStart,normalizeEnd - child.parentRelativeStart);
+               child.tlf_internal::normalizeRange(normalizeStart,normalizeEnd - child.parentRelativeStart);
                newChildEnd = child.parentRelativeStart + child.textLength;
                normalizeEnd += newChildEnd - origChildEnd;
-               if(child.textLength == 0 && !child.bindableElement)
+               if(child.textLength == 0 && !child.tlf_internal::bindableElement)
                {
                   this.replaceChildren(idx,idx + 1);
                }
-               else if(child.mergeToPreviousIfPossible())
+               else if(child.tlf_internal::mergeToPreviousIfPossible())
                {
                   prevElement = this.getChildAt(idx - 1);
-                  prevElement.normalizeRange(0,prevElement.textLength);
+                  prevElement.tlf_internal::normalizeRange(0,prevElement.textLength);
                }
                else
                {
@@ -596,7 +594,7 @@ package flashx.textLayout.elements
                   if(idx != 0)
                   {
                      lastChild = this.getChildAt(idx - 1);
-                     if(lastChild is SubParagraphGroupElementBase && lastChild.textLength == 1 && !lastChild.bindableElement)
+                     if(lastChild is SubParagraphGroupElementBase && lastChild.textLength == 1 && !lastChild.tlf_internal::bindableElement)
                      {
                         this.replaceChildren(idx - 1,idx);
                      }
@@ -613,30 +611,30 @@ package flashx.textLayout.elements
          }
          if(numChildren == 0 || textLength == 0)
          {
-            s = new SpanElement();
+            s = new flashx.textLayout.elements.SpanElement();
             this.replaceChildren(0,0,s);
-            s.normalizeRange(0,s.textLength);
+            s.tlf_internal::normalizeRange(0,s.textLength);
          }
       }
       
       tlf_internal function getEffectiveLeadingModel() : String
       {
-         return this.computedFormat.leadingModel == LeadingModel.AUTO ? LocaleUtil.leadingModel(this.computedFormat.locale) : this.computedFormat.leadingModel;
+         return this.computedFormat.leadingModel == LeadingModel.AUTO ? LocaleUtil.leadingModel(this.computedFormat.locale) : String(this.computedFormat.leadingModel);
       }
       
       tlf_internal function getEffectiveDominantBaseline() : String
       {
-         return this.computedFormat.dominantBaseline == FormatValue.AUTO ? LocaleUtil.dominantBaseline(this.computedFormat.locale) : this.computedFormat.dominantBaseline;
+         return this.computedFormat.dominantBaseline == FormatValue.AUTO ? LocaleUtil.dominantBaseline(this.computedFormat.locale) : String(this.computedFormat.dominantBaseline);
       }
       
       tlf_internal function getEffectiveJustificationRule() : String
       {
-         return this.computedFormat.justificationRule == FormatValue.AUTO ? LocaleUtil.justificationRule(this.computedFormat.locale) : this.computedFormat.justificationRule;
+         return this.computedFormat.justificationRule == FormatValue.AUTO ? LocaleUtil.justificationRule(this.computedFormat.locale) : String(this.computedFormat.justificationRule);
       }
       
       tlf_internal function getEffectiveJustificationStyle() : String
       {
-         return this.computedFormat.justificationStyle == FormatValue.AUTO ? LocaleUtil.justificationStyle(this.computedFormat.locale) : this.computedFormat.justificationStyle;
+         return this.computedFormat.justificationStyle == FormatValue.AUTO ? LocaleUtil.justificationStyle(this.computedFormat.locale) : String(this.computedFormat.justificationStyle);
       }
    }
 }

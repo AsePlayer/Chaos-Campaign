@@ -2,10 +2,9 @@ package com.liamr.ui.dropDown
 {
    import com.liamr.ui.dropDown.Events.DropDownEvent;
    import flash.display.Sprite;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
+   import flash.events.*;
    import gs.TweenLite;
-   import gs.easing.Strong;
+   import gs.easing.*;
    
    public class DropDown extends DropDownMc
    {

@@ -1,21 +1,10 @@
 package gs
 {
-   import flash.display.DisplayObject;
-   import flash.display.Sprite;
-   import flash.events.Event;
-   import flash.events.TimerEvent;
-   import flash.utils.Dictionary;
-   import flash.utils.Timer;
-   import flash.utils.getTimer;
-   import gs.plugins.AutoAlphaPlugin;
-   import gs.plugins.EndArrayPlugin;
-   import gs.plugins.FramePlugin;
-   import gs.plugins.RemoveTintPlugin;
-   import gs.plugins.TintPlugin;
-   import gs.plugins.TweenPlugin;
-   import gs.plugins.VisiblePlugin;
-   import gs.plugins.VolumePlugin;
-   import gs.utils.tween.TweenInfo;
+   import flash.display.*;
+   import flash.events.*;
+   import flash.utils.*;
+   import gs.plugins.*;
+   import gs.utils.tween.*;
    
    public class TweenLite
    {
@@ -127,9 +116,9 @@ package gs
             _tlInitted = true;
          }
          this.vars = $vars;
-         this.duration = Number($duration) || Number(0.001);
-         this.delay = Number($vars.delay) || Number(0);
-         this.combinedTimeScale = Number($vars.timeScale) || Number(1);
+         this.duration = $duration || 0.001;
+         this.delay = Number($vars.delay) || 0;
+         this.combinedTimeScale = Number($vars.timeScale) || 1;
          this.active = Boolean($duration == 0 && this.delay == 0);
          this.target = $target;
          if(typeof this.vars.ease != "function")
@@ -146,7 +135,7 @@ package gs
          this.tweens = [];
          this.initTime = currentTime;
          this.startTime = this.initTime + this.delay * 1000;
-         var mode:int = $vars.overwrite == undefined || !overwriteManager.enabled && $vars.overwrite > 1 ? int(overwriteManager.mode) : int(int($vars.overwrite));
+         var mode:int = $vars.overwrite == undefined || !overwriteManager.enabled && $vars.overwrite > 1 ? int(overwriteManager.mode) : int($vars.overwrite);
          if(!($target in masterList) || mode == 1)
          {
             masterList[$target] = [this];
@@ -199,7 +188,7 @@ package gs
          var a:Array = null;
          var i:int = 0;
          var tween:TweenLite = null;
-         var time:uint = currentTime = getTimer();
+         var time:uint = uint(currentTime = getTimer());
          var ml:Dictionary = masterList;
          for each(a in ml)
          {
@@ -258,7 +247,7 @@ package gs
       
       protected static function killGarbage($e:TimerEvent) : void
       {
-         var tgt:* = null;
+         var tgt:Object = null;
          var ml:Dictionary = masterList;
          for(tgt in ml)
          {
@@ -276,7 +265,7 @@ package gs
       
       public function initTweenVals() : void
       {
-         var p:* = null;
+         var p:String = null;
          var i:int = 0;
          var plugin:* = undefined;
          var ti:TweenInfo = null;
@@ -293,17 +282,17 @@ package gs
                   plugin = new plugins[p]();
                   if(plugin.onInitTween(this.target,this.exposedVars[p],this) == false)
                   {
-                     this.tweens[this.tweens.length] = new TweenInfo(this.target,p,this.target[p],typeof this.exposedVars[p] == "number" ? Number(this.exposedVars[p] - this.target[p]) : Number(Number(this.exposedVars[p])),p,false);
+                     this.tweens[this.tweens.length] = new TweenInfo(this.target,p,this.target[p],typeof this.exposedVars[p] == "number" ? this.exposedVars[p] - this.target[p] : Number(this.exposedVars[p]),p,false);
                   }
                   else
                   {
-                     this.tweens[this.tweens.length] = new TweenInfo(plugin,"changeFactor",0,1,plugin.overwriteProps.length == 1 ? plugin.overwriteProps[0] : "_MULTIPLE_",true);
+                     this.tweens[this.tweens.length] = new TweenInfo(plugin,"changeFactor",0,1,plugin.overwriteProps.length == 1 ? String(plugin.overwriteProps[0]) : "_MULTIPLE_",true);
                      this._hasPlugins = true;
                   }
                }
                else
                {
-                  this.tweens[this.tweens.length] = new TweenInfo(this.target,p,this.target[p],typeof this.exposedVars[p] == "number" ? Number(this.exposedVars[p] - this.target[p]) : Number(Number(this.exposedVars[p])),p,false);
+                  this.tweens[this.tweens.length] = new TweenInfo(this.target,p,this.target[p],typeof this.exposedVars[p] == "number" ? this.exposedVars[p] - this.target[p] : Number(this.exposedVars[p]),p,false);
                }
             }
          }
@@ -320,7 +309,7 @@ package gs
          {
             this._hasUpdate = true;
          }
-         if(TweenLite.overwriteManager.enabled && this.target in masterList)
+         if(Boolean(TweenLite.overwriteManager.enabled) && this.target in masterList)
          {
             overwriteManager.manageOverwrites(this,masterList[this.target]);
          }
@@ -353,7 +342,7 @@ package gs
          if(time >= this.duration)
          {
             time = this.duration;
-            factor = this.ease == this.vars.ease || this.duration == 0.001 ? Number(1) : Number(0);
+            factor = this.ease == this.vars.ease || this.duration == 0.001 ? 1 : 0;
          }
          else
          {
@@ -391,7 +380,7 @@ package gs
          {
             for(i = this.tweens.length - 1; i > -1; i--)
             {
-               if(this.tweens[i].isPlugin && this.tweens[i].target.onComplete != null)
+               if(Boolean(this.tweens[i].isPlugin) && this.tweens[i].target.onComplete != null)
                {
                   this.tweens[i].target.onComplete();
                }
@@ -416,7 +405,7 @@ package gs
       
       public function killVars($vars:Object) : void
       {
-         if(overwriteManager.enabled)
+         if(Boolean(overwriteManager.enabled))
          {
             overwriteManager.killVars($vars,this.exposedVars,this.tweens);
          }
@@ -429,7 +418,7 @@ package gs
       
       public function get enabled() : Boolean
       {
-         return !!this.gc ? Boolean(false) : Boolean(true);
+         return this.gc ? false : true;
       }
       
       public function set enabled($b:Boolean) : void
@@ -460,7 +449,7 @@ package gs
                }
             }
          }
-         this.gc = !!$b ? Boolean(false) : Boolean(true);
+         this.gc = $b ? false : true;
          if(this.gc)
          {
             this.active = false;

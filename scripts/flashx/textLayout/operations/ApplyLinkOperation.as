@@ -77,19 +77,19 @@ package flashx.textLayout.operations
          {
             leaf = textFlow.findLeaf(absoluteStart);
             link = leaf.getParentByType(LinkElement) as LinkElement;
-            if(link)
+            if(Boolean(link))
             {
                absoluteStart = link.getAbsoluteStart();
             }
             leaf = textFlow.findLeaf(absoluteEnd - 1);
             link = leaf.getParentByType(LinkElement) as LinkElement;
-            if(link)
+            if(Boolean(link))
             {
                absoluteEnd = link.getAbsoluteStart() + link.textLength;
             }
          }
          this._memento = ModelEdit.saveCurrentState(textFlow,absoluteStart,absoluteEnd);
-         if(this._hrefString && this._hrefString != "")
+         if(Boolean(this._hrefString) && this._hrefString != "")
          {
             madeLink = TextFlowEdit.makeLink(textFlow,absoluteStart,absoluteEnd,this._hrefString,this._target);
             if(!madeLink)
@@ -109,7 +109,7 @@ package flashx.textLayout.operations
       
       override public function undo() : SelectionState
       {
-         if(this._memento)
+         if(Boolean(this._memento))
          {
             this._memento.undo();
          }
@@ -118,7 +118,7 @@ package flashx.textLayout.operations
       
       override public function redo() : SelectionState
       {
-         if(absoluteStart != absoluteEnd && this._memento)
+         if(absoluteStart != absoluteEnd && Boolean(this._memento))
          {
             if(this._hrefString != "")
             {

@@ -9,32 +9,32 @@ package de.polygonal.ds
       
       public var val:Object;
       
-      public var next:SLLNode;
+      public var next:de.polygonal.ds.SLLNode;
       
-      public var _list:SLL;
+      public var _list:de.polygonal.ds.SLL;
       
-      public function SLLNode(x:Object = undefined, list:SLL = undefined)
+      public function SLLNode(param1:Object = undefined, param2:de.polygonal.ds.SLL = undefined)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         val = x;
-         _list = list;
+         val = param1;
+         _list = param2;
       }
       
-      public function unlink() : SLLNode
+      public function unlink() : de.polygonal.ds.SLLNode
       {
-         var _loc3_:* = null as SLLNode;
-         var _loc4_:* = null as SLLNode;
+         var _loc3_:* = null as de.polygonal.ds.SLLNode;
+         var _loc4_:* = null as de.polygonal.ds.SLLNode;
          var _loc5_:* = null as Object;
          var _loc6_:* = null as Object;
          null;
-         var _loc1_:SLL = _list;
+         var _loc1_:de.polygonal.ds.SLL = _list;
          null;
          null;
          null;
-         var _loc2_:SLLNode = next;
+         var _loc2_:de.polygonal.ds.SLLNode = next;
          if(this == _loc1_.head)
          {
             null;
@@ -46,7 +46,7 @@ package de.polygonal.ds
                {
                   _loc1_.tail = null;
                }
-               _loc1_._size = _loc1_._size - 1;
+               --_loc1_._size;
             }
             else
             {
@@ -62,7 +62,7 @@ package de.polygonal.ds
                _loc6_ = null;
                _loc3_.val = _loc6_;
                _loc3_.next = null;
-               _loc1_._poolSize = _loc1_._poolSize + 1;
+               ++_loc1_._poolSize;
             }
             else
             {
@@ -91,14 +91,14 @@ package de.polygonal.ds
                _loc6_ = null;
                val = _loc6_;
                next = null;
-               _loc1_._poolSize = _loc1_._poolSize + 1;
+               ++_loc1_._poolSize;
             }
             else
             {
                _list = null;
             }
             _loc5_;
-            _loc1_._size = _loc1_._size - 1;
+            --_loc1_._size;
          }
          return _loc2_;
       }
@@ -131,7 +131,7 @@ package de.polygonal.ds
          return next != null;
       }
       
-      public function getList() : SLL
+      public function getList() : de.polygonal.ds.SLL
       {
          return _list;
       }
@@ -143,10 +143,10 @@ package de.polygonal.ds
          next = null;
       }
       
-      public function _insertAfter(node:SLLNode) : void
+      public function _insertAfter(param1:de.polygonal.ds.SLLNode) : void
       {
-         node.next = next;
-         next = node;
+         param1.next = next;
+         next = param1;
       }
    }
 }

@@ -14,13 +14,11 @@ package flashx.textLayout.factory
    import flashx.textLayout.elements.TextFlow;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
-   [Exclude(kind="method",name="getNextTruncationPosition")]
-   [Exclude(kind="method",name="doesComposedTextFit")]
-   [Exclude(kind="method",name="callbackWithTextLines")]
-   [Exclude(kind="method",name="setContentBounds")]
-   [Exclude(kind="property",name="containerController")]
+   [Exclude(name="getNextTruncationPosition",kind="method")]
+   [Exclude(name="doesComposedTextFit",kind="method")]
+   [Exclude(name="callbackWithTextLines",kind="method")]
+   [Exclude(name="setContentBounds",kind="method")]
+   [Exclude(name="containerController",kind="property")]
    public class TextLineFactoryBase
    {
       
@@ -45,7 +43,7 @@ package flashx.textLayout.factory
       
       private var _verticalScrollPolicy:String;
       
-      private var _truncationOptions:TruncationOptions;
+      private var _truncationOptions:flashx.textLayout.factory.TruncationOptions;
       
       private var _containerController:ContainerController;
       
@@ -55,7 +53,7 @@ package flashx.textLayout.factory
       {
          super();
          this._containerController = new ContainerController(_tc);
-         this._horizontalScrollPolicy = this._verticalScrollPolicy = String(ScrollPolicy.scrollPolicyPropertyDefinition.defaultValue);
+         this._horizontalScrollPolicy = this._verticalScrollPolicy = String(ScrollPolicy.tlf_internal::scrollPolicyPropertyDefinition.defaultValue);
       }
       
       tlf_internal static function peekFactoryCompose() : SimpleCompose
@@ -69,16 +67,16 @@ package flashx.textLayout.factory
       
       tlf_internal static function beginFactoryCompose() : SimpleCompose
       {
-         var rslt:SimpleCompose = _factoryComposer;
-         _factoryComposer = peekFactoryCompose();
+         var rslt:SimpleCompose = tlf_internal::_factoryComposer;
+         tlf_internal::_factoryComposer = tlf_internal::peekFactoryCompose();
          _savedFactoryComposer = null;
          return rslt;
       }
       
       tlf_internal static function endFactoryCompose(prevComposer:SimpleCompose) : void
       {
-         _savedFactoryComposer = _factoryComposer;
-         _factoryComposer = prevComposer;
+         _savedFactoryComposer = tlf_internal::_factoryComposer;
+         tlf_internal::_factoryComposer = prevComposer;
       }
       
       tlf_internal static function getDefaultFlowComposerClass() : Class
@@ -117,12 +115,12 @@ package flashx.textLayout.factory
          this._swfContext = value;
       }
       
-      public function get truncationOptions() : TruncationOptions
+      public function get truncationOptions() : flashx.textLayout.factory.TruncationOptions
       {
          return this._truncationOptions;
       }
       
-      public function set truncationOptions(value:TruncationOptions) : void
+      public function set truncationOptions(value:flashx.textLayout.factory.TruncationOptions) : void
       {
          this._truncationOptions = value;
       }
@@ -161,10 +159,10 @@ package flashx.textLayout.factory
       {
          var textLine:TextLine = null;
          var textBlock:TextBlock = null;
-         for each(textLine in _factoryComposer._lines)
+         for each(textLine in tlf_internal::_factoryComposer._lines)
          {
             textBlock = textLine.textBlock;
-            if(textBlock)
+            if(Boolean(textBlock))
             {
                textBlock.releaseLines(textBlock.firstLine,textBlock.lastLine);
             }
@@ -178,14 +176,14 @@ package flashx.textLayout.factory
       
       protected function doesComposedTextFit(lineCountLimit:int, textLength:uint, blockProgression:String) : Boolean
       {
-         if(lineCountLimit != TruncationOptions.NO_LINE_COUNT_LIMIT && _factoryComposer._lines.length > lineCountLimit)
+         if(lineCountLimit != TruncationOptions.NO_LINE_COUNT_LIMIT && tlf_internal::_factoryComposer._lines.length > lineCountLimit)
          {
             return false;
          }
-         var lines:Array = _factoryComposer._lines;
+         var lines:Array = tlf_internal::_factoryComposer._lines;
          if(!lines.length)
          {
-            return Boolean(textLength) ? Boolean(false) : Boolean(true);
+            return Boolean(textLength) ? false : true;
          }
          var lastLine:TextLine = lines[lines.length - 1] as TextLine;
          return lastLine.userData + lastLine.rawTextLength == textLength;
@@ -206,7 +204,7 @@ package flashx.textLayout.factory
                break;
             }
          }
-         var paraStart:int = !!multiPara ? int(line.userData - line.textBlockBeginIndex) : int(0);
+         var paraStart:int = multiPara ? int(line.userData - line.textBlockBeginIndex) : 0;
          var atomIndex:int = line.getAtomIndexAtCharIndex(truncateAtCharPosition - paraStart);
          var nextTruncationPosition:int = line.getAtomTextBlockBeginIndex(atomIndex) + paraStart;
          line.flushAtomData();
@@ -220,7 +218,7 @@ package flashx.textLayout.factory
       
       tlf_internal function computeLastAllowedLineIndex(lineCountLimit:int) : void
       {
-         _truncationLineIndex = _factoryComposer._lines.length - 1;
+         _truncationLineIndex = tlf_internal::_factoryComposer._lines.length - 1;
          if(lineCountLimit != TruncationOptions.NO_LINE_COUNT_LIMIT && lineCountLimit <= _truncationLineIndex)
          {
             _truncationLineIndex = lineCountLimit - 1;
@@ -230,11 +228,11 @@ package flashx.textLayout.factory
       tlf_internal function processBackgroundColors(textFlow:TextFlow, callback:Function, x:Number, y:Number, constrainWidth:Number, constrainHeight:Number) : *
       {
          var bgShape:Shape = new Shape();
-         textFlow.backgroundManager.drawAllRects(textFlow,bgShape,constrainWidth,constrainHeight);
+         textFlow.tlf_internal::backgroundManager.drawAllRects(textFlow,bgShape,constrainWidth,constrainHeight);
          bgShape.x = x;
          bgShape.y = y;
          callback(bgShape);
-         textFlow.clearBackgroundManager();
+         textFlow.tlf_internal::clearBackgroundManager();
       }
    }
 }

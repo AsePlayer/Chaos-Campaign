@@ -15,27 +15,27 @@ package com.brockw.stickwar.engine.multiplayer
    {
        
       
-      var mc:faqScreenMc;
+      internal var mc:faqScreenMc;
       
-      var main:BaseMain;
+      internal var main:BaseMain;
       
-      var faqText:Object;
+      internal var faqText:Object;
       
       public function FAQScreen(main:BaseMain)
       {
-         var _loc3_:Object = null;
+         var styleObj:Object = null;
          super();
          this.main = main;
          this.mc = new faqScreenMc();
          addChild(this.mc);
-         var _loc2_:StyleSheet = new StyleSheet();
-         _loc3_ = new Object();
-         _loc3_.color = "#ebb73a";
-         _loc2_.setStyle(".question",_loc3_);
-         _loc3_ = new Object();
-         _loc3_.color = "#FFFFFF";
-         _loc2_.setStyle(".answer",_loc3_);
-         this.mc.faq.styleSheet = _loc2_;
+         var style:StyleSheet = new StyleSheet();
+         styleObj = new Object();
+         styleObj.color = "#ebb73a";
+         style.setStyle(".question",styleObj);
+         styleObj = new Object();
+         styleObj.color = "#FFFFFF";
+         style.setStyle(".answer",styleObj);
+         this.mc.faq.styleSheet = style;
          this.mc.faq.htmlText = "";
          this.faqText = this.mc.faq;
          this.mc.faq.mouseWheelEnabled = false;
@@ -59,7 +59,7 @@ package com.brockw.stickwar.engine.multiplayer
       private function gameGuide(evt:Event) : void
       {
          var url:URLRequest = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
-         if(this.main.tracker)
+         if(Boolean(this.main.tracker))
          {
             this.main.tracker.trackEvent("link","http://www.stickpage.com/stickempiresguide.shtml");
          }

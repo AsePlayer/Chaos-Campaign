@@ -215,7 +215,7 @@ package com.brockw.stickwar.engine.multiplayer.moves
          {
             this.game = StickWar(game);
             this._units.sort(this.formationOrder);
-            num = this._units.length;
+            num = int(this._units.length);
             ROW_OFFSET = 50;
             frontX = this.arg0;
             i = 0;

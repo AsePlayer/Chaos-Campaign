@@ -13,8 +13,6 @@ package flashx.textLayout.compose
    import flashx.textLayout.formats.BlockProgression;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class StandardFlowComposer extends FlowComposerBase implements IFlowComposer
    {
        
@@ -36,7 +34,7 @@ package flashx.textLayout.compose
       
       private static function clearContainerAccessibilityImplementation(cont:Sprite) : void
       {
-         if(cont.accessibilityImplementation)
+         if(Boolean(cont.accessibilityImplementation))
          {
             if(cont.accessibilityImplementation is TextAccImpl)
             {
@@ -48,7 +46,7 @@ package flashx.textLayout.compose
       
       private static function getBPDirectionScrollPosition(bp:String, cont:ContainerController) : Number
       {
-         return bp == BlockProgression.TB ? Number(cont.verticalScrollPosition) : Number(cont.horizontalScrollPosition);
+         return bp == BlockProgression.TB ? cont.verticalScrollPosition : cont.horizontalScrollPosition;
       }
       
       public function get composing() : Boolean
@@ -59,7 +57,7 @@ package flashx.textLayout.compose
       public function getAbsoluteStart(controller:ContainerController) : int
       {
          var stopIdx:int = this.getControllerIndex(controller);
-         var rslt:int = this._rootElement.getAbsoluteStart();
+         var rslt:int = this.tlf_internal::_rootElement.getAbsoluteStart();
          for(var idx:int = 0; idx < stopIdx; idx++)
          {
             rslt += this._controllerList[idx].textLength;
@@ -69,12 +67,12 @@ package flashx.textLayout.compose
       
       public function get rootElement() : ContainerFormattedElement
       {
-         return this._rootElement;
+         return this.tlf_internal::_rootElement;
       }
       
       public function setRootElement(newRootElement:ContainerFormattedElement) : void
       {
-         if(this._rootElement != newRootElement)
+         if(this.tlf_internal::_rootElement != newRootElement)
          {
             if(newRootElement is TextFlow && (newRootElement as TextFlow).flowComposer != this)
             {
@@ -82,11 +80,11 @@ package flashx.textLayout.compose
             }
             else
             {
-               this.clearCompositionResults();
-               this.detachAllContainers();
-               this._rootElement = newRootElement;
-               _textFlow = Boolean(this._rootElement) ? this._rootElement.getTextFlow() : null;
-               this.attachAllContainers();
+               this.tlf_internal::clearCompositionResults();
+               this.tlf_internal::detachAllContainers();
+               this.tlf_internal::_rootElement = newRootElement;
+               _textFlow = Boolean(this.tlf_internal::_rootElement) ? this.tlf_internal::_rootElement.getTextFlow() : null;
+               this.tlf_internal::attachAllContainers();
             }
          }
       }
@@ -96,19 +94,19 @@ package flashx.textLayout.compose
          var cont:ContainerController = null;
          var firstContainerController:ContainerController = null;
          var firstContainer:Sprite = null;
-         if(this._controllerList.length > 0 && _textFlow)
+         if(this._controllerList.length > 0 && Boolean(_textFlow))
          {
             firstContainerController = this.getControllerAt(0);
             firstContainer = firstContainerController.container;
-            if(firstContainer)
+            if(Boolean(firstContainer))
             {
                clearContainerAccessibilityImplementation(firstContainer);
             }
          }
          for each(cont in this._controllerList)
          {
-            cont.clearSelectionShapes();
-            cont.setRootElement(null);
+            cont.tlf_internal::clearSelectionShapes();
+            cont.tlf_internal::setRootElement(null);
          }
       }
       
@@ -120,14 +118,14 @@ package flashx.textLayout.compose
          var firstContainer:Sprite = null;
          for each(cont in this._controllerList)
          {
-            ContainerController(cont).setRootElement(this._rootElement);
+            ContainerController(cont).tlf_internal::setRootElement(this.tlf_internal::_rootElement);
          }
-         if(this._controllerList.length > 0 && _textFlow)
+         if(this._controllerList.length > 0 && Boolean(_textFlow))
          {
-            if(textFlow.configuration.enableAccessibility && Capabilities.hasAccessibility)
+            if(Boolean(textFlow.configuration.enableAccessibility) && Capabilities.hasAccessibility)
             {
                firstContainer = this.getControllerAt(0).container;
-               if(firstContainer)
+               if(Boolean(firstContainer))
                {
                   clearContainerAccessibilityImplementation(firstContainer);
                   firstContainer.accessibilityImplementation = new TextAccImpl(firstContainer,_textFlow);
@@ -136,18 +134,18 @@ package flashx.textLayout.compose
             for(i = 0; i < this._controllerList.length; i++)
             {
                curContainer = this.getControllerAt(i).container;
-               if(curContainer)
+               if(Boolean(curContainer))
                {
                   curContainer.focusRect = false;
                }
             }
          }
-         this.clearCompositionResults();
+         this.tlf_internal::clearCompositionResults();
       }
       
       public function get numControllers() : int
       {
-         return Boolean(this._controllerList) ? int(this._controllerList.length) : int(0);
+         return Boolean(this._controllerList) ? int(this._controllerList.length) : 0;
       }
       
       public function addController(controller:ContainerController) : void
@@ -158,17 +156,17 @@ package flashx.textLayout.compose
          this._controllerList.push(ContainerController(controller));
          if(this.numControllers == 1)
          {
-            this.attachAllContainers();
+            this.tlf_internal::attachAllContainers();
          }
          else
          {
-            controller.setRootElement(this._rootElement);
+            controller.tlf_internal::setRootElement(this.tlf_internal::_rootElement);
             curContainer = controller.container;
-            if(curContainer)
+            if(Boolean(curContainer))
             {
                curContainer.focusRect = false;
             }
-            if(textFlow)
+            if(Boolean(textFlow))
             {
                controller = this.getControllerAt(this.numControllers - 2);
                damageStart = controller.absoluteStart;
@@ -185,9 +183,9 @@ package flashx.textLayout.compose
                      damageLen++;
                   }
                }
-               if(damageLen)
+               if(Boolean(damageLen))
                {
-                  textFlow.damage(damageStart,damageLen,FlowDamageType.GEOMETRY,false);
+                  textFlow.tlf_internal::damage(damageStart,damageLen,FlowDamageType.GEOMETRY,false);
                }
             }
          }
@@ -195,9 +193,9 @@ package flashx.textLayout.compose
       
       public function addControllerAt(controller:ContainerController, index:int) : void
       {
-         this.detachAllContainers();
+         this.tlf_internal::detachAllContainers();
          this._controllerList.splice(index,0,ContainerController(controller));
-         this.attachAllContainers();
+         this.tlf_internal::attachAllContainers();
       }
       
       private function fastRemoveController(index:int) : Boolean
@@ -217,12 +215,12 @@ package flashx.textLayout.compose
             if(index == 0)
             {
                firstContainer = cont.container;
-               if(firstContainer)
+               if(Boolean(firstContainer))
                {
                   clearContainerAccessibilityImplementation(firstContainer);
                }
             }
-            cont.setRootElement(null);
+            cont.tlf_internal::setRootElement(null);
             this._controllerList.splice(index,1);
             return true;
          }
@@ -234,9 +232,9 @@ package flashx.textLayout.compose
          var index:int = this.getControllerIndex(controller);
          if(!this.fastRemoveController(index))
          {
-            this.detachAllContainers();
+            this.tlf_internal::detachAllContainers();
             this._controllerList.splice(index,1);
-            this.attachAllContainers();
+            this.tlf_internal::attachAllContainers();
          }
       }
       
@@ -244,15 +242,15 @@ package flashx.textLayout.compose
       {
          if(!this.fastRemoveController(index))
          {
-            this.detachAllContainers();
+            this.tlf_internal::detachAllContainers();
             this._controllerList.splice(index,1);
-            this.attachAllContainers();
+            this.tlf_internal::attachAllContainers();
          }
       }
       
       public function removeAllControllers() : void
       {
-         this.detachAllContainers();
+         this.tlf_internal::detachAllContainers();
          this._controllerList.splice(0,this._controllerList.length);
       }
       
@@ -333,7 +331,7 @@ package flashx.textLayout.compose
          initializeLines();
          for each(cont in this._controllerList)
          {
-            cont.clearCompositionResults();
+            cont.tlf_internal::clearCompositionResults();
          }
       }
       
@@ -342,24 +340,24 @@ package flashx.textLayout.compose
          return this.updateToController();
       }
       
-      public function updateToController(index:int = 2.147483647E9) : Boolean
+      public function updateToController(index:int = 2147483647) : Boolean
       {
          if(this._composing)
          {
             return false;
          }
          var sm:ISelectionManager = textFlow.interactionManager;
-         if(sm)
+         if(Boolean(sm))
          {
             sm.flushPendingOperations();
          }
          this.internalCompose(-1,index);
-         var shapesDamaged:Boolean = this.areShapesDamaged();
+         var shapesDamaged:Boolean = this.tlf_internal::areShapesDamaged();
          if(shapesDamaged)
          {
             this.updateCompositionShapes();
          }
-         if(sm)
+         if(Boolean(sm))
          {
             sm.refreshSelection();
          }
@@ -384,7 +382,7 @@ package flashx.textLayout.compose
          var controller:ContainerController = null;
          for each(controller in this._controllerList)
          {
-            controller.interactionManagerChanged(newInteractionManager);
+            controller.tlf_internal::interactionManagerChanged(newInteractionManager);
          }
       }
       
@@ -393,7 +391,7 @@ package flashx.textLayout.compose
          var controller:ContainerController = null;
          for each(controller in this._controllerList)
          {
-            controller.updateCompositionShapes();
+            controller.tlf_internal::updateCompositionShapes();
          }
       }
       
@@ -405,7 +403,7 @@ package flashx.textLayout.compose
             if(absolutePosition == _textFlow.textLength)
             {
                container = this.getControllerAt(this.numControllers - 1);
-               if(container && (container.verticalScrollPolicy != ScrollPolicy.OFF || container.horizontalScrollPolicy != ScrollPolicy.OFF))
+               if(Boolean(container) && (container.verticalScrollPolicy != ScrollPolicy.OFF || container.horizontalScrollPolicy != ScrollPolicy.OFF))
                {
                   return true;
                }
@@ -417,7 +415,7 @@ package flashx.textLayout.compose
       
       protected function preCompose() : Boolean
       {
-         this.rootElement.preCompose();
+         this.rootElement.tlf_internal::preCompose();
          if(numLines == 0)
          {
             initializeLines();
@@ -427,12 +425,12 @@ package flashx.textLayout.compose
       
       tlf_internal function getComposeState() : ComposeState
       {
-         return ComposeState.getComposeState();
+         return ComposeState.tlf_internal::getComposeState();
       }
       
       tlf_internal function releaseComposeState(state:ComposeState) : void
       {
-         ComposeState.releaseComposeState(state);
+         ComposeState.tlf_internal::releaseComposeState(state);
       }
       
       tlf_internal function callTheComposer(composeToPosition:int, controllerEndIndex:int) : ContainerController
@@ -441,7 +439,7 @@ package flashx.textLayout.compose
          {
             return this.getControllerAt(this.numControllers - 1);
          }
-         var state:ComposeState = this.getComposeState();
+         var state:ComposeState = this.tlf_internal::getComposeState();
          var lastComposedPosition:int = state.composeTextFlow(textFlow,composeToPosition,controllerEndIndex);
          if(_damageAbsoluteStart < lastComposedPosition)
          {
@@ -449,7 +447,7 @@ package flashx.textLayout.compose
          }
          finalizeLinesAfterCompose();
          var startController:ContainerController = state.startController;
-         this.releaseComposeState(state);
+         this.tlf_internal::releaseComposeState(state);
          if(textFlow.hasEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE))
          {
             textFlow.dispatchEvent(new CompositionCompleteEvent(CompositionCompleteEvent.COMPOSITION_COMPLETE,false,false,textFlow,0,lastComposedPosition));
@@ -466,7 +464,7 @@ package flashx.textLayout.compose
          var lastVisibleLine:TextFlowLine = null;
          var idx:int = 0;
          var sm:ISelectionManager = textFlow.interactionManager;
-         if(sm)
+         if(Boolean(sm))
          {
             sm.flushPendingOperations();
          }
@@ -475,10 +473,10 @@ package flashx.textLayout.compose
          {
             if(this.preCompose())
             {
-               if(textFlow && this.numControllers != 0)
+               if(Boolean(textFlow) && this.numControllers != 0)
                {
                   damageLimit = _textFlow.textLength;
-                  var composeToControllerIndex:int = Math.min(composeToControllerIndex,this.numControllers - 1);
+                  composeToControllerIndex = Math.min(composeToControllerIndex,this.numControllers - 1);
                   if(composeToPosition != -1 || composeToControllerIndex != -1)
                   {
                      if(composeToControllerIndex < 0)
@@ -497,9 +495,9 @@ package flashx.textLayout.compose
                         }
                         if(composeToControllerIndex == this.numControllers - 1)
                         {
-                           bp = this.rootElement.computedFormat.blockProgression;
-                           lastVisibleLine = controller.getLastVisibleLine();
-                           if(lastVisibleLine && getBPDirectionScrollPosition(bp,controller) == this.lastBPDirectionScrollPosition)
+                           bp = String(this.rootElement.computedFormat.blockProgression);
+                           lastVisibleLine = controller.tlf_internal::getLastVisibleLine();
+                           if(Boolean(lastVisibleLine) && getBPDirectionScrollPosition(bp,controller) == this.lastBPDirectionScrollPosition)
                            {
                               damageLimit = lastVisibleLine.absoluteStart + lastVisibleLine.textLength;
                            }
@@ -509,13 +507,13 @@ package flashx.textLayout.compose
                   this.lastBPDirectionScrollPosition = Number.NEGATIVE_INFINITY;
                   if(_damageAbsoluteStart < damageLimit)
                   {
-                     startController = this.callTheComposer(composeToPosition,composeToControllerIndex);
-                     if(startController)
+                     startController = this.tlf_internal::callTheComposer(composeToPosition,composeToControllerIndex);
+                     if(Boolean(startController))
                      {
                         idx = this.getControllerIndex(startController);
                         while(idx < this.numControllers)
                         {
-                           this.getControllerAt(idx++).shapesInvalid = true;
+                           this.getControllerAt(idx++).tlf_internal::shapesInvalid = true;
                         }
                      }
                   }
@@ -540,7 +538,7 @@ package flashx.textLayout.compose
          var cont:ContainerController = null;
          for each(cont in this._controllerList)
          {
-            if(cont.shapesInvalid)
+            if(cont.tlf_internal::shapesInvalid)
             {
                return true;
             }
@@ -550,17 +548,17 @@ package flashx.textLayout.compose
       
       public function compose() : Boolean
       {
-         return !!this._composing ? Boolean(false) : Boolean(this.internalCompose() != null);
+         return this._composing ? false : this.internalCompose() != null;
       }
       
-      public function composeToPosition(absolutePosition:int = 2.147483647E9) : Boolean
+      public function composeToPosition(absolutePosition:int = 2147483647) : Boolean
       {
-         return !!this._composing ? Boolean(false) : Boolean(this.internalCompose(absolutePosition,-1) != null);
+         return this._composing ? false : this.internalCompose(absolutePosition,-1) != null;
       }
       
-      public function composeToController(index:int = 2.147483647E9) : Boolean
+      public function composeToController(index:int = 2147483647) : Boolean
       {
-         return !!this._composing ? Boolean(false) : Boolean(this.internalCompose(-1,index) != null);
+         return this._composing ? false : this.internalCompose(-1,index) != null;
       }
       
       tlf_internal function createBackgroundManager() : BackgroundManager

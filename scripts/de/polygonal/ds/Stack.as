@@ -6,7 +6,7 @@ package de.polygonal.ds
       
       function top() : Object;
       
-      function push(x:Object) : void;
+      function push(param1:Object) : void;
       
       function pop() : Object;
    }

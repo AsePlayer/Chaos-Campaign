@@ -23,7 +23,7 @@ package flashx.textLayout.elements
       
       override tlf_internal function get precedence() : uint
       {
-         return kMinSPGEPrecedence;
+         return tlf_internal::kMinSPGEPrecedence;
       }
       
       override tlf_internal function get allowNesting() : Boolean
@@ -35,17 +35,17 @@ package flashx.textLayout.elements
       {
          var myidx:int = 0;
          var sib:SubParagraphGroupElement = null;
-         if(parent && !bindableElement && !hasActiveEventMirror())
+         if(parent && !tlf_internal::bindableElement && !tlf_internal::hasActiveEventMirror())
          {
             myidx = parent.getChildIndex(this);
             if(myidx != 0)
             {
                sib = parent.getChildAt(myidx - 1) as SubParagraphGroupElement;
-               if(sib == null || sib.hasActiveEventMirror())
+               if(sib == null || Boolean(sib.tlf_internal::hasActiveEventMirror()))
                {
                   return false;
                }
-               if(equalStylesForMerge(sib))
+               if(tlf_internal::equalStylesForMerge(sib))
                {
                   parent.removeChildAt(myidx);
                   if(numChildren > 0)

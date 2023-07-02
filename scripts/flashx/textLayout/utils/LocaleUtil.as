@@ -7,8 +7,6 @@ package flashx.textLayout.utils
    import flashx.textLayout.formats.LeadingModel;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public final class LocaleUtil
    {
@@ -114,7 +112,7 @@ class LocaleSettings
    
    private var _dominantBaseline:String = null;
    
-   function LocaleSettings()
+   public function LocaleSettings()
    {
       super();
    }

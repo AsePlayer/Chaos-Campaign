@@ -1,8 +1,8 @@
 package gs.plugins
 {
-   import flash.display.DisplayObject;
+   import flash.display.*;
    import flash.geom.ColorTransform;
-   import gs.TweenLite;
+   import gs.*;
    import gs.utils.tween.TweenInfo;
    
    public class TintPlugin extends TweenPlugin
@@ -52,7 +52,7 @@ package gs.plugins
          this._ct = this._target.transform.colorTransform;
          for(i = _props.length - 1; i > -1; i--)
          {
-            p = _props[i];
+            p = String(_props[i]);
             if(this._ct[p] != $end[p])
             {
                _tweens[_tweens.length] = new TweenInfo(this._ct,p,this._ct[p],$end[p] - this._ct[p],"tint",false);

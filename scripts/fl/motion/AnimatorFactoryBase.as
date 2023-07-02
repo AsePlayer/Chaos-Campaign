@@ -13,7 +13,7 @@ package fl.motion
    {
        
       
-      private var _motion:MotionBase;
+      private var _motion:fl.motion.MotionBase;
       
       private var _motionArray:Array;
       
@@ -27,7 +27,7 @@ package fl.motion
       
       protected var _sceneName:String;
       
-      public function AnimatorFactoryBase(param1:MotionBase, param2:Array = null)
+      public function AnimatorFactoryBase(param1:fl.motion.MotionBase, param2:Array = null)
       {
          super();
          this._motion = param1;
@@ -39,14 +39,14 @@ package fl.motion
          this._sceneName = "";
       }
       
-      public function get motion() : MotionBase
+      public function get motion() : fl.motion.MotionBase
       {
          return this._motion;
       }
       
       public function addTarget(param1:DisplayObject, param2:int = 0, param3:Boolean = true, param4:int = -1, param5:Boolean = false) : AnimatorBase
       {
-         if(param1)
+         if(Boolean(param1))
          {
             return this.addTargetInfo(param1.parent,param1.name,param2,param3,param4,param5);
          }
@@ -111,7 +111,7 @@ package fl.motion
          {
             AnimatorBase.registerSpriteParent(param1 as Sprite,_loc12_,param2,param9,param10);
          }
-         if(param7)
+         if(Boolean(param7))
          {
             _loc12_.initialPosition = param7;
          }

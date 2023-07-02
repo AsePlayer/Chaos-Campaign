@@ -11,9 +11,9 @@ package com.brockw.stickwar.engine.Team
       
       protected var game:StickWar;
       
-      protected var team:Team;
+      protected var team:com.brockw.stickwar.engine.Team.Team;
       
-      public function CastleDefence(game:StickWar, team:Team)
+      public function CastleDefence(game:StickWar, team:com.brockw.stickwar.engine.Team.Team)
       {
          super();
          this.game = game;

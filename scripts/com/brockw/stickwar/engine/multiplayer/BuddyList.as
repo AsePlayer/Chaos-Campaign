@@ -1,10 +1,8 @@
 package com.brockw.stickwar.engine.multiplayer
 {
    import com.brockw.stickwar.Main;
-   import com.smartfoxserver.v2.entities.data.ISFSArray;
-   import com.smartfoxserver.v2.entities.data.ISFSObject;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
    import fl.controls.ScrollPolicy;
    import flash.display.Sprite;
    import flash.events.Event;
@@ -91,7 +89,7 @@ package com.brockw.stickwar.engine.multiplayer
          }
          if(this._chatTabs.length > 0)
          {
-            width = this._chatTabs[0].width;
+            width = Number(this._chatTabs[0].width);
             limit = width * this._chatTabs.length - 655;
             if(limit - this.chatContainerX > 0)
             {
@@ -111,7 +109,7 @@ package com.brockw.stickwar.engine.multiplayer
          }
          if(this._chatTabs.length > 0)
          {
-            width = this._chatTabs[0].width;
+            width = Number(this._chatTabs[0].width);
             limit = width * this._chatTabs.length - 655;
             if(this.chatContainerX > limit)
             {
@@ -130,7 +128,7 @@ package com.brockw.stickwar.engine.multiplayer
          var width:Number = NaN;
          if(this._chatTabs.length > 0)
          {
-            width = this._chatTabs[0].width;
+            width = Number(this._chatTabs[0].width);
             this.chatContainerX += width;
          }
          this.updateChatContainer();
@@ -141,7 +139,7 @@ package com.brockw.stickwar.engine.multiplayer
          var width:Number = NaN;
          if(this._chatTabs.length > 0)
          {
-            width = this._chatTabs[0].width;
+            width = Number(this._chatTabs[0].width);
             this.chatContainerX -= width;
          }
          this.updateChatContainer();
@@ -251,51 +249,51 @@ package com.brockw.stickwar.engine.multiplayer
       
       public function receiveChat(friend:int, userName:String, message:String) : void
       {
-         var _loc5_:int = 0;
-         var _loc7_:Buddy = null;
-         var _loc4_:Buddy = null;
-         for(_loc5_ = 0; _loc5_ < this._buddyList.length; _loc5_++)
+         var i:int = 0;
+         var b:Buddy = null;
+         var buddy:Buddy = null;
+         for(i = 0; i < this._buddyList.length; i++)
          {
-            _loc7_ = this._buddyMap[this._buddyList[_loc5_]];
-            if(_loc7_.id == friend)
+            b = this._buddyMap[this._buddyList[i]];
+            if(b.id == friend)
             {
-               _loc4_ = _loc7_;
+               buddy = b;
                break;
             }
          }
-         if(_loc4_ == null)
+         if(buddy == null)
          {
-            _loc4_ = new Buddy();
-            _loc4_.id = friend;
-            _loc4_.name = userName;
-            _loc4_.statusType = 0;
-            _loc4_.isTemp = true;
-            this.addBuddy(_loc4_);
+            buddy = new Buddy();
+            buddy.id = friend;
+            buddy.name = userName;
+            buddy.statusType = 0;
+            buddy.isTemp = true;
+            this.addBuddy(buddy);
          }
-         var _loc6_:Boolean = false;
-         for(_loc5_ = 0; _loc5_ < this._chatTabs.length; _loc5_++)
+         var isAlreadyInChat:Boolean = false;
+         for(i = 0; i < this._chatTabs.length; i++)
          {
-            if(BuddyChatTab(this._chatTabs[_loc5_]).id == _loc4_.id)
+            if(BuddyChatTab(this._chatTabs[i]).id == buddy.id)
             {
-               _loc6_ = true;
+               isAlreadyInChat = true;
             }
          }
-         if(!_loc6_)
+         if(!isAlreadyInChat)
          {
-            this.createChatWindow(_loc4_);
+            this.createChatWindow(buddy);
          }
-         for(_loc5_ = 0; _loc5_ < this._chatTabs.length; _loc5_++)
+         for(i = 0; i < this._chatTabs.length; i++)
          {
-            if(BuddyChatTab(this._chatTabs[_loc5_]).id == _loc4_.id && BuddyChatTab(this._chatTabs[_loc5_]).chatWindow != null)
+            if(BuddyChatTab(this._chatTabs[i]).id == buddy.id && BuddyChatTab(this._chatTabs[i]).chatWindow != null)
             {
-               BuddyChatTab(this._chatTabs[_loc5_]).chatWindow.chatOutput.text = BuddyChatTab(this._chatTabs[_loc5_]).chatWindow.chatOutput.text + (userName + ": " + message + "\n");
-               BuddyChatTab(this._chatTabs[_loc5_]).chatWindow.chatOutput.height = BuddyChatTab(this._chatTabs[_loc5_]).chatWindow.chatOutput.textHeight + 20;
-               BuddyChatTab(this._chatTabs[_loc5_]).chatWindow.scroll.update();
+               BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.text = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.text + (userName + ": " + message + "\n");
+               BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.height = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.textHeight + 20;
+               BuddyChatTab(this._chatTabs[i]).chatWindow.scroll.update();
                if(this.main.getOverlayScreen() == "chatOverlay")
                {
-                  BuddyChatTab(this._chatTabs[_loc5_]).chatWindow.scroll.verticalScrollPosition = BuddyChatTab(this._chatTabs[_loc5_]).chatWindow.chatOutput.height;
+                  BuddyChatTab(this._chatTabs[i]).chatWindow.scroll.verticalScrollPosition = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.height;
                }
-               _loc4_.chatHistory = BuddyChatTab(this._chatTabs[_loc5_]).chatWindow.chatOutput.text;
+               buddy.chatHistory = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.text;
             }
          }
       }
@@ -426,11 +424,11 @@ package com.brockw.stickwar.engine.multiplayer
       
       private function sortOnNames(a:int, b:int) : int
       {
-         if(this._buddyMap[a].isTemp)
+         if(Boolean(this._buddyMap[a].isTemp))
          {
             return 1;
          }
-         if(this._buddyMap[b].isTemp)
+         if(Boolean(this._buddyMap[b].isTemp))
          {
             return -1;
          }
@@ -472,32 +470,32 @@ package com.brockw.stickwar.engine.multiplayer
       
       public function receiveBuddyList(params:SFSObject) : void
       {
-         var _loc4_:int = 0;
-         var _loc5_:Buddy = null;
-         var _loc2_:ISFSArray = params.getSFSArray("buddys");
-         var _loc3_:Array = [];
+         var i:int = 0;
+         var b:Buddy = null;
+         var buddys:ISFSArray = params.getSFSArray("buddys");
+         var temps:Array = [];
          trace("\nLoading the buddy list");
-         for(_loc4_ = 0; _loc4_ < this._buddyList.length; _loc4_++)
+         for(i = 0; i < this._buddyList.length; i++)
          {
-            _loc5_ = this._buddyMap[this._buddyList[_loc4_]];
-            if(_loc5_.isTemp)
+            b = this._buddyMap[this._buddyList[i]];
+            if(b.isTemp)
             {
-               _loc3_.push(_loc5_);
+               temps.push(b);
             }
          }
          while(this._buddyList.length != 0)
          {
             this.removeBuddy(this._buddyMap[this._buddyList[0]]);
          }
-         for(_loc4_ = 0; _loc4_ < _loc3_.length; _loc4_++)
+         for(i = 0; i < temps.length; i++)
          {
-            this.addBuddy(_loc3_[_loc4_]);
+            this.addBuddy(temps[i]);
          }
-         for(_loc4_ = 0; _loc4_ < _loc2_.size(); _loc4_++)
+         for(i = 0; i < buddys.size(); i++)
          {
-            _loc5_ = new Buddy();
-            _loc5_.fromSFSObject(_loc2_.getSFSObject(_loc4_));
-            this.addBuddy(_loc5_);
+            b = new Buddy();
+            b.fromSFSObject(buddys.getSFSObject(i));
+            this.addBuddy(b);
          }
       }
       

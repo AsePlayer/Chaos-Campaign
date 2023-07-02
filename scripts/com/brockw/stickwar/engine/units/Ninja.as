@@ -2,22 +2,22 @@ package com.brockw.stickwar.engine.units
 {
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.ActionInterface;
-   import com.brockw.stickwar.engine.Ai.NinjaAi;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.engine.Ai.*;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Tech;
-   import com.brockw.stickwar.market.MarketItem;
+   import com.brockw.stickwar.market.*;
    import flash.display.MovieClip;
    import flash.filters.DropShadowFilter;
    import flash.geom.Point;
    
-   public class Ninja extends Unit
+   public class Ninja extends com.brockw.stickwar.engine.units.Unit
    {
       
       private static var WEAPON_REACH:int;
        
       
-      private var _stealthSpellTimer:SpellCooldown;
+      private var _stealthSpellTimer:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var stealthSpellGlow:DropShadowFilter;
       
@@ -35,7 +35,7 @@ package com.brockw.stickwar.engine.units
       
       private var maxStacks:int;
       
-      private var currentTarget:Unit;
+      private var currentTarget:com.brockw.stickwar.engine.units.Unit;
       
       private var stackDamage:int;
       
@@ -58,37 +58,37 @@ package com.brockw.stickwar.engine.units
       
       public static function setItemForMc(mc:MovieClip, weapon:String, armor:String, misc:String) : void
       {
-         if(mc.ninjahead)
+         if(Boolean(mc.ninjahead))
          {
             if(armor != "")
             {
                mc.ninjahead.gotoAndStop(armor);
             }
          }
-         if(mc.ninjastaff)
+         if(Boolean(mc.ninjastaff))
          {
             if(weapon != "")
             {
                mc.ninjastaff.gotoAndStop(weapon);
             }
          }
-         if(mc.ninjasword)
+         if(Boolean(mc.ninjasword))
          {
             if(misc != "")
             {
                mc.ninjasword.gotoAndStop(misc);
             }
          }
-         if(mc.weaponGroup)
+         if(Boolean(mc.weaponGroup))
          {
-            if(mc.weaponGroup.ninjastaff)
+            if(Boolean(mc.weaponGroup.ninjastaff))
             {
                if(weapon != "")
                {
                   mc.weaponGroup.ninjastaff.gotoAndStop(weapon);
                }
             }
-            if(mc.weaponGroup.ninjasword)
+            if(Boolean(mc.weaponGroup.ninjasword))
             {
                if(misc != "")
                {
@@ -102,11 +102,11 @@ package com.brockw.stickwar.engine.units
       {
          var m:_ninja = _ninja(mc);
          setItemForMc(m.mc,weapon,armor,misc);
-         if(m.shadow1)
+         if(Boolean(m.shadow1))
          {
             setItemForMc(m.shadow1,weapon,armor,misc);
          }
-         if(m.shadow2)
+         if(Boolean(m.shadow2))
          {
             setItemForMc(m.shadow2,weapon,armor,misc);
          }
@@ -120,7 +120,7 @@ package com.brockw.stickwar.engine.units
       override public function init(game:StickWar) : void
       {
          initBase();
-         this._stealthSpellTimer = new SpellCooldown(game.xml.xml.Order.Units.ninja.stealth.effect,game.xml.xml.Order.Units.ninja.stealth.cooldown,game.xml.xml.Order.Units.ninja.stealthMana);
+         this._stealthSpellTimer = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Order.Units.ninja.stealth.effect,game.xml.xml.Order.Units.ninja.stealth.cooldown,game.xml.xml.Order.Units.ninja.stealthMana);
          WEAPON_REACH = game.xml.xml.Order.Units.ninja.weaponReach;
          population = game.xml.xml.Order.Units.ninja.population;
          _mass = game.xml.xml.Order.Units.ninja.mass;
@@ -185,7 +185,7 @@ package com.brockw.stickwar.engine.units
       override protected function checkForHit() : Boolean
       {
          var poisonDamage:Number = NaN;
-         var target:Unit = ai.getClosestTarget();
+         var target:com.brockw.stickwar.engine.units.Unit = ai.getClosestTarget();
          if(target == null)
          {
             return false;
@@ -221,11 +221,11 @@ package com.brockw.stickwar.engine.units
             poisonDamage = 0;
             if(team.tech.isResearched(Tech.CLOAK_II))
             {
-               poisonDamage = team.game.xml.xml.Order.Units.ninja.stealth.poison2;
+               poisonDamage = Number(team.game.xml.xml.Order.Units.ninja.stealth.poison2);
             }
             else if(team.tech.isResearched(Tech.CLOAK))
             {
-               poisonDamage = team.game.xml.xml.Order.Units.ninja.stealth.poison;
+               poisonDamage = Number(team.game.xml.xml.Order.Units.ninja.stealth.poison);
             }
             if(!this.dontStealth)
             {
@@ -271,7 +271,7 @@ package com.brockw.stickwar.engine.units
                   else
                   {
                      _mc.gotoAndStop("run");
-                     if(_mc.shadow1 && _mc.shadow2)
+                     if(Boolean(_mc.shadow1) && Boolean(_mc.shadow2))
                      {
                         _mc.shadow1.x = _mc.mc.x - Math.abs(dx) * 10 * this.ninjaCopyDistance;
                         _mc.shadow2.x = _mc.mc.x - Math.abs(dx) * 20 * this.ninjaCopyDistance;
@@ -396,11 +396,11 @@ package com.brockw.stickwar.engine.units
             assasinateDamage = 0;
             if(team.tech.isResearched(Tech.CLOAK_II))
             {
-               assasinateDamage = team.game.xml.xml.Order.Units.ninja.stealth.damageToArmour2;
+               assasinateDamage = Number(team.game.xml.xml.Order.Units.ninja.stealth.damageToArmour2);
             }
             else if(team.tech.isResearched(Tech.CLOAK))
             {
-               assasinateDamage = team.game.xml.xml.Order.Units.ninja.stealth.damageToArmour;
+               assasinateDamage = Number(team.game.xml.xml.Order.Units.ninja.stealth.damageToArmour);
             }
             return _damageToArmour + int(assasinateDamage);
          }
@@ -415,11 +415,11 @@ package com.brockw.stickwar.engine.units
             assasinateDamage = 0;
             if(team.tech.isResearched(Tech.CLOAK_II))
             {
-               assasinateDamage = team.game.xml.xml.Order.Units.ninja.stealth.damageToNotArmour2;
+               assasinateDamage = Number(team.game.xml.xml.Order.Units.ninja.stealth.damageToNotArmour2);
             }
             else if(team.tech.isResearched(Tech.CLOAK))
             {
-               assasinateDamage = team.game.xml.xml.Order.Units.ninja.stealth.damageToNotArmour;
+               assasinateDamage = Number(team.game.xml.xml.Order.Units.ninja.stealth.damageToNotArmour);
             }
             return _damageToNotArmour + int(assasinateDamage);
          }
@@ -441,7 +441,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      override public function mayAttack(target:Unit) : Boolean
+      override public function mayAttack(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(framesInAttack > team.game.frame - attackStartFrame)
          {

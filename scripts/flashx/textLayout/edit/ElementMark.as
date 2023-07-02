@@ -5,8 +5,6 @@ package flashx.textLayout.edit
    import flashx.textLayout.elements.TextFlow;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class ElementMark
    {
@@ -19,12 +17,12 @@ package flashx.textLayout.edit
       public function ElementMark(elem:FlowElement, relativeStartPosition:int)
       {
          super();
-         this._elemStart = relativeStartPosition;
-         this._indexChain = [];
+         this.tlf_internal::_elemStart = relativeStartPosition;
+         this.tlf_internal::_indexChain = [];
          var p:FlowGroupElement = elem.parent;
          while(p != null)
          {
-            this._indexChain.splice(0,0,p.getChildIndex(elem));
+            this.tlf_internal::_indexChain.splice(0,0,p.getChildIndex(elem));
             elem = p;
             p = p.parent;
          }
@@ -32,14 +30,14 @@ package flashx.textLayout.edit
       
       public function get elemStart() : int
       {
-         return this._elemStart;
+         return this.tlf_internal::_elemStart;
       }
       
       public function findElement(textFlow:TextFlow) : FlowElement
       {
          var idx:int = 0;
          var element:FlowElement = textFlow;
-         for each(idx in this._indexChain)
+         for each(idx in this.tlf_internal::_indexChain)
          {
             element = (element as FlowGroupElement).getChildAt(idx);
          }

@@ -19,15 +19,15 @@ package com.google.analytics.utils
          pre = [];
          post = [];
          super();
-         if(source)
+         if(Boolean(source))
          {
             decode(source);
          }
-         if(pre)
+         if(Boolean(pre))
          {
             this.pre = pre;
          }
-         if(post)
+         if(Boolean(post))
          {
             this.post = post;
          }
@@ -35,7 +35,7 @@ package com.google.analytics.utils
       
       private function _join(vars:Variables) : void
       {
-         var prop:* = null;
+         var prop:String = null;
          if(!vars)
          {
             return;
@@ -48,7 +48,7 @@ package com.google.analytics.utils
       
       public function join(... variables) : void
       {
-         var l:int = variables.length;
+         var l:int = int(variables.length);
          for(var i:int = 0; i < l; i++)
          {
             if(variables[i] is Variables)
@@ -61,7 +61,7 @@ package com.google.analytics.utils
       public function toString() : String
       {
          var value:String = null;
-         var p:* = null;
+         var p:String = null;
          var component:String = null;
          var i:int = 0;
          var j:int = 0;
@@ -70,7 +70,7 @@ package com.google.analytics.utils
          var data:Array = [];
          for(p in this)
          {
-            value = this[p];
+            value = String(this[p]);
             if(URIencode)
             {
                value = encodeURI(value);
@@ -86,10 +86,10 @@ package com.google.analytics.utils
             pre.reverse();
             for(i = 0; i < pre.length; i++)
             {
-               priority = pre[i];
+               priority = String(pre[i]);
                for(j = 0; j < data.length; j++)
                {
-                  component = data[j];
+                  component = String(data[j]);
                   if(component.indexOf(priority) == 0)
                   {
                      data.unshift(data.splice(j,1)[0]);
@@ -102,10 +102,10 @@ package com.google.analytics.utils
          {
             for(i = 0; i < post.length; i++)
             {
-               last = post[i];
+               last = String(post[i]);
                for(j = 0; j < data.length; j++)
                {
-                  component = data[j];
+                  component = String(data[j]);
                   if(component.indexOf(last) == 0)
                   {
                      data.push(data.splice(j,1)[0]);
@@ -137,11 +137,11 @@ package com.google.analytics.utils
          }
          for(var i:int = 0; i < data.length; i++)
          {
-            prop = data[i];
+            prop = String(data[i]);
             if(prop.indexOf("=") > -1)
             {
                tmp = prop.split("=");
-               name = tmp[0];
+               name = String(tmp[0]);
                value = decodeURI(tmp[1]);
                this[name] = value;
             }
@@ -150,7 +150,7 @@ package com.google.analytics.utils
       
       public function toURLVariables() : URLVariables
       {
-         var p:* = null;
+         var p:String = null;
          var urlvars:URLVariables = new URLVariables();
          for(p in this)
          {

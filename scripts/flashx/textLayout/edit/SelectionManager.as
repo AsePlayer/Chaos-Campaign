@@ -42,17 +42,15 @@ package flashx.textLayout.edit
    import flashx.textLayout.tlf_internal;
    import flashx.textLayout.utils.NavigationUtil;
    
-   use namespace tlf_internal;
-   
    public class SelectionManager implements ISelectionManager
    {
        
       
-      private var _focusedSelectionFormat:SelectionFormat;
+      private var _focusedSelectionFormat:flashx.textLayout.edit.SelectionFormat;
       
-      private var _unfocusedSelectionFormat:SelectionFormat;
+      private var _unfocusedSelectionFormat:flashx.textLayout.edit.SelectionFormat;
       
-      private var _inactiveSelectionFormat:SelectionFormat;
+      private var _inactiveSelectionFormat:flashx.textLayout.edit.SelectionFormat;
       
       private var _selFormatState:String = "unfocused";
       
@@ -60,9 +58,9 @@ package flashx.textLayout.edit
       
       private var _textFlow:TextFlow;
       
-      private var anchorMark:Mark;
+      private var anchorMark:flashx.textLayout.edit.Mark;
       
-      private var activeMark:Mark;
+      private var activeMark:flashx.textLayout.edit.Mark;
       
       private var _pointFormat:ITextLayoutFormat;
       
@@ -79,8 +77,8 @@ package flashx.textLayout.edit
          this.marks = [];
          super();
          this._textFlow = null;
-         this.anchorMark = this.createMark();
-         this.activeMark = this.createMark();
+         this.anchorMark = this.tlf_internal::createMark();
+         this.activeMark = this.tlf_internal::createMark();
          this._pointFormat = null;
          this._isActive = false;
       }
@@ -100,10 +98,10 @@ package flashx.textLayout.edit
          var lineIndex:int = -1;
          var firstCharVisible:int = controller.absoluteStart;
          var length:int = controller.textLength;
-         var bp:String = textFlow.computedFormat.blockProgression;
+         var bp:String = String(textFlow.computedFormat.blockProgression);
          var isTTB:Boolean = bp == BlockProgression.RL;
          var isDirectionRTL:Boolean = textFlow.computedFormat.direction == Direction.RTL;
-         var perpCoor:Number = !!isTTB ? Number(localX) : Number(localY);
+         var perpCoor:Number = isTTB ? localX : localY;
          var nearestColIdx:int = locateNearestColumn(controller,localX,localY,textFlow.computedFormat.blockProgression,textFlow.computedFormat.direction);
          var prevLineBounds:Rectangle = null;
          var previousLineIndex:int = -1;
@@ -129,18 +127,18 @@ package flashx.textLayout.edit
                      lastLineIndexInColumn = testIndex;
                   }
                   bounds = rtTextLine.getBounds(DisplayObject(controller.container));
-                  linePerpCoor = !!isTTB ? Number(bounds.left) : Number(bounds.bottom);
+                  linePerpCoor = isTTB ? bounds.left : bounds.bottom;
                   midPerpCoor = -1;
-                  if(prevLineBounds)
+                  if(Boolean(prevLineBounds))
                   {
-                     prevPerpCoor = !!isTTB ? Number(prevLineBounds.right) : Number(prevLineBounds.top);
+                     prevPerpCoor = isTTB ? prevLineBounds.right : prevLineBounds.top;
                      midPerpCoor = (linePerpCoor + prevPerpCoor) / 2;
                   }
-                  isLineBelow = !!isTTB ? Boolean(linePerpCoor > perpCoor) : Boolean(linePerpCoor < perpCoor);
+                  isLineBelow = isTTB ? linePerpCoor > perpCoor : linePerpCoor < perpCoor;
                   if(isLineBelow || testIndex == 0)
                   {
-                     inPrevLine = midPerpCoor != -1 && (!!isTTB ? Boolean(perpCoor < midPerpCoor) : Boolean(perpCoor > midPerpCoor));
-                     lineIndex = inPrevLine && testIndex != lastLineIndexInColumn ? int(testIndex + 1) : int(testIndex);
+                     inPrevLine = midPerpCoor != -1 && (isTTB ? perpCoor < midPerpCoor : perpCoor > midPerpCoor);
+                     lineIndex = inPrevLine && testIndex != lastLineIndexInColumn ? testIndex + 1 : testIndex;
                      break;
                   }
                   prevLineBounds = bounds;
@@ -228,7 +226,7 @@ package flashx.textLayout.edit
             }
          }
          var result:int = computeSelectionIndexInLine(textFlow,textLine,localX,localY);
-         return result != -1 ? int(result) : int(firstCharVisible + length);
+         return result != -1 ? result : firstCharVisible + length;
       }
       
       private static function locateNearestColumn(container:ContainerController, localX:Number, localY:Number, wm:String, direction:String) : int
@@ -305,7 +303,7 @@ package flashx.textLayout.edit
          }
          textLine = rtline.getTextLine(true);
          var isTTB:Boolean = textFlow.computedFormat.blockProgression == BlockProgression.RL;
-         var perpCoor:Number = !!isTTB ? Number(localX) : Number(localY);
+         var perpCoor:Number = isTTB ? localX : localY;
          var pt:Point = new Point();
          pt.x = localX;
          pt.y = localY;
@@ -331,19 +329,19 @@ package flashx.textLayout.edit
             pt.x = localX;
             pt.y = localY;
             pt = textLine.localToGlobal(pt);
-            if(textLine.parent)
+            if(Boolean(textLine.parent))
             {
                pt = textLine.parent.globalToLocal(pt);
             }
             if(!isTTB)
             {
-               return pt.x <= textLine.x ? int(rtline.absoluteStart) : int(rtline.absoluteStart + rtline.textLength - 1);
+               return pt.x <= textLine.x ? rtline.absoluteStart : rtline.absoluteStart + rtline.textLength - 1;
             }
-            return pt.y <= textLine.y ? int(rtline.absoluteStart) : int(rtline.absoluteStart + rtline.textLength - 1);
+            return pt.y <= textLine.y ? rtline.absoluteStart : rtline.absoluteStart + rtline.textLength - 1;
          }
          var glyphRect:Rectangle = textLine.getAtomBounds(elemIdx);
          var leanRight:Boolean = false;
-         if(glyphRect)
+         if(Boolean(glyphRect))
          {
             if(isTTB && textLine.getAtomTextRotation(elemIdx) != TextRotation.ROTATE_0)
             {
@@ -356,11 +354,11 @@ package flashx.textLayout.edit
          }
          if(textLine.getAtomBidiLevel(elemIdx) % 2 != 0)
          {
-            paraSelectionIdx = !!leanRight ? int(textLine.getAtomTextBlockBeginIndex(elemIdx)) : int(textLine.getAtomTextBlockEndIndex(elemIdx));
+            paraSelectionIdx = leanRight ? textLine.getAtomTextBlockBeginIndex(elemIdx) : textLine.getAtomTextBlockEndIndex(elemIdx);
          }
          else
          {
-            paraSelectionIdx = !!leanRight ? int(textLine.getAtomTextBlockEndIndex(elemIdx)) : int(textLine.getAtomTextBlockBeginIndex(elemIdx));
+            paraSelectionIdx = leanRight ? textLine.getAtomTextBlockEndIndex(elemIdx) : textLine.getAtomTextBlockBeginIndex(elemIdx);
          }
          return rtline.paragraph.getAbsoluteStart() + paraSelectionIdx;
       }
@@ -369,13 +367,13 @@ package flashx.textLayout.edit
       {
          try
          {
-            while(container)
+            while(Boolean(container))
             {
                if(!container.visible)
                {
                   return false;
                }
-               var container:DisplayObject = container.parent;
+               container = container.parent;
                if(container is Stage)
                {
                   return true;
@@ -416,7 +414,7 @@ package flashx.textLayout.edit
          if(target is TextLine)
          {
             tfl = TextLine(target).userData as TextFlowLine;
-            if(tfl)
+            if(Boolean(tfl))
             {
                para = tfl.paragraph;
                if(para.getTextFlow() == textFlow)
@@ -440,7 +438,7 @@ package flashx.textLayout.edit
                   break;
                }
             }
-            if(controller)
+            if(Boolean(controller))
             {
                if(target != controller.container)
                {
@@ -461,13 +459,13 @@ package flashx.textLayout.edit
                   if(checkForDisplayed(curContainerController.container as DisplayObject))
                   {
                      bounds = curContainerController.getContentBounds();
-                     containerWidth = !!isNaN(curContainerController.compositionWidth) ? Number(curContainerController.getTotalPaddingLeft() + bounds.width) : Number(curContainerController.compositionWidth);
-                     containerHeight = !!isNaN(curContainerController.compositionHeight) ? Number(curContainerController.getTotalPaddingTop() + bounds.height) : Number(curContainerController.compositionHeight);
+                     containerWidth = isNaN(curContainerController.compositionWidth) ? curContainerController.tlf_internal::getTotalPaddingLeft() + bounds.width : curContainerController.compositionWidth;
+                     containerHeight = isNaN(curContainerController.compositionHeight) ? curContainerController.tlf_internal::getTotalPaddingTop() + bounds.height : curContainerController.compositionHeight;
                      containerPoint = DisplayObject(target).localToGlobal(new Point(localX,localY));
                      containerPoint = DisplayObject(curContainerController.container).globalToLocal(containerPoint);
                      adjustX = 0;
                      adjustY = 0;
-                     if(curContainerController.hasScrollRect)
+                     if(curContainerController.tlf_internal::hasScrollRect)
                      {
                         containerPoint.x -= adjustX = curContainerController.container.scrollRect.x;
                         containerPoint.y -= adjustY = curContainerController.container.scrollRect.y;
@@ -523,7 +521,7 @@ package flashx.textLayout.edit
                      }
                   }
                }
-               rslt = Boolean(controllerCandidate) ? int(computeSelectionIndexInContainer(textFlow,controllerCandidate,candidateLocalX,candidateLocalY)) : int(-1);
+               rslt = Boolean(controllerCandidate) ? computeSelectionIndexInContainer(textFlow,controllerCandidate,candidateLocalX,candidateLocalY) : -1;
             }
          }
          if(rslt >= textFlow.textLength)
@@ -567,7 +565,7 @@ package flashx.textLayout.edit
       {
          if(this._textFlow != value)
          {
-            if(this._textFlow)
+            if(Boolean(this._textFlow))
             {
                this.flushPendingOperations();
             }
@@ -577,7 +575,7 @@ package flashx.textLayout.edit
                this.setMouseCursor(MouseCursor.AUTO);
             }
             this._textFlow = value;
-            if(this._textFlow && this._textFlow.interactionManager != this)
+            if(Boolean(this._textFlow) && this._textFlow.interactionManager != this)
             {
                this._textFlow.interactionManager = this;
             }
@@ -599,7 +597,7 @@ package flashx.textLayout.edit
          return this._selFormatState == SelectionFormatState.FOCUSED;
       }
       
-      public function get currentSelectionFormat() : SelectionFormat
+      public function get currentSelectionFormat() : flashx.textLayout.edit.SelectionFormat
       {
          if(this._selFormatState == SelectionFormatState.UNFOCUSED)
          {
@@ -612,7 +610,7 @@ package flashx.textLayout.edit
          return this.focusedSelectionFormat;
       }
       
-      public function set focusedSelectionFormat(val:SelectionFormat) : void
+      public function set focusedSelectionFormat(val:flashx.textLayout.edit.SelectionFormat) : void
       {
          this._focusedSelectionFormat = val;
          if(this._selFormatState == SelectionFormatState.FOCUSED)
@@ -621,12 +619,12 @@ package flashx.textLayout.edit
          }
       }
       
-      public function get focusedSelectionFormat() : SelectionFormat
+      public function get focusedSelectionFormat() : flashx.textLayout.edit.SelectionFormat
       {
          return Boolean(this._focusedSelectionFormat) ? this._focusedSelectionFormat : (Boolean(this._textFlow) ? this._textFlow.configuration.focusedSelectionFormat : null);
       }
       
-      public function set unfocusedSelectionFormat(val:SelectionFormat) : void
+      public function set unfocusedSelectionFormat(val:flashx.textLayout.edit.SelectionFormat) : void
       {
          this._unfocusedSelectionFormat = val;
          if(this._selFormatState == SelectionFormatState.UNFOCUSED)
@@ -635,12 +633,12 @@ package flashx.textLayout.edit
          }
       }
       
-      public function get unfocusedSelectionFormat() : SelectionFormat
+      public function get unfocusedSelectionFormat() : flashx.textLayout.edit.SelectionFormat
       {
          return Boolean(this._unfocusedSelectionFormat) ? this._unfocusedSelectionFormat : (Boolean(this._textFlow) ? this._textFlow.configuration.unfocusedSelectionFormat : null);
       }
       
-      public function set inactiveSelectionFormat(val:SelectionFormat) : void
+      public function set inactiveSelectionFormat(val:flashx.textLayout.edit.SelectionFormat) : void
       {
          this._inactiveSelectionFormat = val;
          if(this._selFormatState == SelectionFormatState.INACTIVE)
@@ -649,7 +647,7 @@ package flashx.textLayout.edit
          }
       }
       
-      public function get inactiveSelectionFormat() : SelectionFormat
+      public function get inactiveSelectionFormat() : flashx.textLayout.edit.SelectionFormat
       {
          return Boolean(this._inactiveSelectionFormat) ? this._inactiveSelectionFormat : (Boolean(this._textFlow) ? this._textFlow.configuration.inactiveSelectionFormat : null);
       }
@@ -661,8 +659,8 @@ package flashx.textLayout.edit
       
       tlf_internal function setSelectionFormatState(selFormatState:String) : void
       {
-         var oldSelectionFormat:SelectionFormat = null;
-         var newSelectionFormat:SelectionFormat = null;
+         var oldSelectionFormat:flashx.textLayout.edit.SelectionFormat = null;
+         var newSelectionFormat:flashx.textLayout.edit.SelectionFormat = null;
          if(selFormatState != this._selFormatState)
          {
             oldSelectionFormat = this.currentSelectionFormat;
@@ -678,11 +676,11 @@ package flashx.textLayout.edit
       tlf_internal function cloneSelectionFormatState(oldISelectionManager:ISelectionManager) : void
       {
          var oldSelectionManager:SelectionManager = oldISelectionManager as SelectionManager;
-         if(oldSelectionManager)
+         if(Boolean(oldSelectionManager))
          {
             this._isActive = oldSelectionManager._isActive;
             this._mouseOverSelectionArea = oldSelectionManager._mouseOverSelectionArea;
-            this.setSelectionFormatState(oldSelectionManager.selectionFormatState);
+            this.tlf_internal::setSelectionFormatState(oldSelectionManager.tlf_internal::selectionFormatState);
          }
       }
       
@@ -698,7 +696,7 @@ package flashx.textLayout.edit
          }
          var begIdx:int = this.anchorMark.position;
          var endIdx:int = this.activeMark.position;
-         endIdx = computeSelectionIndex(this._textFlow,target,currentTarget,localX,localY);
+         endIdx = tlf_internal::computeSelectionIndex(this._textFlow,target,currentTarget,localX,localY);
          if(endIdx == -1)
          {
             return null;
@@ -710,12 +708,12 @@ package flashx.textLayout.edit
          }
          if(begIdx == endIdx)
          {
-            begIdx = NavigationUtil.updateStartIfInReadOnlyElement(this._textFlow,begIdx);
-            endIdx = NavigationUtil.updateEndIfInReadOnlyElement(this._textFlow,endIdx);
+            begIdx = int(NavigationUtil.tlf_internal::updateStartIfInReadOnlyElement(this._textFlow,begIdx));
+            endIdx = int(NavigationUtil.tlf_internal::updateEndIfInReadOnlyElement(this._textFlow,endIdx));
          }
          else
          {
-            endIdx = NavigationUtil.updateEndIfInReadOnlyElement(this._textFlow,endIdx);
+            endIdx = int(NavigationUtil.tlf_internal::updateEndIfInReadOnlyElement(this._textFlow,endIdx));
          }
          return new SelectionState(this.textFlow,begIdx,endIdx);
       }
@@ -726,11 +724,11 @@ package flashx.textLayout.edit
          {
             return;
          }
-         if(this._textFlow.flowComposer)
+         if(Boolean(this._textFlow.flowComposer))
          {
             this._textFlow.flowComposer.setFocus(this.activePosition,false);
          }
-         this.setSelectionFormatState(SelectionFormatState.FOCUSED);
+         this.tlf_internal::setSelectionFormatState(SelectionFormatState.FOCUSED);
       }
       
       protected function setMouseCursor(cursor:String) : void
@@ -750,12 +748,12 @@ package flashx.textLayout.edit
       
       public function get absoluteStart() : int
       {
-         return this.anchorMark.position < this.activeMark.position ? int(this.anchorMark.position) : int(this.activeMark.position);
+         return this.anchorMark.position < this.activeMark.position ? this.anchorMark.position : this.activeMark.position;
       }
       
       public function get absoluteEnd() : int
       {
-         return this.anchorMark.position > this.activeMark.position ? int(this.anchorMark.position) : int(this.activeMark.position);
+         return this.anchorMark.position > this.activeMark.position ? this.anchorMark.position : this.activeMark.position;
       }
       
       public function selectAll() : void
@@ -770,7 +768,7 @@ package flashx.textLayout.edit
          {
             this.clearSelectionShapes();
             this.internalSetSelection(this._textFlow,anchorPosition,activePosition);
-            this.selectionChanged();
+            this.tlf_internal::selectionChanged();
             this.allowOperationMerge = false;
          }
       }
@@ -783,7 +781,7 @@ package flashx.textLayout.edit
             anchorPosition = -1;
             activePosition = -1;
          }
-         var lastSelectablePos:int = this._textFlow.textLength > 0 ? int(this._textFlow.textLength - 1) : int(0);
+         var lastSelectablePos:int = this._textFlow.textLength > 0 ? this._textFlow.textLength - 1 : 0;
          if(anchorPosition != -1 && activePosition != -1)
          {
             if(anchorPosition > lastSelectablePos)
@@ -807,7 +805,7 @@ package flashx.textLayout.edit
             this.flushPendingOperations();
             this.clearSelectionShapes();
             this.internalSetSelection(this._textFlow,-1,-1);
-            this.selectionChanged();
+            this.tlf_internal::selectionChanged();
             this.allowOperationMerge = false;
          }
       }
@@ -815,15 +813,15 @@ package flashx.textLayout.edit
       private function addSelectionShapes() : void
       {
          var containerIter:int = 0;
-         if(this._textFlow.flowComposer)
+         if(Boolean(this._textFlow.flowComposer))
          {
             this.internalSetSelection(this._textFlow,this.anchorMark.position,this.activeMark.position,this._pointFormat);
-            if(this.currentSelectionFormat && (this.absoluteStart == this.absoluteEnd && this.currentSelectionFormat.pointAlpha != 0 || this.absoluteStart != this.absoluteEnd && this.currentSelectionFormat.rangeAlpha != 0))
+            if(Boolean(this.currentSelectionFormat) && (this.absoluteStart == this.absoluteEnd && this.currentSelectionFormat.pointAlpha != 0 || this.absoluteStart != this.absoluteEnd && this.currentSelectionFormat.rangeAlpha != 0))
             {
                containerIter = 0;
                while(containerIter < this._textFlow.flowComposer.numControllers)
                {
-                  this._textFlow.flowComposer.getControllerAt(containerIter++).addSelectionShapes(this.currentSelectionFormat,this.absoluteStart,this.absoluteEnd);
+                  this._textFlow.flowComposer.getControllerAt(containerIter++).tlf_internal::addSelectionShapes(this.currentSelectionFormat,this.absoluteStart,this.absoluteEnd);
                }
             }
          }
@@ -833,12 +831,12 @@ package flashx.textLayout.edit
       {
          var containerIter:int = 0;
          var flowComposer:IFlowComposer = Boolean(this._textFlow) ? this._textFlow.flowComposer : null;
-         if(flowComposer)
+         if(Boolean(flowComposer))
          {
             containerIter = 0;
             while(containerIter < flowComposer.numControllers)
             {
-               flowComposer.getControllerAt(containerIter++).clearSelectionShapes();
+               flowComposer.getControllerAt(containerIter++).tlf_internal::clearSelectionShapes();
             }
          }
       }
@@ -858,9 +856,9 @@ package flashx.textLayout.edit
          {
             this._pointFormat = null;
          }
-         if(doDispatchEvent && this._textFlow)
+         if(doDispatchEvent && Boolean(this._textFlow))
          {
-            this.textFlow.dispatchEvent(new SelectionEvent(SelectionEvent.SELECTION_CHANGE,false,false,!!this.hasSelection() ? this.getSelectionState() : null));
+            this.textFlow.dispatchEvent(new SelectionEvent(SelectionEvent.SELECTION_CHANGE,false,false,this.hasSelection() ? this.getSelectionState() : null));
          }
       }
       
@@ -881,26 +879,26 @@ package flashx.textLayout.edit
       
       public function mouseDownHandler(event:MouseEvent) : void
       {
-         this.handleMouseEventForSelection(event,event.shiftKey);
+         this.tlf_internal::handleMouseEventForSelection(event,event.shiftKey);
       }
       
       public function mouseMoveHandler(event:MouseEvent) : void
       {
-         var wmode:String = this.textFlow.computedFormat.blockProgression;
+         var wmode:String = String(this.textFlow.computedFormat.blockProgression);
          if(wmode != BlockProgression.RL)
          {
             this.setMouseCursor(MouseCursor.IBEAM);
          }
          if(event.buttonDown)
          {
-            this.handleMouseEventForSelection(event,true);
+            this.tlf_internal::handleMouseEventForSelection(event,true);
          }
       }
       
       tlf_internal function handleMouseEventForSelection(event:MouseEvent, allowExtend:Boolean) : void
       {
          var startSelectionActive:Boolean = this.hasSelection();
-         if(this.setNewSelectionPoint(event.currentTarget,event.target as InteractiveObject,event.localX,event.localY,startSelectionActive && allowExtend))
+         if(this.tlf_internal::setNewSelectionPoint(event.currentTarget,event.target as InteractiveObject,event.localX,event.localY,startSelectionActive && allowExtend))
          {
             if(startSelectionActive)
             {
@@ -943,7 +941,7 @@ package flashx.textLayout.edit
          {
             return;
          }
-         var activePara:ParagraphElement = this._textFlow.findAbsoluteParagraph(this.activeMark.position);
+         var activePara:ParagraphElement = this._textFlow.tlf_internal::findAbsoluteParagraph(this.activeMark.position);
          var activeParaStart:int = activePara.getAbsoluteStart();
          if(this.anchorMark.position <= this.activeMark.position)
          {
@@ -963,7 +961,7 @@ package flashx.textLayout.edit
          }
          else
          {
-            anchorPara = this._textFlow.findAbsoluteParagraph(this.anchorMark.position);
+            anchorPara = this._textFlow.tlf_internal::findAbsoluteParagraph(this.anchorMark.position);
             anchorParaStart = anchorPara.getAbsoluteStart();
             if(this.atBeginningWordPos(anchorPara,this.anchorMark.position - anchorParaStart))
             {
@@ -988,7 +986,7 @@ package flashx.textLayout.edit
          if(newAnchorIndex != this.anchorMark.position || newActiveIndex != this.activeMark.position)
          {
             this.internalSetSelection(this._textFlow,newAnchorIndex,newActiveIndex,null);
-            this.selectionChanged();
+            this.tlf_internal::selectionChanged();
             this.clearSelectionShapes();
             if(this.hasSelection())
             {
@@ -1001,7 +999,7 @@ package flashx.textLayout.edit
       public function mouseOverHandler(event:MouseEvent) : void
       {
          this._mouseOverSelectionArea = true;
-         var wmode:String = this.textFlow.computedFormat.blockProgression;
+         var wmode:String = String(this.textFlow.computedFormat.blockProgression);
          if(wmode != BlockProgression.RL)
          {
             this.setMouseCursor(MouseCursor.IBEAM);
@@ -1021,14 +1019,14 @@ package flashx.textLayout.edit
       public function focusInHandler(event:FocusEvent) : void
       {
          this._isActive = true;
-         this.setSelectionFormatState(SelectionFormatState.FOCUSED);
+         this.tlf_internal::setSelectionFormatState(SelectionFormatState.FOCUSED);
       }
       
       public function focusOutHandler(event:FocusEvent) : void
       {
          if(this._isActive)
          {
-            this.setSelectionFormatState(SelectionFormatState.UNFOCUSED);
+            this.tlf_internal::setSelectionFormatState(SelectionFormatState.UNFOCUSED);
          }
       }
       
@@ -1037,7 +1035,7 @@ package flashx.textLayout.edit
          if(!this._isActive)
          {
             this._isActive = true;
-            this.setSelectionFormatState(SelectionFormatState.UNFOCUSED);
+            this.tlf_internal::setSelectionFormatState(SelectionFormatState.UNFOCUSED);
          }
       }
       
@@ -1046,7 +1044,7 @@ package flashx.textLayout.edit
          if(this._isActive)
          {
             this._isActive = false;
-            this.setSelectionFormatState(SelectionFormatState.INACTIVE);
+            this.tlf_internal::setSelectionFormatState(SelectionFormatState.INACTIVE);
          }
       }
       
@@ -1057,7 +1055,7 @@ package flashx.textLayout.edit
          this.textFlow.dispatchEvent(opEvent);
          if(!opEvent.isDefaultPrevented())
          {
-            var op:FlowOperation = opEvent.operation;
+            op = opEvent.operation;
             if(!(op is CopyOperation))
             {
                throw new IllegalOperationError(GlobalSettings.resourceStringFunction("illegalOperation",[getQualifiedClassName(op)]));
@@ -1073,8 +1071,8 @@ package flashx.textLayout.edit
             }
             opEvent = new FlowOperationEvent(FlowOperationEvent.FLOW_OPERATION_END,false,true,op,0,opError);
             this.textFlow.dispatchEvent(opEvent);
-            opError = !!opEvent.isDefaultPrevented() ? null : opEvent.error;
-            if(opError)
+            opError = opEvent.isDefaultPrevented() ? null : opEvent.error;
+            if(Boolean(opError))
             {
                throw opError;
             }
@@ -1333,7 +1331,7 @@ package flashx.textLayout.edit
          {
             event.preventDefault();
             this.updateSelectionAndShapes(this._textFlow,selState.anchorPosition,selState.activePosition);
-            if(this._textFlow.flowComposer && this._textFlow.flowComposer.numControllers != 0)
+            if(Boolean(this._textFlow.flowComposer) && this._textFlow.flowComposer.numControllers != 0)
             {
                this._textFlow.flowComposer.getControllerAt(this._textFlow.flowComposer.numControllers - 1).scrollToRange(selState.activePosition,selState.activePosition);
             }
@@ -1415,7 +1413,7 @@ package flashx.textLayout.edit
             menu.clipboardItems.clear = false;
          }
          var systemClipboard:Clipboard = Clipboard.generalClipboard;
-         if(this.activePosition != -1 && this.editingMode == EditingMode.READ_WRITE && (systemClipboard.hasFormat(TextClipboard.TEXT_LAYOUT_MARKUP) || systemClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT)))
+         if(this.activePosition != -1 && this.editingMode == EditingMode.READ_WRITE && (systemClipboard.hasFormat(TextClipboard.tlf_internal::TEXT_LAYOUT_MARKUP) || systemClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT)))
          {
             menu.clipboardItems.paste = true;
          }
@@ -1440,9 +1438,9 @@ package flashx.textLayout.edit
          {
             return null;
          }
-         var selRange:ElementRange = ElementRange.createElementRange(this._textFlow,Boolean(range) ? int(range.absoluteStart) : int(this.absoluteStart),Boolean(range) ? int(range.absoluteEnd) : int(this.absoluteEnd));
+         var selRange:ElementRange = ElementRange.createElementRange(this._textFlow,Boolean(range) ? range.absoluteStart : this.absoluteStart,Boolean(range) ? range.absoluteEnd : this.absoluteEnd);
          var rslt:TextLayoutFormat = selRange.getCommonCharacterFormat();
-         if(selRange.absoluteEnd == selRange.absoluteStart && this.pointFormat)
+         if(selRange.absoluteEnd == selRange.absoluteStart && Boolean(this.pointFormat))
          {
             rslt.apply(this.pointFormat);
          }
@@ -1455,7 +1453,7 @@ package flashx.textLayout.edit
          {
             return null;
          }
-         return ElementRange.createElementRange(this._textFlow,Boolean(range) ? int(range.absoluteStart) : int(this.absoluteStart),Boolean(range) ? int(range.absoluteEnd) : int(this.absoluteEnd)).getCommonParagraphFormat();
+         return ElementRange.createElementRange(this._textFlow,Boolean(range) ? range.absoluteStart : this.absoluteStart,Boolean(range) ? range.absoluteEnd : this.absoluteEnd).getCommonParagraphFormat();
       }
       
       public function getCommonContainerFormat(range:TextRange = null) : TextLayoutFormat
@@ -1464,29 +1462,29 @@ package flashx.textLayout.edit
          {
             return null;
          }
-         return ElementRange.createElementRange(this._textFlow,Boolean(range) ? int(range.absoluteStart) : int(this.absoluteStart),Boolean(range) ? int(range.absoluteEnd) : int(this.absoluteEnd)).getCommonContainerFormat();
+         return ElementRange.createElementRange(this._textFlow,Boolean(range) ? range.absoluteStart : this.absoluteStart,Boolean(range) ? range.absoluteEnd : this.absoluteEnd).getCommonContainerFormat();
       }
       
       private function updateSelectionAndShapes(tf:TextFlow, begIdx:int, endIdx:int) : void
       {
          this.internalSetSelection(tf,begIdx,endIdx);
-         if(this._textFlow.flowComposer && this._textFlow.flowComposer.numControllers != 0)
+         if(Boolean(this._textFlow.flowComposer) && this._textFlow.flowComposer.numControllers != 0)
          {
             this._textFlow.flowComposer.getControllerAt(this._textFlow.flowComposer.numControllers - 1).scrollToRange(this.activeMark.position,this.anchorMark.position);
          }
-         this.selectionChanged();
+         this.tlf_internal::selectionChanged();
          this.clearSelectionShapes();
          this.addSelectionShapes();
       }
       
-      tlf_internal function createMark() : Mark
+      tlf_internal function createMark() : flashx.textLayout.edit.Mark
       {
-         var mark:Mark = new Mark(-1);
+         var mark:flashx.textLayout.edit.Mark = new flashx.textLayout.edit.Mark(-1);
          this.marks.push(mark);
          return mark;
       }
       
-      tlf_internal function removeMark(mark:Mark) : void
+      tlf_internal function removeMark(mark:flashx.textLayout.edit.Mark) : void
       {
          var idx:int = this.marks.indexOf(mark);
          if(idx != -1)
@@ -1497,7 +1495,7 @@ package flashx.textLayout.edit
       
       public function notifyInsertOrDelete(absolutePosition:int, length:int) : void
       {
-         var mark:Mark = null;
+         var mark:flashx.textLayout.edit.Mark = null;
          if(length == 0)
          {
             return;
@@ -1509,7 +1507,7 @@ package flashx.textLayout.edit
             {
                if(length < 0)
                {
-                  mark.position = mark.position + length < absolutePosition ? int(absolutePosition) : int(mark.position + length);
+                  mark.position = mark.position + length < absolutePosition ? absolutePosition : mark.position + length;
                }
                else
                {

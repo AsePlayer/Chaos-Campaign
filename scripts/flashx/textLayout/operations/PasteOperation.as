@@ -11,8 +11,6 @@ package flashx.textLayout.operations
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class PasteOperation extends FlowTextOperation
    {
        
@@ -21,13 +19,13 @@ package flashx.textLayout.operations
       
       private var _numCharsAdded:int = 0;
       
-      private var _deleteTextOperation:DeleteTextOperation;
+      private var _deleteTextOperation:flashx.textLayout.operations.DeleteTextOperation;
       
       private var _applyParagraphSettings:Array;
       
       private var _pointFormat:ITextLayoutFormat;
       
-      private var _applyPointFormat:ApplyFormatOperation;
+      private var _applyPointFormat:flashx.textLayout.operations.ApplyFormatOperation;
       
       public function PasteOperation(operationState:SelectionState, textScrap:TextScrap)
       {
@@ -46,10 +44,10 @@ package flashx.textLayout.operations
          {
             if(absoluteStart != absoluteEnd)
             {
-               this._deleteTextOperation = new DeleteTextOperation(originalSelectionState);
+               this._deleteTextOperation = new flashx.textLayout.operations.DeleteTextOperation(originalSelectionState);
                this._deleteTextOperation.doOperation();
             }
-            plainText = this._textScrap.isPlainText();
+            plainText = Boolean(this._textScrap.tlf_internal::isPlainText());
             if(!plainText)
             {
                leaf = textFlow.findLeaf(absoluteStart);
@@ -60,14 +58,14 @@ package flashx.textLayout.operations
                }
             }
             nextInsertPosition = TextFlowEdit.insertTextScrap(textFlow,absoluteStart,this._textScrap,plainText);
-            if(textFlow.interactionManager)
+            if(Boolean(textFlow.interactionManager))
             {
                textFlow.interactionManager.notifyInsertOrDelete(absoluteStart,nextInsertPosition - absoluteStart);
             }
             this._numCharsAdded = nextInsertPosition - absoluteStart;
-            if(this._pointFormat && plainText)
+            if(Boolean(this._pointFormat) && plainText)
             {
-               this._applyPointFormat = new ApplyFormatOperation(new SelectionState(textFlow,absoluteStart,absoluteStart + this._numCharsAdded),this._pointFormat,null,null);
+               this._applyPointFormat = new flashx.textLayout.operations.ApplyFormatOperation(new SelectionState(textFlow,absoluteStart,absoluteStart + this._numCharsAdded),this._pointFormat,null,null);
                this._applyPointFormat.doOperation();
             }
          }
@@ -90,19 +88,19 @@ package flashx.textLayout.operations
          var i:int = 0;
          if(this._textScrap != null)
          {
-            if(this._applyPointFormat)
+            if(Boolean(this._applyPointFormat))
             {
                this._applyPointFormat.undo();
             }
             ModelEdit.deleteText(textFlow,absoluteStart,absoluteStart + this._numCharsAdded,false);
-            if(this._applyParagraphSettings)
+            if(Boolean(this._applyParagraphSettings))
             {
                for(i = this._applyParagraphSettings.length - 1; i >= 0; i--)
                {
                   this._applyParagraphSettings[i].undo();
                }
             }
-            if(this._deleteTextOperation)
+            if(Boolean(this._deleteTextOperation))
             {
                this._deleteTextOperation.undo();
             }
@@ -116,23 +114,23 @@ package flashx.textLayout.operations
          var i:int = 0;
          if(this._textScrap != null)
          {
-            if(this._deleteTextOperation)
+            if(Boolean(this._deleteTextOperation))
             {
                this._deleteTextOperation.redo();
             }
-            if(this._applyParagraphSettings)
+            if(Boolean(this._applyParagraphSettings))
             {
                for(i = this._applyParagraphSettings.length - 1; i >= 0; i--)
                {
                   this._applyParagraphSettings[i].redo();
                }
             }
-            nextInsertPosition = TextFlowEdit.insertTextScrap(textFlow,absoluteStart,this._textScrap,this._textScrap.isPlainText());
-            if(textFlow.interactionManager)
+            nextInsertPosition = TextFlowEdit.insertTextScrap(textFlow,absoluteStart,this._textScrap,this._textScrap.tlf_internal::isPlainText());
+            if(Boolean(textFlow.interactionManager))
             {
                textFlow.interactionManager.notifyInsertOrDelete(absoluteStart,nextInsertPosition - absoluteStart);
             }
-            if(this._applyPointFormat)
+            if(Boolean(this._applyPointFormat))
             {
                this._applyPointFormat.redo();
             }

@@ -1,7 +1,7 @@
 package gs.plugins
 {
-   import gs.TweenLite;
-   import gs.utils.tween.TweenInfo;
+   import gs.*;
+   import gs.utils.tween.*;
    
    public class TweenPlugin
    {
@@ -52,7 +52,7 @@ package gs.plugins
          var change:Number = NaN;
          if($end != null)
          {
-            change = typeof $end == "number" ? Number($end - $start) : Number(Number($end));
+            change = typeof $end == "number" ? $end - $start : Number($end);
             if(change != 0)
             {
                this._tweens[this._tweens.length] = new TweenInfo($object,$propName,$start,change,$overwriteProp || $propName,false);
@@ -72,7 +72,7 @@ package gs.plugins
             {
                ti = this._tweens[i];
                val = ti.start + ti.change * $changeFactor;
-               neg = val < 0 ? int(-1) : int(1);
+               neg = val < 0 ? -1 : 1;
                ti.target[ti.property] = val % 1 * neg > 0.5 ? int(val) + neg : int(val);
             }
          }

@@ -8,15 +8,15 @@ package de.polygonal.ds
       
       public var val:Object;
       
-      public var next:LinkedQueueNode;
+      public var next:de.polygonal.ds.LinkedQueueNode;
       
-      public function LinkedQueueNode(x:Object = undefined)
+      public function LinkedQueueNode(param1:Object = undefined)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         val = x;
+         val = param1;
       }
       
       public function toString() : String

@@ -1,7 +1,5 @@
 package flashx.textLayout
 {
-   use namespace tlf_internal;
-   
    public class TextLayoutVersion
    {
       
@@ -27,9 +25,9 @@ package flashx.textLayout
       
       tlf_internal static function getVersionString(version:uint) : String
       {
-         var major:uint = version >> 24 & 255;
-         var minor:uint = version >> 16 & 255;
-         var update:uint = version & 65535;
+         var major:uint = uint(version >> 24 & 255);
+         var minor:uint = uint(version >> 16 & 255);
+         var update:uint = uint(version & 65535);
          return major.toString() + "." + minor.toString() + "." + update.toString();
       }
       

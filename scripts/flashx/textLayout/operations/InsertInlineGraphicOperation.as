@@ -12,13 +12,11 @@ package flashx.textLayout.operations
    import flashx.textLayout.formats.ITextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class InsertInlineGraphicOperation extends FlowTextOperation
    {
        
       
-      private var delSelOp:DeleteTextOperation;
+      private var delSelOp:flashx.textLayout.operations.DeleteTextOperation;
       
       private var _source:Object;
       
@@ -37,7 +35,7 @@ package flashx.textLayout.operations
          super(operationState);
          if(absoluteStart != absoluteEnd)
          {
-            this.delSelOp = new DeleteTextOperation(operationState);
+            this.delSelOp = new flashx.textLayout.operations.DeleteTextOperation(operationState);
          }
          this._source = source;
          this._options = options;
@@ -97,7 +95,7 @@ package flashx.textLayout.operations
          var deleteFormat:PointFormat = null;
          var subParInsertionPoint:int = 0;
          this.selPos = absoluteStart;
-         if(this.delSelOp)
+         if(Boolean(this.delSelOp))
          {
             leafEl = textFlow.findLeaf(absoluteStart);
             deleteFormat = new PointFormat(textFlow.findLeaf(absoluteStart).format);
@@ -116,14 +114,14 @@ package flashx.textLayout.operations
          while(leafNodeParent is SubParagraphGroupElementBase)
          {
             subParInsertionPoint = this.selPos - leafNodeParent.getAbsoluteStart();
-            if(!(subParInsertionPoint == 0 && !(leafNodeParent as SubParagraphGroupElementBase).acceptTextBefore() || subParInsertionPoint == leafNodeParent.textLength && !(leafNodeParent as SubParagraphGroupElementBase).acceptTextAfter()))
+            if(!(subParInsertionPoint == 0 && !(leafNodeParent as SubParagraphGroupElementBase).tlf_internal::acceptTextBefore() || subParInsertionPoint == leafNodeParent.textLength && !(leafNodeParent as SubParagraphGroupElementBase).tlf_internal::acceptTextAfter()))
             {
                break;
             }
             leafNodeParent = leafNodeParent.parent;
          }
          this._inlineGraphicElement = ParaEdit.createImage(leafNodeParent,this.selPos - leafNodeParent.getAbsoluteStart(),this._source,this.imageWidth,this.imageHeight,this.options,pointFormat);
-         if(textFlow.interactionManager)
+         if(Boolean(textFlow.interactionManager))
          {
             textFlow.interactionManager.notifyInsertOrDelete(absoluteStart,1);
          }
@@ -136,7 +134,7 @@ package flashx.textLayout.operations
          var leafNodeParent:FlowGroupElement = leafNode.parent;
          var elementIdx:int = leafNode.parent.getChildIndex(leafNode);
          leafNodeParent.replaceChildren(elementIdx,elementIdx + 1,null);
-         if(textFlow.interactionManager)
+         if(Boolean(textFlow.interactionManager))
          {
             textFlow.interactionManager.notifyInsertOrDelete(absoluteStart,-1);
          }

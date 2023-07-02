@@ -21,24 +21,24 @@ package com.brockw.stickwar.engine
       
       public function BloodManager()
       {
-         var _loc1_:int = 0;
-         var _loc2_:bloodSplat = null;
-         var _loc3_:_ash = null;
+         var i:int = 0;
+         var newBlood:bloodSplat = null;
+         var newAsh:_ash = null;
          this.bloods = [];
          this.bloodPool = [];
-         for(_loc1_ = 0; _loc1_ < NUM_BLOODS; _loc1_++)
+         for(i = 0; i < NUM_BLOODS; i++)
          {
-            _loc2_ = new bloodSplat();
-            _loc2_.cacheAsBitmap = true;
-            this.bloodPool.push(_loc2_);
+            newBlood = new bloodSplat();
+            newBlood.cacheAsBitmap = true;
+            this.bloodPool.push(newBlood);
          }
          this.ashs = [];
          this.ashPool = [];
-         for(_loc1_ = 0; _loc1_ < NUM_ASHES; _loc1_++)
+         for(i = 0; i < NUM_ASHES; i++)
          {
-            _loc3_ = new _ash();
-            _loc3_.cacheAsBitmap = true;
-            this.ashPool.push(_loc3_);
+            newAsh = new _ash();
+            newAsh.cacheAsBitmap = true;
+            this.ashPool.push(newAsh);
          }
          super();
       }

@@ -3,21 +3,21 @@ package com.brockw.stickwar.engine.units
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.ActionInterface;
    import com.brockw.stickwar.engine.Ai.SkelatorAi;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.Team.Tech;
    import com.brockw.stickwar.market.MarketItem;
    import flash.display.MovieClip;
    
-   public class Skelator extends Unit
+   public class Skelator extends com.brockw.stickwar.engine.units.Unit
    {
        
       
       private var WEAPON_REACH:Number;
       
-      private var fistAttackSpell:SpellCooldown;
+      private var fistAttackSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
-      private var reaperSpell:SpellCooldown;
+      private var reaperSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var isFistAttacking:Boolean;
       
@@ -27,7 +27,7 @@ package com.brockw.stickwar.engine.units
       
       private var spellY:Number;
       
-      private var target:Unit;
+      private var target:com.brockw.stickwar.engine.units.Unit;
       
       private var _fistDamage:Number;
       
@@ -45,14 +45,14 @@ package com.brockw.stickwar.engine.units
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
       {
          var m:_skelator = _skelator(mc);
-         if(m.mc.skullhead)
+         if(Boolean(m.mc.skullhead))
          {
             if(armor != "")
             {
                m.mc.skullhead.gotoAndStop(armor);
             }
          }
-         if(m.mc.skullstaff)
+         if(Boolean(m.mc.skullstaff))
          {
             if(weapon != "")
             {
@@ -85,8 +85,8 @@ package com.brockw.stickwar.engine.units
          this.isFistAttacking = false;
          this.isReaperSpell = false;
          this.spellX = this.spellY = 0;
-         this.fistAttackSpell = new SpellCooldown(game.xml.xml.Chaos.Units.skelator.fist.effect,game.xml.xml.Chaos.Units.skelator.fist.cooldown,game.xml.xml.Chaos.Units.skelator.fist.mana);
-         this.reaperSpell = new SpellCooldown(game.xml.xml.Chaos.Units.skelator.reaper.effect,game.xml.xml.Chaos.Units.skelator.reaper.cooldown,game.xml.xml.Chaos.Units.skelator.reaper.mana);
+         this.fistAttackSpell = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Chaos.Units.skelator.fist.effect,game.xml.xml.Chaos.Units.skelator.fist.cooldown,game.xml.xml.Chaos.Units.skelator.fist.mana);
+         this.reaperSpell = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Chaos.Units.skelator.reaper.effect,game.xml.xml.Chaos.Units.skelator.reaper.cooldown,game.xml.xml.Chaos.Units.skelator.reaper.mana);
          _mc.stop();
          _mc.width *= _scale;
          _mc.height *= _scale;
@@ -251,7 +251,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      public function reaperAttack(unit:Unit) : void
+      public function reaperAttack(unit:com.brockw.stickwar.engine.units.Unit) : void
       {
          if(unit != null && unit.isAlive())
          {
@@ -300,7 +300,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      override public function mayAttack(target:Unit) : Boolean
+      override public function mayAttack(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(isIncapacitated())
          {

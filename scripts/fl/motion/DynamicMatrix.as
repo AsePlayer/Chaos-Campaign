@@ -64,7 +64,7 @@ package fl.motion
          var _loc3_:Number = 0;
          if(param1 >= 0 && param1 < this.m_height && param2 >= 0 && param2 <= this.m_width)
          {
-            _loc3_ = this.m_matrix[param1][param2];
+            _loc3_ = Number(this.m_matrix[param1][param2]);
          }
          return _loc3_;
       }
@@ -81,7 +81,7 @@ package fl.motion
       {
          var _loc1_:int = 0;
          var _loc2_:int = 0;
-         if(this.m_matrix)
+         if(Boolean(this.m_matrix))
          {
             _loc1_ = 0;
             while(_loc1_ < this.m_height)
@@ -108,7 +108,7 @@ package fl.motion
       {
          var _loc1_:int = 0;
          var _loc2_:int = 0;
-         if(this.m_matrix)
+         if(Boolean(this.m_matrix))
          {
             _loc1_ = 0;
             while(_loc1_ < this.m_height)

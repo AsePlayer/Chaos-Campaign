@@ -3,6 +3,7 @@ package com.brockw.simulationSync
    import com.brockw.game.Screen;
    import com.brockw.stickwar.BaseMain;
    import com.brockw.stickwar.GameScreen;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
    import com.smartfoxserver.v2.entities.data.SFSObject;
    import flash.utils.getTimer;
    
@@ -24,15 +25,15 @@ package com.brockw.simulationSync
       
       public var framesLeftInTurn:int;
       
-      private var currentTurn:Turn;
+      private var currentTurn:com.brockw.simulationSync.Turn;
       
-      private var nextTurn:Turn;
+      private var nextTurn:com.brockw.simulationSync.Turn;
       
-      private var nextnextTurn:Turn;
+      private var nextnextTurn:com.brockw.simulationSync.Turn;
       
-      private var temp:Turn;
+      private var temp:com.brockw.simulationSync.Turn;
       
-      private var _game:Simulation;
+      private var _game:com.brockw.simulationSync.Simulation;
       
       private var main:BaseMain;
       
@@ -46,13 +47,13 @@ package com.brockw.simulationSync
       
       public var data:SFSObject;
       
-      public var endOfTurnMove:EndOfTurnMove;
+      public var endOfTurnMove:com.brockw.simulationSync.EndOfTurnMove;
       
       private var endOfTurnFunction:Function;
       
       private var endGame:Function;
       
-      private var _gameReplay:GameReplay;
+      private var _gameReplay:com.brockw.simulationSync.GameReplay;
       
       private var lastNFrames:Array;
       
@@ -62,7 +63,7 @@ package com.brockw.simulationSync
       
       private var _isStalled:Boolean;
       
-      public function SimulationSyncronizer(game:Simulation, main:BaseMain, eot:Function, endGame:Function)
+      public function SimulationSyncronizer(game:com.brockw.simulationSync.Simulation, main:BaseMain, eot:Function, endGame:Function)
       {
          super();
          this._sentEndGame = false;
@@ -78,16 +79,16 @@ package com.brockw.simulationSync
          this.movesInTurn = 0;
          this._isStalled = false;
          this.tempSFSObject = new SFSObject();
-         this.currentTurn = new Turn();
+         this.currentTurn = new com.brockw.simulationSync.Turn();
          this.currentTurn.ready = true;
-         this.nextTurn = new Turn();
-         this.nextnextTurn = new Turn();
+         this.nextTurn = new com.brockw.simulationSync.Turn();
+         this.nextnextTurn = new com.brockw.simulationSync.Turn();
          this.waitingForTurn = false;
          this._hasStarted = false;
-         this.endOfTurnMove = new EndOfTurnMove();
+         this.endOfTurnMove = new com.brockw.simulationSync.EndOfTurnMove();
          this.endGame = endGame;
          this.data = new SFSObject();
-         this.gameReplay = new GameReplay();
+         this.gameReplay = new com.brockw.simulationSync.GameReplay();
          this.lastNFrames = [];
       }
       
@@ -198,12 +199,12 @@ package com.brockw.simulationSync
          }
       }
       
-      public function get gameReplay() : GameReplay
+      public function get gameReplay() : com.brockw.simulationSync.GameReplay
       {
          return this._gameReplay;
       }
       
-      public function set gameReplay(value:GameReplay) : void
+      public function set gameReplay(value:com.brockw.simulationSync.GameReplay) : void
       {
          this._gameReplay = value;
       }
@@ -238,12 +239,12 @@ package com.brockw.simulationSync
          this._isStalled = value;
       }
       
-      public function get game() : Simulation
+      public function get game() : com.brockw.simulationSync.Simulation
       {
          return this._game;
       }
       
-      public function set game(value:Simulation) : void
+      public function set game(value:com.brockw.simulationSync.Simulation) : void
       {
          this._game = value;
       }

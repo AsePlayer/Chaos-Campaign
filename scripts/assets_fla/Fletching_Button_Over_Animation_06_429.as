@@ -12,7 +12,7 @@ package assets_fla
          addFrameScript(44,this.frame45);
       }
       
-      function frame45() : *
+      internal function frame45() : *
       {
          stop();
       }

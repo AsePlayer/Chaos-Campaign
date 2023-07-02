@@ -44,7 +44,7 @@ package com.google.analytics.debug
          this.stickToEdge = stickToEdge;
          if(color == 0)
          {
-            color = Style.backgroundColor;
+            color = uint(Style.backgroundColor);
          }
          _color = color;
          _textField.addEventListener(TextEvent.LINK,onLink);

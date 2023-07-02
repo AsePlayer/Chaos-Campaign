@@ -1,13 +1,6 @@
 package com.brockw.stickwar.campaign
 {
-   import com.brockw.stickwar.campaign.controllers.CampaignArcher;
-   import com.brockw.stickwar.campaign.controllers.CampaignBomber;
-   import com.brockw.stickwar.campaign.controllers.CampaignCutScene1;
-   import com.brockw.stickwar.campaign.controllers.CampaignCutScene2;
-   import com.brockw.stickwar.campaign.controllers.CampaignDeads;
-   import com.brockw.stickwar.campaign.controllers.CampaignKnight;
-   import com.brockw.stickwar.campaign.controllers.CampaignShadow;
-   import com.brockw.stickwar.campaign.controllers.CampaignTutorial;
+   import com.brockw.stickwar.campaign.controllers.*;
    import com.brockw.stickwar.market.ItemMap;
    
    public class Level
@@ -20,9 +13,9 @@ package com.brockw.stickwar.campaign
       
       public var storyName:String;
       
-      public var player:Player;
+      public var player:com.brockw.stickwar.campaign.Player;
       
-      public var oponent:Player;
+      public var oponent:com.brockw.stickwar.campaign.Player;
       
       public var controller:Class;
       
@@ -54,61 +47,61 @@ package com.brockw.stickwar.campaign
       
       public function Level(xml:XML)
       {
-         var _loc3_:* = undefined;
+         var x:* = undefined;
          super();
          this.title = xml.attribute("title");
          this.mapName = xml.attribute("map");
          this.storyName = xml.attribute("story");
          this.points = xml.attribute("points");
          this._levelXml = xml;
-         var _loc2_:* = xml.attribute("controller");
-         if(_loc2_ == "CampaignTutorial")
+         var controllerName:* = xml.attribute("controller");
+         if(controllerName == "CampaignTutorial")
          {
             this.controller = CampaignTutorial;
          }
-         else if(_loc2_ == "CampaignCutScene1")
+         else if(controllerName == "CampaignCutScene1")
          {
             this.controller = CampaignCutScene1;
          }
-         else if(_loc2_ == "CampaignCutScene2")
+         else if(controllerName == "CampaignCutScene2")
          {
             this.controller = CampaignCutScene2;
          }
-         else if(_loc2_ == "CampaignBomber")
+         else if(controllerName == "CampaignBomber")
          {
             this.controller = CampaignBomber;
          }
-         else if(_loc2_ == "CampaignShadow")
+         else if(controllerName == "CampaignShadow")
          {
             this.controller = CampaignShadow;
          }
-         else if(_loc2_ == "CampaignDeads")
+         else if(controllerName == "CampaignDeads")
          {
             this.controller = CampaignDeads;
          }
-         else if(_loc2_ == "CampaignKnight")
+         else if(controllerName == "CampaignKnight")
          {
             this.controller = CampaignKnight;
          }
-         else if(_loc2_ == "CampaignArcher")
+         else if(controllerName == "CampaignArcher")
          {
             this.controller = CampaignArcher;
          }
          this.unlocks = [];
-         for each(_loc3_ in xml.unlock)
+         for each(x in xml.unlock)
          {
-            this.unlocks.push(int(ItemMap.unitNameToType(_loc3_)));
+            this.unlocks.push(int(ItemMap.unitNameToType(x)));
          }
-         this.player = new Player(xml.player);
-         this.oponent = new Player(xml.oponent);
+         this.player = new com.brockw.stickwar.campaign.Player(xml.player);
+         this.oponent = new com.brockw.stickwar.campaign.Player(xml.oponent);
          this.normalModifier = xml.normal;
          this.hardModifier = xml.hard;
          this.insaneModifier = xml.insane;
          this.normalHealthScale = xml.normalHealthScale;
          this.normalDamageModifier = 1;
-         for each(_loc3_ in xml.normalDamageScale)
+         for each(x in xml.normalDamageScale)
          {
-            this.normalDamageModifier = _loc3_;
+            this.normalDamageModifier = x;
          }
          this.tip = xml.tip;
          this.totalTime = 0;

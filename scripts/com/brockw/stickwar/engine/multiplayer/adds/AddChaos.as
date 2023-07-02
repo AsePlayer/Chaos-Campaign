@@ -8,7 +8,7 @@ package com.brockw.stickwar.engine.multiplayer.adds
    {
        
       
-      var mc:addPopUpShowChaos;
+      internal var mc:addPopUpShowChaos;
       
       private var startAddTime:int;
       
@@ -23,7 +23,7 @@ package com.brockw.stickwar.engine.multiplayer.adds
       {
          var timeLeft:int = 0;
          Util.animateToNeutral(this.mc.mc);
-         if(stage)
+         if(Boolean(stage))
          {
             this.mc.signUp.mouseEnabled = true;
             this.mc.exit.mouseEnabled = true;

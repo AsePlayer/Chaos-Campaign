@@ -4,7 +4,7 @@ package com.brockw.ds
    {
        
       
-      var data:Array;
+      internal var data:Array;
       
       public function Queue(size:int)
       {

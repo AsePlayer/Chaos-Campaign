@@ -32,15 +32,15 @@ package com.brockw.stickwar.campaign
       
       override public function enter() : void
       {
-         var _loc5_:int = 0;
-         var _loc6_:Level = null;
-         var _loc7_:String = null;
-         var _loc8_:String = null;
-         var _loc9_:int = 0;
+         var i:int = 0;
+         var l:Level = null;
+         var retryText:String = null;
+         var newTitle:String = null;
+         var j:int = 0;
          this.hasShared = false;
          this.summaryMc.endOfGameText.text = "";
-         var _loc1_:int = 0;
-         var _loc2_:int = 0;
+         var total:int = 0;
+         var best:int = 0;
          this.summaryMc.endOfGameText.text += "You have finished Stick War II on ";
          if(this.main.campaign.difficultyLevel == Campaign.D_NORMAL)
          {
@@ -57,67 +57,67 @@ package com.brockw.stickwar.campaign
             this.summaryMc.endOfGameText.text += "INSANE!\n";
             this.main.kongregateReportStatistic("gameCompleteOnInsane",1);
          }
-         var _loc3_:int = 0;
-         var _loc4_:int = 0;
-         for(_loc5_ = 0; _loc5_ < this.main.campaign.levels.length; _loc5_++)
+         var maxLength:int = 0;
+         var maxRetryLength:int = 0;
+         for(i = 0; i < this.main.campaign.levels.length; i++)
          {
-            _loc6_ = this.main.campaign.levels[_loc5_];
-            _loc7_ = "";
-            if(_loc6_.retries > 1)
+            l = this.main.campaign.levels[i];
+            retryText = "";
+            if(l.retries > 1)
             {
-               _loc7_ = " " + (_loc6_.retries - 1) + " retries";
+               retryText = " " + (l.retries - 1) + " retries";
             }
-            if(_loc7_.length > _loc4_)
+            if(retryText.length > maxRetryLength)
             {
-               _loc4_ = _loc7_.length;
+               maxRetryLength = retryText.length;
             }
-            if(_loc6_.title.length > _loc3_)
+            if(l.title.length > maxLength)
             {
-               _loc3_ = _loc6_.title.length;
+               maxLength = l.title.length;
             }
          }
-         for(_loc5_ = 0; _loc5_ < this.main.campaign.levels.length; _loc5_++)
+         for(i = 0; i < this.main.campaign.levels.length; i++)
          {
-            _loc6_ = this.main.campaign.levels[_loc5_];
-            if(_loc6_.bestTime < 0)
+            l = this.main.campaign.levels[i];
+            if(l.bestTime < 0)
             {
-               _loc6_.bestTime = 0;
+               l.bestTime = 0;
             }
-            _loc8_ = _loc6_.title;
-            _loc7_ = "";
-            if(_loc6_.retries > 1)
+            newTitle = l.title;
+            retryText = "";
+            if(l.retries > 1)
             {
-               _loc7_ = " " + (_loc6_.retries - 1) + " retries";
+               retryText = " " + (l.retries - 1) + " retries";
             }
             else
             {
-               for(_loc9_ = 0; _loc9_ < _loc4_; _loc9_++)
+               for(j = 0; j < maxRetryLength; j++)
                {
                }
             }
-            for(_loc9_ = _loc6_.title.length; _loc9_ < _loc3_; _loc9_++)
+            for(j = l.title.length; j < maxLength; j++)
             {
-               _loc8_ += " ";
+               newTitle += " ";
             }
-            this.summaryMc.endOfGameText.text += "\n" + (_loc8_ + " " + PostGameScreen.getTimeFormat(_loc6_.bestTime));
-            this.summaryMc.endOfGameText.text += _loc7_;
-            _loc1_ += _loc6_.totalTime;
-            _loc2_ += _loc6_.bestTime;
+            this.summaryMc.endOfGameText.text += "\n" + (newTitle + " " + PostGameScreen.getTimeFormat(l.bestTime));
+            this.summaryMc.endOfGameText.text += retryText;
+            total += l.totalTime;
+            best += l.bestTime;
          }
          if(this.main.campaign.difficultyLevel == Campaign.D_NORMAL)
          {
-            this.main.kongregateReportStatistic("timeToCompleteGameOnNormal",_loc2_);
+            this.main.kongregateReportStatistic("timeToCompleteGameOnNormal",best);
          }
          else if(this.main.campaign.difficultyLevel == Campaign.D_HARD)
          {
-            this.main.kongregateReportStatistic("timeToCompleteGameOnHard",_loc2_);
+            this.main.kongregateReportStatistic("timeToCompleteGameOnHard",best);
          }
          else if(this.main.campaign.difficultyLevel == Campaign.D_INSANE)
          {
-            this.main.kongregateReportStatistic("timeToCompleteGameOnInsane",_loc2_);
+            this.main.kongregateReportStatistic("timeToCompleteGameOnInsane",best);
          }
-         this.summaryMc.endOfGameText.text += "\n\n" + "Total time (including retries): " + PostGameScreen.getTimeFormat(_loc1_);
-         this.summaryMc.endOfGameText.text += "\n" + "Best time: " + PostGameScreen.getTimeFormat(_loc2_);
+         this.summaryMc.endOfGameText.text += "\n\n" + "Total time (including retries): " + PostGameScreen.getTimeFormat(total);
+         this.summaryMc.endOfGameText.text += "\n" + "Best time: " + PostGameScreen.getTimeFormat(best);
          addEventListener(Event.ENTER_FRAME,this.update);
          this.summaryMc.buttonFade.mouseEnabled = false;
          this.summaryMc.share.addEventListener(MouseEvent.CLICK,this.share);
@@ -126,8 +126,8 @@ package com.brockw.stickwar.campaign
          this.summaryMc.endOfGameText.mouseWheelEnabled = false;
          if(this.main.tracker != null)
          {
-            this.main.tracker.trackEvent("hostname","totalPlayTime",stage.loaderInfo.url,_loc1_);
-            this.main.tracker.trackEvent("hostname","bestPlayTime",stage.loaderInfo.url,_loc2_);
+            this.main.tracker.trackEvent("hostname","totalPlayTime",stage.loaderInfo.url,total);
+            this.main.tracker.trackEvent("hostname","bestPlayTime",stage.loaderInfo.url,best);
          }
          this.summaryMc.credits.creditsScroll.text = this.main.xml.xml.credits;
       }

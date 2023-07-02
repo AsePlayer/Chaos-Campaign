@@ -4,15 +4,15 @@ package as3reflect
    {
        
       
-      private var _declaringType:Type;
+      private var _declaringType:as3reflect.Type;
       
       private var _name:String;
       
       private var _isStatic:Boolean;
       
-      private var _type:Type;
+      private var _type:as3reflect.Type;
       
-      public function AbstractMember(name:String, type:Type, declaringType:Type, isStatic:Boolean, metaData:Array = null)
+      public function AbstractMember(name:String, type:as3reflect.Type, declaringType:as3reflect.Type, isStatic:Boolean, metaData:Array = null)
       {
          super(metaData);
          _name = name;
@@ -26,12 +26,12 @@ package as3reflect
          return _name;
       }
       
-      public function get declaringType() : Type
+      public function get declaringType() : as3reflect.Type
       {
          return _declaringType;
       }
       
-      public function get type() : Type
+      public function get type() : as3reflect.Type
       {
          return _type;
       }

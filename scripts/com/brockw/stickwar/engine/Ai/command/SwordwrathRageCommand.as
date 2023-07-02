@@ -2,8 +2,7 @@ package com.brockw.stickwar.engine.Ai.command
 {
    import com.brockw.stickwar.engine.Entity;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.units.Swordwrath;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.units.*;
    import flash.display.Bitmap;
    
    public class SwordwrathRageCommand extends UnitCommand

@@ -7,7 +7,7 @@ package flashx.textLayout.elements
    {
        
       
-      tlf_internal var _listNumberHint:int = 2.147483647E9;
+      tlf_internal var _listNumberHint:int = 2147483647;
       
       public function ListItemElement()
       {
@@ -27,11 +27,11 @@ package flashx.textLayout.elements
       tlf_internal function computedListMarkerFormat() : IListMarkerFormat
       {
          var tf:TextFlow = null;
-         var format:IListMarkerFormat = this.getUserStyleWorker(ListElement.LIST_MARKER_FORMAT_NAME) as IListMarkerFormat;
+         var format:IListMarkerFormat = this.tlf_internal::getUserStyleWorker(ListElement.tlf_internal::LIST_MARKER_FORMAT_NAME) as IListMarkerFormat;
          if(format == null)
          {
             tf = this.getTextFlow();
-            if(tf)
+            if(Boolean(tf))
             {
                format = tf.configuration.defaultListMarkerFormat;
             }
@@ -42,7 +42,7 @@ package flashx.textLayout.elements
       tlf_internal function normalizeNeedsInitialParagraph() : Boolean
       {
          var p:FlowGroupElement = this;
-         while(p)
+         while(Boolean(p))
          {
             p = p.getChildAt(0) as FlowGroupElement;
             if(p is ParagraphElement)
@@ -60,14 +60,14 @@ package flashx.textLayout.elements
       override tlf_internal function normalizeRange(normalizeStart:uint, normalizeEnd:uint) : void
       {
          var p:ParagraphElement = null;
-         super.normalizeRange(normalizeStart,normalizeEnd);
-         this._listNumberHint = int.MAX_VALUE;
-         if(this.normalizeNeedsInitialParagraph())
+         super.tlf_internal::normalizeRange(normalizeStart,normalizeEnd);
+         this.tlf_internal::_listNumberHint = int.MAX_VALUE;
+         if(this.tlf_internal::normalizeNeedsInitialParagraph())
          {
             p = new ParagraphElement();
             p.replaceChildren(0,0,new SpanElement());
             replaceChildren(0,0,p);
-            p.normalizeRange(0,p.textLength);
+            p.tlf_internal::normalizeRange(0,p.textLength);
          }
       }
       
@@ -77,36 +77,36 @@ package flashx.textLayout.elements
          var counterIncrement:Object = null;
          var idx:int = 0;
          var sibling:ListItemElement = null;
-         if(this._listNumberHint == int.MAX_VALUE)
+         if(this.tlf_internal::_listNumberHint == int.MAX_VALUE)
          {
             if(listMarkerFormat == null)
             {
-               listMarkerFormat = this.computedListMarkerFormat();
+               listMarkerFormat = this.tlf_internal::computedListMarkerFormat();
             }
             counterReset = listMarkerFormat.counterReset;
-            if(counterReset && counterReset.hasOwnProperty("ordered"))
+            if(Boolean(counterReset) && counterReset.hasOwnProperty("ordered"))
             {
-               this._listNumberHint = counterReset.ordered;
+               this.tlf_internal::_listNumberHint = counterReset.ordered;
             }
             else
             {
                idx = parent.getChildIndex(this);
-               this._listNumberHint = 0;
+               this.tlf_internal::_listNumberHint = 0;
                while(idx > 0)
                {
                   idx--;
                   sibling = parent.getChildAt(idx) as ListItemElement;
-                  if(sibling)
+                  if(Boolean(sibling))
                   {
-                     this._listNumberHint = sibling.getListItemNumber();
+                     this.tlf_internal::_listNumberHint = sibling.tlf_internal::getListItemNumber();
                      break;
                   }
                }
             }
             counterIncrement = listMarkerFormat.counterIncrement;
-            this._listNumberHint += counterIncrement && counterIncrement.hasOwnProperty("ordered") ? counterIncrement.ordered : 1;
+            this.tlf_internal::_listNumberHint += Boolean(counterIncrement) && counterIncrement.hasOwnProperty("ordered") ? counterIncrement.ordered : 1;
          }
-         return this._listNumberHint;
+         return this.tlf_internal::_listNumberHint;
       }
    }
 }

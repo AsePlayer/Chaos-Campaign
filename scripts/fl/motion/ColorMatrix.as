@@ -160,7 +160,7 @@ class XFormData
    
    public var oz:Number;
    
-   function XFormData()
+   public function XFormData()
    {
       super();
    }

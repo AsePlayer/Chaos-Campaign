@@ -13,18 +13,16 @@ package flashx.textLayout.conversion
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
-   class TextLayoutExporter extends BaseTextLayoutExporter
+   internal class TextLayoutExporter extends BaseTextLayoutExporter
    {
       
-      private static var _formatDescription:Object = TextLayoutFormat.description;
+      private static var _formatDescription:Object = TextLayoutFormat.tlf_internal::description;
       
       private static const brTabRegEx:RegExp = new RegExp("[" + " " + "\t" + "]");
        
       
-      function TextLayoutExporter()
+      public function TextLayoutExporter()
       {
          super(new Namespace("http://ns.adobe.com/textLayout/2008"),null,TextLayoutImporter.defaultConfiguration);
       }
@@ -54,11 +52,11 @@ package flashx.textLayout.conversion
       public static function exportLink(exporter:BaseTextLayoutExporter, link:LinkElement) : XMLList
       {
          var output:XMLList = exportFlowGroupElement(exporter,link);
-         if(link.href)
+         if(Boolean(link.href))
          {
             output.@href = link.href;
          }
-         if(link.target)
+         if(Boolean(link.target))
          {
             output.@target = link.target;
          }
@@ -106,7 +104,7 @@ package flashx.textLayout.conversion
       
       tlf_internal function createStylesFromDescription(styles:Object, description:Object, includeUserStyles:Boolean, exclusions:Array) : Array
       {
-         var key:* = null;
+         var key:String = null;
          var val:Object = null;
          var prop:Property = null;
          var customDictProp:XMLList = null;
@@ -114,7 +112,7 @@ package flashx.textLayout.conversion
          for(key in styles)
          {
             val = styles[key];
-            if(!(exclusions && exclusions.indexOf(val) != -1))
+            if(!(Boolean(exclusions) && exclusions.indexOf(val) != -1))
             {
                prop = description[key];
                if(!prop)
@@ -132,8 +130,8 @@ package flashx.textLayout.conversion
                }
                else if(val is TextLayoutFormat)
                {
-                  customDictProp = this.exportObjectAsTextLayoutFormat(key,(val as TextLayoutFormat).getStyles());
-                  if(customDictProp)
+                  customDictProp = this.tlf_internal::exportObjectAsTextLayoutFormat(key,(val as TextLayoutFormat).tlf_internal::getStyles());
+                  if(Boolean(customDictProp))
                   {
                      sortableStyles.push({
                         "xmlName":key,
@@ -157,15 +155,15 @@ package flashx.textLayout.conversion
       {
          var elementName:String = null;
          var description:Object = null;
-         if(key == LinkElement.LINK_NORMAL_FORMAT_NAME || key == LinkElement.LINK_ACTIVE_FORMAT_NAME || key == LinkElement.LINK_HOVER_FORMAT_NAME)
+         if(key == LinkElement.tlf_internal::LINK_NORMAL_FORMAT_NAME || key == LinkElement.tlf_internal::LINK_ACTIVE_FORMAT_NAME || key == LinkElement.tlf_internal::LINK_HOVER_FORMAT_NAME)
          {
             elementName = "TextLayoutFormat";
-            description = TextLayoutFormat.description;
+            description = TextLayoutFormat.tlf_internal::description;
          }
-         else if(key == ListElement.LIST_MARKER_FORMAT_NAME)
+         else if(key == ListElement.tlf_internal::LIST_MARKER_FORMAT_NAME)
          {
             elementName = "ListMarkerFormat";
-            description = ListMarkerFormat.description;
+            description = ListMarkerFormat.tlf_internal::description;
          }
          if(elementName == null)
          {
@@ -173,7 +171,7 @@ package flashx.textLayout.conversion
          }
          var formatXML:XML = new XML("<" + elementName + "/>");
          formatXML.setNamespace(flowNS);
-         var sortableStyles:Array = this.createStylesFromDescription(styleDict,description,true,null);
+         var sortableStyles:Array = this.tlf_internal::createStylesFromDescription(styleDict,description,true,null);
          exportStyles(XMLList(formatXML),sortableStyles);
          var propertyXML:XMLList = XMLList(new XML("<" + key + "/>"));
          propertyXML.appendChild(formatXML);
@@ -185,17 +183,17 @@ package flashx.textLayout.conversion
          var sortableStyles:Array = null;
          var rslt:XMLList = super.exportFlowElement(flowElement);
          var allStyles:Object = flowElement.styles;
-         if(allStyles)
+         if(Boolean(allStyles))
          {
             delete allStyles[TextLayoutFormat.whiteSpaceCollapseProperty.name];
-            sortableStyles = this.createStylesFromDescription(allStyles,this.formatDescription,true,Boolean(flowElement.parent) ? null : [FormatValue.INHERIT]);
+            sortableStyles = this.tlf_internal::createStylesFromDescription(allStyles,this.formatDescription,true,Boolean(flowElement.parent) ? null : [FormatValue.INHERIT]);
             exportStyles(rslt,sortableStyles);
          }
          if(flowElement.id != null)
          {
             rslt["id"] = flowElement.id;
          }
-         if(flowElement.typeName != flowElement.defaultTypeName)
+         if(flowElement.typeName != flowElement.tlf_internal::defaultTypeName)
          {
             rslt["typeName"] = flowElement.typeName;
          }

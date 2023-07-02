@@ -13,8 +13,6 @@ package flashx.textLayout.edit
    import flashx.textLayout.formats.TextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class ParaEdit
    {
@@ -58,7 +56,7 @@ package flashx.textLayout.edit
          while(curSPGElement != null)
          {
             subParInsertionPoint = paraSelBegIdx - curSPGElement.getElementRelativeStart(paragraph);
-            if(!(subParInsertionPoint == 0 && !curSPGElement.acceptTextBefore() || !curSPGElement.acceptTextAfter() && (subParInsertionPoint == curSPGElement.textLength || subParInsertionPoint == curSPGElement.textLength - 1 && sibling == paragraph.getLastLeaf())))
+            if(!(subParInsertionPoint == 0 && !curSPGElement.tlf_internal::acceptTextBefore() || !curSPGElement.tlf_internal::acceptTextAfter() && (subParInsertionPoint == curSPGElement.textLength || subParInsertionPoint == curSPGElement.textLength - 1 && sibling == paragraph.getLastLeaf())))
             {
                break;
             }
@@ -184,21 +182,21 @@ package flashx.textLayout.edit
          if(src is String && src.length > embedStr.length && src.substr(0,embedStr.length) == embedStr)
          {
             searchStr = "source=";
-            index = src.indexOf(searchStr,embedStr.length);
+            index = int(src.indexOf(searchStr,embedStr.length));
             if(index > 0)
             {
                index += searchStr.length;
-               index = src.indexOf("\'",index);
+               index = int(src.indexOf("\'",index));
                src = src.substring(index + 1,src.indexOf("\'",index + 1));
             }
          }
          imgElem.source = src;
-         while(curComposeNode && curComposeNode.parent != flowBlock)
+         while(Boolean(curComposeNode) && curComposeNode.parent != flowBlock)
          {
             curComposeNode = curComposeNode.parent;
          }
-         var elementIdx:int = curComposeNode != null ? int(flowBlock.getChildIndex(curComposeNode)) : int(flowBlock.numChildren);
-         if(curComposeNode && posInCurComposeNode > 0)
+         var elementIdx:int = curComposeNode != null ? flowBlock.getChildIndex(curComposeNode) : flowBlock.numChildren;
+         if(Boolean(curComposeNode) && posInCurComposeNode > 0)
          {
             elementIdx++;
          }
@@ -209,10 +207,10 @@ package flashx.textLayout.edit
          {
             attrElem = imgElem.getNextLeaf(p);
          }
-         if(attrElem.format || pointFormat)
+         if(Boolean(attrElem.format) || Boolean(pointFormat))
          {
             imageElemFormat = new TextLayoutFormat(attrElem.format);
-            if(pointFormat)
+            if(Boolean(pointFormat))
             {
                imageElemFormat.apply(pointFormat);
             }
@@ -250,8 +248,8 @@ package flashx.textLayout.edit
       private static function undefineDefinedFormats(target:TextLayoutFormat, undefineFormat:ITextLayoutFormat) : void
       {
          var tlfUndefineFormat:TextLayoutFormat = null;
-         var prop:* = null;
-         if(undefineFormat)
+         var prop:String = null;
+         if(Boolean(undefineFormat))
          {
             if(undefineFormat is TextLayoutFormat)
             {
@@ -271,7 +269,7 @@ package flashx.textLayout.edit
       private static function applyCharacterFormat(leaf:FlowLeafElement, begIdx:int, rangeLength:int, applyFormat:ITextLayoutFormat, undefineFormat:ITextLayoutFormat) : int
       {
          var newFormat:TextLayoutFormat = new TextLayoutFormat(leaf.format);
-         if(applyFormat)
+         if(Boolean(applyFormat))
          {
             newFormat.apply(applyFormat);
          }
@@ -295,7 +293,7 @@ package flashx.textLayout.edit
             {
                rangeLength = leaf.textLength - begRelativeIdx;
             }
-            if(begRelativeIdx + rangeLength == leaf.textLength - 1 && leaf is SpanElement && SpanElement(leaf).hasParagraphTerminator)
+            if(begRelativeIdx + rangeLength == leaf.textLength - 1 && leaf is SpanElement && Boolean(SpanElement(leaf).tlf_internal::hasParagraphTerminator))
             {
                rangeLength++;
             }
@@ -313,7 +311,7 @@ package flashx.textLayout.edit
             }
             else
             {
-               elemToUpdate.setStylesInternal(format);
+               elemToUpdate.tlf_internal::setStylesInternal(format);
             }
             return begIdx + rangeLength;
          }
@@ -352,12 +350,12 @@ package flashx.textLayout.edit
          if(!(rslt is SubParagraphGroupElementBase))
          {
             rsltParagraph = rslt;
-            while(!(rsltParagraph is ParagraphElement) && rsltParagraph.numChildren)
+            while(!(rsltParagraph is ParagraphElement) && Boolean(rsltParagraph.numChildren))
             {
                rsltParagraph = rsltParagraph.getChildAt(0) as FlowGroupElement;
             }
             elemParagraph = elem;
-            while(!(elemParagraph is ParagraphElement) && elemParagraph.numChildren)
+            while(!(elemParagraph is ParagraphElement) && Boolean(elemParagraph.numChildren))
             {
                elemParagraph = elemParagraph.getChildAt(elemParagraph.numChildren - 1) as FlowGroupElement;
             }
@@ -375,13 +373,13 @@ package flashx.textLayout.edit
             }
             if(elemParagraph.textLength <= 1)
             {
-               elemParagraph.normalizeRange(0,elemParagraph.textLength);
-               elemParagraph.getLastLeaf().quickCloneTextLayoutFormat(rsltParagraph.getFirstLeaf());
+               elemParagraph.tlf_internal::normalizeRange(0,elemParagraph.textLength);
+               elemParagraph.getLastLeaf().tlf_internal::quickCloneTextLayoutFormat(rsltParagraph.getFirstLeaf());
             }
             else if(rsltParagraph.textLength <= 1)
             {
-               rsltParagraph.normalizeRange(0,rsltParagraph.textLength);
-               rsltParagraph.getFirstLeaf().quickCloneTextLayoutFormat(elemParagraph.getLastLeaf());
+               rsltParagraph.tlf_internal::normalizeRange(0,rsltParagraph.textLength);
+               rsltParagraph.getFirstLeaf().tlf_internal::quickCloneTextLayoutFormat(elemParagraph.getLastLeaf());
             }
          }
          return rslt;
@@ -405,7 +403,7 @@ package flashx.textLayout.edit
          {
             return true;
          }
-         while(nextPar.numChildren)
+         while(Boolean(nextPar.numChildren))
          {
             elem = nextPar.getChildAt(0);
             nextPar.replaceChildren(0,1,null);
@@ -461,7 +459,7 @@ package flashx.textLayout.edit
             }
             para = leaf.getParagraph();
             newFormat = new TextLayoutFormat(para.format);
-            if(applyFormat)
+            if(Boolean(applyFormat))
             {
                newFormat.apply(applyFormat);
             }
@@ -490,7 +488,7 @@ package flashx.textLayout.edit
             {
                break;
             }
-            begSel = obj.endIdx;
+            begSel = int(obj.endIdx);
             elem = flowRoot.findLeaf(begSel);
             elemLength = elem.textLength;
          }
@@ -498,63 +496,63 @@ package flashx.textLayout.edit
       
       public static function cacheContainerStyleInformation(flowRoot:TextFlow, begIdx:int, endIdx:int, undoArray:Array) : void
       {
-         var _loc5_:int = 0;
-         var _loc6_:ContainerController = null;
-         var _loc7_:Object = null;
-         if(flowRoot.flowComposer)
+         var startIdx:int = 0;
+         var controller:ContainerController = null;
+         var obj:Object = null;
+         if(Boolean(flowRoot.flowComposer))
          {
-            _loc5_ = flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false);
-            if(_loc5_ == -1)
+            startIdx = int(flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false));
+            if(startIdx == -1)
             {
                return;
             }
-            endIdx = flowRoot.flowComposer.findControllerIndexAtPosition(endIdx,true);
+            endIdx = int(flowRoot.flowComposer.findControllerIndexAtPosition(endIdx,true));
             if(endIdx == -1)
             {
                endIdx = flowRoot.flowComposer.numControllers - 1;
             }
-            while(_loc5_ <= endIdx)
+            while(startIdx <= endIdx)
             {
-               _loc6_ = flowRoot.flowComposer.getControllerAt(_loc5_);
-               _loc7_ = new Object();
-               _loc7_.container = _loc6_;
-               _loc7_.attributes = new TextLayoutFormat(_loc6_.format);
-               undoArray.push(_loc7_);
-               _loc5_++;
+               controller = flowRoot.flowComposer.getControllerAt(startIdx);
+               obj = new Object();
+               obj.container = controller;
+               obj.attributes = new TextLayoutFormat(controller.format);
+               undoArray.push(obj);
+               startIdx++;
             }
          }
       }
       
       public static function applyContainerStyleChange(flowRoot:TextFlow, begIdx:int, endIdx:int, applyFormat:ITextLayoutFormat, undefineFormat:ITextLayoutFormat) : void
       {
-         var _loc6_:int = 0;
-         var _loc7_:int = 0;
-         var _loc8_:ContainerController = null;
-         var _loc9_:TextLayoutFormat = null;
-         if(flowRoot.flowComposer)
+         var startIdx:int = 0;
+         var controllerIndex:int = 0;
+         var controller:ContainerController = null;
+         var newFormat:TextLayoutFormat = null;
+         if(Boolean(flowRoot.flowComposer))
          {
-            _loc6_ = flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false);
-            if(_loc6_ == -1)
+            startIdx = int(flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false));
+            if(startIdx == -1)
             {
                return;
             }
-            endIdx = flowRoot.flowComposer.findControllerIndexAtPosition(endIdx,true);
+            endIdx = int(flowRoot.flowComposer.findControllerIndexAtPosition(endIdx,true));
             if(endIdx == -1)
             {
                endIdx = flowRoot.flowComposer.numControllers - 1;
             }
-            _loc7_ = flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false);
-            while(_loc6_ <= endIdx)
+            controllerIndex = int(flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false));
+            while(startIdx <= endIdx)
             {
-               _loc8_ = flowRoot.flowComposer.getControllerAt(_loc6_);
-               _loc9_ = new TextLayoutFormat(_loc8_.format);
-               if(applyFormat)
+               controller = flowRoot.flowComposer.getControllerAt(startIdx);
+               newFormat = new TextLayoutFormat(controller.format);
+               if(Boolean(applyFormat))
                {
-                  _loc9_.apply(applyFormat);
+                  newFormat.apply(applyFormat);
                }
-               undefineDefinedFormats(_loc9_,undefineFormat);
-               _loc8_.format = _loc9_;
-               _loc6_++;
+               undefineDefinedFormats(newFormat,undefineFormat);
+               controller.format = newFormat;
+               startIdx++;
             }
          }
       }

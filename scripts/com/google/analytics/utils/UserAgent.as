@@ -10,13 +10,13 @@ package com.google.analytics.utils
       public static var minimal:Boolean = false;
        
       
-      private var _localInfo:Environment;
+      private var _localInfo:com.google.analytics.utils.Environment;
       
       private var _applicationProduct:String;
       
-      private var _version:Version;
+      private var _version:com.google.analytics.utils.Version;
       
-      public function UserAgent(localInfo:Environment, product:String = "", version:String = "")
+      public function UserAgent(localInfo:com.google.analytics.utils.Environment, product:String = "", version:String = "")
       {
          super();
          _localInfo = localInfo;
@@ -30,7 +30,7 @@ package com.google.analytics.utils
          {
             return "";
          }
-         if(System.vmVersion)
+         if(Boolean(System.vmVersion))
          {
             return "Tamarin/" + Utils.trim(System.vmVersion,true);
          }

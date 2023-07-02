@@ -1,6 +1,6 @@
 package com.brockw.stickwar.engine
 {
-   import flash.display.Sprite;
+   import flash.display.*;
    import flash.text.TextField;
    
    public class TipBox extends Sprite

@@ -39,10 +39,8 @@ package fl.text
    import flashx.textLayout.formats.VerticalAlign;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
-   class SingleTextContainerManager extends CommonTextContainerManager implements IContainerManager
+   internal class SingleTextContainerManager extends CommonTextContainerManager implements IContainerManager
    {
       
       private static var _alwaysShowOffConfiguration:Configuration;
@@ -52,9 +50,9 @@ package fl.text
       private static var _alwaysShowOnConfiguration:Configuration;
        
       
-      private var _tcm:TLFTextContainerManager;
+      private var _tcm:fl.text.TLFTextContainerManager;
       
-      function SingleTextContainerManager(container:Sprite, ownerField:TLFTextField, controller:ContainerController = null)
+      public function SingleTextContainerManager(container:Sprite, ownerField:TLFTextField, controller:ContainerController = null)
       {
          super();
          _controller = controller;
@@ -63,16 +61,16 @@ package fl.text
          if(initConfiguration)
          {
             _alwaysShowOffConfiguration = Configuration(Configuration(TextContainerManager.defaultConfiguration).clone());
-            _alwaysShowOffConfiguration.focusedSelectionFormat = TLFTextField.focusedSelectionFormat;
-            _alwaysShowOffConfiguration.inactiveSelectionFormat = TLFTextField.inactiveSelectionFormat;
-            _alwaysShowOffConfiguration.unfocusedSelectionFormat = TLFTextField.alwaysShowSelectionOffFormat;
+            _alwaysShowOffConfiguration.focusedSelectionFormat = TLFTextField.tlf_internal::focusedSelectionFormat;
+            _alwaysShowOffConfiguration.inactiveSelectionFormat = TLFTextField.tlf_internal::inactiveSelectionFormat;
+            _alwaysShowOffConfiguration.unfocusedSelectionFormat = TLFTextField.tlf_internal::alwaysShowSelectionOffFormat;
             _alwaysShowOnConfiguration = Configuration(Configuration(TextContainerManager.defaultConfiguration).clone());
-            _alwaysShowOnConfiguration.focusedSelectionFormat = TLFTextField.focusedSelectionFormat;
-            _alwaysShowOnConfiguration.inactiveSelectionFormat = TLFTextField.inactiveSelectionFormat;
-            _alwaysShowOnConfiguration.unfocusedSelectionFormat = TLFTextField.alwaysShowSelectionOnFormat;
+            _alwaysShowOnConfiguration.focusedSelectionFormat = TLFTextField.tlf_internal::focusedSelectionFormat;
+            _alwaysShowOnConfiguration.inactiveSelectionFormat = TLFTextField.tlf_internal::inactiveSelectionFormat;
+            _alwaysShowOnConfiguration.unfocusedSelectionFormat = TLFTextField.tlf_internal::alwaysShowSelectionOnFormat;
             initConfiguration = false;
          }
-         this._tcm = new TLFTextContainerManager(_container,!!ownerField._alwaysShowSelection ? _alwaysShowOnConfiguration : _alwaysShowOffConfiguration);
+         this._tcm = new fl.text.TLFTextContainerManager(_container,!!ownerField.tlf_internal::_alwaysShowSelection ? _alwaysShowOnConfiguration : _alwaysShowOffConfiguration);
          this.addListeners();
          this._tcm.compositionHeight = int.MAX_VALUE;
          this._tcm.compositionWidth = int.MAX_VALUE;
@@ -85,8 +83,8 @@ package fl.text
       
       override public function get textFlow() : TextFlow
       {
-         var fmt:TextLayoutFormat = !!this.isTextStringAndFormat() ? TextLayoutFormat(this.hostFormat) : null;
-         this._tcm.convertToTextFlowWithComposer();
+         var fmt:TextLayoutFormat = this.isTextStringAndFormat() ? TextLayoutFormat(this.hostFormat) : null;
+         this._tcm.tlf_internal::convertToTextFlowWithComposer();
          this.ConvertHostFormatToController(fmt);
          return this._tcm.getTextFlow();
       }
@@ -131,7 +129,7 @@ package fl.text
       {
          this._tcm.compositionWidth = width;
          this._tcm.compositionHeight = height;
-         if(this.controller)
+         if(Boolean(this.controller))
          {
             this.controller.setCompositionSize(width,height);
          }
@@ -140,7 +138,7 @@ package fl.text
       public function set paddingTop(value:Object) : void
       {
          var fmt:TextLayoutFormat = Boolean(this._tcm.hostFormat) ? TextLayoutFormat(this._tcm.hostFormat) : new TextLayoutFormat();
-         fmt.paddingTop = !!this.isTextStringAndFormat() ? value : 0;
+         fmt.paddingTop = this.isTextStringAndFormat() ? value : 0;
          this._tcm.hostFormat = fmt;
          if(!this.isTextStringAndFormat())
          {
@@ -151,7 +149,7 @@ package fl.text
       public function set paddingRight(value:Object) : void
       {
          var fmt:TextLayoutFormat = Boolean(this._tcm.hostFormat) ? TextLayoutFormat(this._tcm.hostFormat) : new TextLayoutFormat();
-         fmt.paddingRight = !!this.isTextStringAndFormat() ? value : 0;
+         fmt.paddingRight = this.isTextStringAndFormat() ? value : 0;
          this._tcm.hostFormat = fmt;
          if(!this.isTextStringAndFormat())
          {
@@ -161,17 +159,17 @@ package fl.text
       
       public function get numLines() : int
       {
-         return this._tcm.getActualNumLines();
+         return this._tcm.tlf_internal::getActualNumLines();
       }
       
       public function removeListeners() : void
       {
-         this._tcm.removeEventListener(TextLayoutEvent.SCROLL,_ownerField.textFlow_ScrollHandler);
-         this._tcm.removeEventListener(MouseEvent.CLICK,_ownerField.linkClick);
-         this._tcm.removeEventListener(FlowOperationEvent.FLOW_OPERATION_BEGIN,_ownerField.textFlow_flowOperationBeginHandler);
-         this._tcm.removeEventListener(FlowOperationEvent.FLOW_OPERATION_END,_ownerField.textFlow_flowOperationEndHandler);
-         this._tcm.removeEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE,_ownerField.composeComplete);
-         this._tcm.removeEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,_ownerField.updateComplete);
+         this._tcm.removeEventListener(TextLayoutEvent.SCROLL,_ownerField.tlf_internal::textFlow_ScrollHandler);
+         this._tcm.removeEventListener(MouseEvent.CLICK,_ownerField.tlf_internal::linkClick);
+         this._tcm.removeEventListener(FlowOperationEvent.FLOW_OPERATION_BEGIN,_ownerField.tlf_internal::textFlow_flowOperationBeginHandler);
+         this._tcm.removeEventListener(FlowOperationEvent.FLOW_OPERATION_END,_ownerField.tlf_internal::textFlow_flowOperationEndHandler);
+         this._tcm.removeEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE,_ownerField.tlf_internal::composeComplete);
+         this._tcm.removeEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,_ownerField.tlf_internal::updateComplete);
          _ownerField.removeEventListener(FocusEvent.FOCUS_IN,this._tcm.focusInHandler);
       }
       
@@ -182,7 +180,7 @@ package fl.text
       
       override public function isTextStringAndFormat() : Boolean
       {
-         return this._tcm.composeState == TextContainerManager.COMPOSE_FACTORY && this._tcm.sourceState == TextContainerManager.SOURCE_STRING;
+         return this._tcm.tlf_internal::composeState == TextContainerManager.tlf_internal::COMPOSE_FACTORY && this._tcm.tlf_internal::sourceState == TextContainerManager.tlf_internal::SOURCE_STRING;
       }
       
       public function get contentLeft() : Number
@@ -239,7 +237,7 @@ package fl.text
       public function set paddingBottom(value:Object) : void
       {
          var fmt:TextLayoutFormat = Boolean(this._tcm.hostFormat) ? TextLayoutFormat(this._tcm.hostFormat) : new TextLayoutFormat();
-         fmt.paddingBottom = !!this.isTextStringAndFormat() ? value : 0;
+         fmt.paddingBottom = this.isTextStringAndFormat() ? value : 0;
          this._tcm.hostFormat = fmt;
          if(!this.isTextStringAndFormat())
          {
@@ -320,7 +318,7 @@ package fl.text
             }
             else
             {
-               this._tcm.setText(TLFTextField.repeat(_ownerField.passwordCharacter,value));
+               this._tcm.setText(TLFTextField.tlf_internal::repeat(_ownerField.tlf_internal::passwordCharacter,value));
             }
             this.hostFormat = tempFmt;
          }
@@ -341,7 +339,7 @@ package fl.text
          var fmt:TextLayoutFormat = Boolean(this._tcm.hostFormat) ? TextLayoutFormat(this._tcm.hostFormat) : new TextLayoutFormat();
          fmt.verticalAlign = value;
          this._tcm.hostFormat = fmt;
-         if(this.controller)
+         if(Boolean(this.controller))
          {
             this.controller.verticalAlign = value;
          }
@@ -391,7 +389,7 @@ package fl.text
       public function set paddingLeft(value:Object) : void
       {
          var fmt:TextLayoutFormat = Boolean(this._tcm.hostFormat) ? TextLayoutFormat(this._tcm.hostFormat) : new TextLayoutFormat();
-         fmt.paddingLeft = !!this.isTextStringAndFormat() ? value : 0;
+         fmt.paddingLeft = this.isTextStringAndFormat() ? value : 0;
          this._tcm.hostFormat = fmt;
          if(!this.isTextStringAndFormat())
          {
@@ -410,7 +408,7 @@ package fl.text
          {
             return super.lineBreak;
          }
-         if(this.hostFormat)
+         if(Boolean(this.hostFormat))
          {
             return this.hostFormat.lineBreak;
          }
@@ -478,7 +476,7 @@ package fl.text
          {
             leading = Number.NaN;
             str = curFormat.lineHeight;
-            if(str)
+            if(Boolean(str))
             {
                if(str.indexOf("%") == -1)
                {
@@ -502,7 +500,7 @@ package fl.text
          var arrTabStops:Array = [];
          if(curFormat.tabStops != null)
          {
-            arrLength = curFormat.tabStops.length;
+            arrLength = int(curFormat.tabStops.length);
             for(i = 0; i < arrLength; i++)
             {
                tabStopFmt = curFormat.tabStops[i];
@@ -621,7 +619,7 @@ package fl.text
          {
             return super.direction;
          }
-         if(this.hostFormat && this.hostFormat.direction)
+         if(Boolean(this.hostFormat) && Boolean(this.hostFormat.direction))
          {
             return this.hostFormat.direction;
          }
@@ -651,7 +649,7 @@ package fl.text
       override public function compose() : void
       {
          this._tcm.compose();
-         _ownerField.composeComplete(null);
+         _ownerField.tlf_internal::composeComplete(null);
       }
       
       public function set firstBaselineOffset(value:Object) : void
@@ -659,7 +657,7 @@ package fl.text
          var fmt:TextLayoutFormat = Boolean(this._tcm.hostFormat) ? TextLayoutFormat(this._tcm.hostFormat) : new TextLayoutFormat();
          fmt.firstBaselineOffset = value;
          this._tcm.hostFormat = fmt;
-         if(this.controller)
+         if(Boolean(this.controller))
          {
             this.controller.firstBaselineOffset = value;
          }
@@ -707,12 +705,12 @@ package fl.text
       
       public function addListeners() : void
       {
-         this._tcm.addEventListener(TextLayoutEvent.SCROLL,_ownerField.textFlow_ScrollHandler,false,0,true);
-         this._tcm.addEventListener(MouseEvent.CLICK,_ownerField.linkClick,false,0,true);
-         this._tcm.addEventListener(FlowOperationEvent.FLOW_OPERATION_BEGIN,_ownerField.textFlow_flowOperationBeginHandler,false,0,true);
-         this._tcm.addEventListener(FlowOperationEvent.FLOW_OPERATION_END,_ownerField.textFlow_flowOperationEndHandler,false,0,true);
-         this._tcm.addEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE,_ownerField.composeComplete,false,0,true);
-         this._tcm.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,_ownerField.updateComplete,false,0,true);
+         this._tcm.addEventListener(TextLayoutEvent.SCROLL,_ownerField.tlf_internal::textFlow_ScrollHandler,false,0,true);
+         this._tcm.addEventListener(MouseEvent.CLICK,_ownerField.tlf_internal::linkClick,false,0,true);
+         this._tcm.addEventListener(FlowOperationEvent.FLOW_OPERATION_BEGIN,_ownerField.tlf_internal::textFlow_flowOperationBeginHandler,false,0,true);
+         this._tcm.addEventListener(FlowOperationEvent.FLOW_OPERATION_END,_ownerField.tlf_internal::textFlow_flowOperationEndHandler,false,0,true);
+         this._tcm.addEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE,_ownerField.tlf_internal::composeComplete,false,0,true);
+         this._tcm.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,_ownerField.tlf_internal::updateComplete,false,0,true);
          _ownerField.addEventListener(FocusEvent.FOCUS_IN,this._tcm.focusInHandler,false,0,true);
       }
       
@@ -773,7 +771,7 @@ package fl.text
          var fmt:TextLayoutFormat = Boolean(this._tcm.hostFormat) ? TextLayoutFormat(this._tcm.hostFormat) : new TextLayoutFormat();
          fmt.columnCount = value;
          this._tcm.hostFormat = fmt;
-         if(this.controller)
+         if(Boolean(this.controller))
          {
             this.controller.columnCount = value;
          }
@@ -799,7 +797,7 @@ package fl.text
          multiTCM.paddingRight = this.paddingRight;
          multiTCM.paddingTop = this.paddingTop;
          multiTCM.columnCount = this.columnCount;
-         if(this.hostFormat)
+         if(Boolean(this.hostFormat))
          {
             hostFmt = this.hostFormat as TextLayoutFormat;
             hostFmt.paddingBottom = 0;
@@ -815,8 +813,8 @@ package fl.text
          multiTCM.horizontalScrollPosition = this.horizontalScrollPosition;
          multiTCM.verticalScrollPosition = this.verticalScrollPosition;
          multiTCM.direction = this.direction;
-         this._tcm.convertToTextFlowWithComposer();
-         if(this.textFlow)
+         this._tcm.tlf_internal::convertToTextFlowWithComposer();
+         if(Boolean(this.textFlow))
          {
             if(this.textFlow.flowComposer == null)
             {
@@ -825,14 +823,14 @@ package fl.text
             this.textFlow.flowComposer.removeAllControllers();
             this.textFlow.flowComposer.addController(multiTCM.controller);
          }
-         _container.removeEventListener(MouseEvent.MOUSE_OVER,this._tcm.requiredMouseOverHandler);
-         _container.removeEventListener(FocusEvent.FOCUS_IN,this._tcm.requiredFocusInHandler);
-         _container.removeEventListener(MouseEvent.MOUSE_OVER,this._tcm.requiredMouseOverHandler);
+         _container.removeEventListener(MouseEvent.MOUSE_OVER,this._tcm.tlf_internal::requiredMouseOverHandler);
+         _container.removeEventListener(FocusEvent.FOCUS_IN,this._tcm.tlf_internal::requiredFocusInHandler);
+         _container.removeEventListener(MouseEvent.MOUSE_OVER,this._tcm.tlf_internal::requiredMouseOverHandler);
          _container.removeEventListener(MouseEvent.MOUSE_DOWN,this._tcm.mouseDownHandler);
          _container.removeEventListener(MouseEvent.MOUSE_OUT,this._tcm.mouseOutHandler);
          _container.removeEventListener(MouseEvent.MOUSE_WHEEL,this._tcm.mouseWheelHandler);
          _container.removeEventListener("imeStartComposition",this._tcm.imeStartCompositionHandler);
-         if(_container.contextMenu)
+         if(Boolean(_container.contextMenu))
          {
             _container.contextMenu.removeEventListener(ContextMenuEvent.MENU_SELECT,this._tcm.menuSelectHandler);
          }
@@ -847,7 +845,7 @@ package fl.text
       
       public function get antialiasType() : String
       {
-         if(this._tcm.hostFormat)
+         if(Boolean(this._tcm.hostFormat))
          {
             return this._tcm.hostFormat.renderingMode == RenderingMode.NORMAL ? AntiAliasType.NORMAL : AntiAliasType.ADVANCED;
          }
@@ -908,7 +906,7 @@ package fl.text
       override public function update() : void
       {
          this._tcm.updateContainer();
-         _ownerField.composeComplete(null);
+         _ownerField.tlf_internal::composeComplete(null);
       }
       
       override public function get embedFonts() : Boolean
@@ -917,7 +915,7 @@ package fl.text
          {
             return super.embedFonts;
          }
-         if(this.hostFormat)
+         if(Boolean(this.hostFormat))
          {
             return this.hostFormat.fontLookup == FontLookup.EMBEDDED_CFF;
          }
@@ -934,7 +932,7 @@ package fl.text
          else
          {
             fmt = Boolean(this.hostFormat) ? TextLayoutFormat(this.hostFormat) : new TextLayoutFormat();
-            fmt.fontLookup = !!value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE;
+            fmt.fontLookup = value ? FontLookup.EMBEDDED_CFF : FontLookup.DEVICE;
             this.hostFormat = fmt;
          }
       }
@@ -988,7 +986,7 @@ package fl.text
          {
             return super.blockProgression;
          }
-         if(this.hostFormat && this.hostFormat.blockProgression)
+         if(Boolean(this.hostFormat) && Boolean(this.hostFormat.blockProgression))
          {
             return this.hostFormat.blockProgression;
          }

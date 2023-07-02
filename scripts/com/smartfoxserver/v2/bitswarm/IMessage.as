@@ -8,26 +8,26 @@ package com.smartfoxserver.v2.bitswarm
       
       function get id() : int;
       
-      function set id(value:int) : void;
+      function set id(param1:int) : void;
       
       function get content() : ISFSObject;
       
-      function set content(obj:ISFSObject) : void;
+      function set content(param1:ISFSObject) : void;
       
       function get targetController() : int;
       
-      function set targetController(value:int) : void;
+      function set targetController(param1:int) : void;
       
       function get isEncrypted() : Boolean;
       
-      function set isEncrypted(value:Boolean) : void;
+      function set isEncrypted(param1:Boolean) : void;
       
       function get isUDP() : Boolean;
       
-      function set isUDP(value:Boolean) : void;
+      function set isUDP(param1:Boolean) : void;
       
       function get packetId() : Number;
       
-      function set packetId(value:Number) : void;
+      function set packetId(param1:Number) : void;
    }
 }

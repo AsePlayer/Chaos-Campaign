@@ -6,7 +6,7 @@ package com.brockw.stickwar.engine.multiplayer.adds
    {
        
       
-      var manager:AddManager;
+      internal var manager:AddManager;
       
       public function Add(manager:*)
       {

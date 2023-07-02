@@ -121,7 +121,7 @@ package com.smartfoxserver.v2.entities
          var pId:int = 0;
          if(this._playerIdByRoomId[room.id] != null)
          {
-            pId = this._playerIdByRoomId[room.id];
+            pId = int(this._playerIdByRoomId[room.id]);
          }
          return pId;
       }

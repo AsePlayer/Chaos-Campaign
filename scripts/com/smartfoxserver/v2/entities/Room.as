@@ -11,7 +11,7 @@ package com.smartfoxserver.v2.entities
       
       function get name() : String;
       
-      function set name(value:String) : void;
+      function set name(param1:String) : void;
       
       function get groupId() : String;
       
@@ -23,7 +23,7 @@ package com.smartfoxserver.v2.entities
       
       function get isPasswordProtected() : Boolean;
       
-      function set isPasswordProtected(value:Boolean) : void;
+      function set isPasswordProtected(param1:Boolean) : void;
       
       function get isManaged() : Boolean;
       
@@ -37,31 +37,31 @@ package com.smartfoxserver.v2.entities
       
       function get capacity() : int;
       
-      function set isJoined(value:Boolean) : void;
+      function set isJoined(param1:Boolean) : void;
       
-      function set isGame(value:Boolean) : void;
+      function set isGame(param1:Boolean) : void;
       
-      function set isHidden(value:Boolean) : void;
+      function set isHidden(param1:Boolean) : void;
       
-      function set isManaged(value:Boolean) : void;
+      function set isManaged(param1:Boolean) : void;
       
-      function set userCount(value:int) : void;
+      function set userCount(param1:int) : void;
       
-      function set maxUsers(value:int) : void;
+      function set maxUsers(param1:int) : void;
       
-      function set spectatorCount(value:int) : void;
+      function set spectatorCount(param1:int) : void;
       
-      function set maxSpectators(value:int) : void;
+      function set maxSpectators(param1:int) : void;
       
-      function addUser(user:User) : void;
+      function addUser(param1:User) : void;
       
-      function removeUser(user:User) : void;
+      function removeUser(param1:User) : void;
       
-      function containsUser(user:User) : Boolean;
+      function containsUser(param1:User) : Boolean;
       
-      function getUserByName(name:String) : User;
+      function getUserByName(param1:String) : User;
       
-      function getUserById(id:int) : User;
+      function getUserById(param1:int) : User;
       
       function get userList() : Array;
       
@@ -69,24 +69,24 @@ package com.smartfoxserver.v2.entities
       
       function get spectatorList() : Array;
       
-      function getVariable(name:String) : RoomVariable;
+      function getVariable(param1:String) : RoomVariable;
       
       function getVariables() : Array;
       
-      function setVariable(roomVariable:RoomVariable) : void;
+      function setVariable(param1:RoomVariable) : void;
       
-      function setVariables(roomVariables:Array) : void;
+      function setVariables(param1:Array) : void;
       
-      function containsVariable(name:String) : Boolean;
+      function containsVariable(param1:String) : Boolean;
       
       function get properties() : Object;
       
-      function set properties(value:Object) : void;
+      function set properties(param1:Object) : void;
       
       function get roomManager() : IRoomManager;
       
-      function set roomManager(manager:IRoomManager) : void;
+      function set roomManager(param1:IRoomManager) : void;
       
-      function setPasswordProtected(isProtected:Boolean) : void;
+      function setPasswordProtected(param1:Boolean) : void;
    }
 }

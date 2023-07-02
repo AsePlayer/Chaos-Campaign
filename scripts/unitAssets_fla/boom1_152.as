@@ -12,7 +12,7 @@ package unitAssets_fla
          addFrameScript(37,this.frame38);
       }
       
-      function frame38() : *
+      internal function frame38() : *
       {
          stop();
       }

@@ -16,7 +16,7 @@ package com.google.analytics.debug
       {
          if(color == 0)
          {
-            color = Style.alertColor;
+            color = uint(Style.alertColor);
          }
          if(alignement == null)
          {
@@ -107,7 +107,7 @@ package com.google.analytics.debug
          if(isValidAction(event.text))
          {
             action = getAction(event.text);
-            if(action)
+            if(Boolean(action))
             {
                action.execute();
             }

@@ -12,7 +12,7 @@ package com.brockw.stickwar.engine.units
    {
        
       
-      private var miners:Vector.<Miner>;
+      private var miners:Vector.<com.brockw.stickwar.engine.units.Miner>;
       
       private var lights:Sprite;
       
@@ -96,7 +96,7 @@ package com.brockw.stickwar.engine.units
             dmg = 0;
             if(inflictor != null)
             {
-               dmg = !!this.isArmoured ? Number(inflictor.damageToArmour) : Number(inflictor.damageToNotArmour);
+               dmg = this.isArmoured ? inflictor.damageToArmour : inflictor.damageToNotArmour;
             }
             else
             {
@@ -136,7 +136,7 @@ package com.brockw.stickwar.engine.units
          MovieClip(canvas).graphics.endFill();
       }
       
-      public function mine(lvl:int, unit:Miner) : Number
+      public function mine(lvl:int, unit:com.brockw.stickwar.engine.units.Miner) : Number
       {
          unit.team.mana += this.prayRate;
          return 0;
@@ -172,12 +172,12 @@ package com.brockw.stickwar.engine.units
          healthBar.y = -otherHeight * 1;
       }
       
-      public function inMineRange(unit:Miner) : Boolean
+      public function inMineRange(unit:com.brockw.stickwar.engine.units.Miner) : Boolean
       {
          return Math.abs(x - unit.team.direction * 50 - unit.x) < 150;
       }
       
-      public function getMiningSpot(unit:Miner) : Number
+      public function getMiningSpot(unit:com.brockw.stickwar.engine.units.Miner) : Number
       {
          for(var i:int = 0; i < this.miners.length; i++)
          {
@@ -189,7 +189,7 @@ package com.brockw.stickwar.engine.units
          return 0;
       }
       
-      public function reserveMiningSpot(unit:Miner) : Boolean
+      public function reserveMiningSpot(unit:com.brockw.stickwar.engine.units.Miner) : Boolean
       {
          for(var i:int = 0; i < this.miners.length; i++)
          {
@@ -203,7 +203,7 @@ package com.brockw.stickwar.engine.units
          return false;
       }
       
-      public function hasMiningSpot(unit:Miner) : Boolean
+      public function hasMiningSpot(unit:com.brockw.stickwar.engine.units.Miner) : Boolean
       {
          for(var i:int = 0; i < this.miners.length; i++)
          {
@@ -215,7 +215,7 @@ package com.brockw.stickwar.engine.units
          return false;
       }
       
-      public function releaseMiningSpot(unit:Miner) : void
+      public function releaseMiningSpot(unit:com.brockw.stickwar.engine.units.Miner) : void
       {
          for(var i:int = 0; i < this.miners.length; i++)
          {
@@ -233,7 +233,7 @@ package com.brockw.stickwar.engine.units
       {
       }
       
-      public function startMining(unit:Miner) : void
+      public function startMining(unit:com.brockw.stickwar.engine.units.Miner) : void
       {
          if(this.beamMiners.indexOf(unit) == -1)
          {
@@ -241,12 +241,12 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      public function stopMining(unit:Miner) : void
+      public function stopMining(unit:com.brockw.stickwar.engine.units.Miner) : void
       {
          this.beamMiners.splice(this.beamMiners.indexOf(unit),1);
       }
       
-      public function mayMine(unit:Miner) : Boolean
+      public function mayMine(unit:com.brockw.stickwar.engine.units.Miner) : Boolean
       {
          if(unit.isBagFull())
          {

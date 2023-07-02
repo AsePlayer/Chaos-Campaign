@@ -127,7 +127,7 @@ package com.brockw.stickwar.engine.Team
       
       public var upgrades:Dictionary;
       
-      protected var team:Team;
+      protected var team:com.brockw.stickwar.engine.Team.Team;
       
       protected var researchingMap:Object;
       
@@ -135,11 +135,11 @@ package com.brockw.stickwar.engine.Team
       
       private var isDebug:Boolean;
       
-      var toDecrement:Array;
+      internal var toDecrement:Array;
       
       private var game:StickWar;
       
-      public function Tech(game:StickWar, team:Team)
+      public function Tech(game:StickWar, team:com.brockw.stickwar.engine.Team.Team)
       {
          super();
          this.game = game;

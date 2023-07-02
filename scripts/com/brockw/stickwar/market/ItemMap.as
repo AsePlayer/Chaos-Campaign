@@ -1,7 +1,8 @@
 package com.brockw.stickwar.market
 {
    import com.brockw.stickwar.Main;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.units.*;
+   import com.smartfoxserver.v2.entities.data.*;
    import flash.display.MovieClip;
    import flash.utils.Dictionary;
    

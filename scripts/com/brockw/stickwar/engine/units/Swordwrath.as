@@ -24,7 +24,7 @@ package com.brockw.stickwar.engine.units
       
       private var damageIncrease:Number;
       
-      private var rageSpell:SpellCooldown;
+      private var rageSpell:com.brockw.stickwar.engine.units.SpellCooldown;
       
       private var rageSpellGlow:GlowFilter;
       
@@ -90,7 +90,7 @@ package com.brockw.stickwar.engine.units
          type = Unit.U_SWORDWRATH;
          this.normalMaxVelocity = _maxVelocity;
          this.rageMaxVelocity = game.xml.xml.Order.Units.swordwrath.rage.rageMaxVelocity;
-         this.rageSpell = new SpellCooldown(RAGE_EFFECT,RAGE_COOLDOWN,game.xml.xml.Order.Units.swordwrath.rage.mana);
+         this.rageSpell = new com.brockw.stickwar.engine.units.SpellCooldown(RAGE_EFFECT,RAGE_COOLDOWN,game.xml.xml.Order.Units.swordwrath.rage.mana);
          _mc.stop();
          _mc.width *= _scale;
          _mc.height *= _scale;

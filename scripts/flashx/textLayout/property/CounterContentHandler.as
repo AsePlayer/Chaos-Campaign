@@ -3,8 +3,6 @@ package flashx.textLayout.property
    import flashx.textLayout.elements.ListElement;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class CounterContentHandler extends PropertyHandler
    {
@@ -103,7 +101,7 @@ package flashx.textLayout.property
             if(val.suffix != null)
             {
                rslt += ",\"" + val.suffix + "\"";
-               if(val.ordered)
+               if(Boolean(val.ordered))
                {
                   rslt += "," + val.ordered;
                }
@@ -118,7 +116,7 @@ package flashx.textLayout.property
          var listStyleType:String = null;
          if(!(newVal is String))
          {
-            return newVal.hasOwnProperty("counter") || newVal.hasOwnProperty("counters") ? newVal : undefined;
+            return Boolean(newVal.hasOwnProperty("counter")) || Boolean(newVal.hasOwnProperty("counters")) ? newVal : undefined;
          }
          if(_counterContentPattern1.test(newVal))
          {
@@ -126,8 +124,8 @@ package flashx.textLayout.property
          }
          if(_counterContentPattern2.test(newVal))
          {
-            listStyleType = extractListStyleTypeFromCounter(newVal);
-            return ListElement.listSuffixes[listStyleType] !== undefined ? newVal : undefined;
+            listStyleType = tlf_internal::extractListStyleTypeFromCounter(newVal);
+            return ListElement.tlf_internal::listSuffixes[listStyleType] !== undefined ? newVal : undefined;
          }
          if(_countersContentPattern1.test(newVal))
          {
@@ -139,8 +137,8 @@ package flashx.textLayout.property
          }
          if(_countersContentPattern3.test(newVal))
          {
-            listStyleType = extractListStyleTypeFromCounters(newVal);
-            return ListElement.listSuffixes[listStyleType] !== undefined ? newVal : undefined;
+            listStyleType = tlf_internal::extractListStyleTypeFromCounters(newVal);
+            return ListElement.tlf_internal::listSuffixes[listStyleType] !== undefined ? newVal : undefined;
          }
          return undefined;
       }
@@ -160,7 +158,7 @@ package flashx.textLayout.property
          }
          if(_counterContentPattern2.test(newVal))
          {
-            listStyleType = extractListStyleTypeFromCounter(newVal);
+            listStyleType = tlf_internal::extractListStyleTypeFromCounter(newVal);
             return {
                "counter":"ordered",
                "ordered":listStyleType
@@ -172,7 +170,7 @@ package flashx.textLayout.property
          }
          if(_countersContentPattern2.test(newVal))
          {
-            suffix = extractSuffixFromCounters2(newVal);
+            suffix = tlf_internal::extractSuffixFromCounters2(newVal);
             return {
                "counters":"ordered",
                "suffix":suffix
@@ -180,8 +178,8 @@ package flashx.textLayout.property
          }
          if(_countersContentPattern3.test(newVal))
          {
-            listStyleType = extractListStyleTypeFromCounters(newVal);
-            suffix = extractSuffixFromCounters3(newVal);
+            listStyleType = tlf_internal::extractListStyleTypeFromCounters(newVal);
+            suffix = tlf_internal::extractSuffixFromCounters3(newVal);
             return {
                "counters":"ordered",
                "suffix":suffix,

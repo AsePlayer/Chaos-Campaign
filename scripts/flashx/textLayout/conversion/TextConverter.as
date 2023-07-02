@@ -4,8 +4,6 @@ package flashx.textLayout.conversion
    import flashx.textLayout.elements.TextFlow;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class TextConverter
    {
       
@@ -18,7 +16,7 @@ package flashx.textLayout.conversion
       tlf_internal static var _descriptors:Array = [];
       
       {
-         setFormatsToDefault();
+         tlf_internal::setFormatsToDefault();
       }
       
       public function TextConverter()
@@ -28,7 +26,7 @@ package flashx.textLayout.conversion
       
       tlf_internal static function setFormatsToDefault() : void
       {
-         _descriptors = [];
+         tlf_internal::_descriptors = [];
          addFormat(TEXT_LAYOUT_FORMAT,TextLayoutImporter,TextLayoutExporter,TEXT_LAYOUT_FORMAT);
          addFormat(TEXT_FIELD_HTML_FORMAT,TextFieldHtmlImporter,TextFieldHtmlExporter,null);
          addFormat(PLAIN_TEXT_FORMAT,PlainTextImporter,PlainTextExporter,"air:text");
@@ -63,8 +61,8 @@ package flashx.textLayout.conversion
          var i:int = findFormatIndex(format);
          if(i >= 0)
          {
-            descriptor = _descriptors[i];
-            if(descriptor && descriptor.importerClass)
+            descriptor = tlf_internal::_descriptors[i];
+            if(Boolean(descriptor) && Boolean(descriptor.importerClass))
             {
                importer = new descriptor.importerClass();
                importer.configuration = config;
@@ -80,8 +78,8 @@ package flashx.textLayout.conversion
          var i:int = findFormatIndex(format);
          if(i >= 0)
          {
-            descriptor = _descriptors[i];
-            if(descriptor && descriptor.exporterClass)
+            descriptor = tlf_internal::_descriptors[i];
+            if(Boolean(descriptor) && Boolean(descriptor.exporterClass))
             {
                exporter = new descriptor.exporterClass();
             }
@@ -92,19 +90,19 @@ package flashx.textLayout.conversion
       public static function addFormatAt(index:int, format:String, importerClass:Class, exporterClass:Class = null, clipboardFormat:String = null) : void
       {
          var descriptor:FormatDescriptor = new FormatDescriptor(format,importerClass,exporterClass,clipboardFormat);
-         _descriptors.splice(index,0,descriptor);
+         tlf_internal::_descriptors.splice(index,0,descriptor);
       }
       
       public static function addFormat(format:String, importerClass:Class, exporterClass:Class, clipboardFormat:String) : void
       {
-         addFormatAt(_descriptors.length,format,importerClass,exporterClass,clipboardFormat);
+         addFormatAt(tlf_internal::_descriptors.length,format,importerClass,exporterClass,clipboardFormat);
       }
       
       public static function removeFormatAt(index:int) : void
       {
-         if(index >= 0 && index < _descriptors.length)
+         if(index >= 0 && index < tlf_internal::_descriptors.length)
          {
-            _descriptors.splice(index,1);
+            tlf_internal::_descriptors.splice(index,1);
          }
       }
       
@@ -112,7 +110,7 @@ package flashx.textLayout.conversion
       {
          for(var i:int = 0; i < numFormats; i++)
          {
-            if(_descriptors[i].format == format)
+            if(tlf_internal::_descriptors[i].format == format)
             {
                return i;
             }
@@ -127,17 +125,17 @@ package flashx.textLayout.conversion
       
       public static function getFormatAt(index:int) : String
       {
-         return _descriptors[index].format;
+         return tlf_internal::_descriptors[index].format;
       }
       
       public static function getFormatDescriptorAt(index:int) : FormatDescriptor
       {
-         return _descriptors[index];
+         return tlf_internal::_descriptors[index];
       }
       
       public static function get numFormats() : int
       {
-         return _descriptors.length;
+         return tlf_internal::_descriptors.length;
       }
    }
 }

@@ -27,7 +27,7 @@ package com.brockw.stickwar.campaign
       
       private var timeOfLastUpdate:int;
       
-      var good:Team;
+      internal var good:Team;
       
       public function CampaignUpgradeScreen(main:BaseMain)
       {
@@ -35,7 +35,7 @@ package com.brockw.stickwar.campaign
          this.main = main;
          this.mc = new campaignUpgradeScreenMc();
          addChild(this.mc);
-         this.timeOfLastUpdate = int(getTimer());
+         this.timeOfLastUpdate = getTimer();
          this.initButtonMap();
       }
       

@@ -4,20 +4,18 @@ package flashx.textLayout.utils
    import flashx.textLayout.elements.FlowElement;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class HitTestArea
    {
        
       
-      private var tl:HitTestArea = null;
+      private var tl:flashx.textLayout.utils.HitTestArea = null;
       
-      private var tr:HitTestArea = null;
+      private var tr:flashx.textLayout.utils.HitTestArea = null;
       
-      private var bl:HitTestArea = null;
+      private var bl:flashx.textLayout.utils.HitTestArea = null;
       
-      private var br:HitTestArea = null;
+      private var br:flashx.textLayout.utils.HitTestArea = null;
       
       private var _rect:Rectangle;
       
@@ -30,12 +28,12 @@ package flashx.textLayout.utils
       public function HitTestArea(objects:Object)
       {
          super();
-         this.initialize(objects);
+         this.tlf_internal::initialize(objects);
       }
       
       tlf_internal function initialize(objects:Object) : void
       {
-         var obj:* = null;
+         var obj:Object = null;
          var r:Rectangle = null;
          var quadrant:Rectangle = null;
          var dxLower:Number = NaN;
@@ -43,7 +41,7 @@ package flashx.textLayout.utils
          var dyLower:Number = NaN;
          var dyUpper:Number = NaN;
          var count:int = 0;
-         if(objects)
+         if(Boolean(objects))
          {
             for(obj in objects)
             {
@@ -107,8 +105,8 @@ package flashx.textLayout.utils
                   dxUpper = r.right - this._xm;
                   dyLower = this._ym - r.top;
                   dyUpper = r.bottom - this._ym;
-                  this._xm = dxLower > dxUpper ? Number(this._xm + dxUpper) : Number(this._xm - dxLower);
-                  this._ym = dyLower > dyUpper ? Number(this._ym + dyUpper) : Number(this._ym - dyLower);
+                  this._xm = dxLower > dxUpper ? this._xm + dxUpper : this._xm - dxLower;
+                  this._ym = dyLower > dyUpper ? this._ym + dyUpper : this._ym - dyLower;
                   break;
                }
             }
@@ -134,13 +132,13 @@ package flashx.textLayout.utils
          {
             return null;
          }
-         if(this._owner)
+         if(Boolean(this._owner))
          {
             return this._owner;
          }
          var quadrantName:String = y < this._ym ? "t" : "b";
          quadrantName += x < this._xm ? "l" : "r";
-         var quadrant:HitTestArea = this[quadrantName];
+         var quadrant:flashx.textLayout.utils.HitTestArea = this[quadrantName];
          if(quadrant == null)
          {
             return null;
@@ -172,7 +170,7 @@ package flashx.textLayout.utils
          }
          if(i > 0)
          {
-            this[propName] = new HitTestArea(qrects);
+            this[propName] = new flashx.textLayout.utils.HitTestArea(qrects);
          }
       }
    }

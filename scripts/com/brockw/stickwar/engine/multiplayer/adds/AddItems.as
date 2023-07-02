@@ -9,7 +9,7 @@ package com.brockw.stickwar.engine.multiplayer.adds
    {
        
       
-      var mc:addPopUpShowItems;
+      internal var mc:addPopUpShowItems;
       
       private var startAddTime:int;
       
@@ -24,19 +24,19 @@ package com.brockw.stickwar.engine.multiplayer.adds
       {
          var timeLeft:int = 0;
          Util.animateToNeutral(this.mc.mc);
-         if(this.mc.mc.spearton2)
+         if(Boolean(this.mc.mc.spearton2))
          {
             Spearton.setItem(this.mc.mc.spearton2,"Native Spaer","Native Spearton","Native Shield");
          }
-         if(this.mc.mc.spearton1)
+         if(Boolean(this.mc.mc.spearton1))
          {
             Spearton.setItem(this.mc.mc.spearton1,"British Spear","Gladiator Helmet","Roman Shield");
          }
-         if(this.mc.mc.spearton3)
+         if(Boolean(this.mc.mc.spearton3))
          {
             Spearton.setItem(this.mc.mc.spearton3,"Dark Samurai Spear","Samurai Mask","Dark Wood Shield");
          }
-         if(stage)
+         if(Boolean(stage))
          {
             this.mc.signUp.mouseEnabled = true;
             this.mc.exit.mouseEnabled = true;
@@ -74,15 +74,15 @@ package com.brockw.stickwar.engine.multiplayer.adds
       override public function enter() : void
       {
          Util.animateToNeutral(this.mc.mc);
-         if(this.mc.mc.spearton2)
+         if(Boolean(this.mc.mc.spearton2))
          {
             Spearton.setItem(this.mc.mc.spearton2,"Native Spaer","Native Spearton","Native Shield");
          }
-         if(this.mc.mc.spearton1)
+         if(Boolean(this.mc.mc.spearton1))
          {
             Spearton.setItem(this.mc.mc.spearton1,"British Spear","Gladiator Helmet","Roman Shield");
          }
-         if(this.mc.mc.spearton3)
+         if(Boolean(this.mc.mc.spearton3))
          {
             Spearton.setItem(this.mc.mc.spearton3,"Dark Samurai Spear","Samurai Mask","Dark Wood Shield");
          }

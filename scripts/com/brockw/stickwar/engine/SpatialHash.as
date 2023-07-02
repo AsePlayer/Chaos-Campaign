@@ -7,7 +7,7 @@ package com.brockw.stickwar.engine
    {
        
       
-      private var partitions:Vector.<Vector.<Entity>>;
+      private var partitions:Vector.<Vector.<com.brockw.stickwar.engine.Entity>>;
       
       private var partitionSizes:Vector.<int>;
       
@@ -23,9 +23,9 @@ package com.brockw.stickwar.engine
       
       private var rows:int;
       
-      var visited:Dictionary;
+      internal var visited:Dictionary;
       
-      var game:StickWar;
+      internal var game:StickWar;
       
       public function SpatialHash(game:StickWar, width:Number, height:Number, boxWidth:Number, boxHeight:Number, maxEntitys:int)
       {
@@ -70,7 +70,7 @@ package com.brockw.stickwar.engine
          this.partitionSizes = null;
       }
       
-      public function add(entity:Entity) : void
+      public function add(entity:com.brockw.stickwar.engine.Entity) : void
       {
          var x:int = entity.px / this.boxWidth;
          var y:int = entity.py / this.boxHeight;
@@ -104,26 +104,26 @@ package com.brockw.stickwar.engine
       
       public function mapInArea(xs:Number, ys:Number, xe:Number, ye:Number, f:Function, includeWalls:Boolean = true) : void
       {
-         var _loc10_:* = null;
-         var _loc11_:Wall = null;
-         var _loc12_:int = 0;
-         var _loc13_:int = 0;
-         var _loc7_:Number = Math.min(xs,xe);
-         var _loc8_:Number = Math.max(xs,xe);
+         var id:String = null;
+         var wall:Wall = null;
+         var y:int = 0;
+         var i:int = 0;
+         var lower:Number = Math.min(xs,xe);
+         var upper:Number = Math.max(xs,xe);
          if(includeWalls)
          {
-            for each(_loc11_ in this.game.teamA.walls)
+            for each(wall in this.game.teamA.walls)
             {
-               if(_loc11_.px > _loc7_ && _loc11_.px < _loc8_)
+               if(wall.px > lower && wall.px < upper)
                {
-                  f(_loc11_);
+                  f(wall);
                }
             }
-            for each(_loc11_ in this.game.teamB.walls)
+            for each(wall in this.game.teamB.walls)
             {
-               if(_loc11_.px > _loc7_ && _loc11_.px < _loc8_)
+               if(wall.px > lower && wall.px < upper)
                {
-                  f(_loc11_);
+                  f(wall);
                }
             }
          }
@@ -131,30 +131,30 @@ package com.brockw.stickwar.engine
          ys /= this.boxHeight;
          xe /= this.boxWidth;
          ye /= this.boxHeight;
-         for(var _loc9_:int = xs; _loc9_ < xe; _loc9_++)
+         for(var x:int = xs; x < xe; x++)
          {
-            for(_loc12_ = ys; _loc12_ < ye; _loc12_++)
+            for(y = ys; y < ye; y++)
             {
-               if(!(this.cols * _loc12_ + _loc9_ < 0 || this.cols * _loc12_ + _loc9_ >= this.partitions.length))
+               if(!(this.cols * y + x < 0 || this.cols * y + x >= this.partitions.length))
                {
-                  for(_loc13_ = 0; _loc13_ < this.partitionSizes[this.cols * _loc12_ + _loc9_]; _loc13_++)
+                  for(i = 0; i < this.partitionSizes[this.cols * y + x]; i++)
                   {
-                     if(!(this.partitions[this.cols * _loc12_ + _loc9_][_loc13_].id in this.visited))
+                     if(!(this.partitions[this.cols * y + x][i].id in this.visited))
                      {
-                        f(this.partitions[this.cols * _loc12_ + _loc9_][_loc13_]);
-                        this.visited[this.partitions[this.cols * _loc12_ + _loc9_][_loc13_].id] = 0;
+                        f(this.partitions[this.cols * y + x][i]);
+                        this.visited[this.partitions[this.cols * y + x][i].id] = 0;
                      }
                   }
                }
             }
          }
-         for(_loc10_ in this.visited)
+         for(id in this.visited)
          {
-            delete this.visited[_loc10_];
+            delete this.visited[id];
          }
       }
       
-      public function getNearbyEntitys(entity:Entity) : Vector.<Entity>
+      public function getNearbyEntitys(entity:com.brockw.stickwar.engine.Entity) : Vector.<com.brockw.stickwar.engine.Entity>
       {
          var x:int = entity.px / this.boxWidth;
          var y:int = entity.py / this.boxHeight;
@@ -165,7 +165,7 @@ package com.brockw.stickwar.engine
          return this.partitions[this.cols * y + x];
       }
       
-      public function getNearbyEntitysXY(x:Number, y:Number) : Vector.<Entity>
+      public function getNearbyEntitysXY(x:Number, y:Number) : Vector.<com.brockw.stickwar.engine.Entity>
       {
          x = Math.floor(x / this.boxWidth);
          y = Math.floor(y / this.boxHeight);
@@ -187,7 +187,7 @@ package com.brockw.stickwar.engine
          return this.partitionSizes[this.cols * y + x];
       }
       
-      public function getNumberOfNearbyEntitys(entity:Entity) : int
+      public function getNumberOfNearbyEntitys(entity:com.brockw.stickwar.engine.Entity) : int
       {
          var x:int = entity.px / this.boxWidth;
          var y:int = entity.py / this.boxHeight;

@@ -1,15 +1,14 @@
 package com.brockw.stickwar.engine.projectile
 {
-   import com.brockw.stickwar.engine.Entity;
-   import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.units.Unit;
-   import flash.display.MovieClip;
+   import com.brockw.stickwar.engine.*;
+   import com.brockw.stickwar.engine.units.*;
+   import flash.display.*;
    
    public class Heal extends Projectile
    {
        
       
-      var spellMc:MovieClip;
+      internal var spellMc:MovieClip;
       
       public function Heal(game:StickWar)
       {

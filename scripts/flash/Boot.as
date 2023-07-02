@@ -30,35 +30,35 @@ package flash
          super();
       }
       
-      public static function enum_to_string(e:Object) : String
+      public static function enum_to_string(param1:Object) : String
       {
          var _loc5_:* = null;
-         if(e.params == null)
+         if(param1.params == null)
          {
-            return e.tag;
+            return String(param1.tag);
          }
          var _loc2_:Array = [];
          var _loc3_:int = 0;
-         var _loc4_:Array = e.params;
+         var _loc4_:Array = param1.params;
          while(_loc3_ < int(_loc4_.length))
          {
             _loc5_ = _loc4_[_loc3_];
             _loc3_++;
             _loc2_.push(Boot.__string_rec(_loc5_,""));
          }
-         return e.tag + "(" + _loc2_.join(",") + ")";
+         return String(param1.tag) + "(" + _loc2_.join(",") + ")";
       }
       
-      public static function __instanceof(v:*, t:*) : Boolean
+      public static function __instanceof(param1:*, param2:*) : Boolean
       {
          var _loc4_:* = null;
          try
          {
-            if(t == Dynamic)
+            if(param2 == Dynamic)
             {
                return true;
             }
-            return v is t;
+            return param1 is param2;
          }
          catch(_loc_e_:*)
          {
@@ -76,9 +76,9 @@ package flash
          Boot.lines = null;
       }
       
-      public static function __set_trace_color(rgb:uint) : void
+      public static function __set_trace_color(param1:uint) : void
       {
-         Boot.getTrace().textColor = rgb;
+         Boot.getTrace().textColor = param1;
       }
       
       public static function getTrace() : TextField
@@ -107,15 +107,15 @@ package flash
          return Boot.tf;
       }
       
-      public static function __trace(v:*, pos:Object) : void
+      public static function __trace(param1:*, param2:Object) : void
       {
          var _loc3_:TextField = Boot.getTrace();
-         var _loc4_:String = pos == null ? "(null)" : pos.fileName + ":" + int(pos.lineNumber);
+         var _loc4_:String = param2 == null ? "(null)" : String(param2.fileName) + ":" + int(param2.lineNumber);
          if(Boot.lines == null)
          {
             Boot.lines = [];
          }
-         Boot.lines = Boot.lines.concat((_loc4_ + ": " + Boot.__string_rec(v,"")).split("\n"));
+         Boot.lines = Boot.lines.concat((_loc4_ + ": " + Boot.__string_rec(param1,"")).split("\n"));
          _loc3_.text = Boot.lines.join("\n");
          var _loc5_:Stage = Lib.current.stage;
          if(_loc5_ == null)
@@ -129,28 +129,28 @@ package flash
          }
       }
       
-      public static function __string_rec(v:*, str:String) : String
+      public static function __string_rec(param1:*, param2:String) : String
       {
          var _loc4_:* = null as String;
          var _loc5_:* = null as Array;
          var _loc6_:* = null as Array;
-         var _loc7_:int = 0;
+         var _loc7_:* = 0;
          var _loc8_:* = null;
          var _loc9_:* = null as String;
          var _loc10_:Boolean = false;
          var _loc11_:int = 0;
          var _loc12_:int = 0;
          var _loc13_:* = null as String;
-         var _loc3_:String = getQualifiedClassName(v);
+         var _loc3_:String = getQualifiedClassName(param1);
          _loc4_ = _loc3_;
          if(_loc4_ == "Object")
          {
             _loc7_ = 0;
             _loc6_ = [];
-            _loc8_ = v;
-            while(§§hasnext(_loc8_,_loc7_))
+            _loc8_ = param1;
+            for(_loc7_ in _loc8_)
             {
-               _loc6_.push(§§nextname(_loc7_,_loc8_));
+               _loc6_.push(_loc7_);
             }
             _loc5_ = _loc6_;
             _loc9_ = "{";
@@ -160,7 +160,7 @@ package flash
             while(_loc7_ < _loc11_)
             {
                _loc12_ = _loc7_++;
-               _loc13_ = _loc5_[_loc12_];
+               _loc13_ = String(_loc5_[_loc12_]);
                if(_loc10_)
                {
                   _loc10_ = false;
@@ -169,7 +169,7 @@ package flash
                {
                   _loc9_ += ",";
                }
-               _loc9_ += " " + _loc13_ + " : " + Boot.__string_rec(v[_loc13_],str);
+               _loc9_ += " " + _loc13_ + " : " + Boot.__string_rec(param1[_loc13_],param2);
             }
             if(!_loc10_)
             {
@@ -179,13 +179,13 @@ package flash
          }
          if(_loc4_ == "Array")
          {
-            if(v == Array)
+            if(param1 == Array)
             {
                return "#Array";
             }
             _loc9_ = "[";
             _loc10_ = true;
-            _loc5_ = v;
+            _loc5_ = param1;
             _loc7_ = 0;
             _loc11_ = int(_loc5_.length);
             while(_loc7_ < _loc11_)
@@ -199,21 +199,21 @@ package flash
                {
                   _loc9_ += ",";
                }
-               _loc9_ += Boot.__string_rec(_loc5_[_loc12_],str);
+               _loc9_ += Boot.__string_rec(_loc5_[_loc12_],param2);
             }
             return _loc9_ + "]";
          }
-         _loc4_ = typeof v;
+         _loc4_ = typeof param1;
          if(_loc4_ == "function")
          {
             return "<function>";
          }
-         return new String(v);
+         return new String(param1);
       }
       
-      public static function __unprotect__(s:String) : String
+      public static function __unprotect__(param1:String) : String
       {
-         return s;
+         return param1;
       }
       
       public function start() : void
@@ -251,7 +251,7 @@ package flash
          throw "assert";
       }
       
-      public function doInitDelay(_:*) : void
+      public function doInitDelay(param1:*) : void
       {
          Lib.current.removeEventListener(Event.ADDED_TO_STAGE,doInitDelay);
          start();

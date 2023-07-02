@@ -534,7 +534,7 @@ package com.smartfoxserver.v2
          }
          catch(problem:SFSValidationError)
          {
-            errMsg = problem.message;
+            errMsg = String(problem.message);
             for each(errorItem in problem.errors)
             {
                errMsg += "\t" + errorItem + "\n";
@@ -578,7 +578,7 @@ package com.smartfoxserver.v2
       
       private function onSocketConnect(evt:BitSwarmEvent) : void
       {
-         if(evt.params.success)
+         if(Boolean(evt.params.success))
          {
             this.sendHandshakeRequest(evt.params._isReconnection);
          }
@@ -687,7 +687,7 @@ package com.smartfoxserver.v2
          }
          else
          {
-            errorCd = obj.getShort(BaseRequest.KEY_ERROR_CODE);
+            errorCd = int(obj.getShort(BaseRequest.KEY_ERROR_CODE));
             errorMsg = SFSErrorCodes.getErrorMessage(errorCd,obj.getUtfStringArray(BaseRequest.KEY_ERROR_PARAMS));
             params = {
                "success":false,
@@ -733,7 +733,7 @@ package com.smartfoxserver.v2
          if(this._bitSwarm.connectionMode == ConnectionMode.SOCKET && this._useBlueBox)
          {
             this._bitSwarm.forceBlueBox(true);
-            bbPort = this.config != null ? int(this.config.httpPort) : int(this.DEFAULT_HTTP_PORT);
+            bbPort = this.config != null ? this.config.httpPort : this.DEFAULT_HTTP_PORT;
             this._bitSwarm.connect(this._lastIpAddress,bbPort);
             dispatchEvent(new SFSEvent(SFSEvent.CONNECTION_ATTEMPT_HTTP,{}));
          }
@@ -751,7 +751,7 @@ package com.smartfoxserver.v2
       
       private function sendHandshakeRequest(isReconnection:Boolean = false) : void
       {
-         var req:IRequest = new HandshakeRequest(this.version,!!isReconnection ? this._sessionToken : null);
+         var req:IRequest = new HandshakeRequest(this.version,isReconnection ? this._sessionToken : null);
          this.send(req);
       }
    }

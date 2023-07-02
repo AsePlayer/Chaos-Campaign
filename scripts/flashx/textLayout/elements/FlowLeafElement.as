@@ -31,8 +31,6 @@ package flashx.textLayout.elements
    import flashx.textLayout.utils.CharacterUtil;
    import flashx.textLayout.utils.LocaleUtil;
    
-   use namespace tlf_internal;
-   
    public class FlowLeafElement extends FlowElement
    {
        
@@ -62,7 +60,7 @@ package flashx.textLayout.elements
             }
             else if(para != null)
             {
-               domBase = para.getEffectiveDominantBaseline();
+               domBase = String(para.tlf_internal::getEffectiveDominantBaseline());
             }
             else
             {
@@ -80,7 +78,7 @@ package flashx.textLayout.elements
          format.alpha = Number(computedFormat.textAlpha);
          format.breakOpportunity = computedFormat.breakOpportunity;
          format.color = uint(computedFormat.color);
-         format.dominantBaseline = resolveDomBaseline(computedFormat,para);
+         format.dominantBaseline = tlf_internal::resolveDomBaseline(computedFormat,para);
          format.digitCase = computedFormat.digitCase;
          format.digitWidth = computedFormat.digitWidth;
          format.ligatureLevel = computedFormat.ligatureLevel;
@@ -114,7 +112,7 @@ package flashx.textLayout.elements
          }
          else
          {
-            fd.fontLookup = GlobalSettings.resolveFontLookupFunction(Boolean(swfContext) ? FlowComposerBase.computeBaseSWFContext(swfContext) : null,computedFormat);
+            fd.fontLookup = GlobalSettings.resolveFontLookupFunction(Boolean(swfContext) ? FlowComposerBase.tlf_internal::computeBaseSWFContext(swfContext) : null,computedFormat);
          }
          var fontMapper:Function = GlobalSettings.fontMapperFunction;
          if(fontMapper != null)
@@ -124,7 +122,7 @@ package flashx.textLayout.elements
          format.fontDescription = fd;
          if(computedFormat.baselineShift == BaselineShift.SUPERSCRIPT || computedFormat.baselineShift == BaselineShift.SUBSCRIPT)
          {
-            if(swfContext)
+            if(Boolean(swfContext))
             {
                fontMetrics = swfContext.callInContext(format.getFontMetrics,format,null,true);
             }
@@ -158,7 +156,7 @@ package flashx.textLayout.elements
          var halfLeading:Number = (lineHeight - textHeight) / 2;
          emBox.top -= halfLeading;
          emBox.bottom += halfLeading;
-         var computedDominantBaseline:String = resolveDomBaseline(computedFormat,para);
+         var computedDominantBaseline:String = tlf_internal::resolveDomBaseline(computedFormat,para);
          switch(computedDominantBaseline)
          {
             case TextBaseline.ASCENT:
@@ -194,13 +192,13 @@ package flashx.textLayout.elements
       
       override tlf_internal function createContentElement() : void
       {
-         if(_computedFormat)
+         if(Boolean(_computedFormat))
          {
-            this._blockElement.elementFormat = this.computeElementFormat();
+            this._blockElement.elementFormat = this.tlf_internal::computeElementFormat();
          }
-         if(parent)
+         if(Boolean(parent))
          {
-            parent.insertBlockElement(this,this._blockElement);
+            parent.tlf_internal::insertBlockElement(this,this._blockElement);
          }
       }
       
@@ -219,42 +217,42 @@ package flashx.textLayout.elements
       {
          if(!this._blockElement)
          {
-            this.createContentElement();
+            this.tlf_internal::createContentElement();
          }
          return this._blockElement;
       }
       
       override tlf_internal function getEventMirror() : IEventDispatcher
       {
-         if(!this._eventMirror)
+         if(!this.tlf_internal::_eventMirror)
          {
-            this._eventMirror = new FlowElementEventDispatcher(this);
+            this.tlf_internal::_eventMirror = new FlowElementEventDispatcher(this);
          }
-         return this._eventMirror;
+         return this.tlf_internal::_eventMirror;
       }
       
       override tlf_internal function hasActiveEventMirror() : Boolean
       {
-         return this._eventMirror && this._eventMirror._listenerCount != 0;
+         return Boolean(this.tlf_internal::_eventMirror) && this.tlf_internal::_eventMirror.tlf_internal::_listenerCount != 0;
       }
       
       override tlf_internal function appendElementsForDelayedUpdate(tf:TextFlow, changeType:String) : void
       {
          if(changeType == ModelChange.ELEMENT_ADDED)
          {
-            if(this.hasActiveEventMirror())
+            if(this.tlf_internal::hasActiveEventMirror())
             {
-               tf.incInteractiveObjectCount();
+               tf.tlf_internal::incInteractiveObjectCount();
             }
          }
          else if(changeType == ModelChange.ELEMENT_REMOVAL)
          {
-            if(this.hasActiveEventMirror())
+            if(this.tlf_internal::hasActiveEventMirror())
             {
-               tf.decInteractiveObjectCount();
+               tf.tlf_internal::decInteractiveObjectCount();
             }
          }
-         super.appendElementsForDelayedUpdate(tf,changeType);
+         super.tlf_internal::appendElementsForDelayedUpdate(tf,changeType);
       }
       
       public function get text() : String
@@ -266,7 +264,7 @@ package flashx.textLayout.elements
       {
          if(!this._blockElement)
          {
-            this.createContentElement();
+            this.tlf_internal::createContentElement();
          }
          return this._blockElement.elementFormat;
       }
@@ -278,51 +276,51 @@ package flashx.textLayout.elements
             return;
          }
          var hasBlock:Boolean = this._blockElement != null;
-         if(this._blockElement && parent && parent.hasBlockElement())
+         if(this._blockElement && parent && Boolean(parent.tlf_internal::hasBlockElement()))
          {
-            parent.removeBlockElement(this,this._blockElement);
+            parent.tlf_internal::removeBlockElement(this,this._blockElement);
          }
-         if(newParent && !newParent.hasBlockElement() && this._blockElement)
+         if(newParent && !newParent.tlf_internal::hasBlockElement() && Boolean(this._blockElement))
          {
-            newParent.createContentElement();
+            newParent.tlf_internal::createContentElement();
          }
-         super.setParentAndRelativeStart(newParent,newStart);
-         if(parent)
+         super.tlf_internal::setParentAndRelativeStart(newParent,newStart);
+         if(Boolean(parent))
          {
-            if(parent.hasBlockElement())
+            if(parent.tlf_internal::hasBlockElement())
             {
                if(!this._blockElement)
                {
-                  this.createContentElement();
+                  this.tlf_internal::createContentElement();
                }
                else if(hasBlock)
                {
-                  parent.insertBlockElement(this,this._blockElement);
+                  parent.tlf_internal::insertBlockElement(this,this._blockElement);
                }
             }
-            else if(this._blockElement)
+            else if(Boolean(this._blockElement))
             {
-               this.releaseContentElement();
+               this.tlf_internal::releaseContentElement();
             }
          }
       }
       
       tlf_internal function quickInitializeForSplit(sibling:FlowLeafElement, newSpanLength:int, newSpanTextElement:TextElement) : void
       {
-         setTextLength(newSpanLength);
+         tlf_internal::setTextLength(newSpanLength);
          this._blockElement = newSpanTextElement;
-         if(this._blockElement)
+         if(Boolean(this._blockElement))
          {
             this._text = this._blockElement.text;
          }
-         quickCloneTextLayoutFormat(sibling);
+         tlf_internal::quickCloneTextLayoutFormat(sibling);
          var tf:TextFlow = sibling.getTextFlow();
          if(tf == null || tf.formatResolver == null)
          {
             _computedFormat = sibling._computedFormat;
-            if(this._blockElement)
+            if(Boolean(this._blockElement))
             {
-               this._blockElement.elementFormat = sibling.getElementFormat();
+               this._blockElement.elementFormat = sibling.tlf_internal::getElementFormat();
             }
          }
       }
@@ -333,7 +331,7 @@ package flashx.textLayout.elements
          {
             return null;
          }
-         return parent.getNextLeafHelper(limitElement,this);
+         return parent.tlf_internal::getNextLeafHelper(limitElement,this);
       }
       
       public function getPreviousLeaf(limitElement:FlowGroupElement = null) : FlowLeafElement
@@ -342,7 +340,7 @@ package flashx.textLayout.elements
          {
             return null;
          }
-         return parent.getPreviousLeafHelper(limitElement,this);
+         return parent.tlf_internal::getPreviousLeafHelper(limitElement,this);
       }
       
       override public function getCharAtPosition(relativePosition:int) : String
@@ -352,7 +350,7 @@ package flashx.textLayout.elements
       
       override tlf_internal function normalizeRange(normalizeStart:uint, normalizeEnd:uint) : void
       {
-         if(this._blockElement)
+         if(Boolean(this._blockElement))
          {
             this.computedFormat;
          }
@@ -362,7 +360,7 @@ package flashx.textLayout.elements
       {
          if(!this._blockElement)
          {
-            this.createContentElement();
+            this.tlf_internal::createContentElement();
          }
          var ef:ElementFormat = this._blockElement.elementFormat;
          if(!ef)
@@ -370,7 +368,7 @@ package flashx.textLayout.elements
             return null;
          }
          var tf:TextFlow = getTextFlow();
-         if(tf && tf.flowComposer && tf.flowComposer.swfContext)
+         if(tf && tf.flowComposer && Boolean(tf.flowComposer.swfContext))
          {
             return tf.flowComposer.swfContext.callInContext(ef.getFontMetrics,ef,null,true);
          }
@@ -380,17 +378,17 @@ package flashx.textLayout.elements
       tlf_internal function computeElementFormat() : ElementFormat
       {
          var tf:TextFlow = getTextFlow();
-         return computeElementFormatHelper(_computedFormat,getParagraph(),tf && tf.flowComposer ? tf.flowComposer.swfContext : null);
+         return tlf_internal::computeElementFormatHelper(_computedFormat,getParagraph(),Boolean(tf) && Boolean(tf.flowComposer) ? tf.flowComposer.swfContext : null);
       }
       
       override public function get computedFormat() : ITextLayoutFormat
       {
          if(!_computedFormat)
          {
-            _computedFormat = doComputeTextLayoutFormat();
-            if(this._blockElement)
+            _computedFormat = tlf_internal::doComputeTextLayoutFormat();
+            if(Boolean(this._blockElement))
             {
-               this._blockElement.elementFormat = this.computeElementFormat();
+               this._blockElement.elementFormat = this.tlf_internal::computeElementFormat();
             }
          }
          return _computedFormat;
@@ -402,7 +400,7 @@ package flashx.textLayout.elements
          {
             return 0;
          }
-         return TextLayoutFormat.lineHeightProperty.computeActualPropertyValue(_computedFormat.lineHeight,this.getEffectiveFontSize());
+         return TextLayoutFormat.lineHeightProperty.computeActualPropertyValue(_computedFormat.lineHeight,this.tlf_internal::getEffectiveFontSize());
       }
       
       tlf_internal function getCSSInlineBox(blockProgression:String, textLine:TextLine, para:ParagraphElement = null, swfContext:ISWFContext = null) : Rectangle
@@ -411,7 +409,7 @@ package flashx.textLayout.elements
          {
             return null;
          }
-         return getCSSInlineBoxHelper(this.computedFormat,this.getComputedFontMetrics(),textLine,para);
+         return tlf_internal::getCSSInlineBoxHelper(this.computedFormat,this.getComputedFontMetrics(),textLine,para);
       }
       
       tlf_internal function getEffectiveFontSize() : Number
@@ -438,7 +436,7 @@ package flashx.textLayout.elements
             }
          }
          var mainRects:Array = [];
-         line.calculateSelectionBounds(textLine,mainRects,startPos,endPos,blockProgression,[line.textHeight,0]);
+         line.tlf_internal::calculateSelectionBounds(textLine,mainRects,startPos,endPos,blockProgression,[line.textHeight,0]);
          return mainRects;
       }
       
@@ -460,7 +458,7 @@ package flashx.textLayout.elements
          var tcyAdornBounds:Rectangle = null;
          var baseULAdjustment:Number = NaN;
          var metrics:FontMetrics = this.getComputedFontMetrics();
-         var spanBoundsArray:Array = this.getSpanBoundsOnLine(tLine,blockProgression);
+         var spanBoundsArray:Array = this.tlf_internal::getSpanBoundsOnLine(tLine,blockProgression);
          for(var i:int = 0; i < spanBoundsArray.length; i++)
          {
             imeLineThickness = 1;
@@ -478,8 +476,8 @@ package flashx.textLayout.elements
                imeLineColor = 10921638;
             }
             spanBounds = spanBoundsArray[i] as Rectangle;
-            stOffset = this.calculateStrikeThrough(tLine,blockProgression,metrics);
-            ulOffset = this.calculateUnderlineOffset(stOffset,blockProgression,metrics,tLine);
+            stOffset = this.tlf_internal::calculateStrikeThrough(tLine,blockProgression,metrics);
+            ulOffset = this.tlf_internal::calculateUnderlineOffset(stOffset,blockProgression,metrics,tLine);
             if(blockProgression != BlockProgression.RL)
             {
                imeLineStartX = spanBounds.topLeft.x + 1;
@@ -504,7 +502,7 @@ package flashx.textLayout.elements
                   if(this.getAbsoluteStart() + this.textLength == tcyParent.getAbsoluteStart() + tcyParent.textLength)
                   {
                      tcyAdornBounds = new Rectangle();
-                     tcyParent.calculateAdornmentBounds(tcyParent,tLine,blockProgression,tcyAdornBounds);
+                     tcyParent.tlf_internal::calculateAdornmentBounds(tcyParent,tLine,blockProgression,tcyAdornBounds);
                      baseULAdjustment = metrics.underlineOffset + metrics.underlineThickness / 2;
                      imeLineStartY = tcyAdornBounds.top + 1;
                      imeLineEndY = tcyAdornBounds.bottom - 1;
@@ -530,7 +528,7 @@ package flashx.textLayout.elements
          var i:int = 0;
          if(_computedFormat.textDecoration == TextDecoration.UNDERLINE || _computedFormat.lineThrough || _computedFormat.backgroundAlpha > 0 && _computedFormat.backgroundColor != BackgroundColor.TRANSPARENT)
          {
-            spanBoundsArray = this.getSpanBoundsOnLine(tLine,blockProgression);
+            spanBoundsArray = this.tlf_internal::getSpanBoundsOnLine(tLine,blockProgression);
             for(i = 0; i < spanBoundsArray.length; i++)
             {
                this.updateAdornmentsOnBounds(tLine,blockProgression,spanBoundsArray[i]);
@@ -564,8 +562,8 @@ package flashx.textLayout.elements
             shape = new Shape();
             shape.alpha = Number(_computedFormat.textAlpha);
             g = shape.graphics;
-            stOffset = this.calculateStrikeThrough(tLine,blockProgression,metrics);
-            ulOffset = this.calculateUnderlineOffset(stOffset,blockProgression,metrics,tLine);
+            stOffset = this.tlf_internal::calculateStrikeThrough(tLine,blockProgression,metrics);
+            ulOffset = this.tlf_internal::calculateUnderlineOffset(stOffset,blockProgression,metrics,tLine);
          }
          if(blockProgression != BlockProgression.RL)
          {
@@ -610,17 +608,17 @@ package flashx.textLayout.elements
                {
                   tcyParent = this.getParentByType(TCYElement) as TCYElement;
                   tcyPara = this.getParentByType(ParagraphElement) as ParagraphElement;
-                  lowerLocale = tcyPara.computedFormat.locale.toLowerCase();
+                  lowerLocale = String(tcyPara.computedFormat.locale.toLowerCase());
                   adornRight = lowerLocale.indexOf("zh") != 0;
                   if(this.getAbsoluteStart() + this.textLength == tcyParent.getAbsoluteStart() + tcyParent.textLength)
                   {
                      tcyAdornBounds = new Rectangle();
-                     tcyParent.calculateAdornmentBounds(tcyParent,tLine,blockProgression,tcyAdornBounds);
+                     tcyParent.tlf_internal::calculateAdornmentBounds(tcyParent,tLine,blockProgression,tcyAdornBounds);
                      if(_computedFormat.textDecoration == TextDecoration.UNDERLINE)
                      {
                         g.lineStyle(metrics.underlineThickness,_computedFormat.color as uint);
                         baseULAdjustment = metrics.underlineOffset + metrics.underlineThickness / 2;
-                        xCoor = !!adornRight ? Number(spanBounds.right) : Number(spanBounds.left);
+                        xCoor = adornRight ? spanBounds.right : spanBounds.left;
                         if(!adornRight)
                         {
                            baseULAdjustment = -baseULAdjustment;
@@ -641,10 +639,10 @@ package flashx.textLayout.elements
                }
             }
          }
-         if(shape)
+         if(Boolean(shape))
          {
-            peekLine = (tLine.userData as TextFlowLine).peekTextLine();
-            if(peekLine && tLine != peekLine)
+            peekLine = (tLine.userData as TextFlowLine).tlf_internal::peekTextLine();
+            if(Boolean(peekLine) && tLine != peekLine)
             {
                tLine = peekLine;
             }
@@ -667,14 +665,14 @@ package flashx.textLayout.elements
             return;
          }
          var tf:TextFlow = this.getTextFlow();
-         if(!tf.getBackgroundManager())
+         if(!tf.tlf_internal::getBackgroundManager())
          {
             return;
          }
          var r:Rectangle = spanBounds.clone();
          if(!isTCY && (_computedFormat.baselineShift == BaselineShift.SUPERSCRIPT || _computedFormat.baselineShift == BaselineShift.SUBSCRIPT))
          {
-            fontSize = this.getEffectiveFontSize();
+            fontSize = this.tlf_internal::getEffectiveFontSize();
             baseStrikethroughOffset = metrics.strikethroughOffset + metrics.strikethroughThickness / 2;
             if(_computedFormat.baselineShift == BaselineShift.SUPERSCRIPT)
             {
@@ -715,13 +713,13 @@ package flashx.textLayout.elements
                }
             }
          }
-         tf.backgroundManager.addRect(tLine,this,r,_computedFormat.backgroundColor,_computedFormat.backgroundAlpha);
+         tf.tlf_internal::backgroundManager.addRect(tLine,this,r,_computedFormat.backgroundColor,_computedFormat.backgroundAlpha);
       }
       
       tlf_internal function calculateStrikeThrough(textLine:TextLine, blockProgression:String, metrics:FontMetrics) : Number
       {
          var underlineAndStrikeThroughShift:int = 0;
-         var effectiveFontSize:Number = this.getEffectiveFontSize();
+         var effectiveFontSize:Number = this.tlf_internal::getEffectiveFontSize();
          if(_computedFormat.baselineShift == BaselineShift.SUPERSCRIPT)
          {
             underlineAndStrikeThroughShift = -(metrics.superscriptOffset * effectiveFontSize);
@@ -734,7 +732,7 @@ package flashx.textLayout.elements
          {
             underlineAndStrikeThroughShift = TextLayoutFormat.baselineShiftProperty.computeActualPropertyValue(_computedFormat.baselineShift,effectiveFontSize);
          }
-         var domBaselineString:String = resolveDomBaseline(this.computedFormat,getParagraph());
+         var domBaselineString:String = tlf_internal::resolveDomBaseline(this.computedFormat,getParagraph());
          var alignmentBaselineString:String = this.computedFormat.alignmentBaseline;
          var alignDomBaselineAdjustment:Number = textLine.getBaselinePosition(domBaselineString);
          if(alignmentBaselineString != TextBaseline.USE_DOMINANT_BASELINE && alignmentBaselineString != domBaselineString)
@@ -760,7 +758,7 @@ package flashx.textLayout.elements
          {
             stOffset -= metrics.strikethroughThickness;
          }
-         return Number(stOffset + (alignDomBaselineAdjustment - underlineAndStrikeThroughShift));
+         return stOffset + (alignDomBaselineAdjustment - underlineAndStrikeThroughShift);
       }
       
       tlf_internal function calculateUnderlineOffset(stOffset:Number, blockProgression:String, metrics:FontMetrics, textLine:TextLine) : Number

@@ -31,7 +31,7 @@ package com.brockw.stickwar
       
       protected var _simulation:SimulationSyncronizer;
       
-      protected var _main:BaseMain;
+      protected var _main:com.brockw.stickwar.BaseMain;
       
       protected var _team:Team;
       
@@ -95,13 +95,13 @@ package com.brockw.stickwar
       
       private var _isFastForwardFrame:Boolean;
       
-      var t:int;
+      internal var t:int;
       
       private var showingTimeout:Boolean;
       
       private var showingSyncError:Boolean;
       
-      public function GameScreen(main:BaseMain)
+      public function GameScreen(main:com.brockw.stickwar.BaseMain)
       {
          this._period = 33.333333333333336;
          this._period = 33.333333333333336;
@@ -413,12 +413,12 @@ package com.brockw.stickwar
          this._team = value;
       }
       
-      public function get main() : BaseMain
+      public function get main() : com.brockw.stickwar.BaseMain
       {
          return this._main;
       }
       
-      public function set main(value:BaseMain) : void
+      public function set main(value:com.brockw.stickwar.BaseMain) : void
       {
          this._main = value;
       }

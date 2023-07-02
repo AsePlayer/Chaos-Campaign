@@ -16,13 +16,13 @@ package com.brockw.stickwar
    {
        
       
-      var loadingMc:loadingCampaignScreenMc;
+      internal var loadingMc:loadingCampaignScreenMc;
       
-      var isLocked:Boolean;
+      internal var isLocked:Boolean;
       
-      var version:int;
+      internal var version:int;
       
-      var minorVersion:int;
+      internal var minorVersion:int;
       
       public var mainClassName:String = "com.brockw.stickwar.stickwar2";
       
@@ -56,8 +56,8 @@ package com.brockw.stickwar
          var _fullInfo:String = Capabilities.version;
          var _osSplitArr:Array = _fullInfo.split(" ");
          var _versionSplitArr:Array = _osSplitArr[1].split(",");
-         var _versionInfo:Number = _versionSplitArr[0];
-         var _minerVersion:Number = _versionSplitArr[1];
+         var _versionInfo:Number = Number(_versionSplitArr[0]);
+         var _minerVersion:Number = Number(_versionSplitArr[1]);
          this.version = _versionInfo;
          this.minorVersion = _minerVersion;
          trace(this.version,this.minorVersion);
@@ -124,15 +124,15 @@ package com.brockw.stickwar
       {
          trace("dispose preloader");
          removeEventListener(Event.ENTER_FRAME,this.onEnterFrame);
-         if(this._preloaderBackground)
+         if(Boolean(this._preloaderBackground))
          {
             removeChild(this._preloaderBackground);
          }
-         if(this._preloaderPercent)
+         if(Boolean(this._preloaderPercent))
          {
             removeChild(this._preloaderPercent);
          }
-         if(this.loadingMc)
+         if(Boolean(this.loadingMc))
          {
             removeChild(this.loadingMc);
          }

@@ -54,7 +54,7 @@ package com.google.analytics.external
       
       public function get search() : String
       {
-         if(_search)
+         if(Boolean(_search))
          {
             return _search;
          }
@@ -68,7 +68,7 @@ package com.google.analytics.external
       
       public function get location() : String
       {
-         if(_location)
+         if(Boolean(_location))
          {
             return _location;
          }
@@ -82,7 +82,7 @@ package com.google.analytics.external
       
       public function get pathname() : String
       {
-         if(_pathname)
+         if(Boolean(_pathname))
          {
             return _pathname;
          }
@@ -101,7 +101,7 @@ package com.google.analytics.external
             return;
          }
          var obj:Object = call(cache_properties_js);
-         if(obj)
+         if(Boolean(obj))
          {
             _host = obj.host;
             _language = obj.language;
@@ -118,7 +118,7 @@ package com.google.analytics.external
       
       public function get language() : String
       {
-         if(_language)
+         if(Boolean(_language))
          {
             return _language;
          }
@@ -137,7 +137,7 @@ package com.google.analytics.external
       
       public function get colorDepth() : String
       {
-         if(_colorDepth)
+         if(Boolean(_colorDepth))
          {
             return _colorDepth;
          }
@@ -151,7 +151,7 @@ package com.google.analytics.external
       
       public function get referrer() : String
       {
-         if(_referrer)
+         if(Boolean(_referrer))
          {
             return _referrer;
          }
@@ -165,7 +165,7 @@ package com.google.analytics.external
       
       public function get protocol() : String
       {
-         if(_protocol)
+         if(Boolean(_protocol))
          {
             return _protocol;
          }
@@ -179,7 +179,7 @@ package com.google.analytics.external
       
       public function get host() : String
       {
-         if(_host)
+         if(Boolean(_host))
          {
             return _host;
          }
@@ -193,7 +193,7 @@ package com.google.analytics.external
       
       public function get characterSet() : String
       {
-         if(_characterSet)
+         if(Boolean(_characterSet))
          {
             return _characterSet;
          }
@@ -212,7 +212,7 @@ package com.google.analytics.external
       
       public function get title() : String
       {
-         if(_title)
+         if(Boolean(_title))
          {
             return _title;
          }

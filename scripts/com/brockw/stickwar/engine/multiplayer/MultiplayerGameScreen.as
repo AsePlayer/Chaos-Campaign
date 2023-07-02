@@ -1,21 +1,24 @@
 package com.brockw.stickwar.engine.multiplayer
 {
-   import com.brockw.game.Util;
+   import com.brockw.*;
+   import com.brockw.game.*;
    import com.brockw.simulationSync.EndOfTurnMove;
    import com.brockw.simulationSync.Move;
    import com.brockw.simulationSync.SimulationSyncronizer;
    import com.brockw.stickwar.GameScreen;
    import com.brockw.stickwar.Main;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.Entity;
    import com.brockw.stickwar.engine.StickWar;
    import com.brockw.stickwar.engine.UserInterface;
-   import com.brockw.stickwar.engine.multiplayer.moves.EndOfGameMove;
-   import com.brockw.stickwar.engine.multiplayer.moves.MoveFactory;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.brockw.stickwar.engine.units.*;
    import com.smartfoxserver.v2.core.SFSEvent;
    import com.smartfoxserver.v2.entities.User;
-   import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
-   import com.smartfoxserver.v2.requests.LogoutRequest;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
+   import flash.display.*;
+   import flash.events.*;
    import flash.utils.ByteArray;
    
    public class MultiplayerGameScreen extends GameScreen
@@ -43,23 +46,23 @@ package com.brockw.stickwar.engine.multiplayer
          game.initGame(main,this,Main(main).gameRoom.getVariable("map").getIntValue());
          this.isOutOfSync = false;
          trace("START GAME RANDOM:",1000 * game.random.lastRandom);
-         a = Main(main).gameRoom.playerList[0].id;
-         b = Main(main).gameRoom.playerList[1].id;
+         a = int(Main(main).gameRoom.playerList[0].id);
+         b = int(Main(main).gameRoom.playerList[1].id);
          var aLabel:String = "race_" + User(Main(main).gameRoom.playerList[0]).name;
          var bLabel:String = "race_" + User(Main(main).gameRoom.playerList[1]).name;
          var aMemberLabel:String = "member_" + User(Main(main).gameRoom.playerList[0]).name;
          var bMemberLabel:String = "member_" + User(Main(main).gameRoom.playerList[1]).name;
          var teamAName:int = raceParams.getInt(User(Main(main).gameRoom.playerList[0]).name);
          var teamBName:int = raceParams.getInt(User(Main(main).gameRoom.playerList[1]).name);
-         var teamARealName:String = User(Main(main).gameRoom.playerList[0]).name;
-         var teamBRealName:String = User(Main(main).gameRoom.playerList[1]).name;
-         var teamARating:Number = User(Main(main).gameRoom.playerList[0]).getVariable("rating").getDoubleValue();
-         var teamBRating:Number = User(Main(main).gameRoom.playerList[1]).getVariable("rating").getDoubleValue();
+         var teamARealName:String = String(User(Main(main).gameRoom.playerList[0]).name);
+         var teamBRealName:String = String(User(Main(main).gameRoom.playerList[1]).name);
+         var teamARating:Number = Number(User(Main(main).gameRoom.playerList[0]).getVariable("rating").getDoubleValue());
+         var teamBRating:Number = Number(User(Main(main).gameRoom.playerList[1]).getVariable("rating").getDoubleValue());
          trace(teamAName,teamBName,raceParams,Main(main).gameRoom.getVariable(aMemberLabel).getBoolValue(),Main(main).gameRoom.getVariable(bMemberLabel).getBoolValue());
          if(a > b)
          {
-            a = Main(main).gameRoom.playerList[1].id;
-            b = Main(main).gameRoom.playerList[0].id;
+            a = int(Main(main).gameRoom.playerList[1].id);
+            b = int(Main(main).gameRoom.playerList[0].id);
             game.initTeams(teamBName,teamAName,game.xml.xml.Order.Units.statue.health,game.xml.xml.Order.Units.statue.health);
             game.teamA.loadout.fromString(Main(main).gameRoom.getVariable(User(Main(main).gameRoom.playerList[1]).name).getStringValue());
             game.teamB.loadout.fromString(Main(main).gameRoom.getVariable(User(Main(main).gameRoom.playerList[0]).name).getStringValue());
@@ -159,11 +162,11 @@ package com.brockw.stickwar.engine.multiplayer
       
       public function extensionResponse(evt:SFSEvent) : void
       {
-         var _loc3_:SFSObject = null;
-         var _loc4_:ByteArray = null;
-         var _loc5_:String = null;
-         var _loc6_:Entity = null;
-         var _loc2_:SFSObject = evt.params.params;
+         var data:SFSObject = null;
+         var byteArray:ByteArray = null;
+         var replayData:String = null;
+         var unit:Entity = null;
+         var extParams:SFSObject = evt.params.params;
          switch(evt.params.cmd)
          {
             case "s":
@@ -173,12 +176,12 @@ package com.brockw.stickwar.engine.multiplayer
                trace("Start game");
                break;
             case "m":
-               simulation.processMove(MoveFactory.createMove(_loc2_));
+               simulation.processMove(MoveFactory.createMove(extParams));
                break;
             case "f":
                trace("Game finalised");
-               _loc3_ = new SFSObject();
-               main.gameServer.send(new ExtensionRequest("z",_loc3_,Main(main).gameRoom));
+               data = new SFSObject();
+               main.gameServer.send(new ExtensionRequest("z",data,Main(main).gameRoom));
                if(main.gameServer != main.sfs)
                {
                   main.gameServer.send(new LogoutRequest());
@@ -186,16 +189,16 @@ package com.brockw.stickwar.engine.multiplayer
                main.showScreen("postGame");
                break;
             case "e":
-               trace("End the game and send a game report. The winner is player with id: ",_loc2_.getInt("winner"));
-               _loc3_ = new SFSObject();
-               _loc4_ = new ByteArray();
-               _loc4_.writeMultiByte("","iso-8859-1");
-               _loc3_.putByteArray("replay",_loc4_);
-               _loc3_.putInt("isOutOfSync",0);
-               main.gameServer.send(new ExtensionRequest("g",_loc3_,Main(main).gameRoom));
+               trace("End the game and send a game report. The winner is player with id: ",extParams.getInt("winner"));
+               data = new SFSObject();
+               byteArray = new ByteArray();
+               byteArray.writeMultiByte("","iso-8859-1");
+               data.putByteArray("replay",byteArray);
+               data.putInt("isOutOfSync",0);
+               main.gameServer.send(new ExtensionRequest("g",data,Main(main).gameRoom));
                Main(main).postGameScreen.setMode(PostGameScreen.M_MULTIPLAYER);
                Main(main).postGameScreen.setReplayFile(simulation.gameReplay.toString(game));
-               Main(main).postGameScreen.setWinner(_loc2_.getInt("winner"),team.type,team.realName,team.enemyTeam.realName,team.id);
+               Main(main).postGameScreen.setWinner(extParams.getInt("winner"),team.type,team.realName,team.enemyTeam.realName,team.id);
                Main(main).postGameScreen.setRatings(team.rating,team.enemyTeam.rating);
                Main(main).postGameScreen.setRecords(game.economyRecords,game.militaryRecords);
                break;
@@ -208,22 +211,22 @@ package com.brockw.stickwar.engine.multiplayer
                trace("client is reconnected");
                break;
             case "userTimeout":
-               showTimeout(_loc2_.getUtfString("user"),_loc2_.getLong("timeLeft"));
-               trace("Timeout: " + _loc2_.getUtfString("user"),_loc2_.getLong("timeLeft"));
+               showTimeout(extParams.getUtfString("user"),extParams.getLong("timeLeft"));
+               trace("Timeout: " + extParams.getUtfString("user"),extParams.getLong("timeLeft"));
                break;
             case "outOfSync":
-               _loc5_ = simulation.gameReplay.toString(game);
-               _loc3_ = new SFSObject();
+               replayData = simulation.gameReplay.toString(game);
+               data = new SFSObject();
                Main(main).postGameScreen.setMode(PostGameScreen.M_MULTIPLAYER);
-               _loc4_ = new ByteArray();
-               _loc4_.writeMultiByte(simulation.gameReplay.toString(game),"iso-8859-1");
-               _loc3_.putByteArray("replay",_loc4_);
-               _loc3_.putInt("isOutOfSync",1);
-               main.gameServer.send(new ExtensionRequest("g",_loc3_,Main(main).gameRoom));
+               byteArray = new ByteArray();
+               byteArray.writeMultiByte(simulation.gameReplay.toString(game),"iso-8859-1");
+               data.putByteArray("replay",byteArray);
+               data.putInt("isOutOfSync",1);
+               main.gameServer.send(new ExtensionRequest("g",data,Main(main).gameRoom));
                trace("Out of Sync");
-               for each(_loc6_ in game.units)
+               for each(unit in game.units)
                {
-                  trace("Unit: ",_loc6_.type,_loc6_.x,_loc6_.y,_loc6_.px,_loc6_.py);
+                  trace("Unit: ",unit.type,unit.x,unit.y,unit.px,unit.py);
                }
                this.isOutOfSync = false;
                showSyncError();

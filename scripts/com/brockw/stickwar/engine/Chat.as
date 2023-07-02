@@ -1,8 +1,13 @@
 package com.brockw.stickwar.engine
 {
+   import com.brockw.game.*;
    import com.brockw.stickwar.GameScreen;
    import com.brockw.stickwar.engine.multiplayer.MultiplayerGameScreen;
-   import com.brockw.stickwar.engine.multiplayer.moves.ChatMove;
+   import com.brockw.stickwar.engine.multiplayer.moves.*;
+   import com.smartfoxserver.v2.entities.*;
+   import com.smartfoxserver.v2.entities.data.*;
+   import com.smartfoxserver.v2.requests.*;
+   import flash.display.*;
    import flash.text.StyleSheet;
    
    public class Chat extends InGameChatMc
@@ -17,7 +22,7 @@ package com.brockw.stickwar.engine
       
       public function Chat(gameScreen:GameScreen)
       {
-         var _loc3_:Object = null;
+         var styleObj:Object = null;
          super();
          this.gameScreen = gameScreen;
          this.lastMessageCount = 10000;
@@ -26,14 +31,14 @@ package com.brockw.stickwar.engine
          this.backOfChat.alpha = 0;
          backBox.alpha = 0;
          alpha = 0;
-         var _loc2_:StyleSheet = new StyleSheet();
-         _loc3_ = new Object();
-         _loc3_.color = "#FFFFFF";
-         _loc2_.setStyle(".myText",_loc3_);
-         _loc3_ = new Object();
-         _loc3_.color = "#FF0000";
-         _loc2_.setStyle(".theirText",_loc3_);
-         chatOutput.styleSheet = _loc2_;
+         var style:StyleSheet = new StyleSheet();
+         styleObj = new Object();
+         styleObj.color = "#FFFFFF";
+         style.setStyle(".myText",styleObj);
+         styleObj = new Object();
+         styleObj.color = "#FF0000";
+         style.setStyle(".theirText",styleObj);
+         chatOutput.styleSheet = style;
          chatOutput.htmlText = "";
       }
       

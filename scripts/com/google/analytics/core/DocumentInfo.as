@@ -68,7 +68,7 @@ package com.google.analytics.core
       private function _generateHitId() : Number
       {
          var hid:Number = NaN;
-         if(_adSense.hid && _adSense.hid != "")
+         if(Boolean(_adSense.hid) && _adSense.hid != "")
          {
             hid = Number(_adSense.hid);
          }

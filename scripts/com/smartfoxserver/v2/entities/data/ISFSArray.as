@@ -6,106 +6,106 @@ package com.smartfoxserver.v2.entities.data
    {
        
       
-      function contains(obj:*) : Boolean;
+      function contains(param1:*) : Boolean;
       
-      function getElementAt(index:int) : *;
+      function getElementAt(param1:int) : *;
       
-      function getWrappedElementAt(index:int) : SFSDataWrapper;
+      function getWrappedElementAt(param1:int) : SFSDataWrapper;
       
-      function removeElementAt(index:int) : *;
+      function removeElementAt(param1:int) : *;
       
       function size() : int;
       
       function toBinary() : ByteArray;
       
-      function getDump(format:Boolean = true) : String;
+      function getDump(param1:Boolean = true) : String;
       
       function getHexDump() : String;
       
       function addNull() : void;
       
-      function addBool(value:Boolean) : void;
+      function addBool(param1:Boolean) : void;
       
-      function addByte(value:int) : void;
+      function addByte(param1:int) : void;
       
-      function addShort(value:int) : void;
+      function addShort(param1:int) : void;
       
-      function addInt(value:int) : void;
+      function addInt(param1:int) : void;
       
-      function addLong(value:Number) : void;
+      function addLong(param1:Number) : void;
       
-      function addFloat(value:Number) : void;
+      function addFloat(param1:Number) : void;
       
-      function addDouble(value:Number) : void;
+      function addDouble(param1:Number) : void;
       
-      function addUtfString(value:String) : void;
+      function addUtfString(param1:String) : void;
       
-      function addBoolArray(value:Array) : void;
+      function addBoolArray(param1:Array) : void;
       
-      function addByteArray(value:ByteArray) : void;
+      function addByteArray(param1:ByteArray) : void;
       
-      function addShortArray(value:Array) : void;
+      function addShortArray(param1:Array) : void;
       
-      function addIntArray(value:Array) : void;
+      function addIntArray(param1:Array) : void;
       
-      function addLongArray(value:Array) : void;
+      function addLongArray(param1:Array) : void;
       
-      function addFloatArray(value:Array) : void;
+      function addFloatArray(param1:Array) : void;
       
-      function addDoubleArray(value:Array) : void;
+      function addDoubleArray(param1:Array) : void;
       
-      function addUtfStringArray(value:Array) : void;
+      function addUtfStringArray(param1:Array) : void;
       
-      function addSFSArray(value:ISFSArray) : void;
+      function addSFSArray(param1:ISFSArray) : void;
       
-      function addSFSObject(value:ISFSObject) : void;
+      function addSFSObject(param1:ISFSObject) : void;
       
-      function addClass(value:*) : void;
+      function addClass(param1:*) : void;
       
-      function add(wrappedObject:SFSDataWrapper) : void;
+      function add(param1:SFSDataWrapper) : void;
       
-      function isNull(index:int) : Boolean;
+      function isNull(param1:int) : Boolean;
       
-      function getBool(index:int) : Boolean;
+      function getBool(param1:int) : Boolean;
       
-      function getByte(index:int) : int;
+      function getByte(param1:int) : int;
       
-      function getUnsignedByte(index:int) : int;
+      function getUnsignedByte(param1:int) : int;
       
-      function getShort(index:int) : int;
+      function getShort(param1:int) : int;
       
-      function getInt(index:int) : int;
+      function getInt(param1:int) : int;
       
-      function getLong(index:int) : Number;
+      function getLong(param1:int) : Number;
       
-      function getFloat(index:int) : Number;
+      function getFloat(param1:int) : Number;
       
-      function getDouble(index:int) : Number;
+      function getDouble(param1:int) : Number;
       
-      function getUtfString(index:int) : String;
+      function getUtfString(param1:int) : String;
       
-      function getBoolArray(index:int) : Array;
+      function getBoolArray(param1:int) : Array;
       
-      function getByteArray(index:int) : ByteArray;
+      function getByteArray(param1:int) : ByteArray;
       
-      function getUnsignedByteArray(index:int) : Array;
+      function getUnsignedByteArray(param1:int) : Array;
       
-      function getShortArray(index:int) : Array;
+      function getShortArray(param1:int) : Array;
       
-      function getIntArray(index:int) : Array;
+      function getIntArray(param1:int) : Array;
       
-      function getLongArray(index:int) : Array;
+      function getLongArray(param1:int) : Array;
       
-      function getFloatArray(index:int) : Array;
+      function getFloatArray(param1:int) : Array;
       
-      function getDoubleArray(index:int) : Array;
+      function getDoubleArray(param1:int) : Array;
       
-      function getUtfStringArray(index:int) : Array;
+      function getUtfStringArray(param1:int) : Array;
       
-      function getSFSArray(index:int) : ISFSArray;
+      function getSFSArray(param1:int) : ISFSArray;
       
-      function getSFSObject(index:int) : ISFSObject;
+      function getSFSObject(param1:int) : ISFSObject;
       
-      function getClass(index:int) : *;
+      function getClass(param1:int) : *;
    }
 }

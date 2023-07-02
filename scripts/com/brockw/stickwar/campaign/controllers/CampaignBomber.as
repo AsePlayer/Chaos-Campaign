@@ -63,19 +63,19 @@ package com.brockw.stickwar.campaign.controllers
       
       private var difficulty:int;
       
-      var bomberTypes:Array;
+      internal var bomberTypes:Array;
       
-      var waves:Array;
+      internal var waves:Array;
       
-      var amounts:Array;
+      internal var amounts:Array;
       
-      var times:Array;
+      internal var times:Array;
       
-      var progression:int = 0;
+      internal var progression:int = 0;
       
-      var randomNumber:int;
+      internal var randomNumber:int;
       
-      var lastRandomNumber:int = -1;
+      internal var lastRandomNumber:int = -1;
       
       public function CampaignBomber(gameScreen:GameScreen)
       {

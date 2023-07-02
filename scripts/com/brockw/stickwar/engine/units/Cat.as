@@ -10,7 +10,7 @@ package com.brockw.stickwar.engine.units
    import flash.display.MovieClip;
    import flash.geom.Point;
    
-   public class Cat extends Unit
+   public class Cat extends com.brockw.stickwar.engine.units.Unit
    {
       
       private static var WEAPON_REACH:int;
@@ -28,7 +28,7 @@ package com.brockw.stickwar.engine.units
       
       private var packDamagePerUnit:int;
       
-      private var target:Unit;
+      private var target:com.brockw.stickwar.engine.units.Unit;
       
       private var normalMaxVelocity:Number;
       
@@ -98,7 +98,7 @@ package com.brockw.stickwar.engine.units
          loadDamage(game.xml.xml.Chaos.Units.cat);
          this.packStacks = game.xml.xml.Chaos.Units.cat.pack.stacks;
          this.packDamagePerUnit = game.xml.xml.Chaos.Units.cat.pack.damagePerUnit;
-         type = Unit.U_CAT;
+         type = com.brockw.stickwar.engine.units.Unit.U_CAT;
          _mc.stop();
          _mc.width *= _scale;
          _mc.height *= _scale;
@@ -112,7 +112,7 @@ package com.brockw.stickwar.engine.units
       override protected function checkForHit() : Boolean
       {
          var packBonus:* = undefined;
-         var target:Unit = ai.getClosestTarget();
+         var target:com.brockw.stickwar.engine.units.Unit = ai.getClosestTarget();
          if(target == null)
          {
             return false;
@@ -302,7 +302,7 @@ package com.brockw.stickwar.engine.units
          }
       }
       
-      override public function mayAttack(target:Unit) : Boolean
+      override public function mayAttack(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          if(framesInAttack > team.game.frame - attackStartFrame)
          {

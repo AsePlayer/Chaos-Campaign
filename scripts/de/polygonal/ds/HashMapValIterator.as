@@ -17,21 +17,21 @@ package de.polygonal.ds
       
       public var _f:Object;
       
-      public function HashMapValIterator(f:Object = undefined)
+      public function HashMapValIterator(param1:Object = undefined)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         _f = f;
+         _f = param1;
          _map = _f._map;
-         var _loc3_:int = 0;
+         var _loc3_:* = 0;
          var _loc2_:Array = [];
          var _loc4_:* = _map;
          §§push(§§findproperty(_keys));
-         while(§§hasnext(_loc4_,_loc3_))
+         for(_loc3_ in _loc4_)
          {
-            _loc2_.push(§§nextname(_loc3_,_loc4_));
+            _loc2_.push(_loc3_);
          }
          §§pop()._keys = _loc2_;
          _i = 0;
@@ -42,13 +42,13 @@ package de.polygonal.ds
       public function reset() : Itr
       {
          _map = _f._map;
-         var _loc2_:int = 0;
+         var _loc2_:* = 0;
          var _loc1_:Array = [];
          var _loc3_:* = _map;
          §§push(§§findproperty(_keys));
-         while(§§hasnext(_loc3_,_loc2_))
+         for(_loc2_ in _loc3_)
          {
-            _loc1_.push(§§nextname(_loc2_,_loc3_));
+            _loc1_.push(_loc2_);
          }
          §§pop()._keys = _loc1_;
          _i = 0;
@@ -68,9 +68,9 @@ package de.polygonal.ds
          return _i < _s;
       }
       
-      public function __map(f:Object) : Dictionary
+      public function __map(param1:Object) : Dictionary
       {
-         return f._map;
+         return param1._map;
       }
    }
 }

@@ -25,17 +25,17 @@ package com.google.analytics.debug
       
       private var _hasWarning:Boolean;
       
-      private var _mainPanel:Panel;
+      private var _mainPanel:com.google.analytics.debug.Panel;
       
       private var _GRAlertQueue:Array;
       
-      private var _debug:DebugConfiguration;
+      private var _debug:com.google.analytics.debug.DebugConfiguration;
       
-      public var visualDebug:Debug;
+      public var visualDebug:com.google.analytics.debug.Debug;
       
       private var _hasGRAlert:Boolean;
       
-      public function Layout(debug:DebugConfiguration, display:DisplayObject)
+      public function Layout(debug:com.google.analytics.debug.DebugConfiguration, display:DisplayObject)
       {
          super();
          _display = display;
@@ -112,9 +112,9 @@ package com.google.analytics.debug
       public function init() : void
       {
          var spaces:int = 10;
-         var W:uint = _display.stage.stageWidth - spaces * 2;
-         var H:uint = _display.stage.stageHeight - spaces * 2;
-         var mp:Panel = new Panel("analytics",W,H);
+         var W:uint = uint(_display.stage.stageWidth - spaces * 2);
+         var H:uint = uint(_display.stage.stageHeight - spaces * 2);
+         var mp:com.google.analytics.debug.Panel = new com.google.analytics.debug.Panel("analytics",W,H);
          mp.alignement = Align.top;
          mp.stickToEdge = false;
          mp.title = "Google Analytics v" + GATracker.version;
@@ -131,9 +131,9 @@ package com.google.analytics.debug
       
       public function addToPanel(name:String, visual:DisplayObject) : void
       {
-         var panel:Panel = null;
+         var panel:com.google.analytics.debug.Panel = null;
          var d:DisplayObject = _display.stage.getChildByName(name);
-         if(d)
+         if(Boolean(d))
          {
             panel = d as Panel;
             panel.addData(visual);
@@ -165,7 +165,7 @@ package com.google.analytics.debug
          }
          for(var i:int = 0; i < lines.length; i++)
          {
-            line = lines[i];
+            line = String(lines[i]);
             while(line.length > maxCharPerLine)
             {
                output.push(line.substr(0,maxCharPerLine));
@@ -246,18 +246,20 @@ package com.google.analytics.debug
       
       public function createGIFRequestAlert(message:String, request:URLRequest, ref:GIFRequest) : void
       {
+         var gra:GIFRequestAlert;
+         var f:Function;
          if(_hasGRAlert)
          {
             _GRAlertQueue.push([message,request,ref]);
             return;
          }
          _hasGRAlert = true;
-         var f:Function = function():void
+         f = function():void
          {
             ref.sendRequest(request);
          };
-         var message:String = _filterMaxChars(message);
-         var gra:GIFRequestAlert = new GIFRequestAlert(message,[new AlertAction("OK","ok",f),new AlertAction("Cancel","cancel","close")]);
+         message = _filterMaxChars(message);
+         gra = new GIFRequestAlert(message,[new AlertAction("OK","ok",f),new AlertAction("Cancel","cancel","close")]);
          addToPanel("analytics",gra);
          gra.addEventListener(Event.REMOVED_FROM_STAGE,_clearGRAlert,false,0,true);
          if(_hasDebug)
@@ -275,7 +277,7 @@ package com.google.analytics.debug
       {
          if(!visualDebug)
          {
-            visualDebug = new Debug();
+            visualDebug = new com.google.analytics.debug.Debug();
             visualDebug.alignement = Align.bottom;
             visualDebug.stickToEdge = true;
             addToPanel("analytics",visualDebug);
@@ -299,7 +301,7 @@ package com.google.analytics.debug
       
       public function createPanel(name:String, width:uint, height:uint) : void
       {
-         var p:Panel = new Panel(name,width,height);
+         var p:com.google.analytics.debug.Panel = new com.google.analytics.debug.Panel(name,width,height);
          p.alignement = Align.center;
          p.stickToEdge = false;
          addToStage(p);

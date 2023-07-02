@@ -3,10 +3,10 @@ package com.brockw.stickwar.engine.multiplayer
    import AS.encryption.MD5;
    import com.brockw.game.Screen;
    import com.brockw.stickwar.Main;
+   import com.smartfoxserver.v2.entities.*;
    import com.smartfoxserver.v2.entities.data.SFSObject;
-   import com.smartfoxserver.v2.requests.ExtensionRequest;
-   import flash.events.Event;
-   import flash.events.MouseEvent;
+   import com.smartfoxserver.v2.requests.*;
+   import flash.events.*;
    import flash.text.TextField;
    
    public class ProfileScreen extends Screen

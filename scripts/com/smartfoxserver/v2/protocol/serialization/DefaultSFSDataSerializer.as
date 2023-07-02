@@ -23,7 +23,7 @@ package com.smartfoxserver.v2.protocol.serialization
       
       private static const FIELD_VALUE_KEY:String = "V";
       
-      private static var _instance:DefaultSFSDataSerializer;
+      private static var _instance:com.smartfoxserver.v2.protocol.serialization.DefaultSFSDataSerializer;
       
       private static var _lock:Boolean = true;
        
@@ -37,12 +37,12 @@ package com.smartfoxserver.v2.protocol.serialization
          }
       }
       
-      public static function getInstance() : DefaultSFSDataSerializer
+      public static function getInstance() : com.smartfoxserver.v2.protocol.serialization.DefaultSFSDataSerializer
       {
          if(_instance == null)
          {
             _lock = false;
-            _instance = new DefaultSFSDataSerializer();
+            _instance = new com.smartfoxserver.v2.protocol.serialization.DefaultSFSDataSerializer();
             _lock = true;
          }
          return _instance;
@@ -101,6 +101,7 @@ package com.smartfoxserver.v2.protocol.serialization
       
       private function decodeSFSObject(buffer:ByteArray) : ISFSObject
       {
+         var size:int;
          var i:int = 0;
          var key:String = null;
          var decodedObject:SFSDataWrapper = null;
@@ -110,7 +111,7 @@ package com.smartfoxserver.v2.protocol.serialization
          {
             throw new SFSCodecError("Invalid SFSDataType. Expected: " + SFSDataType.SFS_OBJECT + ", found: " + headerByte);
          }
-         var size:int = buffer.readShort();
+         size = buffer.readShort();
          if(size < 0)
          {
             throw new SFSCodecError("Can\'t decode SFSObject. Size is negative: " + size);
@@ -147,6 +148,7 @@ package com.smartfoxserver.v2.protocol.serialization
       
       private function decodeSFSArray(buffer:ByteArray) : ISFSArray
       {
+         var size:int;
          var i:int = 0;
          var decodedObject:SFSDataWrapper = null;
          var sfsArray:ISFSArray = SFSArray.newInstance();
@@ -155,7 +157,7 @@ package com.smartfoxserver.v2.protocol.serialization
          {
             throw new SFSCodecError("Invalid SFSDataType. Expected: " + SFSDataType.SFS_ARRAY + ", found: " + headerByte);
          }
-         var size:int = buffer.readShort();
+         size = buffer.readShort();
          if(size < 0)
          {
             throw new SFSCodecError("Can\'t decode SFSArray. Size is negative: " + size);
@@ -269,7 +271,7 @@ package com.smartfoxserver.v2.protocol.serialization
             sfsObj = this.decodeSFSObject(buffer);
             type = SFSDataType.SFS_OBJECT;
             finalSfsObj = sfsObj;
-            if(sfsObj.containsKey(CLASS_MARKER_KEY) && sfsObj.containsKey(CLASS_FIELDS_KEY))
+            if(Boolean(sfsObj.containsKey(CLASS_MARKER_KEY)) && Boolean(sfsObj.containsKey(CLASS_FIELDS_KEY)))
             {
                type = SFSDataType.CLASS;
                finalSfsObj = this.sfs2as(sfsObj);
@@ -806,7 +808,7 @@ package com.smartfoxserver.v2.protocol.serialization
       
       private function unrollDictionary(dict:Object) : ISFSObject
       {
-         var key:* = null;
+         var key:String = null;
          var sfsObj:ISFSObject = SFSObject.newInstance();
          for(key in dict)
          {
@@ -822,7 +824,7 @@ package com.smartfoxserver.v2.protocol.serialization
          {
             throw new SFSCodecError("The SFSObject passed does not represent any serialized class.");
          }
-         var className:String = sfsObj.getUtfString(CLASS_MARKER_KEY);
+         var className:String = String(sfsObj.getUtfString(CLASS_MARKER_KEY));
          var theClass:Class = ClassUtils.forName(className);
          asObj = new theClass();
          if(!(asObj is SerializableSFSType))
@@ -841,7 +843,7 @@ package com.smartfoxserver.v2.protocol.serialization
          for(var j:int = 0; j < fieldList.size(); j++)
          {
             fieldDescriptor = fieldList.getSFSObject(j);
-            fieldName = fieldDescriptor.getUtfString(FIELD_NAME_KEY);
+            fieldName = String(fieldDescriptor.getUtfString(FIELD_NAME_KEY));
             fieldValue = this.unwrapAsField(fieldDescriptor.getData(FIELD_VALUE_KEY));
             asObj[fieldName] = fieldValue;
          }
@@ -900,7 +902,7 @@ package com.smartfoxserver.v2.protocol.serialization
       
       private function _scanGenericObject(obj:Object, sfso:ISFSObject, forceToNumber:Boolean = false) : void
       {
-         var key:* = null;
+         var key:String = null;
          var item:* = undefined;
          var subSfso:ISFSObject = null;
          for(key in obj)

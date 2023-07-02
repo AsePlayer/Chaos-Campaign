@@ -4,11 +4,11 @@ package com.brockw.stickwar.engine
    {
        
       
-      var game:StickWar;
+      internal var game:StickWar;
       
-      var rain:Array;
+      internal var rain:Array;
       
-      var numParticles:int;
+      internal var numParticles:int;
       
       public function Rain(game:StickWar, n:int)
       {

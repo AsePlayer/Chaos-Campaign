@@ -3,8 +3,6 @@ package flashx.textLayout.container
    import flashx.textLayout.property.Property;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public final class ScrollPolicy
    {
       

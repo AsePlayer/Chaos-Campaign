@@ -1,7 +1,8 @@
 package com.brockw.stickwar.engine.Team
 {
    import com.brockw.stickwar.engine.StickWar;
-   import flash.display.MovieClip;
+   import flash.display.*;
+   import flash.events.*;
    
    public class Hud extends MovieClip
    {
@@ -30,14 +31,14 @@ package com.brockw.stickwar.engine.Team
       {
          var x:Number = NaN;
          var y:Number = NaN;
-         var u:* = null;
+         var u:String = null;
          var w:Number = NaN;
          var sx:Number = NaN;
          var width:Number = MovieClip(this.hud.map).width;
          var height:Number = MovieClip(this.hud.map).height;
          for(u in game.units)
          {
-            if(game.units[u].onMap(game))
+            if(Boolean(game.units[u].onMap(game)))
             {
                game.units[u].drawOnHud(this.hud.map,game);
             }

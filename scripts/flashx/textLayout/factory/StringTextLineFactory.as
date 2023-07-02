@@ -15,14 +15,12 @@ package flashx.textLayout.factory
    import flashx.textLayout.formats.LineBreak;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class StringTextLineFactory extends TextLineFactoryBase
    {
       
       private static var _defaultConfiguration:Configuration = null;
       
-      private static var _measurementFactory:StringTextLineFactory = null;
+      private static var _measurementFactory:flashx.textLayout.factory.StringTextLineFactory = null;
       
       private static var _measurementLines:Array = null;
        
@@ -50,17 +48,17 @@ package flashx.textLayout.factory
          if(!_defaultConfiguration)
          {
             _defaultConfiguration = TextFlow.defaultConfiguration.clone();
-            _defaultConfiguration.flowComposerClass = getDefaultFlowComposerClass();
+            _defaultConfiguration.flowComposerClass = tlf_internal::getDefaultFlowComposerClass();
             _defaultConfiguration.textFlowInitialFormat = null;
          }
          return _defaultConfiguration;
       }
       
-      private static function measurementFactory() : StringTextLineFactory
+      private static function measurementFactory() : flashx.textLayout.factory.StringTextLineFactory
       {
          if(_measurementFactory == null)
          {
-            _measurementFactory = new StringTextLineFactory();
+            _measurementFactory = new flashx.textLayout.factory.StringTextLineFactory();
          }
          return _measurementFactory;
       }
@@ -85,7 +83,7 @@ package flashx.textLayout.factory
       
       private function initialize(config:IConfiguration) : void
       {
-         this._configuration = Configuration(Boolean(config) ? config : defaultConfiguration).getImmutableClone();
+         this._configuration = Configuration(Boolean(config) ? config : defaultConfiguration).tlf_internal::getImmutableClone();
          this._tf = new TextFlow(this._configuration);
          this._para = new ParagraphElement();
          this._span = new SpanElement();
@@ -140,19 +138,19 @@ package flashx.textLayout.factory
       
       public function createTextLines(callback:Function) : void
       {
-         var saved:SimpleCompose = TextLineFactoryBase.beginFactoryCompose();
+         var saved:SimpleCompose = TextLineFactoryBase.tlf_internal::beginFactoryCompose();
          try
          {
             this.createTextLinesInternal(callback);
          }
          finally
          {
-            _factoryComposer._lines.splice(0);
-            if(_pass0Lines)
+            tlf_internal::_factoryComposer._lines.splice(0);
+            if(Boolean(_pass0Lines))
             {
                _pass0Lines.splice(0);
             }
-            TextLineFactoryBase.endFactoryCompose(saved);
+            TextLineFactoryBase.tlf_internal::endFactoryCompose(saved);
          }
       }
       
@@ -160,128 +158,128 @@ package flashx.textLayout.factory
       {
          var measureWidth:Boolean = !compositionBounds || isNaN(compositionBounds.width);
          var measureHeight:Boolean = !compositionBounds || isNaN(compositionBounds.height);
-         var bp:String = this._tf.computedFormat.blockProgression;
+         var bp:String = String(this._tf.computedFormat.blockProgression);
          containerController.setCompositionSize(compositionBounds.width,compositionBounds.height);
          containerController.verticalScrollPolicy = Boolean(truncationOptions) ? ScrollPolicy.OFF : verticalScrollPolicy;
          containerController.horizontalScrollPolicy = Boolean(truncationOptions) ? ScrollPolicy.OFF : horizontalScrollPolicy;
          _isTruncated = false;
          this._truncatedText = this.text;
-         if(!this._formatsChanged && FlowComposerBase.computeBaseSWFContext(this._tf.flowComposer.swfContext) != FlowComposerBase.computeBaseSWFContext(swfContext))
+         if(!this._formatsChanged && FlowComposerBase.tlf_internal::computeBaseSWFContext(this._tf.flowComposer.swfContext) != FlowComposerBase.tlf_internal::computeBaseSWFContext(swfContext))
          {
             this._formatsChanged = true;
          }
          this._tf.flowComposer.swfContext = swfContext;
          if(this._formatsChanged)
          {
-            this._tf.normalize();
+            this._tf.tlf_internal::normalize();
             this._formatsChanged = false;
          }
          this._tf.flowComposer.compose();
-         if(truncationOptions)
+         if(Boolean(truncationOptions))
          {
-            this.doTruncation(bp,measureWidth,measureHeight);
+            this.tlf_internal::doTruncation(bp,measureWidth,measureHeight);
          }
          var xadjust:Number = compositionBounds.x;
          var controllerBounds:Rectangle = containerController.getContentBounds();
          if(bp == BlockProgression.RL)
          {
-            xadjust += !!measureWidth ? controllerBounds.width : compositionBounds.width;
+            xadjust += measureWidth ? controllerBounds.width : compositionBounds.width;
          }
          controllerBounds.left += xadjust;
          controllerBounds.right += xadjust;
          controllerBounds.top += compositionBounds.y;
          controllerBounds.bottom += compositionBounds.y;
-         if(this._tf.backgroundManager)
+         if(Boolean(this._tf.tlf_internal::backgroundManager))
          {
-            processBackgroundColors(this._tf,callback,xadjust,compositionBounds.y,containerController.compositionWidth,containerController.compositionHeight);
+            tlf_internal::processBackgroundColors(this._tf,callback,xadjust,compositionBounds.y,containerController.compositionWidth,containerController.compositionHeight);
          }
          callbackWithTextLines(callback,xadjust,compositionBounds.y);
          setContentBounds(controllerBounds);
-         containerController.clearCompositionResults();
+         containerController.tlf_internal::clearCompositionResults();
       }
       
       tlf_internal function doTruncation(bp:String, measureWidth:Boolean, measureHeight:Boolean) : void
       {
-         var _loc4_:Boolean = false;
-         var _loc5_:String = null;
-         var _loc6_:int = 0;
-         var _loc7_:TextLine = null;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc10_:int = 0;
-         bp = this._tf.computedFormat.blockProgression;
+         var somethingFit:Boolean = false;
+         var originalText:String = null;
+         var truncateAtCharPosition:int = 0;
+         var line:TextLine = null;
+         var targetWidth:Number = NaN;
+         var allowedWidth:Number = NaN;
+         var newTruncateAtCharPosition:int = 0;
+         bp = String(this._tf.computedFormat.blockProgression);
          if(!doesComposedTextFit(truncationOptions.lineCountLimit,this._tf.textLength,bp))
          {
             _isTruncated = true;
-            _loc4_ = false;
-            _loc5_ = this._span.text;
-            computeLastAllowedLineIndex(truncationOptions.lineCountLimit);
+            somethingFit = false;
+            originalText = this._span.text;
+            tlf_internal::computeLastAllowedLineIndex(truncationOptions.lineCountLimit);
             if(_truncationLineIndex >= 0)
             {
                this.measureTruncationIndicator(compositionBounds,truncationOptions.truncationIndicator);
                _truncationLineIndex -= _measurementLines.length - 1;
                if(_truncationLineIndex >= 0)
                {
-                  if(this._tf.computedFormat.lineBreak == LineBreak.EXPLICIT || (bp == BlockProgression.TB ? Boolean(measureWidth) : Boolean(measureHeight)))
+                  if(this._tf.computedFormat.lineBreak == LineBreak.EXPLICIT || (bp == BlockProgression.TB ? measureWidth : measureHeight))
                   {
-                     _loc7_ = _factoryComposer._lines[_truncationLineIndex] as TextLine;
-                     _loc6_ = _loc7_.userData + _loc7_.rawTextLength;
+                     line = tlf_internal::_factoryComposer._lines[_truncationLineIndex] as TextLine;
+                     truncateAtCharPosition = line.userData + line.rawTextLength;
                   }
                   else
                   {
-                     _loc8_ = bp == BlockProgression.TB ? Number(compositionBounds.width) : Number(compositionBounds.height);
-                     if(this.paragraphFormat)
+                     targetWidth = bp == BlockProgression.TB ? compositionBounds.width : compositionBounds.height;
+                     if(Boolean(this.paragraphFormat))
                      {
-                        _loc8_ -= Number(this.paragraphFormat.paragraphSpaceAfter) + Number(this.paragraphFormat.paragraphSpaceBefore);
+                        targetWidth -= Number(this.paragraphFormat.paragraphSpaceAfter) + Number(this.paragraphFormat.paragraphSpaceBefore);
                         if(_truncationLineIndex == 0)
                         {
-                           _loc8_ -= this.paragraphFormat.textIndent;
+                           targetWidth -= this.paragraphFormat.textIndent;
                         }
                      }
-                     _loc9_ = _loc8_ - (_measurementLines[_measurementLines.length - 1] as TextLine).unjustifiedTextWidth;
-                     _loc6_ = this.getTruncationPosition(_factoryComposer._lines[_truncationLineIndex],_loc9_);
+                     allowedWidth = targetWidth - (_measurementLines[_measurementLines.length - 1] as TextLine).unjustifiedTextWidth;
+                     truncateAtCharPosition = int(this.getTruncationPosition(tlf_internal::_factoryComposer._lines[_truncationLineIndex],allowedWidth));
                   }
                   if(!_pass0Lines)
                   {
                      _pass0Lines = new Array();
                   }
-                  _pass0Lines = _factoryComposer.swapLines(_pass0Lines);
+                  _pass0Lines = tlf_internal::_factoryComposer.tlf_internal::swapLines(_pass0Lines);
                   this._para = this._para.deepCopy() as ParagraphElement;
                   this._span = this._para.getChildAt(0) as SpanElement;
                   this._tf.replaceChildren(0,1,this._para);
-                  this._tf.normalize();
-                  this._span.replaceText(_loc6_,this._span.textLength,truncationOptions.truncationIndicator);
+                  this._tf.tlf_internal::normalize();
+                  this._span.replaceText(truncateAtCharPosition,this._span.textLength,truncationOptions.truncationIndicator);
                   do
                   {
                      this._tf.flowComposer.compose();
                      if(doesComposedTextFit(truncationOptions.lineCountLimit,this._tf.textLength,bp))
                      {
-                        _loc4_ = true;
+                        somethingFit = true;
                         break;
                      }
-                     if(_loc6_ == 0)
+                     if(truncateAtCharPosition == 0)
                      {
                         break;
                      }
-                     _loc10_ = getNextTruncationPosition(_loc6_);
-                     this._span.replaceText(_loc10_,_loc6_,null);
-                     _loc6_ = _loc10_;
+                     newTruncateAtCharPosition = getNextTruncationPosition(truncateAtCharPosition);
+                     this._span.replaceText(newTruncateAtCharPosition,truncateAtCharPosition,null);
+                     truncateAtCharPosition = newTruncateAtCharPosition;
                   }
                   while(true);
                   
                }
                _measurementLines.splice(0);
             }
-            if(_loc4_)
+            if(somethingFit)
             {
                this._truncatedText = this._span.text;
             }
             else
             {
                this._truncatedText = "";
-               _factoryComposer._lines.splice(0);
+               tlf_internal::_factoryComposer._lines.splice(0);
             }
-            this._span.text = _loc5_;
+            this._span.text = originalText;
          }
       }
       
@@ -292,8 +290,8 @@ package flashx.textLayout.factory
       
       private function measureTruncationIndicator(compositionBounds:Rectangle, truncationIndicator:String) : void
       {
-         var originalLines:Array = _factoryComposer.swapLines(measurementLines());
-         var measureFactory:StringTextLineFactory = measurementFactory();
+         var originalLines:Array = tlf_internal::_factoryComposer.tlf_internal::swapLines(measurementLines());
+         var measureFactory:flashx.textLayout.factory.StringTextLineFactory = measurementFactory();
          measureFactory.compositionBounds = compositionBounds;
          measureFactory.text = truncationIndicator;
          measureFactory.spanFormat = this.spanFormat;
@@ -301,7 +299,7 @@ package flashx.textLayout.factory
          measureFactory.textFlowFormat = this.textFlowFormat;
          measureFactory.truncationOptions = null;
          measureFactory.createTextLinesInternal(noopfunction);
-         _factoryComposer.swapLines(originalLines);
+         tlf_internal::_factoryComposer.tlf_internal::swapLines(originalLines);
       }
       
       private function getTruncationPosition(line:TextLine, allowedWidth:Number) : uint

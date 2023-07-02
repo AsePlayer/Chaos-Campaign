@@ -10,24 +10,24 @@ package
       {
       }
       
-      public static function §is§(v:*, t:*) : Boolean
+      public static function §is§(param1:*, param2:*) : Boolean
       {
-         return Boolean(Boot.__instanceof(v,t));
+         return Boot.__instanceof(param1,param2);
       }
       
-      public static function string(s:*) : String
+      public static function string(param1:*) : String
       {
-         return Boot.__string_rec(s,"");
+         return Boot.__string_rec(param1,"");
       }
       
-      public static function _int(x:Number) : int
+      public static function _int(param1:Number) : int
       {
-         return int(x);
+         return int(param1);
       }
       
-      public static function parseInt(x:String) : Object
+      public static function parseInt(param1:String) : Object
       {
-         var _loc2_:* = parseInt(x);
+         var _loc2_:* = parseInt(param1);
          if(isNaN(_loc2_))
          {
             return null;
@@ -35,14 +35,14 @@ package
          return _loc2_;
       }
       
-      public static function parseFloat(x:String) : Number
+      public static function parseFloat(param1:String) : Number
       {
-         return parseFloat(x);
+         return parseFloat(param1);
       }
       
-      public static function random(x:int) : int
+      public static function random(param1:int) : int
       {
-         return int(Math.floor(Math.random() * x));
+         return int(Math.floor(Math.random() * param1));
       }
    }
 }

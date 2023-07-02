@@ -6,17 +6,17 @@ package de.polygonal.ds
    {
        
       
-      public var _walker:SLLNode;
+      public var _walker:de.polygonal.ds.SLLNode;
       
-      public var _f:SLL;
+      public var _f:de.polygonal.ds.SLL;
       
-      public function SLLIterator(f:SLL = undefined)
+      public function SLLIterator(param1:de.polygonal.ds.SLL = undefined)
       {
          if(Boot.skip_constructor)
          {
             return;
          }
-         _f = f;
+         _f = param1;
          _walker = _f.head;
          this;
       }
@@ -39,9 +39,9 @@ package de.polygonal.ds
          return _walker != null;
       }
       
-      public function __head(f:Object) : SLLNode
+      public function __head(param1:Object) : de.polygonal.ds.SLLNode
       {
-         return f.head;
+         return param1.head;
       }
    }
 }

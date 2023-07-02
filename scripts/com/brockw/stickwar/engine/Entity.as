@@ -1,10 +1,11 @@
 package com.brockw.stickwar.engine
 {
    import com.brockw.ds.Comparable;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.units.Unit;
    import flash.display.MovieClip;
    import flash.display.Sprite;
-   import flash.filters.GlowFilter;
+   import flash.filters.*;
    
    public class Entity extends Sprite implements Comparable
    {
@@ -54,7 +55,7 @@ package com.brockw.stickwar.engine
       
       public function getDamageToUnit(target:Unit) : int
       {
-         return !!target.isArmoured ? int(this.damageToArmour) : int(this.damageToNotArmour);
+         return target.isArmoured ? int(this.damageToArmour) : int(this.damageToNotArmour);
       }
       
       public function drawOnHud(canvas:MovieClip, game:StickWar) : void

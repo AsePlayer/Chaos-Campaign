@@ -12,8 +12,6 @@ package flashx.textLayout.operations
    import flashx.textLayout.formats.ITextLayoutFormat;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class CreateDivOperation extends FlowTextOperation
    {
        
@@ -160,7 +158,7 @@ package flashx.textLayout.operations
                   child = target.getChildAt(begChildIndex) as FlowGroupElement;
                   if(child is ListItemElement)
                   {
-                     while(child.numChildren)
+                     while(Boolean(child.numChildren))
                      {
                         this._mementoList.push(ModelEdit.moveElement(textFlow,child.getChildAt(0),this._divElement,this._divElement.numChildren));
                      }
@@ -169,19 +167,19 @@ package flashx.textLayout.operations
                   else
                   {
                      this._mementoList.push(ModelEdit.moveElement(textFlow,child,this._divElement,this._divElement.numChildren));
-                     child.normalizeRange(0,child.textLength);
+                     child.tlf_internal::normalizeRange(0,child.textLength);
                   }
                   endChildIndex--;
                }
             }
-            if(target is ListItemElement && (target as ListItemElement).normalizeNeedsInitialParagraph())
+            if(target is ListItemElement && Boolean((target as ListItemElement).tlf_internal::normalizeNeedsInitialParagraph()))
             {
                this._mementoList.push(ModelEdit.addElement(textFlow,new ParagraphElement(),target,0));
             }
          }
-         if(originalSelectionState.selectionManagerOperationState && textFlow.interactionManager)
+         if(originalSelectionState.tlf_internal::selectionManagerOperationState && Boolean(textFlow.interactionManager))
          {
-            textFlow.normalize();
+            textFlow.tlf_internal::normalize();
             this._postOpSelectionState = new SelectionState(textFlow,this._divElement.getAbsoluteStart(),this._divElement.getAbsoluteStart() + this._divElement.textLength - 1);
             textFlow.interactionManager.setSelectionState(this._postOpSelectionState);
          }

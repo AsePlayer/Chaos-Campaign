@@ -42,7 +42,7 @@ package com.google.analytics.v4
       
       private var _buffer:Buffer;
       
-      private var _config:Configuration;
+      private var _config:com.google.analytics.v4.Configuration;
       
       private var _x10Module:X10;
       
@@ -70,7 +70,7 @@ package com.google.analytics.v4
       
       private var _account:String;
       
-      public function Tracker(account:String, config:Configuration, debug:DebugConfiguration, info:Environment, buffer:Buffer, gifRequest:GIFRequest, adSense:AdSenseGlobals)
+      public function Tracker(account:String, config:com.google.analytics.v4.Configuration, debug:DebugConfiguration, info:Environment, buffer:Buffer, gifRequest:GIFRequest, adSense:AdSenseGlobals)
       {
          var msg:String = null;
          super();
@@ -125,7 +125,7 @@ package com.google.analytics.v4
             _eventTracker.clearValue(EVENT_TRACKER_PROJECT_ID);
             success = _eventTracker.setKey(EVENT_TRACKER_PROJECT_ID,EVENT_TRACKER_OBJECT_NAME_KEY_NUM,category);
             success = _eventTracker.setKey(EVENT_TRACKER_PROJECT_ID,EVENT_TRACKER_TYPE_KEY_NUM,action);
-            if(label && label != "")
+            if(Boolean(label) && label != "")
             {
                success = _eventTracker.setKey(EVENT_TRACKER_PROJECT_ID,EVENT_TRACKER_LABEL_KEY_NUM,label);
                params = 3;
@@ -340,7 +340,7 @@ package com.google.analytics.v4
                   referrer = "0";
                }
             }
-            if(referrer.charAt(0) == "[" && referrer.charAt(referrer.length - 1))
+            if(referrer.charAt(0) == "[" && Boolean(referrer.charAt(referrer.length - 1)))
             {
                referrer = "-";
             }
@@ -478,7 +478,7 @@ package com.google.analytics.v4
          var data1:String = null;
          var vid:Array = null;
          var data2:String = null;
-         if(!_config.allowLinker)
+         if(_config.allowLinker)
          {
          }
          if(_buffer.hasUTMA() && !_buffer.utma.isEmpty())
@@ -509,9 +509,9 @@ package com.google.analytics.v4
             _noSessionInformation = true;
             _isNewVisitor = true;
          }
-         if(_adSense.gaGlobal && _adSense.dh == String(_domainHash))
+         if(Boolean(_adSense.gaGlobal) && _adSense.dh == String(_domainHash))
          {
-            if(_adSense.sid)
+            if(Boolean(_adSense.sid))
             {
                _buffer.utma.currentTime = Number(_adSense.sid);
                if(_debug.verbose)
@@ -524,7 +524,7 @@ package com.google.analytics.v4
             }
             if(_isNewVisitor)
             {
-               if(_adSense.sid)
+               if(Boolean(_adSense.sid))
                {
                   _buffer.utma.lastTime = Number(_adSense.sid);
                   if(_debug.verbose)
@@ -535,7 +535,7 @@ package com.google.analytics.v4
                      _debug.info(data1,VisualDebugMode.geek);
                   }
                }
-               if(_adSense.vid)
+               if(Boolean(_adSense.vid))
                {
                   vid = _adSense.vid.split(".");
                   _buffer.utma.sessionId = Number(vid[0]);
@@ -750,7 +750,7 @@ package com.google.analytics.v4
          {
             searchVariables = new Variables();
             searchVariables.URIencode = true;
-            if(_x10Module && _x10Module.hasData())
+            if(Boolean(_x10Module) && _x10Module.hasData())
             {
                eventInfo = new EventInfo(false,_x10Module);
                x10vars = eventInfo.toVariables();

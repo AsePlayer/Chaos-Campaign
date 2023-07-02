@@ -14,7 +14,7 @@ package fl.managers
    import flash.text.TextField;
    import flash.text.TextFieldType;
    import flash.ui.Keyboard;
-   import flash.utils.Dictionary;
+   import flash.utils.*;
    
    public class FocusManager implements IFocusManager
    {
@@ -56,7 +56,7 @@ package fl.managers
       private function addedHandler(param1:Event) : void
       {
          var _loc2_:DisplayObject = DisplayObject(param1.target);
-         if(_loc2_.stage)
+         if(Boolean(_loc2_.stage))
          {
             addFocusables(DisplayObject(param1.target));
          }
@@ -81,7 +81,7 @@ package fl.managers
          else if(_loc3_ is InteractiveObject && focusableObjects[_loc3_] == true)
          {
             _loc4_ = _loc3_ as InteractiveObject;
-            if(_loc4_)
+            if(Boolean(_loc4_))
             {
                if(_loc4_ == lastFocus)
                {
@@ -112,7 +112,7 @@ package fl.managers
                focusable = IFocusManagerComponent(o);
                if(focusable.focusEnabled)
                {
-                  if(focusable.tabEnabled && isTabVisible(o))
+                  if(Boolean(focusable.tabEnabled) && isTabVisible(o))
                   {
                      focusableObjects[o] = true;
                      calculateCandidates = true;
@@ -170,7 +170,7 @@ package fl.managers
       
       private function removeFocusables(param1:DisplayObject) : void
       {
-         var _loc2_:* = null;
+         var _loc2_:Object = null;
          var _loc3_:DisplayObject = null;
          if(param1 is DisplayObjectContainer)
          {
@@ -353,7 +353,7 @@ package fl.managers
          form.addEventListener(MouseEvent.MOUSE_DOWN,mouseDownHandler,false,0,true);
          form.addEventListener(KeyboardEvent.KEY_DOWN,keyDownHandler,true,0,true);
          activated = true;
-         if(lastFocus)
+         if(Boolean(lastFocus))
          {
             setFocus(lastFocus);
          }
@@ -406,14 +406,14 @@ package fl.managers
             if(lastFocus is Button)
             {
                _loc3_ = Button(lastFocus);
-               if(defButton)
+               if(Boolean(defButton))
                {
                   defButton.emphasized = false;
                   defButton = _loc3_;
                   _loc3_.emphasized = true;
                }
             }
-            else if(defButton && defButton != _defaultButton)
+            else if(Boolean(defButton) && defButton != _defaultButton)
             {
                defButton.emphasized = false;
                defButton = _defaultButton;
@@ -438,7 +438,7 @@ package fl.managers
             return;
          }
          var _loc2_:InteractiveObject = InteractiveObject(param1.target);
-         if(lastFocus)
+         if(Boolean(lastFocus))
          {
             if(lastFocus is IFocusManagerComponent)
             {
@@ -542,17 +542,17 @@ package fl.managers
          var _loc2_:Button = Boolean(param1) ? Button(param1) : null;
          if(_loc2_ != _defaultButton)
          {
-            if(_defaultButton)
+            if(Boolean(_defaultButton))
             {
                _defaultButton.emphasized = false;
             }
-            if(defButton)
+            if(Boolean(defButton))
             {
                defButton.emphasized = false;
             }
             _defaultButton = _loc2_;
             defButton = _loc2_;
-            if(_loc2_)
+            if(Boolean(_loc2_))
             {
                _loc2_.emphasized = true;
             }
@@ -571,7 +571,7 @@ package fl.managers
             return;
          }
          var _loc2_:InteractiveObject = getNextFocusManagerComponent(param1.shiftKey);
-         if(_loc2_)
+         if(Boolean(_loc2_))
          {
             setFocus(_loc2_);
          }
@@ -579,7 +579,7 @@ package fl.managers
       
       private function hasFocusableObjects() : Boolean
       {
-         var _loc1_:* = null;
+         var _loc1_:Object = null;
          var _loc2_:int = 0;
          var _loc3_:* = focusableObjects;
          for(_loc1_ in _loc3_)
@@ -607,7 +607,7 @@ package fl.managers
          if(_loc2_ is IFocusManagerGroup)
          {
             _loc8_ = IFocusManagerGroup(_loc2_);
-            _loc3_ = _loc8_.groupName;
+            _loc3_ = String(_loc8_.groupName);
          }
          var _loc4_:int = getIndexOfFocusedObject(_loc2_);
          var _loc5_:Boolean = false;
@@ -616,7 +616,7 @@ package fl.managers
          {
             if(param1)
             {
-               _loc4_ = focusableCandidates.length;
+               _loc4_ = int(focusableCandidates.length);
             }
             _loc5_ = true;
          }
@@ -626,7 +626,7 @@ package fl.managers
       
       private function getIndexOfFocusedObject(param1:DisplayObject) : int
       {
-         var _loc2_:int = focusableCandidates.length;
+         var _loc2_:int = int(focusableCandidates.length);
          var _loc3_:int = 0;
          _loc3_ = 0;
          while(_loc3_ < _loc2_)
@@ -647,7 +647,7 @@ package fl.managers
          var _loc9_:int = 0;
          var _loc10_:DisplayObject = null;
          var _loc11_:IFocusManagerGroup = null;
-         var _loc5_:int = focusableCandidates.length;
+         var _loc5_:int = int(focusableCandidates.length);
          var _loc6_:int = param1;
          while(true)
          {
@@ -691,7 +691,7 @@ package fl.managers
                      if(_loc10_ is IFocusManagerGroup)
                      {
                         _loc11_ = IFocusManagerGroup(_loc10_);
-                        if(_loc11_.groupName == _loc8_.groupName && _loc11_.selected)
+                        if(_loc11_.groupName == _loc8_.groupName && Boolean(_loc11_.selected))
                         {
                            param1 = _loc9_;
                            break;
@@ -708,7 +708,7 @@ package fl.managers
       
       private function sortFocusableObjects() : void
       {
-         var _loc1_:* = null;
+         var _loc1_:Object = null;
          var _loc2_:InteractiveObject = null;
          focusableCandidates = [];
          for(_loc1_ in focusableObjects)
@@ -726,13 +726,13 @@ package fl.managers
       
       private function sortFocusableObjectsTabIndex() : void
       {
-         var _loc1_:* = null;
+         var _loc1_:Object = null;
          var _loc2_:InteractiveObject = null;
          focusableCandidates = [];
          for(_loc1_ in focusableObjects)
          {
             _loc2_ = InteractiveObject(_loc1_);
-            if(_loc2_.tabIndex && !isNaN(Number(_loc2_.tabIndex)))
+            if(Boolean(_loc2_.tabIndex) && !isNaN(Number(_loc2_.tabIndex)))
             {
                focusableCandidates.push(_loc2_);
             }
@@ -754,7 +754,7 @@ package fl.managers
          var b:DisplayObject = DisplayObject(bb);
          try
          {
-            while(a != DisplayObject(form) && a.parent)
+            while(a != DisplayObject(form) && Boolean(a.parent))
             {
                index = getChildIndex(a.parent,a);
                tmp = index.toString(16);
@@ -771,7 +771,7 @@ package fl.managers
          }
          try
          {
-            while(b != DisplayObject(form) && b.parent)
+            while(b != DisplayObject(form) && Boolean(b.parent))
             {
                index = getChildIndex(b.parent,b);
                tmp = index.toString(16);
@@ -786,7 +786,7 @@ package fl.managers
          catch(se2:SecurityError)
          {
          }
-         return val1 > val2 ? Number(1) : (val1 < val2 ? Number(-1) : Number(0));
+         return val1 > val2 ? 1 : (val1 < val2 ? -1 : 0);
       }
       
       private function getChildIndex(param1:DisplayObjectContainer, param2:DisplayObject) : int
@@ -796,7 +796,7 @@ package fl.managers
       
       private function sortByTabIndex(param1:InteractiveObject, param2:InteractiveObject) : int
       {
-         return param1.tabIndex > param2.tabIndex ? int(1) : (param1.tabIndex < param2.tabIndex ? int(-1) : int(sortByDepth(param1,param2)));
+         return param1.tabIndex > param2.tabIndex ? 1 : (param1.tabIndex < param2.tabIndex ? -1 : int(sortByDepth(param1,param2)));
       }
       
       public function get defaultButtonEnabled() : Boolean
@@ -866,9 +866,9 @@ package fl.managers
          var p:InteractiveObject = component;
          try
          {
-            while(component)
+            while(Boolean(component))
             {
-               if(component is IFocusManagerComponent && IFocusManagerComponent(component).focusEnabled)
+               if(component is IFocusManagerComponent && Boolean(IFocusManagerComponent(component).focusEnabled))
                {
                   return component;
                }
@@ -888,7 +888,7 @@ package fl.managers
          {
             while(o != InteractiveObject(form))
             {
-               if(o is IFocusManagerComponent && IFocusManagerComponent(o).focusEnabled && IFocusManagerComponent(o).mouseFocusEnabled && UIComponent(o).enabled)
+               if(o is IFocusManagerComponent && Boolean(IFocusManagerComponent(o).focusEnabled) && Boolean(IFocusManagerComponent(o).mouseFocusEnabled) && UIComponent(o).enabled)
                {
                   return o;
                }

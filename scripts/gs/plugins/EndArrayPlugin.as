@@ -1,7 +1,8 @@
 package gs.plugins
 {
-   import gs.TweenLite;
-   import gs.utils.tween.ArrayTweenInfo;
+   import flash.display.*;
+   import gs.*;
+   import gs.utils.tween.*;
    
    public class EndArrayPlugin extends TweenPlugin
    {
@@ -57,7 +58,7 @@ package gs.plugins
             {
                ti = this._info[i];
                val = ti.start + ti.change * $n;
-               neg = val < 0 ? int(-1) : int(1);
+               neg = val < 0 ? -1 : 1;
                this._a[ti.index] = val % 1 * neg > 0.5 ? int(val) + neg : int(val);
             }
          }

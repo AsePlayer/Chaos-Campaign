@@ -30,7 +30,7 @@ package as3reflect
       public static function clearCache() : void
       {
          _cache = new Object();
-         if(_timer && _timer.running)
+         if(Boolean(_timer) && _timer.running)
          {
             _timer.stop();
          }

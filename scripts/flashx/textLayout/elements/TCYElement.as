@@ -6,8 +6,6 @@ package flashx.textLayout.elements
    import flashx.textLayout.formats.BlockProgression;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public final class TCYElement extends SubParagraphGroupElementBase
    {
        
@@ -19,7 +17,7 @@ package flashx.textLayout.elements
       
       override tlf_internal function createContentElement() : void
       {
-         super.createContentElement();
+         super.tlf_internal::createContentElement();
          this.updateTCYRotation();
       }
       
@@ -43,13 +41,13 @@ package flashx.textLayout.elements
          var myidx:int = 0;
          var prevEl:TCYElement = null;
          var xferEl:FlowElement = null;
-         if(parent && !bindableElement)
+         if(Boolean(parent) && !tlf_internal::bindableElement)
          {
             myidx = parent.getChildIndex(this);
             if(myidx != 0)
             {
                prevEl = parent.getChildAt(myidx - 1) as TCYElement;
-               if(prevEl)
+               if(Boolean(prevEl))
                {
                   while(this.numChildren > 0)
                   {
@@ -72,13 +70,13 @@ package flashx.textLayout.elements
       
       override tlf_internal function setParentAndRelativeStart(newParent:FlowGroupElement, newStart:int) : void
       {
-         super.setParentAndRelativeStart(newParent,newStart);
+         super.tlf_internal::setParentAndRelativeStart(newParent,newStart);
          this.updateTCYRotation();
       }
       
       override tlf_internal function formatChanged(notifyModelChanged:Boolean = true) : void
       {
-         super.formatChanged(notifyModelChanged);
+         super.tlf_internal::formatChanged(notifyModelChanged);
          this.updateTCYRotation();
       }
       
@@ -94,7 +92,7 @@ package flashx.textLayout.elements
             curFlowLeaf = curChild as FlowLeafElement;
             if(!curFlowLeaf && curChild is SubParagraphGroupElementBase)
             {
-               this.calculateAdornmentBounds(curChild as SubParagraphGroupElementBase,tLine,blockProgression,spgRect);
+               this.tlf_internal::calculateAdornmentBounds(curChild as SubParagraphGroupElementBase,tLine,blockProgression,spgRect);
                childCount++;
             }
             else
@@ -102,7 +100,7 @@ package flashx.textLayout.elements
                curBounds = null;
                if(!(curFlowLeaf is InlineGraphicElement))
                {
-                  curBounds = curFlowLeaf.getSpanBoundsOnLine(tLine,blockProgression)[0];
+                  curBounds = curFlowLeaf.tlf_internal::getSpanBoundsOnLine(tLine,blockProgression)[0];
                }
                else
                {
@@ -136,10 +134,10 @@ package flashx.textLayout.elements
       
       private function updateTCYRotation() : void
       {
-         var contElement:ContainerFormattedElement = getAncestorWithContainer();
-         if(groupElement)
+         var contElement:ContainerFormattedElement = tlf_internal::getAncestorWithContainer();
+         if(Boolean(tlf_internal::groupElement))
          {
-            groupElement.textRotation = contElement && contElement.computedFormat.blockProgression == BlockProgression.RL ? TextRotation.ROTATE_270 : TextRotation.ROTATE_0;
+            tlf_internal::groupElement.textRotation = Boolean(contElement) && contElement.computedFormat.blockProgression == BlockProgression.RL ? TextRotation.ROTATE_270 : TextRotation.ROTATE_0;
          }
       }
    }

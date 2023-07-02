@@ -22,23 +22,23 @@ package com.smartfoxserver.v2.entities
       
       function get variables() : Array;
       
-      function getVariable(varName:String) : BuddyVariable;
+      function getVariable(param1:String) : BuddyVariable;
       
-      function containsVariable(varName:String) : Boolean;
+      function containsVariable(param1:String) : Boolean;
       
       function getOfflineVariables() : Array;
       
       function getOnlineVariables() : Array;
       
-      function setVariable(bVar:BuddyVariable) : void;
+      function setVariable(param1:BuddyVariable) : void;
       
-      function setVariables(variables:Array) : void;
+      function setVariables(param1:Array) : void;
       
-      function setId(id:int) : void;
+      function setId(param1:int) : void;
       
-      function setBlocked(value:Boolean) : void;
+      function setBlocked(param1:Boolean) : void;
       
-      function removeVariable(varName:String) : void;
+      function removeVariable(param1:String) : void;
       
       function clearVolatileVariables() : void;
    }

@@ -14,8 +14,6 @@ package fl.text
    import flashx.textLayout.formats.Direction;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class TCMText extends Sprite
    {
@@ -58,7 +56,7 @@ package fl.text
          addChild(this._bgShape);
          addChild(this._tcmStage);
          this._tcmStage.tabEnabled = true;
-         this._tcm = new TLFTextContainerManager(this._tcmStage,Configuration(TCMRuntimeManager.getGlobalConfig()));
+         this._tcm = new TLFTextContainerManager(this._tcmStage,Configuration(TCMRuntimeManager.tlf_internal::getGlobalConfig()));
          try
          {
             if(this.parent != null)
@@ -94,22 +92,22 @@ package fl.text
          {
             try
             {
-               stage.addEventListener(Event.RENDER,this.repaint,false,0,true);
+               stage.addEventListener(Event.RENDER,this.tlf_internal::repaint,false,0,true);
                stage.invalidate();
             }
             catch(se:SecurityError)
             {
-               addEventListener(Event.FRAME_CONSTRUCTED,repaint,false,0,true);
+               addEventListener(Event.FRAME_CONSTRUCTED,tlf_internal::repaint,false,0,true);
             }
          }
          else if(parent == null)
          {
-            addEventListener(Event.ADDED,this.repaint,false,0,true);
+            addEventListener(Event.ADDED,this.tlf_internal::repaint,false,0,true);
          }
          else
          {
-            addEventListener(Event.ADDED_TO_STAGE,this.repaint,false,0,true);
-            addEventListener(Event.FRAME_CONSTRUCTED,this.repaint,false,0,true);
+            addEventListener(Event.ADDED_TO_STAGE,this.tlf_internal::repaint,false,0,true);
+            addEventListener(Event.FRAME_CONSTRUCTED,this.tlf_internal::repaint,false,0,true);
          }
          this._invalid = true;
       }
@@ -157,7 +155,7 @@ package fl.text
       
       public function set scrollV(value:int) : void
       {
-         var blockProg:String = !!this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : this._tcm.hostFormat.blockProgression;
+         var blockProg:String = this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : String(this._tcm.hostFormat.blockProgression);
          if(value < 0)
          {
             value = 0;
@@ -183,10 +181,10 @@ package fl.text
       
       public function get maxScrollH() : int
       {
-         var blockProg:String = !!this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : this._tcm.hostFormat.blockProgression;
+         var blockProg:String = this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : String(this._tcm.hostFormat.blockProgression);
          var bounds:Rectangle = this._tcm.getContentBounds();
          var maxScroll:int = blockProg == BlockProgression.RL ? int(bounds.height - this._tcm.compositionHeight) : int(bounds.width - this._tcm.compositionWidth);
-         return maxScroll > 0 ? int(maxScroll) : int(0);
+         return maxScroll > 0 ? maxScroll : 0;
       }
       
       public function get borderAlpha() : Number
@@ -196,7 +194,7 @@ package fl.text
       
       public function get scrollH() : int
       {
-         var blockProg:String = !!this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : this._tcm.hostFormat.blockProgression;
+         var blockProg:String = this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : String(this._tcm.hostFormat.blockProgression);
          return blockProg == BlockProgression.RL ? int(Math.abs(this._tcm.verticalScrollPosition)) : int(Math.abs(this._tcm.horizontalScrollPosition));
       }
       
@@ -233,6 +231,7 @@ package fl.text
       
       tlf_internal function repaint(e:Event) : void
       {
+         var origin:Number;
          var contHeight:Number = NaN;
          var contWidth:Number = NaN;
          if(this._inRepaint)
@@ -247,18 +246,18 @@ package fl.text
                this._inRepaint = false;
                return;
             }
-            removeEventListener(Event.ADDED,this.repaint);
-            removeEventListener(Event.ADDED_TO_STAGE,this.repaint);
-            removeEventListener(Event.FRAME_CONSTRUCTED,this.repaint);
+            removeEventListener(Event.ADDED,this.tlf_internal::repaint);
+            removeEventListener(Event.ADDED_TO_STAGE,this.tlf_internal::repaint);
+            removeEventListener(Event.FRAME_CONSTRUCTED,this.tlf_internal::repaint);
             try
             {
                if(stage != null)
                {
-                  stage.removeEventListener(Event.RENDER,this.repaint);
+                  stage.removeEventListener(Event.RENDER,this.tlf_internal::repaint);
                }
                else if(e.type == Event.RENDER)
                {
-                  e.target.removeEventListener(Event.RENDER,this.repaint);
+                  e.target.removeEventListener(Event.RENDER,this.tlf_internal::repaint);
                }
             }
             catch(se:SecurityError)
@@ -266,7 +265,7 @@ package fl.text
             }
          }
          this._tcm.updateContainer();
-         var origin:Number = !!this._border ? Number(-this._borderWidth / 2) : Number(0);
+         origin = this._border ? -this._borderWidth / 2 : 0;
          if(this._background || this._border)
          {
             graphics.clear();
@@ -342,7 +341,7 @@ package fl.text
       
       public function get scrollV() : int
       {
-         var blockProg:String = !!this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : this._tcm.hostFormat.blockProgression;
+         var blockProg:String = this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : String(this._tcm.hostFormat.blockProgression);
          return blockProg == BlockProgression.RL ? int(Math.abs(this._tcm.horizontalScrollPosition)) : int(Math.abs(this._tcm.verticalScrollPosition));
       }
       
@@ -362,10 +361,10 @@ package fl.text
       
       public function get maxScrollV() : int
       {
-         var blockProg:String = !!this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : this._tcm.hostFormat.blockProgression;
+         var blockProg:String = this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : String(this._tcm.hostFormat.blockProgression);
          var bounds:Rectangle = this._tcm.getContentBounds();
          var maxScroll:int = blockProg == BlockProgression.RL ? int(bounds.width - this._tcm.compositionWidth) : int(bounds.height - this._tcm.compositionHeight);
-         return maxScroll > 0 ? int(maxScroll) : int(0);
+         return maxScroll > 0 ? maxScroll : 0;
       }
       
       public function get background() : Boolean
@@ -375,8 +374,8 @@ package fl.text
       
       public function set scrollH(value:int) : void
       {
-         var blockProg:String = !!this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : this._tcm.hostFormat.blockProgression;
-         var direction:String = !!this.UsingTextFlow() ? this._tcm.getTextFlow().direction : this._tcm.hostFormat.direction;
+         var blockProg:String = this.UsingTextFlow() ? this._tcm.getTextFlow().blockProgression : String(this._tcm.hostFormat.blockProgression);
+         var direction:String = this.UsingTextFlow() ? this._tcm.getTextFlow().direction : String(this._tcm.hostFormat.direction);
          if(value < 0)
          {
             value = 0;
@@ -401,7 +400,7 @@ package fl.text
       
       private function UsingTextFlow() : Boolean
       {
-         return !(this._tcm.composeState == TextContainerManager.COMPOSE_FACTORY && this._tcm.sourceState == TextContainerManager.SOURCE_STRING);
+         return !(this._tcm.tlf_internal::composeState == TextContainerManager.tlf_internal::COMPOSE_FACTORY && this._tcm.tlf_internal::sourceState == TextContainerManager.tlf_internal::SOURCE_STRING);
       }
    }
 }

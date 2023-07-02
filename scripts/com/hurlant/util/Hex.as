@@ -32,7 +32,7 @@ package com.hurlant.util
          var i:uint = 0;
          hex = hex.replace(/\s|:/gm,"");
          a = new ByteArray();
-         if(hex.length & 1 == 1)
+         if(Boolean(hex.length & 1 == 1))
          {
             hex = "0" + hex;
          }

@@ -17,9 +17,9 @@ package fl.timeline.timelineManager
       
       public var type:int;
       
-      public var prev:InstanceInfo;
+      public var prev:fl.timeline.timelineManager.InstanceInfo;
       
-      public var realIIForXn:InstanceInfo;
+      public var realIIForXn:fl.timeline.timelineManager.InstanceInfo;
       
       public var endFrame:int;
       
@@ -29,19 +29,19 @@ package fl.timeline.timelineManager
       
       public var startFrame:int;
       
-      public var next:InstanceInfo;
+      public var next:fl.timeline.timelineManager.InstanceInfo;
       
       public var bounds:Rectangle;
       
       public var sceneName:String;
       
-      public var parent:InstanceInfo;
+      public var parent:fl.timeline.timelineManager.InstanceInfo;
       
-      public var xns:Vector.<InstanceInfo>;
+      public var xns:Vector.<fl.timeline.timelineManager.InstanceInfo>;
       
-      public var children:Vector.<InstanceInfo>;
+      public var children:Vector.<fl.timeline.timelineManager.InstanceInfo>;
       
-      public function InstanceInfo(container:DisplayObject, instanceName:String, startFrame:int, endFrame:int, type:int, bounds:Rectangle = null, data:XML = null, xns:Vector.<InstanceInfo> = null, extraInfo:* = undefined, sceneName:String = null)
+      public function InstanceInfo(container:DisplayObject, instanceName:String, startFrame:int, endFrame:int, type:int, bounds:Rectangle = null, data:XML = null, xns:Vector.<fl.timeline.timelineManager.InstanceInfo> = null, extraInfo:* = undefined, sceneName:String = null)
       {
          super();
          this.container = container;
@@ -56,37 +56,37 @@ package fl.timeline.timelineManager
          this.sceneName = sceneName;
       }
       
-      public function clone() : InstanceInfo
+      public function clone() : fl.timeline.timelineManager.InstanceInfo
       {
-         var ii:InstanceInfo = null;
+         var ii:fl.timeline.timelineManager.InstanceInfo = null;
          var i:int = 0;
-         var newXns:Vector.<InstanceInfo> = new Vector.<InstanceInfo>();
+         var newXns:Vector.<fl.timeline.timelineManager.InstanceInfo> = new Vector.<InstanceInfo>();
          for(i = 0; i < this.xns.length; i++)
          {
             ii = this.xns[i];
-            newXns.push(new InstanceInfo(ii.container,ii.instanceName,ii.startFrame,ii.endFrame,ii.type));
+            newXns.push(new fl.timeline.timelineManager.InstanceInfo(ii.container,ii.instanceName,ii.startFrame,ii.endFrame,ii.type));
          }
          if(this.prev != null)
          {
-            newXns.push(new InstanceInfo(this.prev.container,this.prev.instanceName,this.prev.startFrame,this.prev.endFrame,TimelineManager.PREV));
+            newXns.push(new fl.timeline.timelineManager.InstanceInfo(this.prev.container,this.prev.instanceName,this.prev.startFrame,this.prev.endFrame,TimelineManager.PREV));
          }
          if(this.next != null)
          {
-            newXns.push(new InstanceInfo(this.next.container,this.next.instanceName,this.next.startFrame,this.next.endFrame,TimelineManager.NEXT));
+            newXns.push(new fl.timeline.timelineManager.InstanceInfo(this.next.container,this.next.instanceName,this.next.startFrame,this.next.endFrame,TimelineManager.NEXT));
          }
          if(this.parent != null)
          {
-            newXns.push(new InstanceInfo(this.parent.container,this.parent.instanceName,this.parent.startFrame,this.parent.endFrame,TimelineManager.PARENT));
+            newXns.push(new fl.timeline.timelineManager.InstanceInfo(this.parent.container,this.parent.instanceName,this.parent.startFrame,this.parent.endFrame,TimelineManager.PARENT));
          }
          if(this.children != null)
          {
             for(i = 0; i < this.children.length; i++)
             {
                ii = this.children[i];
-               newXns.push(new InstanceInfo(ii.container,ii.instanceName,ii.startFrame,ii.endFrame,TimelineManager.CHILD));
+               newXns.push(new fl.timeline.timelineManager.InstanceInfo(ii.container,ii.instanceName,ii.startFrame,ii.endFrame,TimelineManager.CHILD));
             }
          }
-         return new InstanceInfo(this.container,this.instanceName,this.startFrame,this.endFrame,this.type,new Rectangle(this.bounds.x,this.bounds.y,this.bounds.width,this.bounds.height),this.data.copy(),newXns,this.extraInfo,this.sceneName);
+         return new fl.timeline.timelineManager.InstanceInfo(this.container,this.instanceName,this.startFrame,this.endFrame,this.type,new Rectangle(this.bounds.x,this.bounds.y,this.bounds.width,this.bounds.height),this.data.copy(),newXns,this.extraInfo,this.sceneName);
       }
    }
 }

@@ -1,6 +1,6 @@
 package com.brockw.stickwar.engine.multiplayer
 {
-   import com.smartfoxserver.v2.entities.data.ISFSObject;
+   import com.smartfoxserver.v2.entities.data.*;
    
    public class Buddy extends buddyDisplayBox
    {

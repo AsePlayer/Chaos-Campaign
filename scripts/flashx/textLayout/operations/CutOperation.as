@@ -9,7 +9,7 @@ package flashx.textLayout.operations
       
       private var _tScrap:TextScrap;
       
-      private var _deleteTextOperation:DeleteTextOperation;
+      private var _deleteTextOperation:flashx.textLayout.operations.DeleteTextOperation;
       
       public function CutOperation(operationState:SelectionState, scrapToCut:TextScrap)
       {
@@ -22,7 +22,7 @@ package flashx.textLayout.operations
       
       override public function doOperation() : Boolean
       {
-         this._deleteTextOperation = new DeleteTextOperation(originalSelectionState);
+         this._deleteTextOperation = new flashx.textLayout.operations.DeleteTextOperation(originalSelectionState);
          return this._deleteTextOperation.doOperation();
       }
       

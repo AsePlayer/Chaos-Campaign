@@ -5,7 +5,7 @@ package fl.controls
    import fl.managers.IFocusManagerComponent;
    import flash.display.DisplayObject;
    
-   [Style(name="emphasizedPadding",format="Length",type="Number")]
+   [Style(name="emphasizedPadding",type="Number",format="Length")]
    [Style(name="emphasizedSkin",type="Class")]
    public class Button extends LabelButton implements IFocusManagerComponent
    {

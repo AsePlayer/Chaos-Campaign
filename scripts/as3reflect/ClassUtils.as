@@ -55,7 +55,7 @@ package as3reflect
          var result:Array = [];
          var classDescription:XML = MetadataUtils.getFromObject(clazz);
          var interfacesDescription:XMLList = classDescription.factory.implementsInterface;
-         if(interfacesDescription)
+         if(Boolean(interfacesDescription))
          {
             numInterfaces = interfacesDescription.length();
             for(i = 0; i < numInterfaces; i++)
@@ -118,11 +118,11 @@ package as3reflect
          var result:Class = null;
          if(!applicationDomain)
          {
-            var applicationDomain:ApplicationDomain = ApplicationDomain.currentDomain;
+            applicationDomain = ApplicationDomain.currentDomain;
          }
          while(!applicationDomain.hasDefinition(name))
          {
-            if(!applicationDomain.parentDomain)
+            if(!Boolean(applicationDomain.parentDomain))
             {
                break;
             }

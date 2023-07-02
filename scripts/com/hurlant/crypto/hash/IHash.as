@@ -12,6 +12,6 @@ package com.hurlant.crypto.hash
       
       function getInputSize() : uint;
       
-      function hash(src:ByteArray) : ByteArray;
+      function hash(param1:ByteArray) : ByteArray;
    }
 }

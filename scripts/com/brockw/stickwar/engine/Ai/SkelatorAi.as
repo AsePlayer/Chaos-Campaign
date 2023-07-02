@@ -1,12 +1,9 @@
 package com.brockw.stickwar.engine.Ai
 {
-   import com.brockw.stickwar.engine.Ai.command.FistAttackCommand;
-   import com.brockw.stickwar.engine.Ai.command.ReaperCommand;
-   import com.brockw.stickwar.engine.Ai.command.UnitCommand;
+   import com.brockw.stickwar.engine.Ai.command.*;
    import com.brockw.stickwar.engine.Entity;
    import com.brockw.stickwar.engine.StickWar;
-   import com.brockw.stickwar.engine.units.Skelator;
-   import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.units.*;
    
    public class SkelatorAi extends UnitAi
    {

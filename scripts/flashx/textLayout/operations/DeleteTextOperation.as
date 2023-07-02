@@ -6,8 +6,6 @@ package flashx.textLayout.operations
    import flashx.textLayout.edit.SelectionState;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    public class DeleteTextOperation extends FlowTextOperation
    {
        
@@ -55,22 +53,22 @@ package flashx.textLayout.operations
          {
             return false;
          }
-         this._pendingFormat = PointFormat.createFromFlowElement(textFlow.findLeaf(absoluteStart));
-         if(this._pendingFormat.linkElement)
+         this._pendingFormat = PointFormat.tlf_internal::createFromFlowElement(textFlow.findLeaf(absoluteStart));
+         if(Boolean(this._pendingFormat.linkElement))
          {
             this._pendingFormat.linkElement = null;
          }
-         if(this._pendingFormat.tcyElement)
+         if(Boolean(this._pendingFormat.tcyElement))
          {
             this._pendingFormat.tcyElement = null;
          }
          this._memento = ModelEdit.deleteText(textFlow,absoluteStart,absoluteEnd,true);
-         if(originalSelectionState.selectionManagerOperationState && textFlow.interactionManager)
+         if(Boolean(originalSelectionState.tlf_internal::selectionManagerOperationState) && Boolean(textFlow.interactionManager))
          {
             state = textFlow.interactionManager.getSelectionState();
             if(state.anchorPosition == state.activePosition)
             {
-               state.pointFormat = PointFormat.clone(this._pendingFormat);
+               state.pointFormat = PointFormat.tlf_internal::clone(this._pendingFormat);
                textFlow.interactionManager.setSelectionState(state);
             }
          }
@@ -79,7 +77,7 @@ package flashx.textLayout.operations
       
       override public function undo() : SelectionState
       {
-         if(this._memento)
+         if(Boolean(this._memento))
          {
             this._memento.undo();
          }
@@ -88,7 +86,7 @@ package flashx.textLayout.operations
       
       override public function redo() : SelectionState
       {
-         if(this._memento)
+         if(Boolean(this._memento))
          {
             this._memento.redo();
          }

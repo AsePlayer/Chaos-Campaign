@@ -23,9 +23,9 @@ package fl.controls
    [Style(name="downIcon",type="Class")]
    [Style(name="upIcon",type="Class")]
    [Style(name="icon",type="Class")]
-   [Style(name="repeatInterval",format="Time",type="Number")]
-   [Style(name="repeatDelay",format="Time",type="Number")]
-   [Style(name="textPadding",format="Length",type="Number")]
+   [Style(name="repeatInterval",type="Number",format="Time")]
+   [Style(name="repeatDelay",type="Number",format="Time")]
+   [Style(name="textPadding",type="Number",format="Length")]
    [Style(name="selectedOverSkin",type="Class")]
    [Style(name="selectedDownSkin",type="Class")]
    [Style(name="selectedUpSkin",type="Class")]
@@ -100,7 +100,7 @@ package fl.controls
          invalidate(InvalidationType.STYLES);
       }
       
-      [Inspectable(defaultValue="right",name="labelPlacement",enumeration="left,right,top,bottom")]
+      [Inspectable(enumeration="left,right,top,bottom",defaultValue="right",name="labelPlacement")]
       public function get labelPlacement() : String
       {
          return _labelPlacement;
@@ -145,7 +145,7 @@ package fl.controls
       [Inspectable(defaultValue="false")]
       override public function get selected() : Boolean
       {
-         return !!_toggle ? Boolean(_selected) : Boolean(false);
+         return _toggle ? _selected : false;
       }
       
       override public function set selected(param1:Boolean) : void
@@ -185,7 +185,7 @@ package fl.controls
          }
          if(isInvalid(InvalidationType.SIZE,InvalidationType.STYLES))
          {
-            if(isFocused && focusManager.showFocusIndicator)
+            if(isFocused && Boolean(focusManager.showFocusIndicator))
             {
                drawFocus(true);
             }
@@ -196,7 +196,7 @@ package fl.controls
       protected function drawIcon() : void
       {
          var _loc1_:DisplayObject = icon;
-         var _loc2_:String = !!enabled ? mouseState : "disabled";
+         var _loc2_:String = enabled ? mouseState : "disabled";
          if(selected)
          {
             _loc2_ = "selected" + _loc2_.substr(0,1).toUpperCase() + _loc2_.substr(1);
@@ -224,9 +224,9 @@ package fl.controls
       protected function drawTextFormat() : void
       {
          var _loc1_:Object = UIComponent.getStyleDefinition();
-         var _loc2_:TextFormat = !!enabled ? _loc1_.defaultTextFormat as TextFormat : _loc1_.defaultDisabledTextFormat as TextFormat;
+         var _loc2_:TextFormat = enabled ? _loc1_.defaultTextFormat as TextFormat : _loc1_.defaultDisabledTextFormat as TextFormat;
          textField.setTextFormat(_loc2_);
-         var _loc3_:TextFormat = getStyleValue(!!enabled ? "textFormat" : "disabledTextFormat") as TextFormat;
+         var _loc3_:TextFormat = getStyleValue(enabled ? "textFormat" : "disabledTextFormat") as TextFormat;
          if(_loc3_ != null)
          {
             textField.setTextFormat(_loc3_);
@@ -257,8 +257,8 @@ package fl.controls
          textField.height = textField.textHeight + 4;
          var _loc3_:Number = textField.textWidth + 4;
          var _loc4_:Number = textField.textHeight + 4;
-         var _loc5_:Number = icon == null ? Number(0) : Number(icon.width + _loc1_);
-         var _loc6_:Number = icon == null ? Number(0) : Number(icon.height + _loc1_);
+         var _loc5_:Number = icon == null ? 0 : icon.width + _loc1_;
+         var _loc6_:Number = icon == null ? 0 : icon.height + _loc1_;
          textField.visible = label.length > 0;
          if(icon != null)
          {
@@ -287,17 +287,18 @@ package fl.controls
             textField.y = Math.round((height - textField.height - _loc6_) / 2 + (_loc2_ == ButtonLabelPlacement.BOTTOM ? _loc6_ : 0));
             if(icon != null)
             {
-               icon.y = Math.round(_loc2_ == ButtonLabelPlacement.BOTTOM ? Number(textField.y - _loc6_) : Number(textField.y + textField.height + _loc1_));
+               icon.y = Math.round(_loc2_ == ButtonLabelPlacement.BOTTOM ? textField.y - _loc6_ : textField.y + textField.height + _loc1_);
             }
          }
          else
          {
             _loc7_ = Math.max(0,Math.min(_loc3_,width - _loc5_ - 2 * _loc1_));
-            textField.x = Math.round((width - (textField.width = Number(_loc7_)) - _loc5_) / 2 + (_loc2_ != ButtonLabelPlacement.LEFT ? _loc5_ : 0));
+            textField.width = _loc3_ = _loc7_;
+            textField.x = Math.round((width - _loc3_ - _loc5_) / 2 + (_loc2_ != ButtonLabelPlacement.LEFT ? _loc5_ : 0));
             textField.y = Math.round((height - textField.height) / 2);
             if(icon != null)
             {
-               icon.x = Math.round(_loc2_ != ButtonLabelPlacement.LEFT ? Number(textField.x - _loc5_) : Number(textField.x + _loc3_ + _loc1_));
+               icon.x = Math.round(_loc2_ != ButtonLabelPlacement.LEFT ? textField.x - _loc5_ : textField.x + _loc3_ + _loc1_);
             }
          }
          super.drawLayout();

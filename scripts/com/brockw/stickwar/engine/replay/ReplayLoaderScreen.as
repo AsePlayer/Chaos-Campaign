@@ -4,8 +4,10 @@ package com.brockw.stickwar.engine.replay
    import com.brockw.simulationSync.SimulationSyncronizer;
    import com.brockw.stickwar.Main;
    import com.brockw.stickwar.engine.StickWar;
+   import com.smartfoxserver.v2.requests.*;
    import flash.events.Event;
    import flash.events.MouseEvent;
+   import flash.text.*;
    
    public class ReplayLoaderScreen extends Screen
    {
@@ -15,7 +17,7 @@ package com.brockw.stickwar.engine.replay
       
       public var mc:replayLoaderMc;
       
-      var txtReplayInput:GenericTextInput;
+      internal var txtReplayInput:GenericTextInput;
       
       public function ReplayLoaderScreen(main:Main)
       {

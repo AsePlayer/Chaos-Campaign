@@ -3,13 +3,13 @@ package flashx.textLayout.conversion
    import flash.utils.Dictionary;
    
    [ExcludeClass]
-   class CustomFormatImporter implements IFormatImporter
+   internal class CustomFormatImporter implements IFormatImporter
    {
        
       
       private var _rslt:Dictionary = null;
       
-      function CustomFormatImporter()
+      public function CustomFormatImporter()
       {
          super();
       }

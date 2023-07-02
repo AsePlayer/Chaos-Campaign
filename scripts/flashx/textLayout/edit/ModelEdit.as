@@ -9,8 +9,6 @@ package flashx.textLayout.edit
    import flashx.textLayout.elements.TextFlow;
    import flashx.textLayout.tlf_internal;
    
-   use namespace tlf_internal;
-   
    [ExcludeClass]
    public class ModelEdit
    {
@@ -78,26 +76,26 @@ package flashx.textLayout.edit
          if(createMemento)
          {
             memento = new MementoList(textFlow);
-            if(newLastParagraph)
+            if(Boolean(newLastParagraph))
             {
                memento.push(addElement(textFlow,newLastParagraph,textFlow,textFlow.numChildren));
             }
             deleteTextMemento = new DeleteTextMemento(textFlow,absoluteStart,absoluteEnd);
             memento.push(deleteTextMemento);
-            mergePara = TextFlowEdit.deleteRange(textFlow,absoluteStart,absoluteEnd);
+            mergePara = TextFlowEdit.tlf_internal::deleteRange(textFlow,absoluteStart,absoluteEnd);
             memento.push(TextFlowEdit.joinNextParagraph(mergePara,false));
             checkNormalize(textFlow,deleteTextMemento.commonRoot,memento);
          }
          else
          {
-            if(newLastParagraph)
+            if(Boolean(newLastParagraph))
             {
                textFlow.replaceChildren(textFlow.numChildren,textFlow.numChildren,newLastParagraph);
             }
-            mergePara = TextFlowEdit.deleteRange(textFlow,absoluteStart,absoluteEnd);
+            mergePara = TextFlowEdit.tlf_internal::deleteRange(textFlow,absoluteStart,absoluteEnd);
             TextFlowEdit.joinNextParagraph(mergePara,false);
          }
-         if(textFlow.interactionManager)
+         if(Boolean(textFlow.interactionManager))
          {
             textFlow.interactionManager.notifyInsertOrDelete(absoluteStart,-(absoluteEnd - absoluteStart));
          }
@@ -108,7 +106,7 @@ package flashx.textLayout.edit
       {
          var paragraph:ParagraphElement = null;
          var child:FlowGroupElement = null;
-         if(commonRoot is ListItemElement && (commonRoot as ListItemElement).normalizeNeedsInitialParagraph())
+         if(commonRoot is ListItemElement && Boolean((commonRoot as ListItemElement).tlf_internal::normalizeNeedsInitialParagraph()))
          {
             paragraph = new ParagraphElement();
             paragraph.replaceChildren(0,0,new SpanElement());
@@ -117,7 +115,7 @@ package flashx.textLayout.edit
          for(var index:int = 0; index < commonRoot.numChildren; index++)
          {
             child = commonRoot.getChildAt(index) as FlowGroupElement;
-            if(child)
+            if(Boolean(child))
             {
                checkNormalize(textFlow,child,mementoList);
             }
@@ -139,7 +137,7 @@ class BaseMemento
    
    protected var _textFlow:TextFlow;
    
-   function BaseMemento(textFlow:TextFlow)
+   public function BaseMemento(textFlow:TextFlow)
    {
       super();
       this._textFlow = textFlow;
@@ -171,7 +169,7 @@ class DeleteTextMemento extends BaseMemento implements IMemento
    
    protected var replaceCount:int;
    
-   function DeleteTextMemento(textFlow:TextFlow, absoluteStart:int, absoluteEnd:int)
+   public function DeleteTextMemento(textFlow:TextFlow, absoluteStart:int, absoluteEnd:int)
    {
       var rootStart:int = 0;
       var startChild:FlowElement = null;
@@ -182,11 +180,11 @@ class DeleteTextMemento extends BaseMemento implements IMemento
       super(textFlow);
       var startLeaf:FlowLeafElement = textFlow.findLeaf(absoluteStart);
       var commonRoot:FlowGroupElement = startLeaf.getParagraph().parent;
-      while(commonRoot && (commonRoot.getAbsoluteStart() + commonRoot.textLength < absoluteEnd || commonRoot.getAbsoluteStart() == absoluteStart && commonRoot.getAbsoluteStart() + commonRoot.textLength == absoluteEnd))
+      while(Boolean(commonRoot) && (commonRoot.getAbsoluteStart() + commonRoot.textLength < absoluteEnd || commonRoot.getAbsoluteStart() == absoluteStart && commonRoot.getAbsoluteStart() + commonRoot.textLength == absoluteEnd))
       {
          commonRoot = commonRoot.parent;
       }
-      if(commonRoot)
+      if(Boolean(commonRoot))
       {
          rootStart = commonRoot.getAbsoluteStart();
          this._startChildIndex = commonRoot.findChildIndexAtPosition(absoluteStart - rootStart);
@@ -230,7 +228,7 @@ class DeleteTextMemento extends BaseMemento implements IMemento
       var element:FlowElement = null;
       var root:FlowGroupElement = this.commonRoot;
       this._originalChildren = [];
-      for(var childIndex:int = this._startChildIndex; childIndex < this._startChildIndex + this.replaceCount; childIndex++)
+      for(var childIndex:int = int(this._startChildIndex); childIndex < this._startChildIndex + this.replaceCount; childIndex++)
       {
          this._originalChildren.push(root.getChildAt(childIndex));
       }
@@ -260,7 +258,7 @@ class TextRangeMemento extends DeleteTextMemento implements IMemento
 {
     
    
-   function TextRangeMemento(textFlow:TextFlow, absoluteStart:int, absoluteEnd:int)
+   public function TextRangeMemento(textFlow:TextFlow, absoluteStart:int, absoluteEnd:int)
    {
       super(textFlow,absoluteStart,absoluteEnd);
       replaceCount = scrapChildren.length;
@@ -277,8 +275,6 @@ import flashx.textLayout.elements.SubParagraphGroupElementBase;
 import flashx.textLayout.elements.TextFlow;
 import flashx.textLayout.tlf_internal;
 
-use namespace tlf_internal;
-
 class InternalSplitFGEMemento extends BaseMemento implements IMemento
 {
     
@@ -291,7 +287,7 @@ class InternalSplitFGEMemento extends BaseMemento implements IMemento
    
    private var _skipUndo:Boolean;
    
-   function InternalSplitFGEMemento(textFlow:TextFlow, target:ElementMark, undoTarget:ElementMark, newSibling:FlowGroupElement)
+   public function InternalSplitFGEMemento(textFlow:TextFlow, target:ElementMark, undoTarget:ElementMark, newSibling:FlowGroupElement)
    {
       super(textFlow);
       this._target = target;
@@ -317,7 +313,7 @@ class InternalSplitFGEMemento extends BaseMemento implements IMemento
    {
       var newSibling:FlowGroupElement = null;
       var targetElement:FlowGroupElement = target.findElement(textFlow) as FlowGroupElement;
-      var childIdx:int = target.elemStart == targetElement.textLength ? int(targetElement.numChildren - 1) : int(targetElement.findChildIndexAtPosition(target.elemStart));
+      var childIdx:int = target.elemStart == targetElement.textLength ? targetElement.numChildren - 1 : targetElement.findChildIndexAtPosition(target.elemStart);
       var child:FlowElement = targetElement.getChildAt(childIdx);
       if(child.parentRelativeStart == target.elemStart)
       {
@@ -331,13 +327,13 @@ class InternalSplitFGEMemento extends BaseMemento implements IMemento
       {
          if(targetElement.textLength <= 1)
          {
-            targetElement.normalizeRange(0,targetElement.textLength);
-            targetElement.getLastLeaf().quickCloneTextLayoutFormat(newSibling.getFirstLeaf());
+            targetElement.tlf_internal::normalizeRange(0,targetElement.textLength);
+            targetElement.getLastLeaf().tlf_internal::quickCloneTextLayoutFormat(newSibling.getFirstLeaf());
          }
          else if(newSibling.textLength <= 1)
          {
-            newSibling.normalizeRange(0,newSibling.textLength);
-            newSibling.getFirstLeaf().quickCloneTextLayoutFormat(targetElement.getLastLeaf());
+            newSibling.tlf_internal::normalizeRange(0,newSibling.textLength);
+            newSibling.getFirstLeaf().tlf_internal::quickCloneTextLayoutFormat(targetElement.getLastLeaf());
          }
       }
       return newSibling;
@@ -374,14 +370,8 @@ class InternalSplitFGEMemento extends BaseMemento implements IMemento
 import flashx.textLayout.edit.ElementMark;
 import flashx.textLayout.edit.IMemento;
 import flashx.textLayout.edit.ModelEdit;
-import flashx.textLayout.elements.ContainerFormattedElement;
-import flashx.textLayout.elements.FlowGroupElement;
-import flashx.textLayout.elements.ListItemElement;
-import flashx.textLayout.elements.ParagraphElement;
-import flashx.textLayout.elements.TextFlow;
+import flashx.textLayout.elements.*;
 import flashx.textLayout.tlf_internal;
-
-use namespace tlf_internal;
 
 class SplitMemento extends BaseMemento implements IMemento
 {
@@ -391,7 +381,7 @@ class SplitMemento extends BaseMemento implements IMemento
    
    private var _target:ElementMark;
    
-   function SplitMemento(textFlow:TextFlow, target:ElementMark, mementoList:Array)
+   public function SplitMemento(textFlow:TextFlow, target:ElementMark, mementoList:Array)
    {
       super(textFlow);
       this._target = target;
@@ -402,7 +392,7 @@ class SplitMemento extends BaseMemento implements IMemento
    {
       var target:ElementMark = new ElementMark(elemToSplit,relativePosition);
       var mementoList:Array = [];
-      var newChild:FlowGroupElement = performInternal(textFlow,target,!!createMemento ? mementoList : null);
+      var newChild:FlowGroupElement = performInternal(textFlow,target,createMemento ? mementoList : null);
       if(createMemento)
       {
          return new SplitMemento(textFlow,target,mementoList);
@@ -414,9 +404,9 @@ class SplitMemento extends BaseMemento implements IMemento
    {
       if(elem is ListItemElement)
       {
-         return !(elem as ListItemElement).normalizeNeedsInitialParagraph();
+         return !(elem as ListItemElement).tlf_internal::normalizeNeedsInitialParagraph();
       }
-      while(elem && !(elem is ParagraphElement))
+      while(Boolean(elem) && !(elem is ParagraphElement))
       {
          elem = elem.getChildAt(0) as FlowGroupElement;
       }
@@ -435,7 +425,7 @@ class SplitMemento extends BaseMemento implements IMemento
       {
          splitPos = splitStart - (child.getAbsoluteStart() - targetElement.getAbsoluteStart());
          splitMemento = InternalSplitFGEMemento.perform(textFlow,child,splitPos,true);
-         if(mementoList)
+         if(Boolean(mementoList))
          {
             mementoList.push(splitMemento);
          }
@@ -449,7 +439,7 @@ class SplitMemento extends BaseMemento implements IMemento
             if(!testValidLeadingParagraph(child))
             {
                memento = ModelEdit.addElement(textFlow,new ParagraphElement(),child,0);
-               if(mementoList)
+               if(Boolean(mementoList))
                {
                   mementoList.push(memento);
                }
@@ -458,7 +448,7 @@ class SplitMemento extends BaseMemento implements IMemento
             if(!testValidLeadingParagraph(newChild))
             {
                memento = ModelEdit.addElement(textFlow,new ParagraphElement(),newChild,0);
-               if(mementoList)
+               if(Boolean(mementoList))
                {
                   mementoList.push(memento);
                }
@@ -497,8 +487,6 @@ import flashx.textLayout.elements.FlowGroupElement;
 import flashx.textLayout.elements.TextFlow;
 import flashx.textLayout.tlf_internal;
 
-use namespace tlf_internal;
-
 class JoinMemento extends BaseMemento implements IMemento
 {
     
@@ -511,7 +499,7 @@ class JoinMemento extends BaseMemento implements IMemento
    
    private var _removeParentChain:IMemento;
    
-   function JoinMemento(textFlow:TextFlow, element1:ElementMark, element2:ElementMark, joinPosition:int, removeParentChain:IMemento)
+   public function JoinMemento(textFlow:TextFlow, element1:ElementMark, element2:ElementMark, joinPosition:int, removeParentChain:IMemento)
    {
       super(textFlow);
       this._element1 = element1;
@@ -526,7 +514,7 @@ class JoinMemento extends BaseMemento implements IMemento
       var element1Mark:ElementMark = new ElementMark(element1,0);
       var element2Mark:ElementMark = new ElementMark(element2,0);
       performInternal(textFlow,element1Mark,element2Mark);
-      var removeParentChain:IMemento = TextFlowEdit.removeEmptyParentChain(element2);
+      var removeParentChain:IMemento = TextFlowEdit.tlf_internal::removeEmptyParentChain(element2);
       if(createMemento)
       {
          return new JoinMemento(textFlow,element1Mark,element2Mark,joinPosition,removeParentChain);
@@ -581,7 +569,7 @@ class AddElementMemento extends BaseMemento implements IMemento
    
    private var _elemToAdd:FlowElement;
    
-   function AddElementMemento(textFlow:TextFlow, elemToAdd:FlowElement, target:ElementMark, index:int)
+   public function AddElementMemento(textFlow:TextFlow, elemToAdd:FlowElement, target:ElementMark, index:int)
    {
       super(textFlow);
       this._target = target;
@@ -641,7 +629,7 @@ class MoveElementMemento extends BaseMemento implements IMemento
    
    private var _sourceIndex:int;
    
-   function MoveElementMemento(textFlow:TextFlow, elemBeforeMove:ElementMark, elemAfterMove:ElementMark, target:ElementMark, targetIndex:int, source:ElementMark, sourceIndex:int)
+   public function MoveElementMemento(textFlow:TextFlow, elemBeforeMove:ElementMark, elemAfterMove:ElementMark, target:ElementMark, targetIndex:int, source:ElementMark, sourceIndex:int)
    {
       super(textFlow);
       this._elemBeforeMove = elemBeforeMove;
@@ -700,7 +688,7 @@ class RemoveElementsMemento extends BaseMemento implements IMemento
    
    private var _numElements:int;
    
-   function RemoveElementsMemento(textFlow:TextFlow, elementParent:ElementMark, startIndex:int, numElements:int, elements:Array)
+   public function RemoveElementsMemento(textFlow:TextFlow, elementParent:ElementMark, startIndex:int, numElements:int, elements:Array)
    {
       super(textFlow);
       this._elemParent = elementParent;
