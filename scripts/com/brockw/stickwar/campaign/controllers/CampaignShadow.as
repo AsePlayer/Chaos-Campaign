@@ -678,7 +678,7 @@ package com.brockw.stickwar.campaign.controllers
             }
             else if(this.currentLevelTitle == "Undead Ambush: Endless Deads Attack")
             {
-               if(this.hasted)
+               if(this.hasted && gameScreen.game.frame < this.timeUntilRescue + 300)
                {
                   _loc9_ = new UnitMove();
                   _loc9_.moveType = UnitCommand.ATTACK_MOVE;
