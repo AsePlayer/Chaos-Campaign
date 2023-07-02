@@ -23,7 +23,7 @@ package com.brockw.stickwar.engine.units
       
       private var bowFrame:int;
       
-      private var target:Unit;
+      private var target:com.brockw.stickwar.engine.units.Unit;
       
       private var _isPoisonedToggled:Boolean;
       
@@ -55,7 +55,7 @@ package com.brockw.stickwar.engine.units
          this.isPoisonedToggled = false;
          this.lastShotFrame = 0;
          this.deadType = "Default";
-         this.scaleOffset = Math.random();
+         this.scaleOffset = Math.random() + 0.1;
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
@@ -96,7 +96,7 @@ package com.brockw.stickwar.engine.units
          this.poisonMana = Number(Number(Number(game.xml.xml.Chaos.Units.dead.poison.mana)));
          this.poisonDamageAmount = Number(Number(Number(game.xml.xml.Chaos.Units.dead.poison.damage)));
          loadDamage(game.xml.xml.Chaos.Units.dead);
-         type = Unit.U_DEAD;
+         type = com.brockw.stickwar.engine.units.Unit.U_DEAD;
          if(this.isCastleArcher)
          {
             this._maximumRange = Number(Number(Number(game.xml.xml.Chaos.Units.dead.castleRange)));
@@ -126,7 +126,7 @@ package com.brockw.stickwar.engine.units
          this.isPoisonedToggled = !this.isPoisonedToggled;
       }
       
-      override public function mayAttack(target:Unit) : Boolean
+      override public function mayAttack(target:com.brockw.stickwar.engine.units.Unit) : Boolean
       {
          var CASTLE_WIDTH:int = 200;
          if(!this.isCastleArcher && team.direction * px < team.direction * (this.team.homeX + team.direction * CASTLE_WIDTH))
@@ -172,26 +172,28 @@ package com.brockw.stickwar.engine.units
          var realPoisonToggle:Boolean = false;
          super.update(game);
          updateCommon(game);
-         this.deadType = "Default";
          if(this.deadType == "Bomber" && !this.setupComplete)
          {
             Dead.setItem(mc,"Default","boomboomhead","Default");
-            this._maximumRange = 5;
+            this.maxHealth *= 0.3;
+            this.health = this.maxHealth;
+            this.healthBar.totalHealth = this._maxHealth;
+            this._maximumRange = 2;
             this.setupComplete = true;
+            isNormal = false;
          }
          else if(this.deadType == "Toxic" && !this.setupComplete)
          {
-            Dead.setItem(mc,"Default","Wrapped Helmet","Default");
+            Dead.setItem(mc,"Default","VenomHead","Default");
             noAutoCure = true;
             this._scale += this.scaleOffset;
             this.maxHealth *= 1.75 + this.scaleOffset;
             this.health = this.maxHealth;
             this.healthBar.totalHealth = this._maxHealth;
+            this._maximumRange /= 2;
+            this._maxVelocity *= 0.66;
             this.setupComplete = true;
-         }
-         else if(this.deadType == "Default")
-         {
-            Dead.setItem(mc,"Default","Default","Default");
+            isNormal = false;
          }
          if(this.deadType == "Toxic" && this.poisonTriggers == 0 && this.health < this.maxHealth * 0.66)
          {
@@ -203,9 +205,15 @@ package com.brockw.stickwar.engine.units
             team.game.projectileManager.initPoisonPool(px,py,this,5);
             ++this.poisonTriggers;
          }
-         else if(this.deadType == "Toxic")
+         if(this.deadType == "Toxic")
          {
             poison(25);
+            Dead.setItem(mc,"Default","VenomHead","Default");
+         }
+         else if(this.deadType == "Bomber")
+         {
+            this._maximumRange = 2;
+            Dead.setItem(mc,"Default","boomboomhead","Default");
          }
          if(!isDieing)
          {
@@ -252,7 +260,7 @@ package com.brockw.stickwar.engine.units
                      }
                      if(realPoisonToggle && team.mana > this.poisonMana || this._isCastleArcher)
                      {
-                        if(!this.target.isPoisoned() && this.target is Unit && !(this.target is Wall) && !(this.target is ChaosTower) && !(this.target is Statue))
+                        if(!this.target.isPoisoned() && this.target is com.brockw.stickwar.engine.units.Unit && !(this.target is Wall) && !(this.target is ChaosTower) && !(this.target is Statue))
                         {
                            poisonDamage = this.poisonDamageAmount;
                            if(!this._isCastleArcher)
@@ -318,17 +326,13 @@ package com.brockw.stickwar.engine.units
             MovieClip(_mc.mc).gotoAndStop(1);
          }
          Util.animateMovieClip(_mc,0);
-         if(this.isCastleArcher || this.deadType == "Toxic")
+         if(this.isCastleArcher)
          {
             Dead.setItem(mc,"Default","Wrapped Helmet","Default");
          }
-         else if(this.deadType == "Bomber")
-         {
-            Dead.setItem(mc,"Default","boomboomhead","Default");
-         }
       }
       
-      override public function shoot(game:StickWar, target:Unit) : void
+      override public function shoot(game:StickWar, target:com.brockw.stickwar.engine.units.Unit) : void
       {
          if(_state != S_ATTACK && game.frame - this.lastShotFrame > 45)
          {

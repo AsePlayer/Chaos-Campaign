@@ -146,7 +146,7 @@ package com.brockw.stickwar.singleplayer
          }
          else
          {
-            _loc4_ = param2.map.gold.length - 1;
+            _loc4_ = int(param2.map.gold.length - 1);
             while(_loc4_ >= 0)
             {
                _loc5_ = param2.map.gold[_loc4_];
@@ -342,7 +342,7 @@ package com.brockw.stickwar.singleplayer
          {
             this.respectForEnemy = 1;
          }
-         var percievedEnemyForce:Number = this.respectForEnemy * this.team.enemyTeam.attackingForcePopulation - 7 + this.getChaosTowerCount() * 6 + this.team.enemyTeam.castleDefence.units.length * 3;
+         var percievedEnemyForce:Number = this.respectForEnemy * this.team.enemyTeam.attackingForcePopulation - 7 + getChaosTowerCount() * 6 * this.respectForEnemy + this.team.enemyTeam.castleDefence.units.length * 3;
          return percievedEnemyForce < this.team.attackingForcePopulation;
       }
       

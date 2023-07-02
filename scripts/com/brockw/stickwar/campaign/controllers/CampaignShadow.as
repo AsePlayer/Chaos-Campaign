@@ -7,10 +7,12 @@ package com.brockw.stickwar.campaign.controllers
    import com.brockw.stickwar.engine.multiplayer.moves.UnitMove;
    import com.brockw.stickwar.engine.units.Bomber;
    import com.brockw.stickwar.engine.units.Cat;
+   import com.brockw.stickwar.engine.units.Dead;
    import com.brockw.stickwar.engine.units.Giant;
    import com.brockw.stickwar.engine.units.Medusa;
    import com.brockw.stickwar.engine.units.Statue;
    import com.brockw.stickwar.engine.units.Unit;
+   import com.brockw.stickwar.engine.units.Wingidon;
    
    public class CampaignShadow extends CampaignController
    {
@@ -124,37 +126,37 @@ package com.brockw.stickwar.campaign.controllers
       
       private var amountOfSpawn:int = 0;
       
-      var bomberTypes:Array;
+      internal var bomberTypes:Array;
       
-      var bomberTypesForDifficulty:Array;
+      internal var bomberTypesForDifficulty:Array;
       
-      var bomberFrequency:int;
+      internal var bomberFrequency:int;
       
-      var bomberFrequencyIncreaseAt:Number = 3.0;
+      private var bomberFrequencyIncreaseAt:Number = 3;
       
-      var bomberTimer:int = -5;
+      private var warnAboutReinforcementEclipsors:Boolean;
       
-      var bomberAmounts:int = 1;
+      internal var bomberTimer:int = -5;
       
-      var giantTimer:int = 0;
+      internal var bomberAmounts:int = 1;
       
-      var tutorialTimer:int = 0;
+      internal var giantTimer:int = 0;
+      
+      internal var tutorialTimer:int = 0;
+      
+      internal var timeUntilRescue:int;
+      
+      internal var rescued:Boolean;
+      
+      internal var hasted:Boolean;
+      
+      internal var maxDeads:int;
       
       public function CampaignShadow(gameScreen:GameScreen)
       {
          this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
-         this.bomberFrequencyIncreaseAt = 3;
+         this.timeUntilRescue = 60 * 3 * 30;
+         this.maxDeads = 0;
          this.bomberTypes = ["Default","minerTargeter","medusaTargeter","statueTargeter","clusterBoi"];
          this.catDelay = 30 * 5;
          super(gameScreen);
@@ -191,6 +193,10 @@ package com.brockw.stickwar.campaign.controllers
       
       override public function update(gameScreen:GameScreen) : void
       {
+         var randomNum:int = 0;
+         var dead:Dead = null;
+         var deadsToSpawn:* = 0;
+         var wingidon:Wingidon = null;
          var i:int = 0;
          var _loc9_:UnitMove = null;
          var z:int = 0;
@@ -209,6 +215,10 @@ package com.brockw.stickwar.campaign.controllers
             this.handicap = -1 * int(this.difficulty) + 2;
             this.medusaQueened = true;
             this.bomberFrequencyIncreaseAt = 3;
+         }
+         if(this.maxDeads == 0)
+         {
+            this.maxDeads = gameScreen.team.game.main.campaign.difficultyLevel;
          }
          if(this.message && gameScreen.contains(this.message))
          {
@@ -291,6 +301,10 @@ package com.brockw.stickwar.campaign.controllers
                else if(this.currentLevelTitle == "Reach For The Sky: Eclipsors Attack")
                {
                   this.messageOpening.setMessage("Queen Medusa: Pesky flies...","",0,this.medusaOneLiner);
+               }
+               else if(this.currentLevelTitle == "Undead Ambush: Endless Deads Attack")
+               {
+                  this.messageOpening.setMessage("Queen Medusa: The Deads shall be my devoted legion, their minds surrendered to my will...","",0,this.medusaOneLiner);
                }
                else if(this.difficulty == 1)
                {
@@ -658,13 +672,110 @@ package com.brockw.stickwar.campaign.controllers
                   this.bomberTimer = 30 * 10 + 30 * (this.bomberFrequencyIncreaseAt * this.bomberAmounts) - Math.pow(this.bomberFrequencyIncreaseAt,1 / 2) / this.bomberAmounts;
                }
             }
-            else if(this.currentLevelTitle == "Deez")
-            {
-               this.comment = "";
-            }
             else if(this.currentLevelTitle == "Reach For The Sky: Eclipsors Attack")
             {
                CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.8);
+            }
+            else if(this.currentLevelTitle == "Undead Ambush: Endless Deads Attack")
+            {
+               if(this.hasted)
+               {
+                  _loc9_ = new UnitMove();
+                  _loc9_.moveType = UnitCommand.ATTACK_MOVE;
+                  for each(wingidon in gameScreen.team.unitGroups[Unit.U_WINGIDON])
+                  {
+                     _loc9_.units.push(wingidon.id);
+                     _loc9_.owner = gameScreen.team.id;
+                  }
+                  _loc9_.arg0 = this.queenMedusa.px;
+                  _loc9_.arg1 = this.queenMedusa.py;
+                  _loc9_.execute(gameScreen.game);
+               }
+               CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.01);
+               if(gameScreen.game.frame % 690 / this.difficulty == 0)
+               {
+                  ++this.maxDeads;
+               }
+               else if(gameScreen.isFastForward && gameScreen.game.frame % 690 / this.difficulty == 1)
+               {
+                  ++this.maxDeads;
+               }
+               if(gameScreen.game.frame % 150 == 0 || gameScreen.game.frame % 151 == 0)
+               {
+                  dead = null;
+                  deadsToSpawn = 0;
+                  deadsToSpawn = int(gameScreen.game.frame / 3000) + 1;
+                  i = 0;
+                  while(i < deadsToSpawn && gameScreen.team.enemyTeam.unitGroups[Unit.U_DEAD].length < this.maxDeads)
+                  {
+                     this.randomNumber = Math.random() * 100;
+                     if(this.randomNumber < 30)
+                     {
+                        dead = Dead(gameScreen.game.unitFactory.getUnit(Unit.U_DEAD));
+                        gameScreen.team.enemyTeam.spawn(dead,gameScreen.game);
+                        dead.deadType = "Toxic";
+                     }
+                     else if(this.randomNumber < 80)
+                     {
+                        dead = Dead(gameScreen.game.unitFactory.getUnit(Unit.U_DEAD));
+                        gameScreen.team.enemyTeam.spawn(dead,gameScreen.game);
+                        dead.deadType = "Bomber";
+                     }
+                     else
+                     {
+                        dead = Dead(gameScreen.game.unitFactory.getUnit(Unit.U_DEAD));
+                        gameScreen.team.enemyTeam.spawn(dead,gameScreen.game);
+                     }
+                     gameScreen.team.enemyTeam.population += 3;
+                     i++;
+                  }
+               }
+               else if(gameScreen.game.frame > this.timeUntilRescue && !this.hasted)
+               {
+                  i = 0;
+                  while(i < 6 * this.difficulty)
+                  {
+                     gameScreen.team.spawn(Wingidon(gameScreen.game.unitFactory.getUnit(Unit.U_WINGIDON)),gameScreen.game);
+                     i++;
+                  }
+                  for each(wingidon in gameScreen.team.unitGroups[Unit.U_WINGIDON])
+                  {
+                     if(wingidon.px < gameScreen.team.statue.px - 100)
+                     {
+                        if(wingidon.speedSpellCooldown() == 0)
+                        {
+                           gameScreen.team.mana += 50;
+                           gameScreen.team.population += 3;
+                           wingidon.speedSpell();
+                        }
+                     }
+                  }
+                  this.hasted = true;
+               }
+               else if(gameScreen.game.frame > this.timeUntilRescue / 50 && this.warnAboutReinforcementEclipsors == false)
+               {
+                  this.message2 = new InGameMessage("",gameScreen.game);
+                  this.message2.x = gameScreen.game.stage.stageWidth / 2;
+                  this.message2.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                  this.message2.scaleX *= 1.3;
+                  this.message2.scaleY *= 1.3;
+                  gameScreen.addChild(this.message2);
+                  this.message2.setMessage("The recently conquered Eclipsors are en route to aid Queen Medusa in her conquest! Hold the line until then!","");
+                  this.frames = 0;
+                  this.warnAboutReinforcementEclipsors = true;
+               }
+               else if(this.hasted && !this.rescued)
+               {
+                  this.message3 = new InGameMessage("",gameScreen.game);
+                  this.message3.x = gameScreen.game.stage.stageWidth / 2;
+                  this.message3.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                  this.message3.scaleX *= 1.3;
+                  this.message3.scaleY *= 1.3;
+                  gameScreen.addChild(this.message3);
+                  this.message3.setMessage("Wingidons: Rendezvous to the Queen!","");
+                  this.frames = 0;
+                  this.rescued = true;
+               }
             }
             else
             {
