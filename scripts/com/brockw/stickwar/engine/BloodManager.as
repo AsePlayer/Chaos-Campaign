@@ -19,6 +19,10 @@ package com.brockw.stickwar.engine
       
       private var ashs:Array;
       
+      private var maxBloods:int = 5;
+      
+      private var amountOfBloods:int;
+      
       public function BloodManager()
       {
          var i:int = 0;
@@ -26,19 +30,23 @@ package com.brockw.stickwar.engine
          var newAsh:_ash = null;
          this.bloods = [];
          this.bloodPool = [];
-         for(i = 0; i < NUM_BLOODS; i++)
+         i = 0;
+         while(i < NUM_BLOODS)
          {
             newBlood = new bloodSplat();
             newBlood.cacheAsBitmap = true;
             this.bloodPool.push(newBlood);
+            i++;
          }
          this.ashs = [];
          this.ashPool = [];
-         for(i = 0; i < NUM_ASHES; i++)
+         i = 0;
+         while(i < NUM_ASHES)
          {
             newAsh = new _ash();
             newAsh.cacheAsBitmap = true;
             this.ashPool.push(newAsh);
+            i++;
          }
          super();
       }
@@ -46,7 +54,13 @@ package com.brockw.stickwar.engine
       public function addAsh(px:Number, py:Number, direction:int, game:StickWar) : void
       {
          var newAsh:_ash = null;
-         if(this.ashPool.length > 0)
+         if(this.ashs.length >= NUM_ASHES)
+         {
+            var oldestAsh:_ash = this.ashs.shift();
+            removeChild(oldestAsh);
+            newAsh = oldestAsh;
+         }
+         else if(this.ashPool.length > 0)
          {
             newAsh = this.ashPool.pop();
          }
@@ -67,7 +81,13 @@ package com.brockw.stickwar.engine
       public function addBlood(px:Number, py:Number, direction:int, game:StickWar) : void
       {
          var newBlood:bloodSplat = null;
-         if(this.bloodPool.length > 0)
+         if(this.bloods.length >= NUM_BLOODS / (this.bloods.length / 4))
+         {
+            var oldestBlood:bloodSplat = this.bloods.shift();
+            removeChild(oldestBlood);
+            newBlood = oldestBlood;
+         }
+         else if(this.bloodPool.length > 0)
          {
             newBlood = this.bloodPool.pop();
          }
