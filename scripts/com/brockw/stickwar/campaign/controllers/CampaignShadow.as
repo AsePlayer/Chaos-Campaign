@@ -10,6 +10,7 @@ package com.brockw.stickwar.campaign.controllers
    import com.brockw.stickwar.engine.units.Dead;
    import com.brockw.stickwar.engine.units.Giant;
    import com.brockw.stickwar.engine.units.Medusa;
+   import com.brockw.stickwar.engine.units.Skelator;
    import com.brockw.stickwar.engine.units.Statue;
    import com.brockw.stickwar.engine.units.Unit;
    import com.brockw.stickwar.engine.units.Wingidon;
@@ -37,6 +38,8 @@ package com.brockw.stickwar.campaign.controllers
       
       private static const CRAWLER_REGROUP_TIME:int = 1200;
        
+      
+      private var bossMarrow:Skelator;
       
       private var poisonCheck:Boolean = false;
       
@@ -152,6 +155,8 @@ package com.brockw.stickwar.campaign.controllers
       
       internal var maxDeads:int;
       
+      internal var interruptMessage:Boolean;
+      
       public function CampaignShadow(gameScreen:GameScreen)
       {
          this.bomberFrequencyIncreaseAt = 3;
@@ -160,7 +165,6 @@ package com.brockw.stickwar.campaign.controllers
          this.bomberTypes = ["Default","minerTargeter","medusaTargeter","statueTargeter","clusterBoi"];
          this.catDelay = 30 * 5;
          super(gameScreen);
-         this.message = null;
          this.currentLevelTitle = gameScreen.main.campaign.getCurrentLevel().title;
          var randomNumber:int = Math.floor(Math.random() * 7) + 1;
          switch(randomNumber)
@@ -220,28 +224,22 @@ package com.brockw.stickwar.campaign.controllers
          {
             this.maxDeads = gameScreen.team.game.main.campaign.difficultyLevel;
          }
-         if(this.message && gameScreen.contains(this.message))
-         {
-            this.message.update();
-            if(this.frames++ > 30 * 7)
-            {
-               gameScreen.removeChild(this.message);
-            }
-         }
-         else if(this.message2 && gameScreen.contains(this.message2))
+         if(this.message2 && gameScreen.contains(this.message2))
          {
             this.message2.update();
             if(this.frames++ > 30 * 8)
             {
                gameScreen.removeChild(this.message2);
+               this.frames = -1;
             }
          }
          else if(this.message3 && gameScreen.contains(this.message3))
          {
             this.message3.update();
-            if(this.frames++ > 30 * 8)
+            if(this.frames++ > 30 * 6)
             {
                gameScreen.removeChild(this.message3);
+               this.frames = -1;
             }
          }
          else if(this.message4 && gameScreen.contains(this.message4))
@@ -250,6 +248,7 @@ package com.brockw.stickwar.campaign.controllers
             if(this.frames++ > 30 * 8)
             {
                gameScreen.removeChild(this.message4);
+               this.frames = -1;
             }
          }
          else if(this.message5 && gameScreen.contains(this.message5))
@@ -258,6 +257,7 @@ package com.brockw.stickwar.campaign.controllers
             if(this.frames++ > 30 * 7)
             {
                gameScreen.removeChild(this.message5);
+               this.frames = -1;
             }
          }
          else if(this.message6 && gameScreen.contains(this.message6))
@@ -266,6 +266,7 @@ package com.brockw.stickwar.campaign.controllers
             if(this.frames++ > 30 * 7)
             {
                gameScreen.removeChild(this.message6);
+               this.frames = -1;
             }
          }
          else if(this.messageOpening && gameScreen.contains(this.messageOpening))
@@ -274,9 +275,19 @@ package com.brockw.stickwar.campaign.controllers
             if(this.frames++ > 30 * 8)
             {
                gameScreen.removeChild(this.messageOpening);
+               this.frames = -1;
             }
          }
-         else if(!this.message)
+         if(this.message && gameScreen.contains(this.message))
+         {
+            this.message.update();
+            if(this.frames++ > 30 * 7)
+            {
+               gameScreen.removeChild(this.message);
+               this.frames = -1;
+            }
+         }
+         if(!this.message)
          {
             if(!this.openingMessageSent)
             {
@@ -306,6 +317,10 @@ package com.brockw.stickwar.campaign.controllers
                {
                   this.messageOpening.setMessage("Queen Medusa: The Deads shall be my devoted legion, their minds surrendered to my will...","",0,this.medusaOneLiner);
                }
+               else if(this.currentLevelTitle == "Marrowkai\'s Power Grab: Reclaiming the Throne")
+               {
+                  this.messageOpening.setMessage("Queen Medusa: You have grown powerful in my absence, bag of bones...","",0,this.medusaOneLiner);
+               }
                else if(this.difficulty == 1)
                {
                   this.messageOpening.setMessage("That\'s all the levels for now! Replay on HARD Mode for a tougher challenge.","",0,"Pain14");
@@ -323,39 +338,50 @@ package com.brockw.stickwar.campaign.controllers
             }
             if(this.currentLevelTitle == "Medusa")
             {
-               for each(u in gameScreen.team.units)
+               CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(1);
+               if(gameScreen.game.frame > 1000)
                {
-                  if(u.isPoisoned() && !this.poisonCheck)
+                  CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.9);
+               }
+               if(!this.poisonCheck && this.frames == -1)
+               {
+                  for each(u in gameScreen.team.units)
                   {
-                     this.message = new InGameMessage("",gameScreen.game);
-                     this.message.x = gameScreen.game.stage.stageWidth / 2;
-                     this.message.y = gameScreen.game.stage.stageHeight / 4 - 75;
-                     this.message.scaleX *= 1.3;
-                     this.message.scaleY *= 1.3;
-                     gameScreen.addChild(this.message);
-                     this.message.setMessage("Cure your Units of poison by garrisoning them or letting them auto-cure after some time.","");
-                     this.frames = 0;
-                     this.poisonCheck = true;
-                     break;
+                     if(u.isPoisoned())
+                     {
+                        this.message2 = new InGameMessage("",gameScreen.game);
+                        this.message2.x = gameScreen.game.stage.stageWidth / 2;
+                        this.message2.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                        this.message2.scaleX *= 1.3;
+                        this.message2.scaleY *= 1.3;
+                        gameScreen.addChild(this.message2);
+                        this.message2.setMessage("Cure your Units of poison by garrisoning them or letting them auto-cure after some time.","");
+                        this.frames = 0;
+                        this.poisonCheck = true;
+                        break;
+                     }
                   }
                }
-               for each(u in gameScreen.team.enemyTeam.units)
+               if(!this.ghostCheck && this.frames == -1)
                {
-                  if(u.isTowerSpawned && !this.ghostCheck)
+                  for each(u in gameScreen.team.enemyTeam.units)
                   {
-                     this.message2 = new InGameMessage("",gameScreen.game);
-                     this.message2.x = gameScreen.game.stage.stageWidth / 2;
-                     this.message2.y = gameScreen.game.stage.stageHeight / 4 - 75;
-                     this.message2.scaleX *= 1.3;
-                     this.message2.scaleY *= 1.3;
-                     gameScreen.addChild(this.message2);
-                     this.message2.setMessage("Told ya so...","");
-                     this.frames = 0;
-                     this.ghostCheck = true;
-                     break;
+                     if(u.isTowerSpawned)
+                     {
+                        this.message2 = new InGameMessage("",gameScreen.game);
+                        this.message2.x = gameScreen.game.stage.stageWidth / 2;
+                        this.message2.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                        this.message2.scaleX *= 1.3;
+                        this.message2.scaleY *= 1.3;
+                        gameScreen.addChild(this.message2);
+                        this.message2.setMessage("Told ya so...","");
+                        this.frames = 0;
+                        this.ghostCheck = true;
+                        break;
+                     }
                   }
                }
-               if(gameScreen.team.enemyTeam.forwardUnit && gameScreen.team.enemyTeam.forwardUnit.x < gameScreen.game.map.width / 2 + 20 && !this.middleWarning)
+               if(gameScreen.team.enemyTeam.forwardUnit && gameScreen.team.enemyTeam.forwardUnit.x < gameScreen.game.map.width / 2 + 20 && !this.middleWarning && this.frames == -1)
                {
                   this.message3 = new InGameMessage("",gameScreen.game);
                   this.message3.x = gameScreen.game.stage.stageWidth / 2;
@@ -367,7 +393,7 @@ package com.brockw.stickwar.campaign.controllers
                   this.frames = 0;
                   this.middleWarning = true;
                }
-               if(!this.queenMedusa.isMedusaMaxHp() && !this.medusaWarning && this.queenMedusa.health < this.queenMedusa.maxHealth / 2)
+               if(!this.medusaWarning && this.queenMedusa.health < this.queenMedusa.maxHealth / 2 && this.frames == -1)
                {
                   this.message4 = new InGameMessage("",gameScreen.game);
                   this.message4.x = gameScreen.game.stage.stageWidth / 2;
@@ -379,7 +405,7 @@ package com.brockw.stickwar.campaign.controllers
                   this.frames = 0;
                   this.medusaWarning = true;
                }
-               if(this.queenMedusa.inStoneSpell && !this.stoneWarning)
+               if(this.queenMedusa.inStoneSpell && !this.stoneWarning && this.frames == -1)
                {
                   this.message5 = new InGameMessage("",gameScreen.game);
                   this.message5.x = gameScreen.game.stage.stageWidth / 2;
@@ -387,11 +413,11 @@ package com.brockw.stickwar.campaign.controllers
                   this.message5.scaleX *= 1.3;
                   this.message5.scaleY *= 1.3;
                   gameScreen.addChild(this.message5);
-                  this.message5.setMessage("Queen Medusa\'s Stone ability is more expensive, has a longer cooldown, and is stronger against heavy units. Use it wisely!","");
+                  this.message5.setMessage("Queen Medusa\'s Stone ability is one of the most powerful in her arsenal, dealing bonus heavy damage! Use it wisely.","");
                   this.frames = 0;
                   this.stoneWarning = true;
                }
-               if(gameScreen.team.getNumberOfMiners() >= 12 && !this.minerWarning)
+               if(gameScreen.team.getNumberOfMiners() >= 6 && !this.minerWarning && this.frames == -1)
                {
                   this.message6 = new InGameMessage("",gameScreen.game);
                   this.message6.x = gameScreen.game.stage.stageWidth / 2;
@@ -399,7 +425,7 @@ package com.brockw.stickwar.campaign.controllers
                   this.message6.scaleX *= 1.3;
                   this.message6.scaleY *= 1.3;
                   gameScreen.addChild(this.message6);
-                  this.message6.setMessage("Never hesitate to utilize ALL your Units when you need to beat a level!","");
+                  this.message6.setMessage("Enslaved Miners are perfect fodder for the battlefield when push comes to shove!","");
                   this.frames = 0;
                   this.minerWarning = true;
                }
@@ -516,7 +542,7 @@ package com.brockw.stickwar.campaign.controllers
                      this.counter = 0;
                      trace("Spawning alphaSpawn with alphaCount " + this.alphaCount + " and random number " + this.randomNumber);
                      ++this.amountOfSpawn;
-                     if(this.amountOfSpawn > 4 && !this.firstAlphaSpawned)
+                     if(this.amountOfSpawn > 2 && !this.firstAlphaSpawned)
                      {
                         this.firstAlphaSpawned = true;
                         this.message5 = new InGameMessage("",gameScreen.game);
@@ -752,7 +778,7 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   this.hasted = true;
                }
-               else if(gameScreen.game.frame > this.timeUntilRescue / 50 && this.warnAboutReinforcementEclipsors == false)
+               else if(!gameScreen.contains(this.messageOpening) && this.warnAboutReinforcementEclipsors == false)
                {
                   this.message2 = new InGameMessage("",gameScreen.game);
                   this.message2.x = gameScreen.game.stage.stageWidth / 2;
@@ -776,6 +802,30 @@ package com.brockw.stickwar.campaign.controllers
                   this.frames = 0;
                   this.rescued = true;
                }
+            }
+            else if(this.currentLevelTitle == "Marrowkai\'s Power Grab: Reclaiming the Throne (WIP)")
+            {
+               var bruh:Boolean = true;
+               if(!this.bossMarrow)
+               {
+                  this.bossMarrow = gameScreen.team.enemyTeam.unitGroups[Unit.U_SKELATOR][0];
+               }
+               else
+               {
+                  this.bossMarrow.px = gameScreen.game.map.width / 2 + 200;
+                  this.bossMarrow.py = gameScreen.game.map.height / 2 - 25;
+                  this.bossMarrow.ai.mayMove = false;
+                  this.bossMarrow.ai.mayAttack = false;
+                  this.bossMarrow.ai.mayMoveToAttack = false;
+                  this.bossMarrow.marrowkaiGeneralDontCast = true;
+                  this.bossMarrow.faceDirection(-1);
+               }
+               this.queenMedusa.px = gameScreen.game.map.width / 2 - 200;
+               this.queenMedusa.py = gameScreen.game.map.height / 2 - 25;
+               this.queenMedusa.ai.mayMove = false;
+               this.queenMedusa.ai.mayAttack = false;
+               this.queenMedusa.ai.mayMoveToAttack = false;
+               this.queenMedusa.faceDirection(1);
             }
             else
             {
