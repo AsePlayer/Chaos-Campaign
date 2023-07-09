@@ -10,6 +10,7 @@ package com.brockw.stickwar.campaign.controllers
    import com.brockw.stickwar.engine.units.Dead;
    import com.brockw.stickwar.engine.units.Giant;
    import com.brockw.stickwar.engine.units.Medusa;
+   import com.brockw.stickwar.engine.units.Miner;
    import com.brockw.stickwar.engine.units.Skelator;
    import com.brockw.stickwar.engine.units.Statue;
    import com.brockw.stickwar.engine.units.Unit;
@@ -129,6 +130,10 @@ package com.brockw.stickwar.campaign.controllers
       
       private var amountOfSpawn:int = 0;
       
+      private var destroyStatueDelay:int;
+      
+      private var messageCounter:int = 0;
+      
       internal var bomberTypes:Array;
       
       internal var bomberTypesForDifficulty:Array;
@@ -156,6 +161,14 @@ package com.brockw.stickwar.campaign.controllers
       internal var maxDeads:int;
       
       internal var interruptMessage:Boolean;
+      
+      private var cutsceneDone:Boolean;
+      
+      private var enemyDefendNow:Boolean;
+      
+      private var enemyDefendIn:int;
+      
+      private var spawnMyBois:Boolean = false;
       
       public function CampaignShadow(gameScreen:GameScreen)
       {
@@ -224,7 +237,7 @@ package com.brockw.stickwar.campaign.controllers
          {
             this.maxDeads = gameScreen.team.game.main.campaign.difficultyLevel;
          }
-         if(this.message2 && gameScreen.contains(this.message2))
+         if(this.message2 && gameScreen.contains(this.message2) && !gameScreen.isPaused)
          {
             this.message2.update();
             if(this.frames++ > 30 * 8)
@@ -233,7 +246,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         else if(this.message3 && gameScreen.contains(this.message3))
+         else if(this.message3 && gameScreen.contains(this.message3) && !gameScreen.isPaused)
          {
             this.message3.update();
             if(this.frames++ > 30 * 6)
@@ -242,7 +255,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         else if(this.message4 && gameScreen.contains(this.message4))
+         else if(this.message4 && gameScreen.contains(this.message4) && !gameScreen.isPaused)
          {
             this.message4.update();
             if(this.frames++ > 30 * 8)
@@ -251,7 +264,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         else if(this.message5 && gameScreen.contains(this.message5))
+         else if(this.message5 && gameScreen.contains(this.message5) && !gameScreen.isPaused)
          {
             this.message5.update();
             if(this.frames++ > 30 * 7)
@@ -260,7 +273,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         else if(this.message6 && gameScreen.contains(this.message6))
+         else if(this.message6 && gameScreen.contains(this.message6) && !gameScreen.isPaused)
          {
             this.message6.update();
             if(this.frames++ > 30 * 7)
@@ -269,7 +282,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         else if(this.messageOpening && gameScreen.contains(this.messageOpening))
+         else if(this.messageOpening && gameScreen.contains(this.messageOpening) && !gameScreen.isPaused)
          {
             this.messageOpening.update();
             if(this.frames++ > 30 * 8)
@@ -278,7 +291,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         if(this.message && gameScreen.contains(this.message))
+         if(this.message && gameScreen.contains(this.message) && !gameScreen.isPaused)
          {
             this.message.update();
             if(this.frames++ > 30 * 7)
@@ -333,7 +346,14 @@ package com.brockw.stickwar.campaign.controllers
                {
                   this.messageOpening.setMessage("That\'s all the levels for now! Congrats on beating INSANE Mode!","",0,"Pain14");
                }
-               this.frames = 0;
+               if(this.currentLevelTitle == "Marrowkai\'s Power Grab: Reclaiming the Throne")
+               {
+                  this.frames = 90;
+               }
+               else
+               {
+                  this.frames = 0;
+               }
                this.openingMessageSent = true;
             }
             if(this.currentLevelTitle == "Medusa")
@@ -803,29 +823,171 @@ package com.brockw.stickwar.campaign.controllers
                   this.rescued = true;
                }
             }
-            else if(this.currentLevelTitle == "Marrowkai\'s Power Grab: Reclaiming the Throne (WIP)")
+            else if(this.currentLevelTitle == "Marrowkai\'s Power Grab: Reclaiming the Throne")
             {
-               var bruh:Boolean = true;
+               CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.75);
+               for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_DEAD])
+               {
+                  if(u.isNormal)
+                  {
+                     u.isNormal = false;
+                     this.randomNumber = Math.random() * 100;
+                     if(this.randomNumber < 30)
+                     {
+                        u.deadType = "Toxic";
+                     }
+                     else if(this.randomNumber < 80)
+                     {
+                        u.deadType = "Bomber";
+                     }
+                  }
+               }
+               for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_CAT])
+               {
+                  if(u.isNormal)
+                  {
+                     u.isNormal = false;
+                     this.randomNumber = Math.random() * 100;
+                     if(this.randomNumber > 69)
+                     {
+                        u.isAlphaSpawn = true;
+                     }
+                  }
+               }
+               for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_BOMBER])
+               {
+                  if(u.isNormal)
+                  {
+                     u.isNormal = false;
+                     this.randomNumber = Math.random() * 100;
+                     if(this.randomNumber < 33)
+                     {
+                        u.bomberType = "medusaTargeter";
+                     }
+                     else if(this.randomNumber < 100)
+                     {
+                        u.bomberType = "clusterBoi";
+                     }
+                  }
+               }
+               if(this.messageOpening && !gameScreen.contains(this.messageOpening) && this.messageCounter == 0)
+               {
+                  this.message3 = new InGameMessage("",gameScreen.game);
+                  this.message3.x = gameScreen.game.stage.stageWidth / 2;
+                  this.message3.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                  this.message3.scaleX *= 1.3;
+                  this.message3.scaleY *= 1.3;
+                  gameScreen.addChild(this.message3);
+                  this.message3.setMessage("Marrowkai: While I possess the mastery of necromancy, you are but a sack of flesh... It\'s clear who reigns supreme, Medusa.","");
+                  this.frames = 30;
+                  this.messageCounter = 1;
+               }
+               if(this.message3 && !gameScreen.contains(this.message3) && this.messageCounter == 1)
+               {
+                  this.message3 = new InGameMessage("",gameScreen.game);
+                  this.message3.x = gameScreen.game.stage.stageWidth / 2;
+                  this.message3.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                  this.message3.scaleX *= 1.3;
+                  this.message3.scaleY *= 1.3;
+                  gameScreen.addChild(this.message3);
+                  this.message3.setMessage("Queen Medusa: Skills mean nothing without leadership. I will prove myself and take my rightful place as Queen of the Chaos Empire!","");
+                  this.frames = 30;
+                  this.messageCounter = 2;
+               }
+               if(this.message3 && !gameScreen.contains(this.message3) && this.messageCounter == 2)
+               {
+                  this.message3 = new InGameMessage("",gameScreen.game);
+                  this.message3.x = gameScreen.game.stage.stageWidth / 2;
+                  this.message3.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                  this.message3.scaleX *= 1.3;
+                  this.message3.scaleY *= 1.3;
+                  gameScreen.addChild(this.message3);
+                  this.message3.setMessage("Marrowkai: Your fate is sealed, but very well! Best me in combat and I shall become your loyal servant once more!","");
+                  this.frames = 30;
+                  this.messageCounter = 3;
+                  this.cutsceneDone = true;
+                  this.queenMedusa.reverseReap = true;
+                  this.enemyDefendIn = gameScreen.game.frame + 500;
+               }
                if(!this.bossMarrow)
                {
                   this.bossMarrow = gameScreen.team.enemyTeam.unitGroups[Unit.U_SKELATOR][0];
                }
-               else
+               else if(!this.cutsceneDone)
                {
-                  this.bossMarrow.px = gameScreen.game.map.width / 2 + 200;
+                  this.bossMarrow.px = gameScreen.game.map.width / 2 + 150;
                   this.bossMarrow.py = gameScreen.game.map.height / 2 - 25;
                   this.bossMarrow.ai.mayMove = false;
                   this.bossMarrow.ai.mayAttack = false;
                   this.bossMarrow.ai.mayMoveToAttack = false;
                   this.bossMarrow.marrowkaiGeneralDontCast = true;
                   this.bossMarrow.faceDirection(-1);
+                  this.bossMarrow.isBossMarrow = true;
+                  this.bossMarrow.canCastReap = false;
+                  this.bossMarrow.canCastFists = false;
                }
-               this.queenMedusa.px = gameScreen.game.map.width / 2 - 200;
-               this.queenMedusa.py = gameScreen.game.map.height / 2 - 25;
-               this.queenMedusa.ai.mayMove = false;
-               this.queenMedusa.ai.mayAttack = false;
-               this.queenMedusa.ai.mayMoveToAttack = false;
-               this.queenMedusa.faceDirection(1);
+               if(!this.cutsceneDone)
+               {
+                  gameScreen.game.targetScreenX = gameScreen.game.map.width / 2 - 425;
+                  this.queenMedusa.px = gameScreen.game.map.width / 2 - 150;
+                  this.queenMedusa.py = gameScreen.game.map.height / 2 - 25;
+                  this.queenMedusa.ai.mayMove = false;
+                  this.queenMedusa.ai.mayAttack = false;
+                  this.queenMedusa.ai.mayMoveToAttack = false;
+                  this.queenMedusa.faceDirection(1);
+                  gameScreen.userInterface.selectedUnits.clear();
+                  gameScreen.userInterface.isGlobalsEnabled = false;
+                  gameScreen.userInterface.hud.hud.fastForward.visible = false;
+                  delete gameScreen.team.unitsAvailable[Unit.U_KNIGHT];
+                  delete gameScreen.team.unitsAvailable[Unit.U_CHAOS_MINER];
+                  delete gameScreen.team.unitsAvailable[Unit.U_MEDUSA];
+                  delete gameScreen.team.unitsAvailable[Unit.U_BOMBER];
+                  delete gameScreen.team.unitsAvailable[Unit.U_WINGIDON];
+                  delete gameScreen.team.unitsAvailable[Unit.U_GIANT];
+                  delete gameScreen.team.unitsAvailable[Unit.U_DEAD];
+                  delete gameScreen.team.unitsAvailable[Unit.U_CAT];
+               }
+               if(this.bossMarrow.isDead && this.destroyStatueDelay == 0)
+               {
+                  this.destroyStatueDelay = gameScreen.game.frame + 80;
+                  this.message3 = new InGameMessage("",gameScreen.game);
+                  this.message3.x = gameScreen.game.stage.stageWidth / 2;
+                  this.message3.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                  this.message3.scaleX *= 1.3;
+                  this.message3.scaleY *= 1.3;
+                  gameScreen.addChild(this.message3);
+                  this.message3.setMessage("Marrowkai: Nooooooo-","");
+                  this.frames = 0;
+               }
+               if(this.destroyStatueDelay != 0 && this.destroyStatueDelay < gameScreen.game.frame)
+               {
+                  gameScreen.game.teamB.statue.health = Number(Number(0));
+               }
+               if(this.bossMarrow.isDead)
+               {
+                  this.queenMedusa.health = this.queenMedusa.maxHealth;
+               }
+               if(this.cutsceneDone && !this.spawnMyBois)
+               {
+                  this.bossMarrow.canCastReap = true;
+                  this.spawnMyBois = true;
+                  gameScreen.userInterface.isGlobalsEnabled = true;
+                  gameScreen.userInterface.hud.hud.fastForward.visible = true;
+                  gameScreen.team.unitsAvailable[Unit.U_KNIGHT] = 1;
+                  gameScreen.team.unitsAvailable[Unit.U_CHAOS_MINER] = 1;
+                  gameScreen.team.unitsAvailable[Unit.U_MEDUSA] = 1;
+                  gameScreen.team.unitsAvailable[Unit.U_BOMBER] = 1;
+                  gameScreen.team.unitsAvailable[Unit.U_WINGIDON] = 1;
+                  gameScreen.team.unitsAvailable[Unit.U_GIANT] = 1;
+                  gameScreen.team.unitsAvailable[Unit.U_DEAD] = 1;
+                  gameScreen.team.unitsAvailable[Unit.U_CAT] = 1;
+                  gameScreen.team.spawn(Dead(gameScreen.game.unitFactory.getUnit(Unit.U_DEAD)),gameScreen.game);
+                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                  gameScreen.team.population += 11;
+               }
             }
             else
             {
