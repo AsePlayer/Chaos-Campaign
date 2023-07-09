@@ -35,9 +35,13 @@ package com.brockw.stickwar.engine.units
       
       public var isBossMarrow:Boolean;
       
+      public var bossMarrowSetupComplete:Boolean;
+      
       public var canCastReap:Boolean = true;
       
       public var canCastFists:Boolean = true;
+      
+      private var difficulty:int;
       
       public function Skelator(game:StickWar)
       {
@@ -113,6 +117,16 @@ package com.brockw.stickwar.engine.units
       
       override public function update(game:StickWar) : void
       {
+         if(this.isBossMarrow && !this.bossMarrowSetupComplete)
+         {
+            _scale = 2;
+            health = maxHealth = 2500;
+            maxHealth = maxHealth;
+            healthBar.totalHealth = maxHealth;
+            isMiniBoss = true;
+            this.bossMarrowSetupComplete = true;
+            this.difficulty = 3;
+         }
          var num:int = 0;
          this.fistAttackSpell.update();
          this.reaperSpell.update();
@@ -137,7 +151,7 @@ package com.brockw.stickwar.engine.units
             {
                _mc.gotoAndStop("fistAttack");
                num = (_mc.mc.currentFrame - 27) / 5;
-               if(_mc.mc.currentFrame >= 27 && (_mc.mc.currentFrame - 27) % 5 == 0 && num < 6)
+               if(_mc.mc.currentFrame >= 27 && (_mc.mc.currentFrame - 27) % 5 == 0 && num < 6 + 1.5 * this.difficulty)
                {
                   game.projectileManager.initFistAttack(this.spellX,this.spellY,this,num);
                }
@@ -205,7 +219,11 @@ package com.brockw.stickwar.engine.units
             }
          }
          Util.animateMovieClip(mc);
-         if(!hasDefaultLoadout)
+         if(this.isBossMarrow)
+         {
+            Skelator.setItem(_skelator(mc),"Horns Staff","Horns","");
+         }
+         else if(!hasDefaultLoadout)
          {
             Skelator.setItem(_skelator(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
          }
@@ -280,6 +298,10 @@ package com.brockw.stickwar.engine.units
                _state = S_ATTACK;
                team.game.soundManager.playSound("skeletalReaperSound",px,py);
             }
+         }
+         if(!this.canCastFists)
+         {
+            this.canCastFists = true;
          }
       }
       

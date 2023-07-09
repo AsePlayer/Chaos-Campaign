@@ -256,7 +256,7 @@ package com.brockw.stickwar.engine.units
          {
             com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"Round Cluster Bomb","Round Bomb","");
          }
-         else if(this.bomberType == "Default")
+         else
          {
             com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"Default","Default","");
          }
@@ -276,6 +276,7 @@ package com.brockw.stickwar.engine.units
             randomNumber2 = Math.floor(Math.random() * 3) + 1;
             this.clusterLad = team.game.unitFactory.getUnit(Unit.U_BOMBER);
             team.spawn(this.clusterLad,team.game);
+            this.clusterLad.isNormal = false;
             this.clusterLad.px = px + 75;
             this.clusterLad.py = py;
             this.clusterLad.stun(randomNumber2 * 10);
@@ -285,6 +286,7 @@ package com.brockw.stickwar.engine.units
             randomNumber2 = Math.floor(Math.random() * 3) + 1;
             this.clusterLad = team.game.unitFactory.getUnit(Unit.U_BOMBER);
             team.spawn(this.clusterLad,team.game);
+            this.clusterLad.isNormal = false;
             this.clusterLad.px = px;
             this.clusterLad.py = py + 50;
             this.clusterLad.stun(randomNumber2 * 10);
@@ -294,6 +296,7 @@ package com.brockw.stickwar.engine.units
             randomNumber2 = Math.floor(Math.random() * 3) + 1;
             this.clusterLad = team.game.unitFactory.getUnit(Unit.U_BOMBER);
             team.spawn(this.clusterLad,team.game);
+            this.clusterLad.isNormal = false;
             this.clusterLad.px = px - 75;
             this.clusterLad.py = py;
             this.clusterLad.stun(randomNumber2 * 10);

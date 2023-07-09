@@ -50,7 +50,8 @@ package com.brockw.stickwar.engine
          {
             if(game.gameScreen.hasEffects)
             {
-               for(i = 0; i < this.profilePic.numChildren; i++)
+               i = 0;
+               while(i < this.profilePic.numChildren)
                {
                   d = this.profilePic.getChildAt(i);
                   if(d is MovieClip)
@@ -62,6 +63,7 @@ package com.brockw.stickwar.engine
                      }
                      m.nextFrame();
                   }
+                  i++;
                }
             }
          }
