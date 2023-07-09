@@ -31,6 +31,14 @@ package com.brockw.stickwar.engine.units
       
       private var _fistDamage:Number;
       
+      public var marrowkaiGeneralDontCast:Boolean = false;
+      
+      public var isBossMarrow:Boolean;
+      
+      public var canCastReap:Boolean = true;
+      
+      public var canCastFists:Boolean = true;
+      
       public function Skelator(game:StickWar)
       {
          super(game);
@@ -81,7 +89,7 @@ package com.brockw.stickwar.engine.units
          maxHealth = health = game.xml.xml.Chaos.Units.skelator.health;
          this.fistDamage = game.xml.xml.Chaos.Units.skelator.fist.damage;
          loadDamage(game.xml.xml.Chaos.Units.skelator);
-         type = Unit.U_SKELATOR;
+         type = com.brockw.stickwar.engine.units.Unit.U_SKELATOR;
          this.isFistAttacking = false;
          this.isReaperSpell = false;
          this.spellX = this.spellY = 0;
@@ -215,11 +223,19 @@ package com.brockw.stickwar.engine.units
       
       public function fistAttackCooldown() : Number
       {
+         if(!canCastFists)
+         {
+            return 900;
+         }
          return this.fistAttackSpell.cooldown();
       }
       
       public function reaperCooldown() : Number
       {
+         if(!canCastReap)
+         {
+            return 900;
+         }
          return this.reaperSpell.cooldown();
       }
       
