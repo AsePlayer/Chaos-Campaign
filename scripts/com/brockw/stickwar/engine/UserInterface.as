@@ -162,6 +162,8 @@ package com.brockw.stickwar.engine
       {
          this._period = 33.333333333333336;
          this._period = 33.333333333333336;
+         this._period = 33.333333333333336;
+         this._period = 33.333333333333336;
          this.devHotkeys = [];
          ++main.loadingFraction;
          this.lastButton = null;
@@ -669,7 +671,7 @@ package com.brockw.stickwar.engine
          this.selectedUnits.hasChanged = false;
          this._chat.update();
          this.keyBoardState.isDisabled = this.chat.isInput;
-         if(this.keyBoardState.isPressed(9))
+         if(this.keyBoardState.isPressed(192))
          {
             if(!this.gameScreen.isFastForward && this.hud.hud.fastForward.visible)
             {
@@ -1343,6 +1345,17 @@ package com.brockw.stickwar.engine
                for each(_loc5_ in this.team.units)
                {
                   if(!_loc5_.isTowerSpawned && !_loc5_.isDead && _loc5_.isGarrisoned == false && _loc5_.type != Unit.U_CHAOS_TOWER)
+                  {
+                     this.selectedUnits.add(_loc5_);
+                     _loc5_.selected = true;
+                  }
+               }
+            }
+            else if(this.keyBoardState.isShift)
+            {
+               for each(_loc5_ in this.team.units)
+               {
+                  if(!_loc5_.isTowerSpawned && !_loc5_.isDead && _loc5_.type == Unit.U_MEDUSA)
                   {
                      this.selectedUnits.add(_loc5_);
                      _loc5_.selected = true;
