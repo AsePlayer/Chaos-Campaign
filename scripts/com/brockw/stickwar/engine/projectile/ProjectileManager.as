@@ -106,6 +106,10 @@ package com.brockw.stickwar.engine.projectile
          n.target = target;
          n.init(unit.px,unit.py,unit.pz,target,0,unit.team);
          n.visible = false;
+         if(unit.isBossMarrow)
+         {
+            n.reaperScale = 1.5;
+         }
          n.damageToDeal = unit.team.game.xml.xml.Chaos.Units.skelator.reaper.damage;
          this.projectiles.push(n);
          unit.team.game.battlefield.addChild(n);

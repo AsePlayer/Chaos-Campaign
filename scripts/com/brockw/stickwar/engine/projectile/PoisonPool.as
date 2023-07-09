@@ -64,7 +64,6 @@ package com.brockw.stickwar.engine.projectile
             {
                if(!unit.isFlying() || this.spellMc.currentFrame < 60 && unit.isFlying())
                {
-                  this.comment = "d = dx = dy = 0";
                   unit.poison(this.poisonDamage);
                }
             }
