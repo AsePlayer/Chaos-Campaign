@@ -298,6 +298,8 @@ package com.brockw.stickwar.engine.units
       
       public var noAutoCure:Boolean = false;
       
+      public var reverseReap:Boolean = false;
+      
       public function Unit(game:StickWar)
       {
          this.hasDefaultLoadout = false;
@@ -781,7 +783,14 @@ package com.brockw.stickwar.engine.units
          }
          if(this.reaperCurseFrames > 0)
          {
-            this.walk(this.team.direction,0,this.team.direction);
+            if(this.reverseReap)
+            {
+               this.walk(-this.team.direction,0,-this.team.direction);
+            }
+            else
+            {
+               this.walk(this.team.direction,0,this.team.direction);
+            }
             this.reaperCurseFrames--;
             if(this.reaperMc.currentFrame == this.reaperMc.totalFrames)
             {
