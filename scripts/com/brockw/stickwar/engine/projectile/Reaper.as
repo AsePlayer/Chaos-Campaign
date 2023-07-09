@@ -13,6 +13,8 @@ package com.brockw.stickwar.engine.projectile
       
       public var target:Unit;
       
+      public var reaperScale:Number = 1;
+      
       public function Reaper(game:StickWar)
       {
          super(game);
@@ -34,7 +36,9 @@ package com.brockw.stickwar.engine.projectile
             return;
          }
          this.scaleX = game.backScale + py / game.map.height * (game.frontScale - game.backScale);
+         this.scaleX *= this.reaperScale;
          this.scaleY = game.backScale + py / game.map.height * (game.frontScale - game.backScale);
+         this.scaleY *= this.reaperScale;
          var targetScale:int = Util.sgn(this.target.px - startX);
          if(targetScale != Util.sgn(this.scaleX))
          {
