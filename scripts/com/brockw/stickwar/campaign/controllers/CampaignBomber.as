@@ -63,6 +63,8 @@ package com.brockw.stickwar.campaign.controllers
       
       private var difficulty:int;
       
+      private var spawnedMiners:Boolean;
+      
       internal var bomberTypes:Array;
       
       internal var waves:Array;
@@ -376,26 +378,31 @@ package com.brockw.stickwar.campaign.controllers
                if(this.frames++ > 30 * 10)
                {
                   gameScreen.removeChild(this.message);
-                  this.introBomber.detonate();
-                  this.state = S_SUICIDE;
-                  this.middleBomber = Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER));
-                  gameScreen.team.enemyTeam.spawn(this.middleBomber,gameScreen.game);
-                  this.middleBomber.px = gameScreen.game.map.width / 2 + 50;
-                  this.middleBomber.py = gameScreen.game.map.height / 2;
-                  this.middleBomber.bomberType = "MiddleBoi";
-                  gameScreen.userInterface.isGlobalsEnabled = true;
-                  gameScreen.userInterface.hud.hud.fastForward.visible = true;
-                  gameScreen.team.unitsAvailable[Unit.U_KNIGHT] = 1;
-                  gameScreen.team.unitsAvailable[Unit.U_CHAOS_MINER] = 1;
-                  gameScreen.team.unitsAvailable[Unit.U_MEDUSA] = 1;
                }
-               else if(this.frames == 30 * 9.25 - 0.5)
-               {
-                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
-                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
-                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
-                  gameScreen.team.population += 6;
-               }
+            }
+            else if(!gameScreen.contains(this.message) && !this.spawnedMiners)
+            {
+               this.introBomber.detonate();
+               this.state = S_SUICIDE;
+               this.middleBomber = Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER));
+               gameScreen.team.enemyTeam.spawn(this.middleBomber,gameScreen.game);
+               this.middleBomber.px = gameScreen.game.map.width / 2 + 50;
+               this.middleBomber.py = gameScreen.game.map.height / 2;
+               this.middleBomber.bomberType = "MiddleBoi";
+               gameScreen.userInterface.isGlobalsEnabled = true;
+               gameScreen.userInterface.hud.hud.fastForward.visible = true;
+               gameScreen.team.unitsAvailable[Unit.U_KNIGHT] = 1;
+               gameScreen.team.unitsAvailable[Unit.U_CHAOS_MINER] = 1;
+               gameScreen.team.unitsAvailable[Unit.U_MEDUSA] = 1;
+               gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+               gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+               gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+               gameScreen.team.population += 6;
+               this.spawnedMiners = true;
+            }
+            if(!this.spawnedMiners)
+            {
+               gameScreen.game.targetScreenX = this.queenMedusa.px - 200;
             }
          }
          gameScreen.game.team.enemyTeam.tech.isResearchedMap[Tech.GIANT_GROWTH_I] = true;
