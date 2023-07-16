@@ -9,8 +9,10 @@ package com.brockw.stickwar.campaign.controllers
    import com.brockw.stickwar.engine.units.Cat;
    import com.brockw.stickwar.engine.units.Dead;
    import com.brockw.stickwar.engine.units.Giant;
+   import com.brockw.stickwar.engine.units.Knight;
    import com.brockw.stickwar.engine.units.Medusa;
    import com.brockw.stickwar.engine.units.Miner;
+   import com.brockw.stickwar.engine.units.MinerChaos;
    import com.brockw.stickwar.engine.units.Skelator;
    import com.brockw.stickwar.engine.units.Statue;
    import com.brockw.stickwar.engine.units.Unit;
@@ -169,6 +171,18 @@ package com.brockw.stickwar.campaign.controllers
       private var enemyDefendIn:int;
       
       private var spawnMyBois:Boolean = false;
+      
+      private var spawnedBackupJug:Boolean = false;
+      
+      private var statueMiners:Array;
+      
+      private var statueMinersSpawned:Boolean;
+      
+      private var miner1:MinerChaos;
+      
+      private var miner2:MinerChaos;
+      
+      private var miner3:MinerChaos;
       
       public function CampaignShadow(gameScreen:GameScreen)
       {
@@ -358,6 +372,10 @@ package com.brockw.stickwar.campaign.controllers
             }
             if(this.currentLevelTitle == "Medusa")
             {
+               for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_KNIGHT])
+               {
+                  u.charger = true;
+               }
                CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(1);
                if(gameScreen.game.frame > 1000)
                {
@@ -452,6 +470,23 @@ package com.brockw.stickwar.campaign.controllers
             }
             else if(this.currentLevelTitle == "Apex Of The Forest: Crawlers Attack")
             {
+               if(gameScreen.team.unitGroups[Unit.U_BOMBER].length < 1)
+               {
+                  gameScreen.team.spawn(Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER)),gameScreen.game);
+                  ++gameScreen.team.population;
+                  if(this.messageOpening && !gameScreen.contains(this.messageOpening) && this.messageCounter == 0)
+                  {
+                     this.message3 = new InGameMessage("",gameScreen.game);
+                     this.message3.x = gameScreen.game.stage.stageWidth / 2;
+                     this.message3.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                     this.message3.scaleX *= 1.3;
+                     this.message3.scaleY *= 1.3;
+                     gameScreen.addChild(this.message3);
+                     this.message3.setMessage("The recently conquered Bombers are keen to display unwavering loyalty to Medusa. When the dust settles, one will always rise to the occasion!","");
+                     this.frames = 0;
+                     this.messageCounter = 1;
+                  }
+               }
                if(!gameScreen.isPaused)
                {
                   if(true == false)
@@ -860,13 +895,21 @@ package com.brockw.stickwar.campaign.controllers
                   {
                      u.isNormal = false;
                      this.randomNumber = Math.random() * 100;
-                     if(this.randomNumber < 33)
+                     if(gameScreen.game.frame > 5000)
+                     {
+                        this.randomNumber += Math.random() * 50;
+                     }
+                     if(this.randomNumber < 50)
                      {
                         u.bomberType = "medusaTargeter";
                      }
                      else if(this.randomNumber < 100)
                      {
                         u.bomberType = "clusterBoi";
+                     }
+                     else if(this.randomNumber < 150)
+                     {
+                        u.bomberType = "statueTargeter";
                      }
                   }
                }
@@ -908,6 +951,18 @@ package com.brockw.stickwar.campaign.controllers
                   this.cutsceneDone = true;
                   this.queenMedusa.reverseReap = true;
                   this.enemyDefendIn = gameScreen.game.frame + 500;
+               }
+               if(this.message3 && !gameScreen.contains(this.message3) && this.messageCounter == 3 && gameScreen.game.targetScreenX <= gameScreen.team.statue.px - 42)
+               {
+                  this.message3 = new InGameMessage("",gameScreen.game);
+                  this.message3.x = gameScreen.game.stage.stageWidth / 2;
+                  this.message3.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                  this.message3.scaleX *= 1.3;
+                  this.message3.scaleY *= 1.3;
+                  gameScreen.addChild(this.message3);
+                  this.message3.setMessage("Medusa: Where are they going? These slaves appear to have found a new master...","");
+                  this.frames = 0;
+                  this.messageCounter = 4;
                }
                if(!this.bossMarrow)
                {
@@ -982,11 +1037,127 @@ package com.brockw.stickwar.campaign.controllers
                   gameScreen.team.unitsAvailable[Unit.U_DEAD] = 1;
                   gameScreen.team.unitsAvailable[Unit.U_CAT] = 1;
                   gameScreen.team.spawn(Dead(gameScreen.game.unitFactory.getUnit(Unit.U_DEAD)),gameScreen.game);
-                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
-                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
-                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
-                  gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
-                  gameScreen.team.population += 11;
+                  gameScreen.team.population += 3;
+               }
+               for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_KNIGHT])
+               {
+                  u.charger = true;
+               }
+               if(this.bossMarrow.health < this.bossMarrow.maxHealth / 1.5 && !this.spawnedBackupJug)
+               {
+                  gameScreen.team.enemyTeam.spawn(Knight(gameScreen.game.unitFactory.getUnit(Unit.U_KNIGHT)),gameScreen.game);
+                  gameScreen.team.enemyTeam.population += 3;
+                  this.spawnedBackupJug = true;
+               }
+               if(gameScreen.team.statue.reaperCurseFrames > 0)
+               {
+                  if(gameScreen.team.statue && gameScreen.team.statue.health > 0 && !gameScreen.isPaused)
+                  {
+                     gameScreen.team.mana = 500;
+                     gameScreen.team.statue.px += 0.25;
+                     gameScreen.team.statue.x += 0.25;
+                     if(gameScreen.isFastForward)
+                     {
+                        gameScreen.team.statue.px += 0.25;
+                        gameScreen.team.statue.x += 0.25;
+                     }
+                     if(!this.statueMinersSpawned)
+                     {
+                        gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                        gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                        gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                        gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                        gameScreen.team.population += 8;
+                        this.statueMinersSpawned = true;
+                        gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                        gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                        gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                        gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                     }
+                     if(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0])
+                     {
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].px = gameScreen.team.statue.px + 35;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].py = gameScreen.team.statue.py - 6;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].faceDirection(1);
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].isGodmoded = true;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].health = gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].maxHealth;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].stunTimeLeft = 0;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].canBeTargeted = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].ai.mayAttack = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].ai.mayMoveToAttack = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].ai.currentTarget = null;
+                        _loc9_ = new UnitMove();
+                        _loc9_.moveType = UnitCommand.MOVE;
+                        _loc9_.units.push(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].id);
+                        _loc9_.owner = gameScreen.team.id;
+                        _loc9_.arg0 = gameScreen.team.statue.px + 500;
+                        _loc9_.arg1 = gameScreen.team.statue.py;
+                        _loc9_.execute(gameScreen.game);
+                     }
+                     if(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1])
+                     {
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].px = gameScreen.team.statue.px - 25;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].py = gameScreen.team.statue.py - 16;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].faceDirection(1);
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].isGodmoded = true;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].health = gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].maxHealth;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].stunTimeLeft = 0;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].canBeTargeted = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].ai.mayAttack = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].ai.mayMoveToAttack = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].ai.mayMove = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].ai.currentTarget = null;
+                        _loc9_ = new UnitMove();
+                        _loc9_.moveType = UnitCommand.MOVE;
+                        _loc9_.units.push(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].id);
+                        _loc9_.owner = gameScreen.team.id;
+                        _loc9_.arg0 = gameScreen.team.statue.px + 500;
+                        _loc9_.arg1 = gameScreen.team.statue.py;
+                        _loc9_.execute(gameScreen.game);
+                     }
+                     if(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2])
+                     {
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].px = gameScreen.team.statue.px + 50;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].py = gameScreen.team.statue.py + 25;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].faceDirection(1);
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].isGodmoded = true;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].health = gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].maxHealth;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].stunTimeLeft = 0;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].canBeTargeted = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].ai.mayAttack = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].ai.mayMoveToAttack = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].ai.mayMove = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].ai.currentTarget = null;
+                        _loc9_ = new UnitMove();
+                        _loc9_.moveType = UnitCommand.MOVE;
+                        _loc9_.units.push(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].id);
+                        _loc9_.owner = gameScreen.team.id;
+                        _loc9_.arg0 = gameScreen.team.statue.px + 500;
+                        _loc9_.arg1 = gameScreen.team.statue.py;
+                        _loc9_.execute(gameScreen.game);
+                     }
+                     if(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3])
+                     {
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].px = gameScreen.team.statue.px + -15;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].py = gameScreen.team.statue.py + 30;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].faceDirection(1);
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].isGodmoded = true;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].health = gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].maxHealth;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].stunTimeLeft = 0;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].canBeTargeted = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].ai.mayAttack = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].ai.mayMoveToAttack = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].ai.mayMove = false;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].ai.currentTarget = null;
+                        _loc9_ = new UnitMove();
+                        _loc9_.moveType = UnitCommand.MOVE;
+                        _loc9_.units.push(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].id);
+                        _loc9_.owner = gameScreen.team.id;
+                        _loc9_.arg0 = gameScreen.team.statue.px + 500;
+                        _loc9_.arg1 = gameScreen.team.statue.py;
+                        _loc9_.execute(gameScreen.game);
+                     }
+                  }
                }
             }
             else
