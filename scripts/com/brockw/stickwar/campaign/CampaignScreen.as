@@ -211,7 +211,7 @@ package com.brockw.stickwar.campaign
                trace("skip level deactivated");
             }
          }
-         if(!this.main.isKongregate && this.main.isCampaignDebug && this.keyboard.isDown(78) && this.keyboard.isShift)
+         if(!this.main.isKongregate && this.main.isCampaignDebug && this.keyboard.isDown(78) && this.keyboard.isShift || !this.main.isKongregate && this.keyboard.isDown(76) && this.keyboard.isShift)
          {
             if(this.main.campaign.currentLevel % 2)
             {
