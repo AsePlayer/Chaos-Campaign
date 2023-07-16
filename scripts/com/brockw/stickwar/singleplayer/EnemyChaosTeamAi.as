@@ -249,6 +249,7 @@ package com.brockw.stickwar.singleplayer
             team.tech.isResearchedMap[Tech.MINER_SPEED] = true;
             team.tech.isResearchedMap[Tech.DEAD_POISON] = true;
          }
+         team.tech.isResearchedMap[Tech.KNIGHT_CHARGE] = true;
          if(this.giantGrowthTimer > 0)
          {
             --this.giantGrowthTimer;
