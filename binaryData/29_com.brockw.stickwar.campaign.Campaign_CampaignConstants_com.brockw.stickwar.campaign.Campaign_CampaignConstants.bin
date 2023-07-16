@@ -32,6 +32,8 @@
 </oponent>
 </level>
 
+
+
 <level title="The Big Bang: Bombers Attack" number="2" map="5" story="The Bombers only serve to blow up anything that doesn’t align with them. For suicidal creatures, they’ve become civil enough to give themselves different abilities to distinguish them from the regular tiny maniac." controller="CampaignBomber" points="2">
 <unlock>Knight</unlock>
 <normal>1.6</normal>
@@ -63,6 +65,8 @@
 </oponent>
 </level>
 
+
+
 <level title="Apex Of The Forest: Crawlers Attack" number="3" map="4" story="Crawlers are quick, deadly, and silent. Their pack mentality and territorial nature does not bode well for most intruders..." controller="CampaignShadow" points="1">
 <unlock>Bomber</unlock>
 <normal>1.6</normal>
@@ -83,8 +87,6 @@
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Bomber</startingUnit>
-
 </player>
 
 <oponent race="Chaos" statueHealth="1000">
@@ -104,6 +106,8 @@
 </UnitComposition>
 </oponent>
 </level>
+
+
 
 <level title="Monstrous Mire: Giants Attack" number="4" map="0" story="Giants are slow, bumbling creatures that attack anything in their path. But wait, something's off..." controller="CampaignShadow" points="2">
 <unlock>Cat</unlock>
@@ -147,6 +151,7 @@
 </level>
 
 
+
 <level title="Reach For The Sky: Eclipsors Attack" number="5" map="0" story="Eclipsors are fast flying winged-creatures armed with a bow and their signature ability: 'Wingidon Haste'. They will be a perfect addition to our army, but how do we get to them?" controller="CampaignShadow" points="1">
 <unlock>Giant</unlock>
 <normal>1.4</normal>
@@ -160,6 +165,7 @@
 <gold>500</gold>
 <mana>200</mana>
 <raceName>Medusa's Army</raceName>
+<statue>medusa</statue>
 <unit>Medusa</unit>
 <unit>Knight</unit>
 <unit>Bomber</unit>
@@ -191,9 +197,153 @@
 </oponent>
 </level>
 
-<level title="???" number="6" map="1" story="???" controller="CampaignShadow" points="1">
+
+
+<level title="Undead Ambush: Endless Deads Attack" number="6" map="8" story="Endless hordes of Deads threaten to overrun your position. Hold out until reinforcement Eclipsors arrive to turn the tide of battle! Can you outlast the relentless attack?" controller="CampaignShadow" points="2">
 <hasInsaneWall>true</hasInsaneWall>
 <unlock>Wingadon</unlock>
+<normal>1.65</normal>
+<hard>1.5</hard>
+<insane>.85</insane>
+<normalHealthScale>.7</normalHealthScale>
+<normalDamageScale>.6</normalDamageScale>
+<tip>Tip: Unlike most units, Eclipsors can fly over poison pools to avoid them!</tip>
+<player race="Chaos" statueHealth="1500">
+<gold>1000</gold>
+<mana>500</mana>
+<raceName>Medusa's Army</raceName>
+<statue>medusa</statue>
+<unit>Medusa</unit>
+<unit>Knight</unit>
+<unit>Bomber</unit>
+<unit>Cat</unit>
+<unit>Giant</unit>
+<unit>Wingadon</unit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>Wingadon</startingUnit>
+</player>
+
+<oponent race="Chaos" statueHealth="1500">
+<gold>500</gold>
+<mana>200</mana>
+<raceName>Endless Deads</raceName> 
+<statue>dead</statue>
+<unit>Dead</unit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>Dead</startingUnit>
+<UnitComposition>
+<Dead>1</Dead>
+</UnitComposition>
+</oponent>
+</level>
+
+
+
+<level title="Marrowkai's Power Grab: Reclaiming the Throne" number="7" map="8" story="The Chaos Empire is on the brink of restoration, but a false idol threatens to unravel your efforts! Show them what it means to be Queen and unite the Chaos Empire once and for all!" controller="CampaignShadow" points="2">
+<hasInsaneWall>true</hasInsaneWall>
+<unlock>Dead</unlock>
+<normal>1.65</normal>
+<hard>1.5</hard>
+<insane>.85</insane>
+<normalHealthScale>.8</normalHealthScale>
+<normalDamageScale>.7</normalDamageScale>
+<tip>Tip: Take out the rouge Marrowkai to put an end to this madness once and for all!</tip>
+<player race="Chaos" statueHealth="1500">
+<gold>1000</gold>
+<mana>500</mana>
+<raceName>Medusa's Army</raceName>
+<statue>medusa</statue>
+<unit>Medusa</unit>
+<unit>Knight</unit>
+<unit>Bomber</unit>
+<unit>Cat</unit>
+<unit>Giant</unit>
+<unit>Wingadon</unit>
+<unit>Dead</unit>
+
+</player>
+
+<oponent race="Chaos" statueHealth="1500">
+<gold>500</gold>
+<mana>500</mana>
+<raceName>Marrowkai</raceName> 
+<statue>chaos</statue>
+<unit>Knight</unit>
+<unit>Bomber</unit>
+<unit>Cat</unit>
+<unit>Giant</unit>
+<unit>Wingadon</unit>
+<unit>Dead</unit>
+<unit>SkelatalMage</unit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>SkelatalMage</startingUnit>
+<UnitComposition>
+<Bomber>2</Bomber>
+<Knight>5</Knight>
+<Wingadon>2</Wingadon>
+<Dead>2</Dead>
+<Giant>2</Giant>
+<Cat>1</Cat>
+<SkelatalMage>0</SkelatalMage>
+</UnitComposition>
+</oponent>
+</level>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<level title="???" number="8" map="1" story="???" controller="CampaignShadow" points="1">
+<hasInsaneWall>true</hasInsaneWall>
+<unlock>SkelatalMage</unlock>
 <normal>1.65</normal>
 <hard>1.5</hard>
 <insane>.85</insane>

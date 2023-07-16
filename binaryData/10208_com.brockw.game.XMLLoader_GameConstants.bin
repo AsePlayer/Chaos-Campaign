@@ -2,7 +2,7 @@
 <debug>0</debug>
 <isKongregate>0</isKongregate>
 <campaignDebug>0</campaignDebug>
-<campaignVersion>v0.94.3 BETA</campaignVersion>
+<campaignVersion>v0.95 BETA</campaignVersion>
 <isAlpha>1</isAlpha>
 <hasArmory>1</hasArmory>
 <skipToLevel>6</skipToLevel>
@@ -1582,29 +1582,32 @@
 
 <credits>
 Original Game By:
-Jason Whitham (CRAZYJAY), Brock White, and Winston Zhang
+Jason Whitham (CRAZYJAY), Brock White, & Winston Zhang
 
-Chaos Mod By:
-Ryan Scott (AsePlayer), Austin Dressick (Destroyer), and Purpi
+Chaos Empire Campaign Mod By:
+Ryan Scott (AsePlayer), Austin Dressick (Destroyer), & Purpi
 
 Credits:
 Project Manager: AsePlayer
-Game Balance: AsePlayer
-Level Design: AsePlayer
+Game Designer: AsePlayer
 Lead Programmer: AsePlayer
-Programmer: Destroyer
-Sprite Manager: Destroyer
+Sprite Manager: AsePlayer & Destroyer
 Artist: Purpi
-Lore: AsePlayer, Destroyer, Pax Orderia, and jjrocks90
-New Map (Moonlight Mountain): Destroyer and Purpi
+Addtional Programming: Destroyer
+Additional Art: BlueXDN25
+Quality Assurance: AsePlayer
+Lore: AsePlayer, Destroyer, Pax Orderia, & Bloxro_
+Moonlight Mountain (New Map): Destroyer, Purpi & AsePlayer
+
 
 Special Thanks:
 Pretty Good Source Code: Brock White
-Community Manager: NathanNorth
-Supporter: Nayreel17
-Free Flash Decompiler: JPEXS (github.com/jindrapetrik/jpexs-decompiler)
-Beta Testers: Brock White, Dex, NathanNorth, Nayreel17, Sauce, Sazzy, SnowStrider, William1, and Xecute
+MinGames Discord Community Manager: 75g
+Supporters: Nayreel17 & COCOGOAT MILKERSSSSS
+Free Flash Decompiler: 
+JPEXS (github.com/jindrapetrik/jpexs-decompiler)
 Ex-Developers: Team Vertigo
+Our Many Beta Testers, Especially AsePlayer ;)
 
 The MinGames and Stick War Community!
 </credits>
