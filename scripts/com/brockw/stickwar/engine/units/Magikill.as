@@ -43,6 +43,7 @@ package com.brockw.stickwar.engine.units
          initSync();
          firstInit();
          healthBar.y = -pheight * 1;
+         name = "The Magikill";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void

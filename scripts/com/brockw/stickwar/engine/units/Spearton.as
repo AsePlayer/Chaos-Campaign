@@ -45,6 +45,7 @@ package com.brockw.stickwar.engine.units
          ai = new SpeartonAi(this);
          initSync();
          firstInit();
+         name = "Speartons";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
@@ -91,7 +92,7 @@ package com.brockw.stickwar.engine.units
          damageToDeal = game.xml.xml.Order.Units.spearton.baseDamage;
          this.createTime = game.xml.xml.Order.Units.spearton.cooldown;
          maxHealth = health = game.xml.xml.Order.Units.spearton.health;
-         type = Unit.U_SPEARTON;
+         type = com.brockw.stickwar.engine.units.Unit.U_SPEARTON;
          loadDamage(game.xml.xml.Order.Units.spearton);
          _mc.stop();
          _mc.width *= _scale;

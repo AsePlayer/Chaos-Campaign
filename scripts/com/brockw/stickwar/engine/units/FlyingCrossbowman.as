@@ -26,6 +26,7 @@ package com.brockw.stickwar.engine.units
          initSync();
          firstInit();
          this.bowFrame = 1;
+         name = "The Albowtross";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void

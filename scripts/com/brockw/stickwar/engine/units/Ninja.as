@@ -54,6 +54,7 @@ package com.brockw.stickwar.engine.units
          firstInit();
          this.dontStealth = true;
          this.ninjaCopyDistance = 1;
+         name = "The Shadowrath";
       }
       
       public static function setItemForMc(mc:MovieClip, weapon:String, armor:String, misc:String) : void
@@ -144,7 +145,7 @@ package com.brockw.stickwar.engine.units
          this.stealthSpellGlow.angle = 0;
          this.stealthSpellGlow.distance = 0;
          this.stealthSpellGlow.color = 0;
-         type = Unit.U_NINJA;
+         type = com.brockw.stickwar.engine.units.Unit.U_NINJA;
          _mc.stop();
          _mc.width *= _scale;
          _mc.height *= _scale;

@@ -50,6 +50,7 @@ package com.brockw.stickwar.engine.units
          this.rageSpellGlow.blurX = 10;
          this.rageSpellGlow.blurY = 10;
          this.lastWasStanding = false;
+         name = "Swordwrath";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void

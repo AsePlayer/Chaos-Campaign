@@ -59,6 +59,7 @@ package com.brockw.stickwar.engine.units
          this.isConstructing = false;
          attackState = 0;
          wallConstructing = null;
+         name = "Enslaved Miners";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void

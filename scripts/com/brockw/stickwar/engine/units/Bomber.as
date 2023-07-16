@@ -47,6 +47,7 @@ package com.brockw.stickwar.engine.units
          addChild(_mc);
          ai = new BomberAi(this);
          this.bomberType = "Default";
+         name = "Bombers";
          initSync();
          firstInit();
       }
@@ -305,7 +306,7 @@ package com.brockw.stickwar.engine.units
          }
          team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
          this.damage(0,this.maxHealth,null);
-         team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
+         team.game.projectileManager.initNuke(px,py,this,20);
          trace("Bomber detonated");
       }
       

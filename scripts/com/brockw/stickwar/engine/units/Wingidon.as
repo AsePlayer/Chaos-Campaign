@@ -52,6 +52,7 @@ package com.brockw.stickwar.engine.units
          ai = new WingidonAi(this);
          initSync();
          firstInit();
+         name = "Eclipsors";
          this.rageSpellGlow = new GlowFilter();
          this.rageSpellGlow.color = 16711832;
          this.rageSpellGlow.blurX = 10;

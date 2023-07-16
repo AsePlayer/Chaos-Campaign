@@ -55,6 +55,7 @@ package com.brockw.stickwar.engine.units
          this.isPoisonedToggled = false;
          this.lastShotFrame = 0;
          this.deadType = "Default";
+         name = "Deads";
          this.scaleOffset = Math.random() + 0.1;
       }
       

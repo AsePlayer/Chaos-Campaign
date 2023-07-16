@@ -288,6 +288,8 @@ package com.brockw.stickwar.engine.units
       
       private var lastWalkFrame:int;
       
+      public var name:String;
+      
       public var isMiniBoss:Boolean = false;
       
       public var isGodmoded:Boolean = false;
@@ -299,6 +301,8 @@ package com.brockw.stickwar.engine.units
       public var noAutoCure:Boolean = false;
       
       public var reverseReap:Boolean = false;
+      
+      public var canBeTargeted:Boolean = true;
       
       public function Unit(game:StickWar)
       {
@@ -653,7 +657,7 @@ package com.brockw.stickwar.engine.units
       
       public function isTargetable() : Boolean
       {
-         return !this.isDead && !this.isDieing && px * this.team.direction > this.team.homeX * this.team.direction;
+         return !this.isDead && !this.isDieing && px * this.team.direction > this.team.homeX * this.team.direction && this.canBeTargeted;
       }
       
       public function isAlive() : Boolean
@@ -791,7 +795,10 @@ package com.brockw.stickwar.engine.units
             {
                this.walk(this.team.direction,0,this.team.direction);
             }
-            this.reaperCurseFrames--;
+            if(this.type != U_STATUE)
+            {
+               this.reaperCurseFrames--;
+            }
             if(this.reaperMc.currentFrame == this.reaperMc.totalFrames)
             {
                this.reaperMc.gotoAndStop(1);

@@ -42,6 +42,7 @@ package com.brockw.stickwar.engine.units
          initSync();
          firstInit();
          this.archerFireSpellCooldown = new com.brockw.stickwar.engine.units.SpellCooldown(0,game.xml.xml.Order.Units.archer.fire.cooldown,game.xml.xml.Order.Units.archer.fire.mana);
+         name = "Archidons";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void

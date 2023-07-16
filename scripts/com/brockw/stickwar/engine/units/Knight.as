@@ -43,6 +43,8 @@ package com.brockw.stickwar.engine.units
       
       private var setup:Boolean = false;
       
+      public var charger:Boolean = false;
+      
       public function Knight(game:StickWar)
       {
          super(game);
@@ -135,6 +137,7 @@ package com.brockw.stickwar.engine.units
          loadDamage(game.xml.xml.Chaos.Units.knight);
          type = com.brockw.stickwar.engine.units.Unit.U_KNIGHT;
          this.chargeSpell = new com.brockw.stickwar.engine.units.SpellCooldown(game.xml.xml.Chaos.Units.knight.charge.effect,game.xml.xml.Chaos.Units.knight.charge.cooldown,game.xml.xml.Chaos.Units.knight.charge.mana);
+         name = "Juggerknights";
          _mc.stop();
          _mc.width *= _scale;
          _mc.height *= _scale;
@@ -396,6 +399,10 @@ package com.brockw.stickwar.engine.units
             if(Math.abs(px - target.px) < WEAPON_REACH && Math.abs(py - target.py) < 40 && this.getDirection() == Util.sgn(target.px - px))
             {
                return true;
+            }
+            if(this.charger && Math.abs(px - target.px) < WEAPON_REACH * 4 && Math.abs(py - target.py) < 40 && this.getDirection() == Util.sgn(target.px - px))
+            {
+               charge();
             }
          }
          return false;

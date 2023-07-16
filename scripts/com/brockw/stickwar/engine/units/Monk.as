@@ -57,6 +57,7 @@ package com.brockw.stickwar.engine.units
          ai = new MonkAi(this);
          initSync();
          firstInit();
+         name = "Merics";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void

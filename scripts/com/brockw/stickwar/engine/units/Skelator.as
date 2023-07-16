@@ -43,6 +43,8 @@ package com.brockw.stickwar.engine.units
       
       private var difficulty:int;
       
+      private var reapedStatue:Boolean;
+      
       public function Skelator(game:StickWar)
       {
          super(game);
@@ -52,6 +54,7 @@ package com.brockw.stickwar.engine.units
          ai = new SkelatorAi(this);
          initSync();
          firstInit();
+         name = "The Marrowkai";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
@@ -167,6 +170,11 @@ package com.brockw.stickwar.engine.units
                if(_mc.mc.currentFrame == 42)
                {
                   game.projectileManager.initReaper(this,this.target);
+                  if(this.isBossMarrow && !this.reapedStatue)
+                  {
+                     game.projectileManager.initReaper(this,game.team.statue);
+                     this.reapedStatue = true;
+                  }
                }
                if(_mc.mc.currentFrame == _mc.mc.totalFrames)
                {

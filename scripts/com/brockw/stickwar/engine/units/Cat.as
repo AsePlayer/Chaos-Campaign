@@ -46,6 +46,7 @@ package com.brockw.stickwar.engine.units
          initSync();
          firstInit();
          this.target = null;
+         name = "Crawlers";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
