@@ -130,7 +130,7 @@ package com.brockw.stickwar.engine.multiplayer
       {
          var unit:Unit = game.unitFactory.getUnit(u);
          var item:XMLList = game.team.buttonInfoMap[u][2];
-         this.unitUnlocked.push([item.name,item.info,game.unitFactory.getProfile(u)]);
+         this.unitUnlocked.push([unit.name,item.info,game.unitFactory.getProfile(u)]);
          game.unitFactory.returnUnit(unit.type,unit);
       }
       
@@ -185,7 +185,7 @@ package com.brockw.stickwar.engine.multiplayer
             this.mc.exit.text.text = "Continue";
             this.mc.singlePlayerOverlay.visible = true;
             this.mc.timer.visible = true;
-            this.mc.saveReplay.text.text = "Play Online";
+            this.mc.saveReplay.text.text = "Play More Mods";
             this.mc.saveReplay.visible = true;
             if(!this.wasWin)
             {
@@ -227,7 +227,8 @@ package com.brockw.stickwar.engine.multiplayer
       {
          var gapSize:Number = this.D_WIDTH / (records.length / 2 - 1);
          var incrementSize:Number = this.D_HEIGHT / max;
-         for(var i:int = isEven ? 0 : 1; i < records.length; i += 2)
+         var i:int = isEven ? 0 : 1;
+         while(i < records.length)
          {
             if(i == 0 || i == 1)
             {
@@ -237,6 +238,7 @@ package com.brockw.stickwar.engine.multiplayer
             {
                canvas.graphics.lineTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * records[i] + yOffset);
             }
+            i += 2;
          }
       }
       
@@ -265,19 +267,23 @@ package com.brockw.stickwar.engine.multiplayer
          this.displayGraphBackgroundHighlight.graphics.clear();
          var maxMiners:int = 0;
          var maxPopulation:int = 0;
-         for(i = 0; i < this.economyRecords.length; i++)
+         i = 0;
+         while(i < this.economyRecords.length)
          {
             if(this.economyRecords[i] > maxMiners)
             {
                maxMiners = int(this.economyRecords[i]);
             }
+            i++;
          }
-         for(i = 0; i < this.militaryRecords.length; i++)
+         i = 0;
+         while(i < this.militaryRecords.length)
          {
             if(this.militaryRecords[i] > maxPopulation)
             {
                maxPopulation = int(this.militaryRecords[i]);
             }
+            i++;
          }
          var max:int = Math.max(maxMiners,maxPopulation);
          var gapSize:Number = this.D_WIDTH / (this.economyRecords.length / 2 - 1);
@@ -292,7 +298,8 @@ package com.brockw.stickwar.engine.multiplayer
          }
          this.textBoxes = [];
          prevValue = "";
-         for(i = 0; i < this.D_WIDTH / TEXT_SPACING; i++)
+         i = 0;
+         while(i < this.D_WIDTH / TEXT_SPACING)
          {
             newTxt = new TextField();
             newTxt.y = this.D_HEIGHT + 3;
@@ -309,9 +316,11 @@ package com.brockw.stickwar.engine.multiplayer
             newTxt.mouseEnabled = false;
             this.displayGraph.addChild(newTxt);
             this.textBoxes.push(newTxt);
+            i++;
          }
          prevValue = "";
-         for(i = 0; i < this.D_HEIGHT / TEXT_SPACING + 1; i++)
+         i = 0;
+         while(i < this.D_HEIGHT / TEXT_SPACING + 1)
          {
             newTxt = new TextField();
             newTxt.y = this.D_HEIGHT - i * TEXT_SPACING - 6;
@@ -328,6 +337,7 @@ package com.brockw.stickwar.engine.multiplayer
             prevValue = newTxt.text;
             this.displayGraph.addChild(newTxt);
             this.textBoxes.push(newTxt);
+            i++;
          }
          this.mc.timer.text = getTimeFormat(this.militaryRecords.length);
       }
@@ -379,13 +389,13 @@ package com.brockw.stickwar.engine.multiplayer
          var url:URLRequest = null;
          if(this.mode == PostGameScreen.M_CAMPAIGN)
          {
-            url = new URLRequest("http://www.stickempires.com");
+            url = new URLRequest("https://www.aseplayer.com/sw2-mods");
             navigateToURL(url,"_blank");
             this.main.soundManager.playSoundFullVolume("clickButton");
          }
          else if(this.mode == PostGameScreen.M_SINGLEPLAYER)
          {
-            url = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
+            url = new URLRequest("https://www.aseplayer.com/sw2-mods");
             navigateToURL(url,"_blank");
          }
          else

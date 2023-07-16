@@ -469,7 +469,7 @@ package com.brockw.stickwar.campaign
       
       private function stickWarButton(e:Event) : void
       {
-         var url:URLRequest = new URLRequest("https://drive.google.com/drive/folders/1cwJ1NcCoHzrG3Z4qERPLDTbvwPFFDXbo?usp=sharing");
+         var url:URLRequest = new URLRequest("https://www.aseplayer.com/sw2-mods");
          navigateToURL(url,"_blank");
          if(this.main.tracker != null)
          {
@@ -479,7 +479,7 @@ package com.brockw.stickwar.campaign
       
       private function openIntroLink(e:Event) : void
       {
-         var url:URLRequest = new URLRequest("http://www.stickpage.com/stickwar2orderempireintro.shtml");
+         var url:URLRequest = new URLRequest("https://youtu.be/xJOMmisl54M");
          navigateToURL(url,"_blank");
          if(this.main.tracker != null)
          {
