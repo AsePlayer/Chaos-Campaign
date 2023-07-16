@@ -51,6 +51,10 @@ package com.brockw.stickwar.engine.projectile
          this.slowFrames = 0;
          this.poisonDamage = 0;
          this.timeOfFlight = 20;
+         if(target == team.enemyTeam.statue)
+         {
+            this.timeOfFlight *= 3;
+         }
          this.targetUnit = target;
          this.scaleX = team.game.backScale + py / team.game.map.height * (team.game.frontScale - team.game.backScale);
          this.scaleY = team.game.backScale + py / team.game.map.height * (team.game.frontScale - team.game.backScale);
