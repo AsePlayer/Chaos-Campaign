@@ -164,6 +164,7 @@ package com.brockw.stickwar.engine
          this._period = 33.333333333333336;
          this._period = 33.333333333333336;
          this._period = 33.333333333333336;
+         this._period = 33.333333333333336;
          this.devHotkeys = [];
          ++main.loadingFraction;
          this.lastButton = null;
@@ -1202,7 +1203,7 @@ package com.brockw.stickwar.engine
          {
             this.selectedUnits.nextSelectedUnitType();
          }
-         if(this.keyBoardState.isCtrl && !this.keyBoardState.isShift && this.keyBoardState.isPressed(49))
+         if(this.keyBoardState.isCtrl && this.keyBoardState.isPressed(49))
          {
             if(!this.keyBoardState.isShift)
             {
@@ -1217,7 +1218,7 @@ package com.brockw.stickwar.engine
                }
             }
          }
-         if(this.keyBoardState.isCtrl && !this.keyBoardState.isShift && this.keyBoardState.isPressed(50))
+         if(this.keyBoardState.isCtrl && this.keyBoardState.isPressed(50))
          {
             if(!this.keyBoardState.isShift)
             {
@@ -1232,7 +1233,7 @@ package com.brockw.stickwar.engine
                }
             }
          }
-         if(this.keyBoardState.isCtrl && !this.keyBoardState.isShift && this.keyBoardState.isPressed(51))
+         if(this.keyBoardState.isCtrl && this.keyBoardState.isPressed(51))
          {
             if(!this.keyBoardState.isShift)
             {
@@ -1247,7 +1248,7 @@ package com.brockw.stickwar.engine
                }
             }
          }
-         if(this.keyBoardState.isCtrl && !this.keyBoardState.isShift && this.keyBoardState.isPressed(52))
+         if(this.keyBoardState.isCtrl && this.keyBoardState.isPressed(52))
          {
             if(!this.keyBoardState.isShift)
             {
@@ -1262,7 +1263,7 @@ package com.brockw.stickwar.engine
                }
             }
          }
-         if(this.keyBoardState.isCtrl && !this.keyBoardState.isShift && this.keyBoardState.isPressed(53))
+         if(this.keyBoardState.isCtrl && this.keyBoardState.isPressed(53))
          {
             if(!this.keyBoardState.isShift)
             {
@@ -1277,7 +1278,7 @@ package com.brockw.stickwar.engine
                }
             }
          }
-         if(this.keyBoardState.isCtrl && !this.keyBoardState.isShift && this.keyBoardState.isPressed(54))
+         if(this.keyBoardState.isCtrl && this.keyBoardState.isPressed(54))
          {
             if(!this.keyBoardState.isShift)
             {
@@ -1292,7 +1293,7 @@ package com.brockw.stickwar.engine
                }
             }
          }
-         if(this.keyBoardState.isCtrl && !this.keyBoardState.isShift && this.keyBoardState.isPressed(55))
+         if(this.keyBoardState.isCtrl && this.keyBoardState.isPressed(55))
          {
             if(!this.keyBoardState.isShift)
             {
@@ -1307,7 +1308,7 @@ package com.brockw.stickwar.engine
                }
             }
          }
-         if(this.keyBoardState.isCtrl && !this.keyBoardState.isShift && this.keyBoardState.isPressed(56))
+         if(this.keyBoardState.isCtrl && this.keyBoardState.isPressed(56))
          {
             if(!this.keyBoardState.isShift)
             {
@@ -1322,7 +1323,7 @@ package com.brockw.stickwar.engine
                }
             }
          }
-         if(this.keyBoardState.isCtrl && !this.keyBoardState.isShift && this.keyBoardState.isPressed(57))
+         if(this.keyBoardState.isCtrl && this.keyBoardState.isPressed(57))
          {
             if(!this.keyBoardState.isShift)
             {
