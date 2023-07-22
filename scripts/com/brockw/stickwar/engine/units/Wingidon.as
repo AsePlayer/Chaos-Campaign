@@ -165,6 +165,10 @@ package com.brockw.stickwar.engine.units
          {
             aim(null);
             aimedAtUnit(null,0);
+            if(!isFeetMoving())
+            {
+               this.wingidonSpeedSpell.increaseFalloff = true;
+            }
             if(this.wingidonSpeedSpell.inEffect() && _maxVelocity > this.increasedVelocity)
             {
                _maxVelocity += 0.025;

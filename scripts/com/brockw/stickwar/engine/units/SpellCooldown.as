@@ -14,11 +14,16 @@ package com.brockw.stickwar.engine.units
       
       private var mana:int = 0;
       
+      public var increaseFalloff:Boolean;
+      
+      public var effectShortened:int;
+      
       public function SpellCooldown(effect:int, cooldownTime:int, mana:int)
       {
          super();
          this.cooldownTime = cooldownTime;
          this.effect = effect;
+         this.effectShortened = effect;
          this.mana = mana;
          this.counter = effect + cooldownTime;
       }
@@ -29,6 +34,8 @@ package com.brockw.stickwar.engine.units
          {
             team.mana -= this.mana;
             this.counter = 0;
+            this.effectShortened = effect;
+            this.increaseFalloff = false;
             return true;
          }
          return false;
@@ -37,6 +44,11 @@ package com.brockw.stickwar.engine.units
       public function update() : void
       {
          ++this.counter;
+         if(this.increaseFalloff)
+         {
+            --this.effectShortened;
+            --this.effectShortened;
+         }
       }
       
       public function timeRunning() : Number
@@ -46,6 +58,10 @@ package com.brockw.stickwar.engine.units
       
       public function inEffect() : Boolean
       {
+         if(this.increaseFalloff)
+         {
+            return this.counter < this.effectShortened;
+         }
          return this.counter < this.effect;
       }
       
