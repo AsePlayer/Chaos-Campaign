@@ -59,7 +59,11 @@ package com.brockw.stickwar.engine.projectile
                dz = dx = dy = 0;
                minDamage = this.explosionDamage;
                maxDamage = this.explosionDamage;
-               if(this.whoNuked == "medusaTargeter")
+               if(minDamage < 20)
+               {
+                  minDamage = 20;
+               }
+               if(this.whoNuked == "medusaTargeter" || this.whoNuked == "stunBomber")
                {
                   if(unit.type == Unit.U_MEDUSA)
                   {

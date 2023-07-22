@@ -150,6 +150,10 @@ package com.brockw.stickwar.engine.units
             this.ai.medusaTargeter = true;
             isNormal = false;
          }
+         if(this.bomberType == "stunBomber")
+         {
+            isNormal = false;
+         }
          if(this.bomberType == "statueTargeter" || this.bomberType == "statueEndsHere")
          {
             this.ai.statueTargeter = true;
@@ -230,6 +234,8 @@ package com.brockw.stickwar.engine.units
             else
             {
                this.detonate();
+               team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
+               team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
                _mc.gotoAndStop(getDeathLabel(game));
                this.team.removeUnit(this,game);
                isDead = true;
@@ -241,7 +247,7 @@ package com.brockw.stickwar.engine.units
             _mc.gotoAndStop(getDeathLabel(game));
             _mc.mc.alpha = 0;
          }
-         if(this.bomberType == "medusaTargeter" && !specialTimeOver && !stoned)
+         if((this.bomberType == "medusaTargeter" || this.bomberType == "stunBomber") && !specialTimeOver && !stoned)
          {
             com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"C4","Red Bike Helmet","");
          }
@@ -304,10 +310,7 @@ package com.brockw.stickwar.engine.units
             this.clusterLad.applyVelocity(1 * randomNumber * Util.sgn(mc.scaleX));
             team.population += 3;
          }
-         team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
          this.damage(0,this.maxHealth,null);
-         team.game.projectileManager.initNuke(px,py,this,20);
-         trace("Bomber detonated");
       }
       
       override public function get damageToArmour() : Number

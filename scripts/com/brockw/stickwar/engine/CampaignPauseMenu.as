@@ -58,7 +58,8 @@ package com.brockw.stickwar.engine
       
       private function restartButton(evt:Event) : void
       {
-         gameScreen.main.showScreen(gameScreen.main.currentScreen(),true);
+         gameScreen.team.statue.health = 0;
+         this.hideMenu();
       }
       
       private function backButton(evt:Event) : void
