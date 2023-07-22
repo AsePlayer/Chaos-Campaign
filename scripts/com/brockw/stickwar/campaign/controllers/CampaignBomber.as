@@ -402,7 +402,10 @@ package com.brockw.stickwar.campaign.controllers
             }
             if(!this.spawnedMiners)
             {
-               gameScreen.game.targetScreenX = this.queenMedusa.px - 200;
+               if(gameScreen.team.statue && gameScreen.team.statue.health > 0 && gameScreen.team.enemyTeam.statue && gameScreen.team.enemyTeam.statue.health > 0)
+               {
+                  gameScreen.game.targetScreenX = this.queenMedusa.px - 200;
+               }
             }
          }
          gameScreen.game.team.enemyTeam.tech.isResearchedMap[Tech.GIANT_GROWTH_I] = true;

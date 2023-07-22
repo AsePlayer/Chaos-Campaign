@@ -184,6 +184,8 @@ package com.brockw.stickwar.campaign.controllers
       
       private var miner3:MinerChaos;
       
+      private var minerStatueOffset:int;
+      
       public function CampaignShadow(gameScreen:GameScreen)
       {
          this.bomberFrequencyIncreaseAt = 3;
@@ -251,7 +253,7 @@ package com.brockw.stickwar.campaign.controllers
          {
             this.maxDeads = gameScreen.team.game.main.campaign.difficultyLevel;
          }
-         if(this.message2 && gameScreen.contains(this.message2) && !gameScreen.isPaused)
+         if(this.message2 && gameScreen.contains(this.message2) && !gameScreen.isPaused && gameScreen.game.winner == null)
          {
             this.message2.update();
             if(this.frames++ > 30 * 8)
@@ -260,7 +262,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         else if(this.message3 && gameScreen.contains(this.message3) && !gameScreen.isPaused)
+         else if(this.message3 && gameScreen.contains(this.message3) && !gameScreen.isPaused && gameScreen.game.winner == null)
          {
             this.message3.update();
             if(this.frames++ > 30 * 6)
@@ -269,7 +271,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         else if(this.message4 && gameScreen.contains(this.message4) && !gameScreen.isPaused)
+         else if(this.message4 && gameScreen.contains(this.message4) && !gameScreen.isPaused && gameScreen.game.winner == null)
          {
             this.message4.update();
             if(this.frames++ > 30 * 8)
@@ -278,7 +280,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         else if(this.message5 && gameScreen.contains(this.message5) && !gameScreen.isPaused)
+         else if(this.message5 && gameScreen.contains(this.message5) && !gameScreen.isPaused && gameScreen.game.winner == null)
          {
             this.message5.update();
             if(this.frames++ > 30 * 7)
@@ -287,7 +289,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         else if(this.message6 && gameScreen.contains(this.message6) && !gameScreen.isPaused)
+         else if(this.message6 && gameScreen.contains(this.message6) && !gameScreen.isPaused && gameScreen.game.winner == null)
          {
             this.message6.update();
             if(this.frames++ > 30 * 7)
@@ -305,7 +307,7 @@ package com.brockw.stickwar.campaign.controllers
                this.frames = -1;
             }
          }
-         if(this.message && gameScreen.contains(this.message) && !gameScreen.isPaused)
+         if(this.message && gameScreen.contains(this.message) && !gameScreen.isPaused && gameScreen.game.winner == null)
          {
             this.message.update();
             if(this.frames++ > 30 * 7)
@@ -470,11 +472,20 @@ package com.brockw.stickwar.campaign.controllers
             }
             else if(this.currentLevelTitle == "Apex Of The Forest: Crawlers Attack")
             {
-               if(gameScreen.team.unitGroups[Unit.U_BOMBER].length < 1)
+               if(!bomber || bomber && bomber.isDead)
                {
-                  gameScreen.team.spawn(Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER)),gameScreen.game);
+                  bomber = Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER));
+                  bomber.bomberType = "stunBomber";
+                  gameScreen.team.spawn(bomber,gameScreen.game);
                   ++gameScreen.team.population;
-                  if(this.messageOpening && !gameScreen.contains(this.messageOpening) && this.messageCounter == 0)
+                  _loc9_ = new UnitMove();
+                  _loc9_.moveType = UnitCommand.ATTACK_MOVE;
+                  _loc9_.units.push(bomber.id);
+                  _loc9_.owner = gameScreen.team.id;
+                  _loc9_.arg0 = gameScreen.team.enemyTeam.statue.px;
+                  _loc9_.arg1 = gameScreen.team.enemyTeam.statue.py;
+                  _loc9_.execute(gameScreen.game);
+                  if(this.message3 && !gameScreen.contains(this.message3) && !(this.message5 && gameScreen.contains(this.message5)) && this.messageCounter == 1)
                   {
                      this.message3 = new InGameMessage("",gameScreen.game);
                      this.message3.x = gameScreen.game.stage.stageWidth / 2;
@@ -482,10 +493,22 @@ package com.brockw.stickwar.campaign.controllers
                      this.message3.scaleX *= 1.3;
                      this.message3.scaleY *= 1.3;
                      gameScreen.addChild(this.message3);
-                     this.message3.setMessage("The recently conquered Bombers are keen to display unwavering loyalty to Medusa. When the dust settles, one will always rise to the occasion!","");
+                     this.message3.setMessage("Stun Bombers, who dared make an attempt on the Queen\'s life, will now face their punishment in a solemn death march: one by one...","");
                      this.frames = 0;
-                     this.messageCounter = 1;
+                     this.messageCounter = 2;
                   }
+               }
+               if(this.messageOpening && !gameScreen.contains(this.messageOpening) && this.messageCounter == 0)
+               {
+                  this.message3 = new InGameMessage("",gameScreen.game);
+                  this.message3.x = gameScreen.game.stage.stageWidth / 2;
+                  this.message3.y = gameScreen.game.stage.stageHeight / 4 - 75;
+                  this.message3.scaleX *= 1.3;
+                  this.message3.scaleY *= 1.3;
+                  gameScreen.addChild(this.message3);
+                  this.message3.setMessage("The recently conquered Bombers are excited to display unwavering loyalty to Medusa in this battle...","");
+                  this.frames = 0;
+                  this.messageCounter = 1;
                }
                if(!gameScreen.isPaused)
                {
@@ -765,8 +788,11 @@ package com.brockw.stickwar.campaign.controllers
                   _loc9_.moveType = UnitCommand.ATTACK_MOVE;
                   for each(wingidon in gameScreen.team.unitGroups[Unit.U_WINGIDON])
                   {
-                     _loc9_.units.push(wingidon.id);
-                     _loc9_.owner = gameScreen.team.id;
+                     if(wingidon.isFeetMoving())
+                     {
+                        _loc9_.units.push(wingidon.id);
+                        _loc9_.owner = gameScreen.team.id;
+                     }
                   }
                   _loc9_.arg0 = this.queenMedusa.px;
                   _loc9_.arg1 = this.queenMedusa.py;
@@ -814,7 +840,7 @@ package com.brockw.stickwar.campaign.controllers
                else if(gameScreen.game.frame > this.timeUntilRescue && !this.hasted)
                {
                   i = 0;
-                  while(i < 6 * this.difficulty)
+                  while(i < 6 + 3 * this.difficulty)
                   {
                      gameScreen.team.spawn(Wingidon(gameScreen.game.unitFactory.getUnit(Unit.U_WINGIDON)),gameScreen.game);
                      i++;
@@ -825,8 +851,9 @@ package com.brockw.stickwar.campaign.controllers
                      {
                         if(wingidon.speedSpellCooldown() == 0)
                         {
-                           gameScreen.team.mana += 50;
-                           gameScreen.team.population += 3;
+                           gameScreen.team.gold += 100 - 25 * this.difficulty;
+                           gameScreen.team.mana += 25;
+                           gameScreen.team.population += 2;
                            wingidon.speedSpell();
                         }
                      }
@@ -860,7 +887,6 @@ package com.brockw.stickwar.campaign.controllers
             }
             else if(this.currentLevelTitle == "Marrowkai\'s Power Grab: Reclaiming the Throne")
             {
-               CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.75);
                for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_DEAD])
                {
                   if(u.isNormal)
@@ -895,7 +921,7 @@ package com.brockw.stickwar.campaign.controllers
                   {
                      u.isNormal = false;
                      this.randomNumber = Math.random() * 100;
-                     if(gameScreen.game.frame > 5000)
+                     if(gameScreen.game.frame > 3000)
                      {
                         this.randomNumber += Math.random() * 50;
                      }
@@ -983,7 +1009,10 @@ package com.brockw.stickwar.campaign.controllers
                }
                if(!this.cutsceneDone)
                {
-                  gameScreen.game.targetScreenX = gameScreen.game.map.width / 2 - 425;
+                  if(gameScreen.team.statue && gameScreen.team.statue.health > 0 && gameScreen.team.enemyTeam.statue && gameScreen.team.enemyTeam.statue.health > 0)
+                  {
+                     gameScreen.game.targetScreenX = gameScreen.game.map.width / 2 - 425;
+                  }
                   this.queenMedusa.px = gameScreen.game.map.width / 2 - 150;
                   this.queenMedusa.py = gameScreen.game.map.height / 2 - 25;
                   this.queenMedusa.ai.mayMove = false;
@@ -1073,10 +1102,11 @@ package com.brockw.stickwar.campaign.controllers
                         gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
                         gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
                         gameScreen.team.spawn(Miner(gameScreen.game.unitFactory.getUnit(Unit.U_CHAOS_MINER)),gameScreen.game);
+                        this.minerStatueOffset = 0;
                      }
                      if(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0])
                      {
-                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].px = gameScreen.team.statue.px + 35;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].px = gameScreen.team.statue.px + 35 + this.minerStatueOffset;
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].py = gameScreen.team.statue.py - 6;
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].faceDirection(1);
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][0].isGodmoded = true;
@@ -1096,7 +1126,7 @@ package com.brockw.stickwar.campaign.controllers
                      }
                      if(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1])
                      {
-                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].px = gameScreen.team.statue.px - 25;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].px = gameScreen.team.statue.px - 25 + this.minerStatueOffset;
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].py = gameScreen.team.statue.py - 16;
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].faceDirection(1);
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][1].isGodmoded = true;
@@ -1117,7 +1147,7 @@ package com.brockw.stickwar.campaign.controllers
                      }
                      if(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2])
                      {
-                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].px = gameScreen.team.statue.px + 50;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].px = gameScreen.team.statue.px + 50 + this.minerStatueOffset;
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].py = gameScreen.team.statue.py + 25;
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].faceDirection(1);
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][2].isGodmoded = true;
@@ -1138,7 +1168,7 @@ package com.brockw.stickwar.campaign.controllers
                      }
                      if(gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3])
                      {
-                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].px = gameScreen.team.statue.px + -15;
+                        gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].px = gameScreen.team.statue.px - 15 + this.minerStatueOffset;
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].py = gameScreen.team.statue.py + 30;
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].faceDirection(1);
                         gameScreen.team.unitGroups[Unit.U_CHAOS_MINER][3].isGodmoded = true;
@@ -1159,10 +1189,26 @@ package com.brockw.stickwar.campaign.controllers
                      }
                   }
                }
+               if(gameScreen.game.frame < 1000)
+               {
+                  CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.75);
+               }
+               else if(gameScreen.game.frame < 1800)
+               {
+                  CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(2);
+               }
+               else if(this.spawnedBackupJug)
+               {
+                  CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.8);
+               }
+               else
+               {
+                  CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.7);
+               }
             }
             else
             {
-               gameScreen.team.statue.health = 0;
+               gameScreen.team.enemyTeam.statue.health = 0;
             }
          }
       }
