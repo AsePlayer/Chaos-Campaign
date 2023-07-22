@@ -41,7 +41,7 @@ package com.brockw.stickwar.campaign
          this.summaryMc.endOfGameText.text = "";
          var total:int = 0;
          var best:int = 0;
-         this.summaryMc.endOfGameText.text += "You have finished Stick War II on ";
+         this.summaryMc.endOfGameText.text += "You have finished Stick War II: Chaos Empire Campaign on ";
          if(this.main.campaign.difficultyLevel == Campaign.D_NORMAL)
          {
             this.summaryMc.endOfGameText.text += "NORMAL!\n";
@@ -59,7 +59,8 @@ package com.brockw.stickwar.campaign
          }
          var maxLength:int = 0;
          var maxRetryLength:int = 0;
-         for(i = 0; i < this.main.campaign.levels.length; i++)
+         i = 0;
+         while(i < this.main.campaign.levels.length)
          {
             l = this.main.campaign.levels[i];
             retryText = "";
@@ -75,8 +76,10 @@ package com.brockw.stickwar.campaign
             {
                maxLength = l.title.length;
             }
+            i++;
          }
-         for(i = 0; i < this.main.campaign.levels.length; i++)
+         i = 0;
+         while(i < this.main.campaign.levels.length)
          {
             l = this.main.campaign.levels[i];
             if(l.bestTime < 0)
@@ -91,18 +94,23 @@ package com.brockw.stickwar.campaign
             }
             else
             {
-               for(j = 0; j < maxRetryLength; j++)
+               j = 0;
+               while(j < maxRetryLength)
                {
+                  j++;
                }
             }
-            for(j = l.title.length; j < maxLength; j++)
+            j = l.title.length;
+            while(j < maxLength)
             {
                newTitle += " ";
+               j++;
             }
             this.summaryMc.endOfGameText.text += "\n" + (newTitle + " " + PostGameScreen.getTimeFormat(l.bestTime));
             this.summaryMc.endOfGameText.text += retryText;
             total += l.totalTime;
             best += l.bestTime;
+            i++;
          }
          if(this.main.campaign.difficultyLevel == Campaign.D_NORMAL)
          {
@@ -134,7 +142,7 @@ package com.brockw.stickwar.campaign
       
       private function playOnline(e:Event) : void
       {
-         var url:URLRequest = new URLRequest("http://www.stickempires.com");
+         var url:URLRequest = new URLRequest("https://www.paypal.com/donate/?hosted_button_id=EAQQPFT8SDLD6");
          navigateToURL(url,"_blank");
          if(this.main.tracker != null)
          {
@@ -153,7 +161,7 @@ package com.brockw.stickwar.campaign
       {
          this.selectInCount = 2;
          this.hasShared = true;
-         System.setClipboard(this.summaryMc.endOfGameText.text);
+         System.setClipboard("```\n" + this.summaryMc.endOfGameText.text + "\n```");
          this.main.soundManager.playSoundFullVolume("clickButton");
       }
       

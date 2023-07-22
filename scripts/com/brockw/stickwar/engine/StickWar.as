@@ -534,12 +534,14 @@ package com.brockw.stickwar.engine
             skip = 10 + (dParent.numChildren - 60);
          }
          var isOdd:int = this.random.nextInt() % skip;
-         for(var i:int = dParent.numChildren - 1 - isOdd; i > 0; )
+         var i:int = dParent.numChildren - 1 - isOdd;
+         while(i > 0)
          {
             bFlipped = false;
-            for(o = 0; o < i; o++)
+            o = 0;
+            while(o < i)
             {
-               if(dParent.getChildAt(o) is Entity && dParent.getChildAt(o + 1) is Entity)
+               if(dParent.getChildAt(o) is com.brockw.stickwar.engine.Entity && dParent.getChildAt(o + 1) is com.brockw.stickwar.engine.Entity)
                {
                   if(Entity(dParent.getChildAt(o)).py > Entity(dParent.getChildAt(o + 1)).py)
                   {
@@ -547,6 +549,7 @@ package com.brockw.stickwar.engine
                      bFlipped = true;
                   }
                }
+               o++;
             }
             if(!bFlipped)
             {

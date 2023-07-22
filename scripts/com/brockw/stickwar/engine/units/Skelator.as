@@ -128,7 +128,7 @@ package com.brockw.stickwar.engine.units
             healthBar.totalHealth = maxHealth;
             isMiniBoss = true;
             this.bossMarrowSetupComplete = true;
-            this.difficulty = 3;
+            this.difficulty = game.main.campaign.difficultyLevel;
          }
          var num:int = 0;
          this.fistAttackSpell.update();
@@ -157,6 +157,7 @@ package com.brockw.stickwar.engine.units
                if(_mc.mc.currentFrame >= 27 && (_mc.mc.currentFrame - 27) % 5 == 0 && num < 6 + 1.5 * this.difficulty)
                {
                   game.projectileManager.initFistAttack(this.spellX,this.spellY,this,num);
+                  heal(maxHealth / (maxHealth / 20),1);
                }
                if(_mc.mc.currentFrame == _mc.mc.totalFrames)
                {
@@ -170,7 +171,8 @@ package com.brockw.stickwar.engine.units
                if(_mc.mc.currentFrame == 42)
                {
                   game.projectileManager.initReaper(this,this.target);
-                  if(this.isBossMarrow && !this.reapedStatue)
+                  heal(maxHealth / 20,1);
+                  if(this.isBossMarrow)
                   {
                      game.projectileManager.initReaper(this,game.team.statue);
                      this.reapedStatue = true;
