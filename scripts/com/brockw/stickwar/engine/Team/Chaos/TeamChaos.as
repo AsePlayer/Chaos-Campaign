@@ -67,6 +67,7 @@ package com.brockw.stickwar.engine.Team.Chaos
          unitInfo[Unit.U_KNIGHT] = [game.xml.xml.Chaos.Units.knight.gold * handicap,game.xml.xml.Chaos.Units.knight.mana * handicap];
          unitInfo[Unit.U_MEDUSA] = [game.xml.xml.Chaos.Units.medusa.gold * handicap,game.xml.xml.Chaos.Units.medusa.mana * handicap];
          unitInfo[Unit.U_GIANT] = [game.xml.xml.Chaos.Units.giant.gold * handicap,game.xml.xml.Chaos.Units.giant.mana * handicap];
+         unitInfo[Unit.U_ENSLAVED_GIANT] = [game.xml.xml.Order.Units.giant.gold * handicap,game.xml.xml.Order.Units.giant.mana * handicap];
          unitInfo[Unit.U_CHAOS_MINER] = [game.xml.xml.Chaos.Units.miner.gold * handicap,game.xml.xml.Chaos.Units.miner.mana * handicap];
          unitInfo[Unit.U_CHAOS_TOWER] = [game.xml.xml.Order.Units.tower.gold * handicap,game.xml.xml.Order.Units.tower.mana * handicap];
          buildingHighlights = [];

@@ -3,6 +3,7 @@ package com.brockw.stickwar.engine.units
    import com.brockw.game.Util;
    import com.brockw.stickwar.engine.Ai.EnslavedGiantAi;
    import com.brockw.stickwar.engine.StickWar;
+   import com.brockw.stickwar.engine.Team.Team;
    import com.brockw.stickwar.engine.Team.Tech;
    import com.brockw.stickwar.market.MarketItem;
    import flash.display.MovieClip;
@@ -31,7 +32,7 @@ package com.brockw.stickwar.engine.units
          ai = new EnslavedGiantAi(this);
          initSync();
          firstInit();
-         name = "Enslaved Giants";
+         name = "The Enslaved Giant";
       }
       
       public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
@@ -82,7 +83,14 @@ package com.brockw.stickwar.engine.units
       
       override public function setBuilding() : void
       {
-         building = team.buildings["SiegeBuilding"];
+         if(this.team.type == Team.T_GOOD)
+         {
+            building = team.buildings["SiegeBuilding"];
+         }
+         else
+         {
+            building = team.buildings["GiantBuilding"];
+         }
       }
       
       override public function update(game:StickWar) : void
