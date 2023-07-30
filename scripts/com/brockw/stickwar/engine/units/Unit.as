@@ -1951,5 +1951,22 @@ package com.brockw.stickwar.engine.units
       {
          this._hasDefaultLoadout = value;
       }
+      
+      public function explode(u:com.brockw.stickwar.engine.units.Unit) : void
+      {
+         if(u)
+         {
+            this.team.enemyTeam.game.projectileManager.initNuke(px,py,u,10);
+         }
+         else if(this.team.enemyTeam.units[0])
+         {
+            this.team.enemyTeam.game.projectileManager.initNuke(px,py,this.team.enemyTeam.units[0],10);
+         }
+         else
+         {
+            this.team.enemyTeam.game.projectileManager.initNuke(px,py,this.team.units[0],10);
+         }
+         this.team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
+      }
    }
 }
