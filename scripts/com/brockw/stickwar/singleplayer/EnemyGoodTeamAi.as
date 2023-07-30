@@ -213,6 +213,7 @@ package com.brockw.stickwar.singleplayer
          var ninja:Ninja = null;
          var target:Unit = null;
          team.tech.isResearchedMap[Tech.CLOAK] = true;
+         team.tech.isResearchedMap[Tech.CLOAK_II] = true;
          team.mana = 500;
          for each(ninja in team.unitGroups[Unit.U_NINJA])
          {
