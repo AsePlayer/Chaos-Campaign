@@ -145,6 +145,10 @@ package com.brockw.stickwar.engine.units
             this.ai.minerTargeter = true;
             isNormal = false;
          }
+         if(this.bomberType == "medusaToxicSpawn")
+         {
+            isNormal = false;
+         }
          if(this.bomberType == "medusaTargeter")
          {
             this.ai.medusaTargeter = true;
@@ -255,7 +259,7 @@ package com.brockw.stickwar.engine.units
          {
             com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"Rocket","Flash","");
          }
-         else if(this.bomberType == "minerTargeter" && !specialTimeOver && !stoned)
+         else if((this.bomberType == "minerTargeter" || this.bomberType == "medusaToxicSpawn") && !specialTimeOver && !stoned)
          {
             com.brockw.stickwar.engine.units.Bomber.setItem(_bomber(mc),"Flask","Scientist","");
          }
@@ -273,7 +277,7 @@ package com.brockw.stickwar.engine.units
       {
          var randomNumber:int = 0;
          var randomNumber2:int = 0;
-         if(this.bomberType == "minerTargeter")
+         if(this.bomberType == "minerTargeter" || this.bomberType == "medusaToxicSpawn")
          {
             team.game.projectileManager.initPoisonPool(px,py,this,5);
          }
