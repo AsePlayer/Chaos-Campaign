@@ -329,6 +329,10 @@ package com.brockw.stickwar.engine.projectile
          n.damageToDeal = damage;
          n.slowFrames = 0;
          n.isFire = isFire;
+         if(unit.type == Unit.U_FLYING_CROSSBOWMAN && unit.isExploder)
+         {
+            n.isExplode = true;
+         }
          n.setArrowGraphics(isFire);
          this.projectiles.push(n);
          unit.team.game.battlefield.addChild(n);
@@ -400,7 +404,10 @@ package com.brockw.stickwar.engine.projectile
          n.visible = true;
          if(Math.abs(x - unit.px) > unit.team.game.xml.xml.Order.Units.magikill.nuke.range)
          {
-            x = unit.px + Util.sgn(x - unit.px) * unit.team.game.xml.xml.Order.Units.magikill.nuke.range;
+            if(unit.type != Unit.U_FLYING_CROSSBOWMAN)
+            {
+               x = unit.px + Util.sgn(x - unit.px) * unit.team.game.xml.xml.Order.Units.magikill.nuke.range;
+            }
          }
          n.inflictor = unit;
          if(n.inflictor.type == Unit.U_BOMBER)
@@ -422,6 +429,51 @@ package com.brockw.stickwar.engine.projectile
          n.explosionDamage = damage;
          this.projectiles.push(n);
          unit.team.game.battlefield.addChild(n);
+         if(n.inflictor.type != Unit.U_MEDUSA)
+         {
+            unit.team.game.bloodManager.addAsh(x,y,unit.team.direction,unit.team.game);
+         }
+         else
+         {
+            n.visible = false;
+         }
+      }
+      
+      public function initSuperNuke(x:Number, y:Number, unit:Unit, damage:Number) : void
+      {
+         var n:Nuke = Nuke(this._projectileMap[Projectile.NUKE].getItem());
+         if(n == null)
+         {
+            return;
+         }
+         n.visible = true;
+         if(Math.abs(x - unit.px) > unit.team.game.xml.xml.Order.Units.magikill.nuke.range)
+         {
+            x = unit.px + Util.sgn(x - unit.px) * unit.team.game.xml.xml.Order.Units.magikill.nuke.range;
+         }
+         n.inflictor = unit;
+         if(n.inflictor.type == Unit.U_BOMBER)
+         {
+            n.whoNuked = n.inflictor.bomberType;
+         }
+         if(n.whoNuked == "minerTargeter")
+         {
+            damage /= 2;
+         }
+         n.nukeScale = 1.3;
+         n.explosionRadius *= 1.25;
+         n.px = x;
+         n.py = y;
+         n.team = unit.team;
+         n.x = n.px;
+         n.y = n.py;
+         Util.animateToNeutral(n.spellMc);
+         n.spellMc.gotoAndStop(1);
+         n.stunTime = 0;
+         n.explosionDamage = damage;
+         this.projectiles.push(n);
+         unit.team.game.battlefield.addChild(n);
+         unit.team.game.bloodManager.addAsh(x,y,unit.team.direction,unit.team.game);
          unit.team.game.bloodManager.addAsh(x,y,unit.team.direction,unit.team.game);
       }
       

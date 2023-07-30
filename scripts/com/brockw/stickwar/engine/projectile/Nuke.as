@@ -12,11 +12,13 @@ package com.brockw.stickwar.engine.projectile
       
       internal var spellMc:MovieClip;
       
-      internal var explosionRadius:Number;
+      public var explosionRadius:Number;
       
       internal var explosionDamage:Number;
       
       internal var whoNuked:String;
+      
+      public var nukeScale:Number = 1;
       
       public function Nuke(game:StickWar)
       {
@@ -39,7 +41,9 @@ package com.brockw.stickwar.engine.projectile
       {
          Util.animateMovieClip(this.spellMc,4);
          this.scaleX = 1 * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
+         this.scaleX *= this.nukeScale;
          this.scaleY = 1 * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
+         this.scaleY *= this.nukeScale;
          var units:Array = team.enemyTeam.units;
          var n:int = int(units.length);
          if(this.spellMc.explosion.currentFrame == 3)
