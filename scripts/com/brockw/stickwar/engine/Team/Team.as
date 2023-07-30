@@ -188,6 +188,8 @@ package com.brockw.stickwar.engine.Team
       
       public var respectForEnemy:Number;
       
+      public var instaQueue:Boolean = false;
+      
       public function Team(game:StickWar)
       {
          super();
@@ -1296,7 +1298,7 @@ package com.brockw.stickwar.engine.Team
          {
             if(_loc4_.length != 0)
             {
-               if(_loc4_[0][1] > Unit(_loc4_[0][0]).createTime || _loc3_)
+               if(_loc4_[0][1] > Unit(_loc4_[0][0]).createTime || _loc3_ || this.instaQueue)
                {
                   this.spawn(Unit(_loc4_[0][0]),param1);
                   this.dequeueUnit(Unit(_loc4_[0][0]).type,false);
