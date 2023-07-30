@@ -1082,7 +1082,14 @@ package com.brockw.stickwar.campaign.controllers
                {
                   if(gameScreen.team.statue && gameScreen.team.statue.health > 0 && !gameScreen.isPaused)
                   {
-                     gameScreen.team.mana = 500;
+                     if(gameScreen.team.mana < 1000)
+                     {
+                        ++gameScreen.team.mana;
+                     }
+                     else
+                     {
+                        gameScreen.team.mana = 1000;
+                     }
                      gameScreen.team.statue.px += 0.25;
                      gameScreen.team.statue.x += 0.25;
                      if(gameScreen.isFastForward)
