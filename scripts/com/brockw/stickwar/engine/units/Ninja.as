@@ -43,6 +43,10 @@ package com.brockw.stickwar.engine.units
       
       private var lastHitFrame:int;
       
+      public var shadowType:String = "";
+      
+      public var hasSneakyTeleported:Boolean;
+      
       public function Ninja(game:StickWar)
       {
          super(game);
@@ -361,14 +365,60 @@ package com.brockw.stickwar.engine.units
          if(!this.dontStealth)
          {
             mc.filters = [this.stealthSpellGlow];
-            mc.mc.alpha = 1;
+            if(this.shadowType == "Default")
+            {
+               mc.mc.alpha = 1;
+            }
+            else if(this.shadowType == "Sneaky")
+            {
+               if(!this.hasSneakyTeleported && mc.mc.alpha <= 0)
+               {
+                  px += this.getDirection() * 600;
+                  this.hasSneakyTeleported = true;
+               }
+               if(this.hasSneakyTeleported && _state != S_ATTACK)
+               {
+                  mc.mc.alpha = 0;
+               }
+               if(mc.mc.alpha > 0)
+               {
+                  if(_state != S_ATTACK)
+                  {
+                     mc.mc.alpha -= 0.05;
+                  }
+                  else
+                  {
+                     mc.mc.alpha += 0.1;
+                  }
+                  healthBar.alpha = mc.mc.alpha;
+                  shadowSprite.alpha = mc.mc.alpha;
+               }
+               else if(mc.mc.alpha < 0)
+               {
+                  mc.mc.alpha = 0;
+               }
+            }
          }
          else
          {
             mc.filters = [];
             mc.mc.alpha = 1;
+            healthBar.alpha = 1;
+            if(!isDead)
+            {
+               shadowSprite.alpha = 1;
+            }
+            this.hasSneakyTeleported = false;
          }
-         if(!hasDefaultLoadout)
+         if(this.shadowType == "Sneaky")
+         {
+            if(isNormal)
+            {
+               isNormal = false;
+            }
+            Ninja.setItem(_ninja(mc),"Double Edged Spear","Tribal Ninja","Ninja Claws");
+         }
+         else if(!hasDefaultLoadout)
          {
             Ninja.setItem(_ninja(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
          }
