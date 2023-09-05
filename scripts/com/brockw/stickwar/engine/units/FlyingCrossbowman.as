@@ -16,6 +16,16 @@ package com.brockw.stickwar.engine.units
           
           private var bowFrame:int;
           
+          public var hasBlownUp:Boolean;
+          
+          public var isExploder:Boolean;
+          
+          public var noiseMade:Boolean = false;
+          
+          internal var ninjaUnit:Ninja;
+          
+          public var shortenRange:Boolean;
+          
           public function FlyingCrossbowman(game:StickWar)
           {
                super(game);
@@ -109,6 +119,11 @@ package com.brockw.stickwar.engine.units
           {
                var bow:MovieClip = null;
                super.update(game);
+               if(this.shortenRange)
+               {
+                    this._maximumRange = 400;
+                    isNormal = false;
+               }
                if(_mc.mc.bow != null)
                {
                     _mc.mc.bow.rotation = bowAngle + 12;
@@ -203,6 +218,17 @@ package com.brockw.stickwar.engine.units
                if(isDead)
                {
                     Util.animateMovieClip(_mc,3);
+                    if(this.isExploder && !this.hasBlownUp && _mc.mc.currentFrame >= 19)
+                    {
+                         team.game.projectileManager.initSuperNuke(px + this.getDirection() * 20,py + 30,this,30);
+                         team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
+                         this.hasBlownUp = true;
+                         this.noiseMade = true;
+                         this.ninjaUnit = team.game.unitFactory.getUnit(Unit.U_NINJA);
+                         team.spawn(this.ninjaUnit,team.game);
+                         this.ninjaUnit.shadowType = "Sneaky";
+                         team.population += this.ninjaUnit.population;
+                    }
                     MovieClip(_mc.mc.wings).gotoAndStop(1);
                     if(_mc.mc.body != null && _mc.mc.body.quiver != null)
                     {
@@ -217,7 +243,17 @@ package com.brockw.stickwar.engine.units
                          _mc.mc.arms.gotoAndStop(1);
                     }
                }
-               if(!hasDefaultLoadout)
+               if(this.isExploder)
+               {
+                    _maximumRange = 5 * health;
+                    FlyingCrossbowman.setItem(mc,"Exploding Tips","Inferno Helmet","Inferno Wings");
+                    if(isNormal)
+                    {
+                         isNormal = false;
+                         team.population += population;
+                    }
+               }
+               else if(!hasDefaultLoadout)
                {
                     FlyingCrossbowman.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
                }
