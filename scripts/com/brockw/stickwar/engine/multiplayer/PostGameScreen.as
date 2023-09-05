@@ -130,7 +130,14 @@ package com.brockw.stickwar.engine.multiplayer
           {
                var unit:Unit = game.unitFactory.getUnit(u);
                var item:XMLList = game.team.buttonInfoMap[u][2];
-               this.unitUnlocked.push([unit.name,item.info,game.unitFactory.getProfile(u)]);
+               if(unit.type == Unit.U_MEDUSA)
+               {
+                    this.unitUnlocked.push(["Full Power!","Queen Medusa\'s power has been fully restored! Her formidable abilities have transcended into EVEN MORE potent incarnations...",game.unitFactory.getProfile(u)]);
+               }
+               else
+               {
+                    this.unitUnlocked.push([unit.name,item.info,game.unitFactory.getProfile(u)]);
+               }
                game.unitFactory.returnUnit(unit.type,unit);
           }
           
