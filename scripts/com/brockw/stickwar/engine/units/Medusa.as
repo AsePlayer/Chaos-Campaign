@@ -6,6 +6,7 @@ package com.brockw.stickwar.engine.units
      import com.brockw.stickwar.engine.Ai.command.UnitCommand;
      import com.brockw.stickwar.engine.StickWar;
      import com.brockw.stickwar.engine.Team.Tech;
+     import com.brockw.stickwar.engine.multiplayer.moves.UnitMove;
      import com.brockw.stickwar.market.MarketItem;
      import flash.display.DisplayObject;
      import flash.display.MovieClip;
@@ -35,6 +36,10 @@ package com.brockw.stickwar.engine.units
           
           private var poisonReady:Boolean = true;
           
+          public var medusaTrueQueen:Boolean = false;
+          
+          private var poisonBomberSpawn:com.brockw.stickwar.engine.units.Bomber;
+          
           public function Medusa(game:StickWar)
           {
                super(game);
@@ -45,7 +50,7 @@ package com.brockw.stickwar.engine.units
                ai = new MedusaAi(this);
                initSync();
                firstInit();
-               name = "Medusa";
+               name = "Queen Medusa";
           }
           
           public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
@@ -216,6 +221,27 @@ package com.brockw.stickwar.engine.units
                          {
                               game.projectileManager.initPoisonPool(this.px,this.py,this,0);
                          }
+                         if(MovieClip(_mc.mc).currentFrame == 12)
+                         {
+                              if(this.medusaTrueQueen)
+                              {
+                                   this.poisonBomberSpawn = Bomber(game.unitFactory.getUnit(com.brockw.stickwar.engine.units.Unit.U_BOMBER));
+                                   this.poisonBomberSpawn.bomberType = "medusaToxicSpawn";
+                                   team.spawn(this.poisonBomberSpawn,game);
+                                   ++team.population;
+                                   this.poisonBomberSpawn.px = px;
+                                   this.poisonBomberSpawn.py = py - 1;
+                                   this.poisonBomberSpawn.poison(15);
+                                   var _loc9_:UnitMove = null;
+                                   _loc9_ = new UnitMove();
+                                   _loc9_.moveType = UnitCommand.ATTACK_MOVE;
+                                   _loc9_.units.push(this.poisonBomberSpawn.id);
+                                   _loc9_.owner = team.id;
+                                   _loc9_.arg0 = px + 1000;
+                                   _loc9_.arg1 = py;
+                                   _loc9_.execute(game);
+                              }
+                         }
                          if(MovieClip(_mc.mc).totalFrames == MovieClip(_mc.mc).currentFrame)
                          {
                               _state = int(S_RUN);
@@ -236,6 +262,10 @@ package com.brockw.stickwar.engine.units
                                    else
                                    {
                                         this.targetUnit.stoneAttack(game.xml.xml.Chaos.Units.medusa.stone.damageToNotArmour);
+                                   }
+                                   if(this.medusaTrueQueen)
+                                   {
+                                        team.game.projectileManager.initNuke(this.targetUnit.px + 25,this.targetUnit.py,this,40);
                                    }
                               }
                          }
@@ -309,13 +339,13 @@ package com.brockw.stickwar.engine.units
                     }
                }
                Util.animateMovieClip(_mc);
-               if(!hasDefaultLoadout)
+               if(this.medusaTrueQueen)
+               {
+                    Medusa.setItem(_medusaMc(mc),"","red cape","More Crowny");
+               }
+               else
                {
                     Medusa.setItem(_medusaMc(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
-               }
-               if(this.outfit == 1)
-               {
-                    Medusa.setItem(_medusaMc(mc),"","Woodland Cape","More Crowny");
                }
           }
           
