@@ -1,8 +1,10 @@
 package com.brockw.stickwar.engine.projectile
 {
-     import com.brockw.stickwar.engine.*;
+     import com.brockw.stickwar.engine.Entity;
+     import com.brockw.stickwar.engine.StickWar;
      import com.brockw.stickwar.engine.units.Unit;
-     import flash.display.*;
+     import flash.display.DisplayObject;
+     import flash.display.MovieClip;
      
      public class ElectricWall extends Projectile
      {
@@ -14,6 +16,10 @@ package com.brockw.stickwar.engine.projectile
           
           private var frequency:Number;
           
+          public var speed:Number;
+          
+          public var currentSpeed:Number;
+          
           public function ElectricWall(game:StickWar)
           {
                var mc:DisplayObject = null;
@@ -21,13 +27,15 @@ package com.brockw.stickwar.engine.projectile
                type = ELECTRIC_WALL;
                this.spellMc = new electricWallMc();
                this.addChild(this.spellMc);
-               for(var i:* = 0; i < this.spellMc.numChildren; i++)
+               var i:* = 0;
+               while(i < this.spellMc.numChildren)
                {
                     mc = this.spellMc.getChildAt(i);
                     if(mc is MovieClip)
                     {
                          MovieClip(mc).gotoAndStop(Math.floor(game.random.nextNumber() * MovieClip(mc).totalFrames));
                     }
+                    i++;
                }
                this.wallArea = game.xml.xml.Order.Units.magikill.electricWall.area;
                this.frequency = game.xml.xml.Order.Units.magikill.electricWall.frequency;
@@ -45,7 +53,8 @@ package com.brockw.stickwar.engine.projectile
                var mc:DisplayObject = null;
                this.visible = true;
                this.spellMc.nextFrame();
-               for(var i:* = 0; i < this.spellMc.numChildren; i++)
+               var i:* = 0;
+               while(i < this.spellMc.numChildren)
                {
                     mc = this.spellMc.getChildAt(i);
                     if(mc is MovieClip)
@@ -56,6 +65,7 @@ package com.brockw.stickwar.engine.projectile
                               MovieClip(mc).gotoAndStop(1);
                          }
                     }
+                    i++;
                }
                if(game.frame % this.frequency == 0)
                {
@@ -65,6 +75,10 @@ package com.brockw.stickwar.engine.projectile
                {
                     this.visible = false;
                }
+               this.px -= this.speed;
+               this.px += 0.007 * this.spellMc.currentFrame * this.speed;
+               this.x -= this.speed;
+               this.x += 0.007 * this.spellMc.currentFrame * this.speed;
           }
           
           private function hitElectricWall(unit:Unit) : void
@@ -74,6 +88,7 @@ package com.brockw.stickwar.engine.projectile
                     if(Math.abs(unit.px - this.px) < this.wallArea)
                     {
                          Entity(unit.damage(Unit.D_NO_SOUND | Unit.D_NO_BLOOD,damageToDeal,null));
+                         unit.stun(this.frequency / 1.25);
                     }
                }
           }
