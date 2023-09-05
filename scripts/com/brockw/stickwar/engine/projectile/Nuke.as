@@ -2,6 +2,7 @@ package com.brockw.stickwar.engine.projectile
 {
      import com.brockw.game.Util;
      import com.brockw.stickwar.engine.StickWar;
+     import com.brockw.stickwar.engine.units.Giant;
      import com.brockw.stickwar.engine.units.Statue;
      import com.brockw.stickwar.engine.units.Unit;
      import flash.display.MovieClip;
@@ -12,11 +13,13 @@ package com.brockw.stickwar.engine.projectile
           
           internal var spellMc:MovieClip;
           
-          internal var explosionRadius:Number;
+          public var explosionRadius:Number;
           
           internal var explosionDamage:Number;
           
           internal var whoNuked:String;
+          
+          public var nukeScale:Number = 1;
           
           public function Nuke(game:StickWar)
           {
@@ -39,7 +42,9 @@ package com.brockw.stickwar.engine.projectile
           {
                Util.animateMovieClip(this.spellMc,4);
                this.scaleX = 1 * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
+               this.scaleX *= this.nukeScale;
                this.scaleY = 1 * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
+               this.scaleY *= this.nukeScale;
                var units:Array = team.enemyTeam.units;
                var n:int = int(units.length);
                if(this.spellMc.explosion.currentFrame == 3)
@@ -74,9 +79,9 @@ package com.brockw.stickwar.engine.projectile
                                    unit.stun(75);
                               }
                          }
-                         else if(this.whoNuked == "statueTargeter")
+                         else if(this.whoNuked == "statueTargeter" || this.whoNuked == "statueTargeterNoAi")
                          {
-                              if(unit is Statue)
+                              if(unit is Statue || unit is Giant)
                               {
                                    unit.damage(1,125,null);
                               }
