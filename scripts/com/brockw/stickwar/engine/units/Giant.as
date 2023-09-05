@@ -330,7 +330,7 @@ package com.brockw.stickwar.engine.units
           
           override public function mayAttack(target:Unit) : Boolean
           {
-               if(framesInAttack > team.game.frame - attackStartFrame)
+               if(framesInAttack > team.game.frame - attackStartFrame && _state != S_RUN)
                {
                     return false;
                }
