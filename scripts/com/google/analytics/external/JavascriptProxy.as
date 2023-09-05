@@ -1,13 +1,13 @@
 package com.google.analytics.external
 {
-   import com.google.analytics.debug.DebugConfiguration;
-   import flash.external.ExternalInterface;
-   import flash.system.Capabilities;
-   
-   public class JavascriptProxy
-   {
-      
-      public static var setProperty_js:XML = <script>
+     import com.google.analytics.debug.DebugConfiguration;
+     import flash.external.ExternalInterface;
+     import flash.system.Capabilities;
+     
+     public class JavascriptProxy
+     {
+          
+          public static var setProperty_js:XML = <script>
                 <![CDATA[
                     function( path , value )
                     {
@@ -34,8 +34,8 @@ package com.google.analytics.external
                     }
                 ]]>
             </script>;
-      
-      public static var hasProperty_js:XML = <script>
+          
+          public static var hasProperty_js:XML = <script>
                 <![CDATA[
                     function( path )
                     {
@@ -65,8 +65,8 @@ package com.google.analytics.external
                     }
                 ]]>
             </script>;
-      
-      public static var setPropertyRef_js:XML = <script>
+          
+          public static var setPropertyRef_js:XML = <script>
                 <![CDATA[
                     function( path , target )
                     {
@@ -112,121 +112,121 @@ package com.google.analytics.external
                     }
                 ]]>
             </script>;
-       
-      
-      private var _notAvailableWarning:Boolean = true;
-      
-      private var _debug:DebugConfiguration;
-      
-      public function JavascriptProxy(debug:DebugConfiguration)
-      {
-         super();
-         _debug = debug;
-      }
-      
-      public function getProperty(name:String) : *
-      {
-         return call(name + ".valueOf");
-      }
-      
-      public function hasProperty(path:String) : Boolean
-      {
-         return call(hasProperty_js,path);
-      }
-      
-      public function setProperty(path:String, value:*) : void
-      {
-         call(setProperty_js,path,value);
-      }
-      
-      public function executeBlock(data:String) : void
-      {
-         if(isAvailable())
-         {
-            try
-            {
-               ExternalInterface.call(data);
-            }
-            catch(e:SecurityError)
-            {
-               if(_debug.javascript)
+           
+          
+          private var _notAvailableWarning:Boolean = true;
+          
+          private var _debug:DebugConfiguration;
+          
+          public function JavascriptProxy(debug:DebugConfiguration)
+          {
+               super();
+               _debug = debug;
+          }
+          
+          public function getProperty(name:String) : *
+          {
+               return call(name + ".valueOf");
+          }
+          
+          public function hasProperty(path:String) : Boolean
+          {
+               return call(hasProperty_js,path);
+          }
+          
+          public function setProperty(path:String, value:*) : void
+          {
+               call(setProperty_js,path,value);
+          }
+          
+          public function executeBlock(data:String) : void
+          {
+               if(isAvailable())
                {
-                  _debug.warning("ExternalInterface is not allowed.\nEnsure that allowScriptAccess is set to \"always\" in the Flash embed HTML.");
+                    try
+                    {
+                         ExternalInterface.call(data);
+                    }
+                    catch(e:SecurityError)
+                    {
+                         if(_debug.javascript)
+                         {
+                              _debug.warning("ExternalInterface is not allowed.\nEnsure that allowScriptAccess is set to \"always\" in the Flash embed HTML.");
+                         }
+                    }
+                    catch(e:Error)
+                    {
+                         if(_debug.javascript)
+                         {
+                              _debug.warning("ExternalInterface failed to make the call\nreason: " + e.message);
+                         }
+                    }
                }
-            }
-            catch(e:Error)
-            {
-               if(_debug.javascript)
+          }
+          
+          public function getPropertyString(name:String) : String
+          {
+               return call(name + ".toString");
+          }
+          
+          public function setPropertyByReference(path:String, target:String) : void
+          {
+               call(setPropertyRef_js,path,target);
+          }
+          
+          public function call(functionName:String, ... args) : *
+          {
+               var output:String = null;
+               if(isAvailable())
                {
-                  _debug.warning("ExternalInterface failed to make the call\nreason: " + e.message);
+                    try
+                    {
+                         if(_debug.javascript && _debug.verbose)
+                         {
+                              output = "";
+                              output = "Flash->JS: " + functionName;
+                              output += "( ";
+                              if(args.length > 0)
+                              {
+                                   output += args.join(",");
+                              }
+                              output += " )";
+                              _debug.info(output);
+                         }
+                         args.unshift(functionName);
+                         return ExternalInterface.call.apply(ExternalInterface,args);
+                    }
+                    catch(e:SecurityError)
+                    {
+                         if(_debug.javascript)
+                         {
+                              _debug.warning("ExternalInterface is not allowed.\nEnsure that allowScriptAccess is set to \"always\" in the Flash embed HTML.");
+                         }
+                    }
+                    catch(e:Error)
+                    {
+                         if(_debug.javascript)
+                         {
+                              _debug.warning("ExternalInterface failed to make the call\nreason: " + e.message);
+                         }
+                    }
                }
-            }
-         }
-      }
-      
-      public function getPropertyString(name:String) : String
-      {
-         return call(name + ".toString");
-      }
-      
-      public function setPropertyByReference(path:String, target:String) : void
-      {
-         call(setPropertyRef_js,path,target);
-      }
-      
-      public function call(functionName:String, ... args) : *
-      {
-         var output:String = null;
-         if(isAvailable())
-         {
-            try
-            {
-               if(_debug.javascript && _debug.verbose)
+               return null;
+          }
+          
+          public function isAvailable() : Boolean
+          {
+               var available:Boolean = ExternalInterface.available;
+               if(available && Capabilities.playerType == "External")
                {
-                  output = "";
-                  output = "Flash->JS: " + functionName;
-                  output += "( ";
-                  if(args.length > 0)
-                  {
-                     output += args.join(",");
-                  }
-                  output += " )";
-                  _debug.info(output);
+                    available = false;
                }
-               args.unshift(functionName);
-               return ExternalInterface.call.apply(ExternalInterface,args);
-            }
-            catch(e:SecurityError)
-            {
-               if(_debug.javascript)
+               if(!available && _debug.javascript && _notAvailableWarning)
                {
-                  _debug.warning("ExternalInterface is not allowed.\nEnsure that allowScriptAccess is set to \"always\" in the Flash embed HTML.");
+                    _debug.warning("ExternalInterface is not available.");
+                    _notAvailableWarning = false;
                }
-            }
-            catch(e:Error)
-            {
-               if(_debug.javascript)
-               {
-                  _debug.warning("ExternalInterface failed to make the call\nreason: " + e.message);
-               }
-            }
-         }
-         return null;
-      }
-      
-      public function isAvailable() : Boolean
-      {
-         var available:Boolean = ExternalInterface.available;
-         if(available && Capabilities.playerType == "External")
-         {
-            available = false;
-         }
-         if(!available && _debug.javascript && _notAvailableWarning)
-         {
-            _debug.warning("ExternalInterface is not available.");
-            _notAvailableWarning = false;
-         }
-         return available;
-      }
-   }
+               return available;
+          }
+     }
 }

@@ -1,11 +1,11 @@
 package com.google.analytics.external
 {
-   import com.google.analytics.debug.DebugConfiguration;
-   
-   public class HTMLDOM extends JavascriptProxy
-   {
-      
-      public static var cache_properties_js:XML = <script>
+     import com.google.analytics.debug.DebugConfiguration;
+     
+     public class HTMLDOM extends JavascriptProxy
+     {
+          
+          public static var cache_properties_js:XML = <script>
             <![CDATA[
                     function()
                     {
@@ -25,203 +25,203 @@ package com.google.analytics.external
                     }
                 ]]>
          </script>;
-       
-      
-      private var _referrer:String;
-      
-      private var _language:String;
-      
-      private var _host:String;
-      
-      private var _pathname:String;
-      
-      private var _location:String;
-      
-      private var _search:String;
-      
-      private var _characterSet:String;
-      
-      private var _title:String;
-      
-      private var _protocol:String;
-      
-      private var _colorDepth:String;
-      
-      public function HTMLDOM(debug:DebugConfiguration)
-      {
-         super(debug);
-      }
-      
-      public function get search() : String
-      {
-         if(Boolean(_search))
-         {
-            return _search;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         _search = getProperty("document.location.search");
-         return _search;
-      }
-      
-      public function get location() : String
-      {
-         if(Boolean(_location))
-         {
-            return _location;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         _location = getPropertyString("document.location");
-         return _location;
-      }
-      
-      public function get pathname() : String
-      {
-         if(Boolean(_pathname))
-         {
-            return _pathname;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         _pathname = getProperty("document.location.pathname");
-         return _pathname;
-      }
-      
-      public function cacheProperties() : void
-      {
-         if(!isAvailable())
-         {
-            return;
-         }
-         var obj:Object = call(cache_properties_js);
-         if(Boolean(obj))
-         {
-            _host = obj.host;
-            _language = obj.language;
-            _characterSet = obj.characterSet;
-            _colorDepth = obj.colorDepth;
-            _location = obj.location;
-            _pathname = obj.pathname;
-            _protocol = obj.protocol;
-            _search = obj.search;
-            _referrer = obj.referrer;
-            _title = obj.title;
-         }
-      }
-      
-      public function get language() : String
-      {
-         if(Boolean(_language))
-         {
-            return _language;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         var lang:String = getProperty("navigator.language");
-         if(lang == null)
-         {
-            lang = getProperty("navigator.browserLanguage");
-         }
-         _language = lang;
-         return _language;
-      }
-      
-      public function get colorDepth() : String
-      {
-         if(Boolean(_colorDepth))
-         {
-            return _colorDepth;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         _colorDepth = getProperty("window.screen.colorDepth");
-         return _colorDepth;
-      }
-      
-      public function get referrer() : String
-      {
-         if(Boolean(_referrer))
-         {
-            return _referrer;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         _referrer = getProperty("document.referrer");
-         return _referrer;
-      }
-      
-      public function get protocol() : String
-      {
-         if(Boolean(_protocol))
-         {
-            return _protocol;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         _protocol = getProperty("document.location.protocol");
-         return _protocol;
-      }
-      
-      public function get host() : String
-      {
-         if(Boolean(_host))
-         {
-            return _host;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         _host = getProperty("document.location.host");
-         return _host;
-      }
-      
-      public function get characterSet() : String
-      {
-         if(Boolean(_characterSet))
-         {
-            return _characterSet;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         var cs:String = getProperty("document.characterSet");
-         if(cs == null)
-         {
-            cs = getProperty("document.charset");
-         }
-         _characterSet = cs;
-         return _characterSet;
-      }
-      
-      public function get title() : String
-      {
-         if(Boolean(_title))
-         {
-            return _title;
-         }
-         if(!isAvailable())
-         {
-            return null;
-         }
-         _title = getProperty("document.title");
-         return _title;
-      }
-   }
+           
+          
+          private var _referrer:String;
+          
+          private var _language:String;
+          
+          private var _host:String;
+          
+          private var _pathname:String;
+          
+          private var _location:String;
+          
+          private var _search:String;
+          
+          private var _characterSet:String;
+          
+          private var _title:String;
+          
+          private var _protocol:String;
+          
+          private var _colorDepth:String;
+          
+          public function HTMLDOM(debug:DebugConfiguration)
+          {
+               super(debug);
+          }
+          
+          public function get search() : String
+          {
+               if(Boolean(_search))
+               {
+                    return _search;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               _search = getProperty("document.location.search");
+               return _search;
+          }
+          
+          public function get location() : String
+          {
+               if(Boolean(_location))
+               {
+                    return _location;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               _location = getPropertyString("document.location");
+               return _location;
+          }
+          
+          public function get pathname() : String
+          {
+               if(Boolean(_pathname))
+               {
+                    return _pathname;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               _pathname = getProperty("document.location.pathname");
+               return _pathname;
+          }
+          
+          public function cacheProperties() : void
+          {
+               if(!isAvailable())
+               {
+                    return;
+               }
+               var obj:Object = call(cache_properties_js);
+               if(Boolean(obj))
+               {
+                    _host = obj.host;
+                    _language = obj.language;
+                    _characterSet = obj.characterSet;
+                    _colorDepth = obj.colorDepth;
+                    _location = obj.location;
+                    _pathname = obj.pathname;
+                    _protocol = obj.protocol;
+                    _search = obj.search;
+                    _referrer = obj.referrer;
+                    _title = obj.title;
+               }
+          }
+          
+          public function get language() : String
+          {
+               if(Boolean(_language))
+               {
+                    return _language;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               var lang:String = getProperty("navigator.language");
+               if(lang == null)
+               {
+                    lang = getProperty("navigator.browserLanguage");
+               }
+               _language = lang;
+               return _language;
+          }
+          
+          public function get colorDepth() : String
+          {
+               if(Boolean(_colorDepth))
+               {
+                    return _colorDepth;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               _colorDepth = getProperty("window.screen.colorDepth");
+               return _colorDepth;
+          }
+          
+          public function get referrer() : String
+          {
+               if(Boolean(_referrer))
+               {
+                    return _referrer;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               _referrer = getProperty("document.referrer");
+               return _referrer;
+          }
+          
+          public function get protocol() : String
+          {
+               if(Boolean(_protocol))
+               {
+                    return _protocol;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               _protocol = getProperty("document.location.protocol");
+               return _protocol;
+          }
+          
+          public function get host() : String
+          {
+               if(Boolean(_host))
+               {
+                    return _host;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               _host = getProperty("document.location.host");
+               return _host;
+          }
+          
+          public function get characterSet() : String
+          {
+               if(Boolean(_characterSet))
+               {
+                    return _characterSet;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               var cs:String = getProperty("document.characterSet");
+               if(cs == null)
+               {
+                    cs = getProperty("document.charset");
+               }
+               _characterSet = cs;
+               return _characterSet;
+          }
+          
+          public function get title() : String
+          {
+               if(Boolean(_title))
+               {
+                    return _title;
+               }
+               if(!isAvailable())
+               {
+                    return null;
+               }
+               _title = getProperty("document.title");
+               return _title;
+          }
+     }
 }
