@@ -167,10 +167,6 @@ package com.brockw.stickwar.engine.Team
                          this.toDecrement.push(key);
                          --this.researchingMap[key];
                     }
-                    else
-                    {
-                         trace("that bug would have happenend");
-                    }
                }
                this.toDecrement.splice(0,this.toDecrement.length);
           }
