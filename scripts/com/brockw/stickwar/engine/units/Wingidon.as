@@ -42,6 +42,8 @@ package com.brockw.stickwar.engine.units
           
           public var pxCounter:int;
           
+          public var shortenRange:Boolean;
+          
           public function Wingidon(game:StickWar)
           {
                this.eclipsorNoises = ["voiceTutorial16","voiceTutorial17"];
@@ -152,6 +154,11 @@ package com.brockw.stickwar.engine.units
                this.wingidonSpeedSpell.update();
                super.update(game);
                updateCommon(game);
+               if(this.shortenRange)
+               {
+                    this._maximumRange = 350;
+                    isNormal = false;
+               }
                if(this.pxCounter <= 0)
                {
                     this.prevpx = px;

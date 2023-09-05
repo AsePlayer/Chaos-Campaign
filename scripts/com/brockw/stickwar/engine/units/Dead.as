@@ -43,6 +43,8 @@ package com.brockw.stickwar.engine.units
           
           private var poisonTriggers:int;
           
+          public var shortenRange:Boolean;
+          
           public function Dead(game:StickWar)
           {
                super(game);
@@ -195,6 +197,17 @@ package com.brockw.stickwar.engine.units
                     this._maxVelocity *= 0.66;
                     this.setupComplete = true;
                     isNormal = false;
+               }
+               else if(this.shortenRange && this.deadType != "Bomber")
+               {
+                    if(this.deadType != "Toxic")
+                    {
+                         this._maximumRange = 400;
+                    }
+                    else
+                    {
+                         this._maximumRange = 200;
+                    }
                }
                if(this.deadType == "Toxic" && this.poisonTriggers == 0 && this.health < this.maxHealth * 0.66)
                {
