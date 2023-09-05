@@ -45,6 +45,8 @@ package com.brockw.stickwar.singleplayer
           
           private var comment:String = "";
           
+          internal var unitMove:UnitMove = null;
+          
           public function EnemyChaosTeamAi(team:Team, main:BaseMain, game:StickWar, isCreatingUnits:* = true)
           {
                var key:int = 0;
@@ -369,6 +371,23 @@ package com.brockw.stickwar.singleplayer
                                    skelator.reaperAttack(target);
                               }
                          }
+                         else if(Math.abs(skelator.px - skelator.ai.getClosestTarget().px) < 300 && skelator.px < team.statue.px + 100 && skelator.health < skelator.maxHealth / 2 || Math.abs(skelator.px - skelator.ai.getClosestTarget().px) < 690 && skelator.px < team.statue.px + 100 && skelator.health < skelator.maxHealth / 1.5)
+                         {
+                              this.unitMove = new UnitMove();
+                              this.unitMove.owner = team.id;
+                              if(skelator.px > team.statue.px + 90)
+                              {
+                                   this.unitMove.moveType = UnitCommand.HOLD;
+                              }
+                              else
+                              {
+                                   this.unitMove.moveType = UnitCommand.MOVE;
+                              }
+                              this.unitMove.arg0 = team.statue.px + 200;
+                              this.unitMove.arg1 = skelator.py;
+                              this.unitMove.units.push(skelator.id);
+                              this.unitMove.execute(game);
+                         }
                     }
                }
           }
@@ -395,18 +414,6 @@ package com.brockw.stickwar.singleplayer
                                         wingidon.speedSpell();
                                    }
                               }
-                         }
-                         else if(1 == 2 && wingidon.isWingSpell && Math.abs(closestEnemyUnit.px - wingidon.px) < 800 && Math.abs(closestEnemyUnit.px - wingidon.px) > 200)
-                         {
-                              this.comment = "inactive code ------------------------------------------------------------------------------------------------------------------------";
-                              wingidon.forceFaceDirection(wingidon.px - closestEnemyUnit.px);
-                              _loc7_ = new UnitMove();
-                              _loc7_.owner = game.team.enemyTeam.id;
-                              _loc7_.moveType = UnitCommand.MOVE;
-                              _loc7_.arg0 = wingidon.px + wingidon.getDirection() * 100;
-                              _loc7_.arg1 = wingidon.py;
-                              _loc7_.units.push(wingidon.id);
-                              _loc7_.execute(game);
                          }
                          else if(wingidon.isWingSpell)
                          {
