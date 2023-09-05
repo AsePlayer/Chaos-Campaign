@@ -32,6 +32,10 @@ package com.brockw.stickwar.engine.units
           
           private var area:Number;
           
+          public var shortenRange:Boolean;
+          
+          public var archerType:String;
+          
           public function Archer(game:StickWar)
           {
                super(game);
@@ -153,6 +157,30 @@ package com.brockw.stickwar.engine.units
                super.update(game);
                this.archerFireSpellCooldown.update();
                updateCommon(game);
+               if(this.shortenRange)
+               {
+                    this._maximumRange = 400;
+                    isNormal = false;
+               }
+               else if(!isNormal)
+               {
+                    this._maximumRange = this.normalRange;
+               }
+               if(this.archerType == "Splash")
+               {
+                    _scale = game.xml.xml.Order.Units.archer.scale;
+                    this.area = game.xml.xml.Order.Units.archer.castleArea;
+                    this.areaDamage = game.xml.xml.Order.Units.archer.castleAreaDamage;
+                    isNormal = false;
+               }
+               if(this.archerType == "Fire")
+               {
+                    team.tech.isResearchedMap[Tech.ARCHIDON_FIRE] = true;
+                    if(getFireCoolDown() == 0)
+                    {
+                         archerFireArrow();
+                    }
+               }
                if(!isDieing)
                {
                     updateMotion(game);
@@ -237,13 +265,21 @@ package com.brockw.stickwar.engine.units
                          }
                     }
                }
-               if(this.isCastleArcher)
+               if(this.archerType == "Splash")
                {
-                    Archer.setItem(mc,"Default","Basic Helmet","Default");
+                    Archer.setItem(mc,"Default","Basic Helmet","Silver Archidon");
+               }
+               else if(this.archerType == "Fire")
+               {
+                    Archer.setItem(mc,"Default","Robin Hood Hat","Robin Hood Quiver");
                }
                else if(!hasDefaultLoadout)
                {
                     Archer.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+               }
+               if(this.isCastleArcher)
+               {
+                    Archer.setItem(mc,"Default","Basic Helmet","Default");
                }
                if(_mc.mc.bow != null)
                {
