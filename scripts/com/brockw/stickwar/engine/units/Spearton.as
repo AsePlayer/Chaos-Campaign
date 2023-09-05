@@ -20,21 +20,29 @@ package com.brockw.stickwar.engine.units
           private static var RAGE_EFFECT:int;
            
           
-          private var _isBlocking:Boolean;
+          public var _isBlocking:Boolean;
           
-          private var _inBlock:Boolean;
+          public var _inBlock:Boolean;
           
           private var shieldwallDamageReduction:Number;
           
           private var shieldBashSpell:com.brockw.stickwar.engine.units.SpellCooldown;
           
-          private var isShieldBashing:Boolean;
+          public var isShieldBashing:Boolean;
           
           private var stunForce:Number;
           
           private var stunTime:int;
           
           private var stunned:com.brockw.stickwar.engine.units.Unit;
+          
+          public var isBasher:Boolean;
+          
+          public var speartonType:String = "Default";
+          
+          public var speartonSetup:Boolean;
+          
+          public var wantsToShield:Boolean;
           
           public function Spearton(game:StickWar)
           {
@@ -130,6 +138,10 @@ package com.brockw.stickwar.engine.units
           
           public function shieldBashCooldown() : Number
           {
+               if(isMinion)
+               {
+                    return 69;
+               }
                return this.shieldBashSpell.cooldown();
           }
           
@@ -138,6 +150,34 @@ package com.brockw.stickwar.engine.units
                var hit:Boolean = false;
                this.shieldBashSpell.update();
                updateCommon(game);
+               if(isNormal && isMinion)
+               {
+                    WEAPON_REACH = game.xml.xml.Order.Units.spearton.weaponReach / 2;
+                    this._maxHealth /= 3;
+                    this._health = this._maxHealth;
+                    this.healthBar.totalHealth = this._maxHealth;
+                    _scale = game.xml.xml.Chaos.Units.bomber.scale / 1.25;
+                    _maxForce /= 1.25;
+                    population = 0;
+                    isNormal = false;
+               }
+               if(isMinion && !isNormal)
+               {
+                    if(this.isAlive() && game.frame % 10 == 0)
+                    {
+                         this.damage(D_NO_SOUND,this._maxHealth / 15 + 1,null);
+                    }
+               }
+               if(!this.speartonSetup && this.speartonType == "Royal")
+               {
+                    _maxHealth *= 2.5;
+                    _health = _maxHealth;
+                    healthBar.totalHealth = _maxHealth;
+                    _scale = game.xml.xml.Order.Units.spearton.scale * 1.4;
+                    isMiniBoss = true;
+                    isNormal = false;
+                    this.speartonSetup = true;
+               }
                if(!isDieing)
                {
                     updateMotion(game);
@@ -172,7 +212,7 @@ package com.brockw.stickwar.engine.units
                               this.isShieldBashing = false;
                          }
                     }
-                    else if(this.inBlock)
+                    else if(this.inBlock && !isMinion)
                     {
                          if(_mc.currentLabel == "shieldBash")
                          {
@@ -252,7 +292,15 @@ package com.brockw.stickwar.engine.units
                {
                     Util.animateMovieClip(_mc);
                }
-               if(!hasDefaultLoadout)
+               if(isMinion)
+               {
+                    Spearton.setItem(_speartonMc(mc),"Pitchfork","None","None");
+               }
+               else if(this.speartonType == "Royal")
+               {
+                    Spearton.setItem(_speartonMc(mc),"British Spear","Gladiator Helmet","Roman Shield");
+               }
+               else if(!hasDefaultLoadout)
                {
                     Spearton.setItem(_speartonMc(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
                }
@@ -286,6 +334,10 @@ package com.brockw.stickwar.engine.units
           
           public function startBlocking() : void
           {
+               if(isMinion)
+               {
+                    return;
+               }
                if(team.tech.isResearched(Tech.BLOCK))
                {
                     this.isBlocking = true;
