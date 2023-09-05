@@ -2,17 +2,20 @@ package com.brockw.stickwar.engine.units
 {
      import com.brockw.game.Util;
      import com.brockw.stickwar.engine.ActionInterface;
-     import com.brockw.stickwar.engine.Ai.*;
-     import com.brockw.stickwar.engine.Ai.command.*;
+     import com.brockw.stickwar.engine.Ai.MagikillAi;
+     import com.brockw.stickwar.engine.Ai.command.UnitCommand;
      import com.brockw.stickwar.engine.StickWar;
-     import com.brockw.stickwar.engine.Team.*;
+     import com.brockw.stickwar.engine.Team.Tech;
      import com.brockw.stickwar.market.MarketItem;
      import flash.display.MovieClip;
+     import flash.filters.GlowFilter;
      
      public class Magikill extends Unit
      {
           
           private static var WEAPON_REACH:int;
+          
+          private static var RAGE_EFFECT:int;
            
           
           private var stunSpellCooldown:com.brockw.stickwar.engine.units.SpellCooldown;
@@ -33,6 +36,16 @@ package com.brockw.stickwar.engine.units
           
           private var explosionDamage:Number;
           
+          private var rageSpellGlow:GlowFilter;
+          
+          public var spellStacks:int;
+          
+          private var maxSpellStacks:int = 5;
+          
+          public var magikillType:String;
+          
+          private var speartonMinion:com.brockw.stickwar.engine.units.Spearton;
+          
           public function Magikill(game:StickWar)
           {
                super(game);
@@ -44,6 +57,10 @@ package com.brockw.stickwar.engine.units
                firstInit();
                healthBar.y = -pheight * 1;
                name = "The Magikill";
+               this.rageSpellGlow = new GlowFilter();
+               this.rageSpellGlow.color = 69420;
+               this.rageSpellGlow.blurX = 0;
+               this.rageSpellGlow.blurY = 0;
           }
           
           public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
@@ -86,6 +103,7 @@ package com.brockw.stickwar.engine.units
           {
                initBase();
                WEAPON_REACH = game.xml.xml.Order.Units.magikill.weaponReach;
+               RAGE_EFFECT = game.xml.xml.Order.Units.swordwrath.rage.effect;
                population = game.xml.xml.Order.Units.magikill.population;
                _mass = game.xml.xml.Order.Units.magikill.mass;
                _maxForce = game.xml.xml.Order.Units.magikill.maxForce;
@@ -128,6 +146,30 @@ package com.brockw.stickwar.engine.units
                this.nukeSpellCooldown.update();
                this.poisonDartSpellCooldown.update();
                updateCommon(game);
+               if(this.magikillType != "")
+               {
+                    if(this.magikillType == "Explosion")
+                    {
+                         this.rageSpellGlow.color = 16753920;
+                         isNormal = false;
+                    }
+                    if(this.magikillType == "Poison")
+                    {
+                         this.rageSpellGlow.color = 65280;
+                         isNormal = false;
+                    }
+                    if(this.magikillType == "Stun")
+                    {
+                         this.rageSpellGlow.color = 16711832;
+                         isNormal = false;
+                    }
+                    if(this.spellStacks > 0)
+                    {
+                         this.rageSpellGlow.blurX = 9 + this.spellStacks * Util.sin((2 + this.spellStacks * this.spellStacks) * Math.PI * team.game.frame / RAGE_EFFECT);
+                         this.rageSpellGlow.blurY = 6 + this.spellStacks;
+                         this.mc.filters = [this.rageSpellGlow];
+                    }
+               }
                if(!isDieing)
                {
                     if(_isDualing)
@@ -149,6 +191,22 @@ package com.brockw.stickwar.engine.units
                          _mc.gotoAndStop("attack_1");
                          if(MovieClip(_mc.mc).currentFrame == 36 && !hasHit)
                          {
+                              if(this.spellStacks < this.maxSpellStacks)
+                              {
+                                   ++this.spellStacks;
+                              }
+                              var i:int = 0;
+                              while(i < this.spellStacks)
+                              {
+                                   var angleRadians:Number = i * (Math.PI * 2 / this.maxSpellStacks);
+                                   var radius:Number = 50;
+                                   var xOffset:Number = Math.cos(angleRadians) * radius * 2;
+                                   var yOffset:Number = Math.sin(angleRadians) * radius;
+                                   var miniExplosionX:Number = this.spellX + xOffset;
+                                   var miniExplosionY:Number = this.spellY + yOffset;
+                                   game.projectileManager.initMiniNuke(miniExplosionX,miniExplosionY,this,this.explosionDamage * 0.5);
+                                   i++;
+                              }
                               game.soundManager.playSoundRandom("mediumExplosion",3,this.spellX,this.spellY);
                               game.projectileManager.initNuke(this.spellX,this.spellY,this,this.explosionDamage);
                               hasHit = true;
@@ -164,8 +222,12 @@ package com.brockw.stickwar.engine.units
                          _mc.gotoAndStop("electricAttack");
                          if(MovieClip(_mc.mc).currentFrame == 47 && !hasHit)
                          {
+                              if(this.spellStacks < this.maxSpellStacks)
+                              {
+                                   ++this.spellStacks;
+                              }
                               game.soundManager.playSound("electricWall",this.spellX,this.spellY);
-                              game.projectileManager.initStun(this.spellX,this.spellY,game.xml.xml.Order.Units.magikill.electricWallDamage,this);
+                              game.projectileManager.initStun(this.spellX,this.spellY,game.xml.xml.Order.Units.magikill.electricWallDamage,this,this.spellStacks);
                               hasHit = true;
                          }
                          if(MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
@@ -179,6 +241,19 @@ package com.brockw.stickwar.engine.units
                          _mc.gotoAndStop("poisonAttack");
                          if(MovieClip(_mc.mc).currentFrame == 44 && !hasHit)
                          {
+                              if(this.spellStacks < this.maxSpellStacks)
+                              {
+                                   ++this.spellStacks;
+                              }
+                              var m:int = 0;
+                              while(m < this.spellStacks)
+                              {
+                                   this.speartonMinion = team.game.unitFactory.getUnit(Unit.U_SPEARTON);
+                                   team.spawn(this.speartonMinion,team.game);
+                                   this.speartonMinion.isMinion = true;
+                                   this.speartonMinion.px = px;
+                                   m++;
+                              }
                               game.soundManager.playSound("AcidSpraySound",px,py);
                               game.projectileManager.initPoisonSpray(this.spellX,this.spellY,this);
                               hasHit = true;
@@ -254,7 +329,19 @@ package com.brockw.stickwar.engine.units
                          }
                     }
                }
-               if(!hasDefaultLoadout)
+               if(this.magikillType == "Explosion")
+               {
+                    Magikill.setItem(_magikill(mc),"Dragon Staff","Lava Hat","Lava Beard");
+               }
+               else if(this.magikillType == "Poison")
+               {
+                    Magikill.setItem(_magikill(mc),"Poison Staff","Yoda","Santa Beard");
+               }
+               else if(this.magikillType == "Stun")
+               {
+                    Magikill.setItem(_magikill(mc),"Purple Staff","Moon Stars Hat","Default");
+               }
+               else if(!hasDefaultLoadout)
                {
                     Magikill.setItem(_magikill(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
                }
@@ -351,16 +438,28 @@ package com.brockw.stickwar.engine.units
           
           public function stunCooldown() : Number
           {
+               if(this.magikillType != "Stun")
+               {
+                    return 69;
+               }
                return this.stunSpellCooldown.cooldown();
           }
           
           public function nukeCooldown() : Number
           {
+               if(this.magikillType != "Explosion")
+               {
+                    return 69;
+               }
                return this.nukeSpellCooldown.cooldown();
           }
           
           public function poisonDartCooldown() : Number
           {
+               if(this.magikillType != "Poison")
+               {
+                    return 69;
+               }
                return this.poisonDartSpellCooldown.cooldown();
           }
           
