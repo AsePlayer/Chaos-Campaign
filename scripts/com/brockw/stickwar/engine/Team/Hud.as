@@ -38,7 +38,7 @@ package com.brockw.stickwar.engine.Team
                var height:Number = MovieClip(this.hud.map).height;
                for(u in game.units)
                {
-                    if(Boolean(game.units[u].onMap(game)))
+                    if(Boolean(game.units[u].onMap(game)) && !game.teamA.blind)
                     {
                          game.units[u].drawOnHud(this.hud.map,game);
                     }
@@ -47,8 +47,16 @@ package com.brockw.stickwar.engine.Team
                MovieClip(this.hud.map).graphics.drawRect(width * game.screenX / game.map.width,0,width * game.map.screenWidth / game.map.width,height);
                if(game.fogOfWar.isFogOn)
                {
-                    w = width * game.team.getVisionRange() / game.map.width;
-                    sx = 0;
+                    if(game.team == game.teamA && game.team.blind)
+                    {
+                         w = 0;
+                         sx = 0;
+                    }
+                    else if(game.team == game.teamA)
+                    {
+                         w = width * game.team.getVisionRange() / game.map.width;
+                         sx = 0;
+                    }
                     if(game.team == game.teamA)
                     {
                          sx = w;
