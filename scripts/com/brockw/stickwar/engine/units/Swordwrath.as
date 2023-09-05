@@ -6,7 +6,6 @@ package com.brockw.stickwar.engine.units
      import com.brockw.stickwar.engine.Ai.command.UnitCommand;
      import com.brockw.stickwar.engine.StickWar;
      import com.brockw.stickwar.engine.Team.Tech;
-     import com.brockw.stickwar.market.MarketItem;
      import flash.display.MovieClip;
      import flash.filters.GlowFilter;
      
@@ -36,8 +35,19 @@ package com.brockw.stickwar.engine.units
           
           public var isMinion:Boolean = false;
           
+          public var swordType:String = "Default";
+          
+          private var setupComplete:Boolean = false;
+          
+          private var isStunning:Boolean = false;
+          
+          public var randomSwords:Array;
+          
+          public var sword:String = "Default";
+          
           public function Swordwrath(game:StickWar)
           {
+               this.randomSwords = ["Bronze Sword","Steel Sword","Copper Sword","Saladins Sword"];
                super(game);
                _mc = new _swordwrath();
                this.init(game);
@@ -117,6 +127,24 @@ package com.brockw.stickwar.engine.units
           
           override public function update(game:StickWar) : void
           {
+               if(!this.setupComplete)
+               {
+                    if(this.swordType == "Club")
+                    {
+                         stunner = true;
+                         this.sword = "Club";
+                         this.setupComplete = true;
+                    }
+                    else if(this.swordType == "Random")
+                    {
+                         this.sword = this.randomSwords[Math.floor(Math.random() * this.randomSwords.length)];
+                         this.setupComplete = true;
+                    }
+               }
+               else
+               {
+                    isNormal = false;
+               }
                var currentLabel:String = null;
                this.rageSpell.update();
                updateCommon(game);
@@ -150,11 +178,14 @@ package com.brockw.stickwar.engine.units
                     }
                     else if(_state == S_RUN)
                     {
-                         if(!this.isMinion && !this.rageSpell.inEffect() && team.tech.isResearched(Tech.SWORDWRATH_RAGE) && this.rageCooldown() <= 0 && this.health <= this.maxHealth / 2)
+                         if(this.swordType != "Club")
                          {
-                              this.rageSpell.spellActivate(team);
-                              this.heal(1,20);
-                              team.game.soundManager.playSoundRandom("Rage",3,px,py);
+                              if(!this.isMinion && !this.rageSpell.inEffect() && team.tech.isResearched(Tech.SWORDWRATH_RAGE) && this.rageCooldown() <= 0 && this.health <= this.maxHealth / 1.5)
+                              {
+                                   this.rageSpell.spellActivate(team);
+                                   this.heal(1,20);
+                                   team.game.soundManager.playSoundRandom("Rage",3,px,py);
+                              }
                          }
                          if(isFeetMoving())
                          {
@@ -180,9 +211,12 @@ package com.brockw.stickwar.engine.units
                     {
                          if(!this.rageSpell.inEffect() && team.tech.isResearched(Tech.SWORDWRATH_RAGE) && this.rageCooldown() <= 0)
                          {
-                              this.rageSpell.spellActivate(team);
-                              this.heal(5,4);
-                              team.game.soundManager.playSoundRandom("Rage",3,px,py);
+                              if(this.swordType != "Club")
+                              {
+                                   this.rageSpell.spellActivate(team);
+                                   this.heal(5,4);
+                                   team.game.soundManager.playSoundRandom("Rage",3,px,py);
+                              }
                          }
                          if(mc.mc.swing != null)
                          {
@@ -235,10 +269,7 @@ package com.brockw.stickwar.engine.units
                     }
                     MovieClip(_mc.mc).nextFrame();
                }
-               if(!hasDefaultLoadout)
-               {
-                    Swordwrath.setItem(_swordwrath(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
-               }
+               Swordwrath.setItem(_swordwrath(mc),this.sword,"","");
           }
           
           override protected function getDeathLabel(game:StickWar) : String
