@@ -1,6 +1,7 @@
 package com.brockw.stickwar.engine.projectile
 {
      import com.brockw.game.Util;
+     import com.brockw.stickwar.engine.Ai.*;
      import com.brockw.stickwar.engine.Entity;
      import com.brockw.stickwar.engine.StickWar;
      import com.brockw.stickwar.engine.Team.Team;
@@ -94,11 +95,15 @@ package com.brockw.stickwar.engine.projectile
           
           public var isFire:Boolean;
           
+          public var isExplode:Boolean;
+          
           private var _area:Number;
           
           private var _areaDamage:Number;
           
           protected var hasArrowDeath:Boolean;
+          
+          public var isPierce:Boolean = false;
           
           public function Projectile()
           {
@@ -146,6 +151,11 @@ package com.brockw.stickwar.engine.projectile
                {
                     visible = false;
                }
+               if(this.isPierce)
+               {
+                    this.area = 100;
+                    this.areaDamage = 5;
+               }
                effects = game.projectileManager.airEffects;
                px += this.dx;
                py += this.dy;
@@ -182,9 +192,15 @@ package com.brockw.stickwar.engine.projectile
                     cDistance = Math.abs(x - this.unitNotToHit.px);
                     if(!Unit(this.unitNotToHit).checkForHitPoint(this.p3,Unit(this.unitNotToHit)) || cDistance > this.lastDistanceToCentre)
                     {
+                         if(this.isExplode)
+                         {
+                              this.team.game.projectileManager.initNuke(this.unitNotToHit.px,this.unitNotToHit.py,this._inflictor,10);
+                              this.team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
+                              this.isExplode = false;
+                         }
                          direction = Util.sgn(this.dx);
-                         this.dz = this.dx = this.dy = 0;
                          this.visible = false;
+                         this.dz = this.dx = this.dy = 0;
                          if(this.unitNotToHit is Unit)
                          {
                               Unit(this.unitNotToHit).stun(this.stunTime);
