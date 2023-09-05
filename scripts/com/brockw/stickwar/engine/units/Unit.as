@@ -304,6 +304,10 @@ package com.brockw.stickwar.engine.units
           
           public var canBeTargeted:Boolean = true;
           
+          public var stunner:Boolean = false;
+          
+          public var isMinion:Boolean = false;
+          
           public function Unit(game:StickWar)
           {
                this.hasDefaultLoadout = false;
@@ -1322,6 +1326,10 @@ package com.brockw.stickwar.engine.units
                var p1:Point = MovieClip(this._mc.mc.tip).localToGlobal(new Point(0,0));
                if(target.checkForHitPoint(p1,target))
                {
+                    if(this.stunner)
+                    {
+                         target.stun(20);
+                    }
                     target.damage(0,this.damageToDeal,this);
                     return true;
                }
@@ -1365,7 +1373,7 @@ package com.brockw.stickwar.engine.units
                {
                     if(!(com.brockw.stickwar.engine.units.Unit.D_NO_SOUND & type))
                     {
-                         if(this.isArmoured)
+                         if(this.isArmoured && !this.isMinion)
                          {
                               this.team.game.soundManager.playSoundRandom("hitOnArmour",7,px,py);
                          }
@@ -1383,7 +1391,7 @@ package com.brockw.stickwar.engine.units
                     {
                          dmg = amount * modifier;
                     }
-                    if(!(com.brockw.stickwar.engine.units.Unit.D_NO_BLOOD & type))
+                    if(!(com.brockw.stickwar.engine.units.Unit.D_NO_BLOOD & type) && !isMinion)
                     {
                          this.team.game.bloodManager.addBlood(px,py,0 - this.team.direction,this.team.game);
                     }
