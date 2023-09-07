@@ -1,4 +1,5 @@
 <Campaign>
+
 <level title="Medusa" number="1" map="3" story="" controller="CampaignShadow" points="1">
 <normal>1.5</normal>
 <hard>1.0</hard>
@@ -74,7 +75,7 @@
 <insane>.85</insane>
 <normalHealthScale>.6</normalHealthScale>
 <normalDamageScale>.5</normalDamageScale>
-<tip>Tip: Crawlers reach their full potential in packs, making them very susceptible to AoE burst damage!</tip>
+<tip>Tip: Crawlers have low health and reach their full potential in packs, making them very susceptible to explosions and poison!</tip>
 
 <player race="Chaos" statueHealth="1200">
 <gold>500</gold>
@@ -129,7 +130,7 @@
 <unit>Cat</unit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Knight</startingUnit>
+<startingUnit>Cat</startingUnit>
 </player>
 
 <oponent race="Chaos" statueHealth="1500">
@@ -138,9 +139,6 @@
 <raceName>Giants</raceName>
 <statue>giant</statue>
 <unit>Giant</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <UnitComposition>
@@ -178,7 +176,7 @@
 
 </player>
 <oponent race="Chaos" statueHealth="1500"> 
-<gold>2000</gold>
+<gold>1000</gold>
 <mana>400</mana>
 <raceName>Eclipsors</raceName> 
 <statue>wingadon</statue>
@@ -205,8 +203,8 @@
 <normal>1.65</normal>
 <hard>1.5</hard>
 <insane>.85</insane>
-<normalHealthScale>.7</normalHealthScale>
-<normalDamageScale>.6</normalDamageScale>
+<normalHealthScale>0.9</normalHealthScale>
+<normalDamageScale>0.8</normalDamageScale>
 <tip>Tip: Unlike most units, Eclipsors can fly over poison pools to avoid them!</tip>
 <player race="Chaos" statueHealth="1500">
 <gold>1000</gold>
@@ -248,14 +246,14 @@
 <level title="Marrowkai's Power Grab: Reclaiming the Throne" number="7" map="8" story="The Chaos Empire is on the brink of restoration, but a false idol threatens to unravel your efforts! Show them what it means to be Queen and unite the Chaos Empire once and for all!" controller="CampaignShadow" points="2">
 <hasInsaneWall>true</hasInsaneWall>
 <unlock>Dead</unlock>
-<normal>1.65</normal>
-<hard>1.5</hard>
+<normal>1.3</normal>
+<hard>1.25</hard>
 <insane>.85</insane>
 <normalHealthScale>.8</normalHealthScale>
 <normalDamageScale>.7</normalDamageScale>
 <tip>Tip: Take out the rouge Marrowkai to put an end to this madness once and for all!</tip>
 <player race="Chaos" statueHealth="1500">
-<gold>1000</gold>
+<gold>2000</gold>
 <mana>500</mana>
 <raceName>Medusa's Army</raceName>
 <statue>medusa</statue>
@@ -292,9 +290,9 @@
 <Bomber>2</Bomber>
 <Knight>5</Knight>
 <Wingadon>2</Wingadon>
-<Dead>2</Dead>
+<Dead>3</Dead>
 <Giant>2</Giant>
-<Cat>1</Cat>
+<Cat>5</Cat>
 <SkelatalMage>0</SkelatalMage>
 </UnitComposition>
 </oponent>
@@ -304,562 +302,207 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<level title="???" number="8" map="1" story="???" controller="CampaignShadow" points="1">
+<level title="Scouting Party: Unexpected Guests" number="8" map="8" story="En route to the Order Empire, Queen Medusa's dominion crosses paths with an unexpected scouting party. They shall not live to tell tale of the encounter!" controller="CampaignKnight" points="1">
 <hasInsaneWall>true</hasInsaneWall>
 <unlock>SkelatalMage</unlock>
+<unlock>Medusa</unlock>
 <normal>1.65</normal>
 <hard>1.5</hard>
 <insane>.85</insane>
-<normalHealthScale>.6</normalHealthScale>
-<normalDamageScale>.5</normalDamageScale>
-<tip>Tip: Support MinGames and the Chaos Mod's development by clicking the button in the Main Menu!</tip>
-
-<player race="Chaos" statueHealth="1500">
-<gold>500</gold>
-<mana>200</mana>
-<raceName>Medusa's Army</raceName>
+<normalHealthScale>.8</normalHealthScale>
+<normalDamageScale>.7</normalDamageScale>
+<tip>Tip: Avoid over-extending and pick off the scouts one-by-one. Leave no survivors!</tip>
+<player race="Chaos" statueHealth="1200">
+<gold>2000</gold>
+<mana>1000</mana>
+<raceName>Chaos Empire</raceName>
+<statue>chaos</statue>
 <unit>Medusa</unit>
 <unit>Knight</unit>
 <unit>Bomber</unit>
 <unit>Cat</unit>
 <unit>Giant</unit>
 <unit>Wingadon</unit>
+<unit>Dead</unit>
+<unit>SkelatalMage</unit>
+<startingUnit>SkelatalMage</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Wingadon</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+</player>
+
+<oponent race="Order" statueHealth="1500">
+<gold>200</gold>
+<mana>500</mana>
+<raceName>Scouting Party</raceName> 
+<statue>default</statue>
+<unit>Miner</unit>
+<unit>FlyingCrossbowman</unit>
+<unit>Ninja</unit>
+<startingUnit>FlyingCrossbowman</startingUnit>
+
+<UnitComposition>
+<Miner>0</Miner>
+<FlyingCrossbowman>3</FlyingCrossbowman>
+<Ninja>4</Ninja>
+</UnitComposition>
+</oponent>
+</level>
+
+
+
+<level title="Raiding Party: Attack at Fern Crest" number="9" map="1" story="Queen Medusa, now fully empowered, hungers for unparalleled mayhem. She sets her sights on the tranquil towns nestled betwixt the grass hills, plotting a coordinated attack. They shall bear witness to her dreaded return..." controller="CampaignKnight" points="2">
+<hasInsaneWall>true</hasInsaneWall>
+<normal>1.65</normal>
+<hard>1.25</hard>
+<insane>.85</insane>
+<normalHealthScale>.8</normalHealthScale>
+<normalDamageScale>.7</normalDamageScale>
+<tip>Tip: Use your abilities to overpower the stronger enemy!</tip>
+<player race="Chaos" statueHealth="1200">
+<gold>0</gold>
+<mana>0</mana>
+<raceName>Chaos Empire</raceName>
+<statue>chaos</statue>
+<unit>Medusa</unit>
+<unit>Knight</unit>
+<unit>Bomber</unit>
+<unit>Cat</unit>
+<unit>Giant</unit>
+<unit>Wingadon</unit>
+<unit>Dead</unit>
+<unit>SkelatalMage</unit>
+</player>
+
+<oponent race="Order" statueHealth="1200">
+<gold>0</gold>
+<mana>0</mana>
+<raceName>Fern Crest</raceName> 
+<statue>default</statue>
+<unit>Swordwrath</unit>
+<unit>Archidon</unit>
+<unit>Spearton</unit>
+<unit>Ninja</unit>
+<unit>FlyingCrossbowman</unit>
+<unit>Monk</unit>
+<unit>Magikill</unit>
+<UnitComposition>
+</UnitComposition>
+</oponent>
+</level>
+
+
+
+
+<level title="Lost Giant" number="10" map="2" story="A lonely giant just trying to find his way back home..." controller="CampaignCutScene1" points="1">
+<hasInsaneWall>true</hasInsaneWall>
+<normal>1.65</normal>
+<hard>1.25</hard>
+<insane>.85</insane>
+<normalHealthScale>.8</normalHealthScale>
+<normalDamageScale>.7</normalDamageScale>
+<tip>Tip: Just let it play out lol</tip>
+<player race="Chaos" statueHealth="1200">
+<gold>0</gold>
+<mana>0</mana>
+<raceName>Chaos Empire</raceName>
+<statue>giant</statue>
+<unit>Giant</unit>
+<startingUnit>Giant</startingUnit>
+</player>
+
+<oponent race="Order" statueHealth="500">
+<gold>0</gold>
+<mana>0</mana>
+<raceName>Order Empire</raceName> 
+<statue>default</statue>
+<unit>Swordwrath</unit>
+<unit>Archidon</unit>
+<unit>Spearton</unit>
+<unit>Ninja</unit>
+<unit>FlyingCrossbowman</unit>
+<unit>Monk</unit>
+<unit>Magikill</unit>
+<UnitComposition>
+</UnitComposition>
+</oponent>
+</level>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<level title="More levels coming soon..." number="11" map="8" story="Who knows what awaits..." controller="CampaignShadow" points="1">
+<hasInsaneWall>true</hasInsaneWall>
+<normal>1.65</normal>
+<hard>1.5</hard>
+<insane>.85</insane>
+<normalHealthScale>.8</normalHealthScale>
+<normalDamageScale>.7</normalDamageScale>
+<tip>Tip: Take out the rouge Marrowkai to put an end to this madness once and for all!</tip>
+<player race="Chaos" statueHealth="1500">
+<gold>3000</gold>
+<mana>500</mana>
+<raceName>Medusa's Army</raceName>
+<statue>medusa</statue>
+<unit>Medusa</unit>
+<unit>Knight</unit>
+<unit>Bomber</unit>
+<unit>Cat</unit>
+<unit>Giant</unit>
+<unit>Wingadon</unit>
+<unit>Dead</unit>
+
 </player>
 
 <oponent race="Chaos" statueHealth="1500">
 <gold>500</gold>
-<mana>200</mana>
-<raceName>???</raceName> 
+<mana>500</mana>
+<raceName>The Mod So Far</raceName> 
+<statue>chaos</statue>
 <unit>Knight</unit>
-<unit>Wingadon</unit>
-<unit>Giant</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Giant</startingUnit>
-<startingUnit>Knight</startingUnit>
-<startingUnit>Wingadon</startingUnit>
-<UnitComposition>
-<Knight>8</Knight>
-<Giant>3</Giant>
-<Wingadon>6</Wingadon>
-</UnitComposition>
-</oponent>
-</level>
-<level title="???" number="7" map="4" story="???" controller="CampaignShadow" points="1">
-<normal>1.6</normal>
-<hard>1.3</hard>
-<insane>.8</insane>
-<normalHealthScale>.7</normalHealthScale>
-<tip>Tip: Crawlers are more powerful in numbers. Area damage from Bombers will help. Wingidons are also a good choice.</tip>
-
-<player race="Chaos" statueHealth="1500">
-<gold>500</gold>
-<mana>200</mana>
-<raceName>Medusa's Army</raceName>
-<unit>Medusa</unit>
-<unit>SkelatalMage</unit>
-<unit>Dead</unit>
-<unit>Knight</unit>
-<unit>Wingadon</unit>
-<unit>Bomber</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Knight</startingUnit>
-</player>
-
-<oponent race="Chaos" statueHealth="0">
-<gold>900</gold>
-<mana>0</mana>
-<raceName>Crawlers</raceName> 
-<unit>Cat</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<UnitComposition>
-<Cat>25</Cat>
-</UnitComposition>
-</oponent>
-</level>
-
-<level title="???" number="8" map="3" story="???" controller="CampaignShadow" points="1">
-<hasInsaneWall>true</hasInsaneWall>
-<normal>1.75</normal>
-<hard>.95</hard>
-<insane>.8</insane>
-<normalHealthScale>.5</normalHealthScale>
-<tip>Tip: Giants attack very slowly, try attacking once, then run your units behind them, attack and repeat.</tip>
-
-<player race="Chaos" statueHealth="1500">
-<gold>500</gold>
-<mana>0</mana>
-<raceName>Medusa's Army</raceName>
-<unit>Medusa</unit>
-<unit>SkelatalMage</unit>
-<unit>Dead</unit>
-<unit>Knight</unit>
-<unit>Wingadon</unit>
-<unit>Cat</unit>
-<unit>Bomber</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-</player>
-
-<oponent race="Chaos" statueHealth="0">
-<gold>900</gold>
-<mana>0</mana>
-<raceName>Giants</raceName> 
-<statue>giant</statue>
-<unit>Giant</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Giant</startingUnit>
-<castleArcher>1</castleArcher>
-<UnitComposition>
-<Giant>8</Giant>
-</UnitComposition>
-</oponent>
-</level>
-
-<level title="???" number="9" map="4" story="???" controller="CampaignShadow" points="1">
-<hasInsaneWall>true</hasInsaneWall>
-<normal>1.8</normal>
-<hard>1.4</hard>
-<insane>.9</insane>
-<normalHealthScale>.55</normalHealthScale>
-<tip>Tip: The JuggerKnight heavy armor is good at blocking arrows.</tip>
-
-<player race="Chaos" statueHealth="1500">
-<gold>500</gold>
-<mana>200</mana>
-<raceName>Chaos Empire</raceName>  
-<unit>Medusa</unit>
-<unit>SkelatalMage</unit>
-<unit>Dead</unit>
-<unit>Knight</unit>
-<unit>Wingadon</unit>
 <unit>Bomber</unit>
 <unit>Cat</unit>
 <unit>Giant</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Giant</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Dead</startingUnit>
-</player>
-
-<oponent race="Order" statueHealth="0">
-<gold>500</gold>
-<mana>0</mana>
-<raceName>Pertland</raceName> 
-<statue>archidon</statue>
-<unit>Swordwrath</unit>
-<unit>Archidon</unit>
-<unit>Monk</unit>
-<unit>EnslavedGiant</unit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Swordwrath</startingUnit>
-<startingUnit>Archidon</startingUnit>
-<startingUnit>EnslavedGiant</startingUnit>
-<castleArcher>1</castleArcher>
-<UnitComposition>
-<Swordwrath>4</Swordwrath>
-<Archidon>20</Archidon>
-<Monk>3</Monk>
-<EnslavedGiant>4</EnslavedGiant>
-</UnitComposition>
-</oponent>
-</level>
-
-<level title="???" number="10" map="1" story="???" controller="CampaignShadow" points="1">
-<hasInsaneWall>true</hasInsaneWall>
-<normal>1.65</normal>
-<hard>1.5</hard>
-<insane>.85</insane>
-<normalHealthScale>.6</normalHealthScale>
-<normalDamageScale>.5</normalDamageScale>
-<tip>Tip: Giants are effective against heavily armored units.</tip>
-
-<player race="Chaos" statueHealth="1500">
-<gold>500</gold>
-<mana>200</mana>
-<raceName>Chaos Empire</raceName>  
-<unit>Medusa</unit>
-<unit>SkelatalMage</unit>
-<unit>Dead</unit>
-<unit>Knight</unit>
 <unit>Wingadon</unit>
-<unit>Bomber</unit>
-<unit>Cat</unit>
-<unit>Giant</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Knight</startingUnit>
-<startingUnit>Dead</startingUnit>
-</player>
-
-<oponent race="Order" statueHealth="0">
-<gold>500</gold>
-<mana>200</mana>
-<raceName>Westwind</raceName> 
-<statue>spearton</statue>
-<unit>Swordwrath</unit>
-<unit>Archidon</unit>
-<unit>Monk</unit>
-<unit>EnslavedGiant</unit>
-<unit>Spearton</unit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Spearton</startingUnit>
-<startingUnit>Archidon</startingUnit>
-<startingUnit>Monk</startingUnit>
-<castleArcher>1</castleArcher>
-<UnitComposition>
-<Spearton>8</Spearton>
-<Archidon>25</Archidon>
-<Monk>3</Monk>
-<EnslavedGiant>1</EnslavedGiant>
-<Swordwrath>0</Swordwrath>
-</UnitComposition>
-</oponent>
-</level>
-
-<level title="???" number="11" map="5" story="???" controller="CampaignShadow" points="1">
-<hasInsaneWall>true</hasInsaneWall>
-<normal>1.7</normal>
-<hard>1.4</hard>
-<insane>.85</insane>
-<normalHealthScale>.75</normalHealthScale>
-<tip>Tip: Chaos will benefit from auto curing during battle. However they can not instantly cure themselves so this can be also seen as a disadvantage in some cases as the Order have Monks that can instantly cure.</tip>
-
-<player race="Chaos" statueHealth="1500">
-<gold>500</gold>
-<mana>200</mana>
-<raceName>Chaos Empire</raceName>  
-<unit>Medusa</unit>
-<unit>SkelatalMage</unit>
 <unit>Dead</unit>
-<unit>Knight</unit>
-<unit>Wingadon</unit>
-<unit>Bomber</unit>
-<unit>Cat</unit>
-<unit>Giant</unit>
+<unit>SkelatalMage</unit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Wingadon</startingUnit>
-<startingUnit>Knight</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
 <startingUnit>SkelatalMage</startingUnit>
-</player>
-
-<oponent race="Order" statueHealth="0">
-<gold>500</gold>
-<mana>0</mana>
-<raceName>Mountains</raceName> 
-<statue>magikill</statue>
-<unit>Swordwrath</unit>
-<unit>Archidon</unit>
-<unit>Monk</unit>
-<unit>EnslavedGiant</unit>
-<unit>Spearton</unit>
-<unit>Magikill</unit>
-<unit>Ninja</unit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Archidon</startingUnit>
-<startingUnit>Monk</startingUnit>
-<startingUnit>Magikill</startingUnit>
-<startingUnit>Ninja</startingUnit>
-<castleArcher>1</castleArcher>
 <UnitComposition>
-<Swordwrath>4</Swordwrath>
-<Spearton>5</Spearton>
-<Archidon>6</Archidon>
-<Ninja>6</Ninja>
-<Monk>2</Monk>
-<Magikill>4</Magikill>
-<EnslavedGiant>1</EnslavedGiant>
+<Bomber>2</Bomber>
+<Knight>5</Knight>
+<Wingadon>2</Wingadon>
+<Dead>3</Dead>
+<Giant>2</Giant>
+<Cat>5</Cat>
+<SkelatalMage>0</SkelatalMage>
 </UnitComposition>
 </oponent>
 </level>
 
-<level title="???" number="12" map="2" story="???" controller="CampaignShadow" points="1">
-<hasInsaneWall>true</hasInsaneWall>
-<normal>1.65</normal>
-<hard>1.4</hard>
-<insane>.8</insane>
-<normalHealthScale>.7</normalHealthScale>
-<tip>Tip: Use your Deads in large numbers to pick the Albowtross out of the sky. Medusa and Marrowkai will also hit air units.</tip>
 
-<player race="Chaos" statueHealth="1500">
-<gold>500</gold>
-<mana>200</mana>
-<raceName>Chaos Empire</raceName>  
-<unit>Medusa</unit>
-<unit>SkelatalMage</unit>
-<unit>Dead</unit>
-<unit>Knight</unit>
-<unit>Wingadon</unit>
-<unit>Bomber</unit>
-<unit>Cat</unit>
-<unit>Giant</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>SkelatalMage</startingUnit>
-<startingUnit>Wingadon</startingUnit>
-</player>
 
-<oponent race="Order" statueHealth="0">
-<gold>500</gold>
-<mana>0</mana>
-<raceName>Albowtross</raceName> 
-<unit>Swordwrath</unit>
-<unit>Archidon</unit>
-<unit>Monk</unit>
-<unit>EnslavedGiant</unit>
-<unit>Spearton</unit>
-<unit>Magikill</unit>
-<unit>Ninja</unit>
-<unit>FlyingCrossbowman</unit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Swordwrath</startingUnit>
-<startingUnit>Magikill</startingUnit>
-<startingUnit>FlyingCrossbowman</startingUnit>
-<castleArcher>1</castleArcher>
-<UnitComposition>
-<Swordwrath>3</Swordwrath>
-<Spearton>2</Spearton>
-<Ninja>3</Ninja>
-<Archidon>2</Archidon>
-<FlyingCrossbowman>6</FlyingCrossbowman>
-<Monk>2</Monk>
-<Magikill>4</Magikill>
-<EnslavedGiant>2</EnslavedGiant>
-</UnitComposition>
-</oponent>
-</level>
-
-<level title="???" number="13" map="6" story="???" controller="CampaignShadow" points="1">
-<hasInsaneWall>true</hasInsaneWall>
-<normal>1.6</normal>
-<hard>1.4</hard>
-<insane>.8</insane>
-<normalHealthScale>.7</normalHealthScale>
-<tip>Tip: Take out key units first.</tip>
-
-<player race="Chaos" statueHealth="1500">
-<gold>500</gold>
-<mana>200</mana>
-<raceName>Chaos Empire</raceName> 
-<unit>Medusa</unit>
-<unit>SkelatalMage</unit>
-<unit>Dead</unit>
-<unit>Knight</unit>
-<unit>Wingadon</unit>
-<unit>Bomber</unit>
-<unit>Cat</unit>
-<unit>Giant</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Bomber</startingUnit>
-<startingUnit>Bomber</startingUnit>
-<startingUnit>Dead</startingUnit>
-<startingUnit>Knight</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Wingadon</startingUnit>
-<startingUnit>SkelatalMage</startingUnit>
-</player>
-
-<oponent race="Order" statueHealth="0">
-<gold>500</gold>
-<mana>200</mana>
-<raceName>Order's Gates</raceName> 
-<unit>Swordwrath</unit>
-<unit>Spearton</unit>
-<unit>Archidon</unit>
-<unit>Ninja</unit>
-<unit>Magikill</unit>
-<unit>Monk</unit>
-<unit>FlyingCrossbowman</unit>
-<unit>EnslavedGiant</unit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Swordwrath</startingUnit>
-<startingUnit>Spearton</startingUnit>
-<startingUnit>Ninja</startingUnit>
-<startingUnit>Magikill</startingUnit>
-<startingUnit>Monk</startingUnit>
-<startingUnit>FlyingCrossbowman</startingUnit>
-<UnitComposition>
-<Ninja>3</Ninja>
-<Spearton>3</Spearton>
-<Archidon>4</Archidon>
-<Swordwrath>7</Swordwrath>
-<FlyingCrossbowman>4</FlyingCrossbowman>
-<Magikill>4</Magikill>
-<EnslavedGiant>2</EnslavedGiant>
-</UnitComposition>
-</oponent>
-</level>
-
-<level title="???" number="14" map="7" story="???" controller="CampaignShadow" points="1">
-<hasInsaneWall>true</hasInsaneWall>
-<normal>1.6</normal>
-<hard>1.4</hard>
-<insane>.78</insane>
-<normalHealthScale>.7</normalHealthScale>
-<tip>Tip: Use everything you have learned up to this point to fight the most difficult battle of all.</tip>
-
-<player race="Chaos" statueHealth="1500">
-<raceName>Medusa</raceName> 
-<mana>1000</mana>
-<gold>1000</gold>
-<statue>medusa</statue>
-<unit>Medusa</unit>
-<unit>Bomber</unit>
-<unit>Knight</unit>
-<unit>Giant</unit>
-<unit>Dead</unit>
-<unit>Cat</unit>
-<unit>Wingadon</unit>
-<unit>SkelatalMage</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Bomber</startingUnit>
-<startingUnit>Bomber</startingUnit>
-<startingUnit>Dead</startingUnit>
-<startingUnit>Knight</startingUnit>
-<startingUnit>Giant</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Cat</startingUnit>
-<startingUnit>Wingadon</startingUnit>
-<startingUnit>SkelatalMage</startingUnit>
-</player>
-
-<oponent race="Order" statueHealth="0">
-<raceName>Order Empire</raceName> 
-<mana>1000</mana>
-<gold>1000</gold>
-<statue>swordwrath</statue>
-<unit>Swordwrath</unit>
-<unit>Spearton</unit>
-<unit>Archidon</unit>
-<unit>Ninja</unit>
-<unit>Magikill</unit>
-<unit>Monk</unit>
-<unit>EnslavedGiant</unit>
-<unit>FlyingCrossbowman</unit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>     
-<startingUnit>Swordwrath</startingUnit>
-<startingUnit>Spearton</startingUnit>
-<startingUnit>Archidon</startingUnit>
-<startingUnit>Ninja</startingUnit>
-<startingUnit>Magikill</startingUnit>
-<startingUnit>Monk</startingUnit>
-<startingUnit>EnslavedGiant</startingUnit>
-
-<UnitComposition>
-<Ninja>2</Ninja>
-<Spearton>2</Spearton>
-<Archidon>3</Archidon>
-<Swordwrath>3</Swordwrath>
-<FlyingCrossbowman>4</FlyingCrossbowman>
-<Magikill>4</Magikill>
-<EnslavedGiant>2</EnslavedGiant>
-<Monk>2</Monk>
-</UnitComposition>
-</oponent>
-</level>
 
 <Order>
 <UnitComposition>

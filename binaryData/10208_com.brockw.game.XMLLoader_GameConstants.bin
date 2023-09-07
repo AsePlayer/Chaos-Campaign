@@ -2,7 +2,7 @@
 <debug>0</debug>
 <isKongregate>0</isKongregate>
 <campaignDebug>0</campaignDebug>
-<campaignVersion>v0.95 BETA</campaignVersion>
+<campaignVersion>v0.98 BETA</campaignVersion>
 <isAlpha>1</isAlpha>
 <hasArmory>1</hasArmory>
 <skipToLevel>6</skipToLevel>
@@ -497,7 +497,7 @@
 
 <skelator>
 <name>Marrowkai</name>
-<info>A skeletal mage able to cast rows of deadly fists and summon reapers.</info>
+<info>A skeletal mage empowered to steal life by casting rows of deadly fists and summoning reapers.</info>
 <hotkey>81</hotkey>
 <gold>400</gold>
 <mana>400</mana>
@@ -551,7 +551,7 @@
 
 <medusa>
 <name>Queen Medusa</name>
-<info>Queen of the Chaos Empire. Able to turn Units to stone and spray pools of poison.</info>
+<info>Queen of the Chaos Empire. Able to turn Units to stone and spray pools of venomous poison.</info>
 <hotkey>87</hotkey>
 <gold>-1</gold>
 <mana>-1</mana>
@@ -677,7 +677,7 @@
 <info>Burst of accelerated wing movement at the cost of being able to shoot.</info>
 <hotkey>81</hotkey>
 <gold>0</gold>
-<mana>25</mana>
+<mana>15</mana>
 <effect>180</effect>
 <cooldown>600</cooldown>
 <strength>2.5</strength>
@@ -950,7 +950,7 @@
 <cost>50</cost>
 <mana>100</mana>
 <effect>1</effect>
-<time>1200</time>
+<time>600</time>
 <tip>Fire a single flaming arrow with extra range and damage.</tip>
 </archidonFire>
 
@@ -1581,31 +1581,28 @@
 </Elemental>
 
 <credits>
+Chaos Empire Campaign Mod By:
+Ryan Scott (AsePlayer), Austin Dressick (Destroyer), & Cecilia Canavati (Purpi)
+
 Original Game By:
 Jason Whitham (CRAZYJAY), Brock White, & Winston Zhang
 
-Chaos Empire Campaign Mod By:
-Ryan Scott (AsePlayer), Austin Dressick (Destroyer), & Purpi
-
 Credits:
-Project Manager: AsePlayer
-Game Designer: AsePlayer
-Lead Programmer: AsePlayer
-Sprite Manager: AsePlayer & Destroyer
-Artist: Purpi
-Addtional Programming: Destroyer
-Additional Art: BlueXDN25
-Quality Assurance: AsePlayer
+Game Design, Programming & Project Management: AsePlayer
+Art: Purpi
+Sprite Manager: Destroyer & AsePlayer
+Addtional Programming: Destroyer & dyzqy
+Additional Art: BlueXDN25, Maktronius, Destroyer, AsePlayer
+Creative Consultant: Xecute
+Quality Assurance: AsePlayer & Xecute
 Lore: AsePlayer, Destroyer, Pax Orderia, & Bloxro_
-Moonlight Mountain (New Map): Destroyer, Purpi & AsePlayer
-
 
 Special Thanks:
 Pretty Good Source Code: Brock White
-MinGames Discord Community Manager: 75g
-Supporters: Nayreel17 & COCOGOAT MILKERSSSSS
 Free Flash Decompiler: 
 JPEXS (github.com/jindrapetrik/jpexs-decompiler)
+Supporters: Nayreel17 & COCOGOAT MILKERSSSSS
+MinGames Discord Community Manager: 75g
 Ex-Developers: Team Vertigo
 Our Many Beta Testers, Especially AsePlayer ;)
 
