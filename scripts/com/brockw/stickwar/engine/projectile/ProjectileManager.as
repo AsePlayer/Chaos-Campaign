@@ -269,6 +269,7 @@ package com.brockw.stickwar.engine.projectile
                n.y = -100;
                n.scale = 1;
                n.stunTime = 0;
+               n.scale = unit.scale / 2.5;
                n.drotation = unit.team.game.random.nextInt() % 4 - 2;
                n.rot = unit.team.game.random.nextInt() % 360;
                n.isDebris = false;

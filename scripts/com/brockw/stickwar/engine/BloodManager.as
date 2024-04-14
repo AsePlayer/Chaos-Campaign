@@ -6,7 +6,7 @@ package com.brockw.stickwar.engine
      public class BloodManager extends Sprite
      {
           
-          private static const NUM_BLOODS:int = 100;
+          private static const NUM_BLOODS:int = 50;
           
           private static const NUM_ASHES:int = 10;
            
@@ -18,8 +18,6 @@ package com.brockw.stickwar.engine
           private var ashPool:Array;
           
           private var ashs:Array;
-          
-          private var maxBloods:int = 5;
           
           private var amountOfBloods:int;
           
@@ -81,28 +79,35 @@ package com.brockw.stickwar.engine
           public function addBlood(px:Number, py:Number, direction:int, game:StickWar) : void
           {
                var newBlood:bloodSplat = null;
-               if(this.bloods.length >= NUM_BLOODS / (this.bloods.length / 4))
+               if(this.bloods.length >= NUM_BLOODS)
                {
-                    var oldestBlood:bloodSplat = this.bloods.shift();
-                    removeChild(oldestBlood);
-                    newBlood = oldestBlood;
-               }
-               else if(this.bloodPool.length > 0)
-               {
-                    newBlood = this.bloodPool.pop();
+                    newBlood = this.bloods.shift();
+                    this.bloods.push(newBlood);
+                    newBlood.gotoAndStop(game.random.nextInt() % newBlood.totalFrames);
+                    newBlood.x = px;
+                    newBlood.y = py;
+                    newBlood.scaleX = -Util.sgn(direction) * game.getPerspectiveScale(py);
+                    newBlood.scaleY = game.getPerspectiveScale(py);
                }
                else
                {
-                    newBlood = this.bloods.shift();
+                    if(this.bloodPool.length > 0)
+                    {
+                         newBlood = this.bloodPool.pop();
+                    }
+                    else
+                    {
+                         newBlood = this.bloods.shift();
+                    }
+                    this.bloods.push(newBlood);
+                    newBlood.gotoAndStop(game.random.nextInt() % newBlood.totalFrames);
+                    newBlood.x = px;
+                    newBlood.y = py;
+                    newBlood.alpha = 0.8;
+                    newBlood.scaleX = -Util.sgn(direction) * game.getPerspectiveScale(py);
+                    newBlood.scaleY = game.getPerspectiveScale(py);
+                    addChild(newBlood);
                }
-               this.bloods.push(newBlood);
-               newBlood.gotoAndStop(game.random.nextInt() % newBlood.totalFrames);
-               newBlood.x = px;
-               newBlood.y = py;
-               newBlood.alpha = 0.8;
-               newBlood.scaleX = -Util.sgn(direction) * game.getPerspectiveScale(py);
-               newBlood.scaleY = game.getPerspectiveScale(py);
-               addChild(newBlood);
           }
      }
 }

@@ -274,7 +274,7 @@ package com.brockw.stickwar.engine.projectile
           
           public function isReadyForCleanup() : Boolean
           {
-               return this.framesDead > 1200;
+               return this.framesDead > 400;
           }
           
           public function isInFlight() : Boolean

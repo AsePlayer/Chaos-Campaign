@@ -5,6 +5,7 @@ package com.brockw.stickwar.engine.Team
      import com.brockw.stickwar.engine.Ai.MinerAi;
      import com.brockw.stickwar.engine.Ai.TeamAi;
      import com.brockw.stickwar.engine.Ai.command.AttackMoveCommand;
+     import com.brockw.stickwar.engine.Ai.command.StandCommand;
      import com.brockw.stickwar.engine.Ai.command.UnitCommand;
      import com.brockw.stickwar.engine.Entity;
      import com.brockw.stickwar.engine.StickWar;
@@ -300,6 +301,77 @@ package com.brockw.stickwar.engine.Team
                return "";
           }
           
+          public function switchTeams(param1:Unit) : void
+          {
+               var _loc4_:Unit = null;
+               var _loc2_:ColorTransform = null;
+               var _loc3_:int = 0;
+               this.game.projectileManager.initTowerSpawn(param1.px,param1.py,this,param1.scale / 2);
+               this._units.splice(this._units.indexOf(param1),1);
+               if(param1.id in this.garrisonedUnits)
+               {
+                    delete this.garrisonedUnits[param1.id];
+               }
+               if(!param1.isSwitched)
+               {
+                    this.unitGroups[param1.type].splice(this.unitGroups[param1.type].indexOf(param1),1);
+               }
+               else
+               {
+                    this.enemyTeam.unitGroups[param1.type].push(param1);
+               }
+               if(param1.isMiner())
+               {
+                    MinerAi(param1.ai).targetOre = null;
+               }
+               for each(_loc4_ in this.enemyTeam.units)
+               {
+                    if(_loc4_.ai.currentTarget == param1)
+                    {
+                         _loc4_.ai.currentTarget = null;
+                    }
+               }
+               this.enemyTeam._units.push(param1);
+               param1.team = this.enemyTeam;
+               param1.isSwitched = !param1.isSwitched;
+               param1.ai.currentTarget = null;
+               param1.isProtected = false;
+               param1.maxHealth /= game.main.campaign.difficultyLevel;
+               param1.health = param1.maxHealth;
+               if(param1.isSwitched)
+               {
+                    _loc2_ = param1.mc.transform.colorTransform;
+                    _loc3_ = this.game.random.nextInt();
+                    _loc2_.redMultiplier = 1;
+                    _loc2_.blueMultiplier = 1;
+                    _loc2_.greenMultiplier = 1;
+                    _loc2_.redOffset = 0;
+                    _loc2_.blueOffset = 0;
+                    _loc2_.greenOffset = 0;
+                    param1.mc.transform.colorTransform = _loc2_;
+               }
+               else
+               {
+                    _loc2_ = param1.mc.transform.colorTransform;
+                    _loc3_ = this.game.random.nextInt();
+                    _loc2_.redMultiplier = 1;
+                    _loc2_.blueMultiplier = 1;
+                    _loc2_.greenMultiplier = 1;
+                    if(param1.team.isEnemy)
+                    {
+                         _loc2_.redOffset = 75;
+                    }
+                    else
+                    {
+                         _loc2_.redOffset = 0;
+                         _loc2_.blueOffset = 0;
+                         _loc2_.greenOffset = 0;
+                    }
+                    param1.mc.transform.colorTransform = _loc2_;
+               }
+               param1.ai.setCommand(game,new StandCommand(game));
+          }
+          
           public function get damageModifier() : Number
           {
                return this._damageModifier;
@@ -331,6 +403,14 @@ package com.brockw.stickwar.engine.Team
                this.game.projectileManager.initWallExplosion(w.px,3 * this.game.map.height / 5,this);
                this.game.projectileManager.initWallExplosion(w.px,4 * this.game.map.height / 5,this);
                this.game.projectileManager.initWallExplosion(w.px,5 * this.game.map.height / 5,this);
+          }
+          
+          public function removeWallAll() : void
+          {
+               while(this._walls.length != 0)
+               {
+                    removeWall(this._walls[0]);
+               }
           }
           
           public function garrisonMiner(isLocal:Boolean = false) : void
@@ -729,7 +809,7 @@ package com.brockw.stickwar.engine.Team
           {
           }
           
-          public function spawnUnitGroup(u:Array) : void
+          public function spawnUnitGroup(u:Array) : Array
           {
                var type:int = 0;
                var newUnit:Unit = null;
@@ -742,10 +822,12 @@ package com.brockw.stickwar.engine.Team
                          this.spawn(newUnit,this.game);
                          newUnit.x = newUnit.px = this.homeX + 100;
                          newUnit.y = newUnit.py = c * this.game.map.height / u.length;
+                         u[c] = newUnit;
                          this.population += newUnit.population;
                     }
                     c++;
                }
+               return u;
           }
           
           public function checkUnitCreateMouseOver(param1:GameScreen) : void
@@ -1321,11 +1403,11 @@ package com.brockw.stickwar.engine.Team
                     this._forwardUnitNotSpawn = null;
                     for(_loc6_ in this._units)
                     {
-                         if(this._units[_loc6_].isAlive() && (this._forwardUnit == null || Unit(this._units[_loc6_]).px * this.direction > this._forwardUnit.px * this.direction))
+                         if(this._units[_loc6_].isAlive() && !this._units[_loc6_].isMinion && (this._forwardUnit == null || Unit(this._units[_loc6_]).px * this.direction > this._forwardUnit.px * this.direction))
                          {
                               this._forwardUnit = this._units[_loc6_];
                          }
-                         if(this._units[_loc6_].isAlive() && !Unit(this._units[_loc6_]).isTowerSpawned && (this._forwardUnitNotSpawn == null || Unit(this._units[_loc6_]).px * this.direction > this._forwardUnitNotSpawn.px * this.direction))
+                         if(this._units[_loc6_].isAlive() && !this._units[_loc6_].isMinion && !Unit(this._units[_loc6_]).isTowerSpawned && (this._forwardUnitNotSpawn == null || Unit(this._units[_loc6_]).px * this.direction > this._forwardUnitNotSpawn.px * this.direction))
                          {
                               this._forwardUnitNotSpawn = this._units[_loc6_];
                          }

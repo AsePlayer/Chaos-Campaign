@@ -6,9 +6,11 @@ package com.brockw.stickwar.campaign.controllers
      import com.brockw.stickwar.engine.Ai.command.UnitCommand;
      import com.brockw.stickwar.engine.Team.Tech;
      import com.brockw.stickwar.engine.multiplayer.moves.UnitMove;
+     import com.brockw.stickwar.engine.units.EnslavedGiant;
      import com.brockw.stickwar.engine.units.FlyingCrossbowman;
      import com.brockw.stickwar.engine.units.Medusa;
      import com.brockw.stickwar.engine.units.Ninja;
+     import com.brockw.stickwar.engine.units.Spearton;
      import com.brockw.stickwar.engine.units.Unit;
      import com.brockw.stickwar.engine.units.Wall;
      
@@ -82,6 +84,24 @@ package com.brockw.stickwar.campaign.controllers
           
           private var spawnQueenMedusaLateGame:Boolean;
           
+          private var marrowResponse:Boolean;
+          
+          private var lostGiant:EnslavedGiant;
+          
+          private var foundLostGiant:Boolean;
+          
+          private var lostGiantApology:Boolean;
+          
+          private var lostGiantSwitches:Boolean;
+          
+          private var commanderStatus:String;
+          
+          private var justSwitchedStatus:Boolean;
+          
+          private var lastRoyalMessage:String = "";
+          
+          private var currentRoyalMessage:String = "";
+          
           public function CampaignKnight(gameScreen:GameScreen)
           {
                super(gameScreen);
@@ -128,6 +148,12 @@ package com.brockw.stickwar.campaign.controllers
                     gameScreen.team.population += 10;
                     this.medusaQueened = true;
                     this.difficulty = gameScreen.team.game.main.campaign.difficultyLevel;
+                    if(this.currentLevelTitle == "Siege: Titans Revenge")
+                    {
+                         this.leaderUnit = Spearton(gameScreen.game.unitFactory.getUnit(Unit.U_SPEARTON));
+                         gameScreen.team.enemyTeam.spawn(this.leaderUnit,gameScreen.game);
+                         this.leaderUnit.speartonType = "Royal";
+                    }
                }
                if(!this.openingMessageSent)
                {
@@ -145,9 +171,17 @@ package com.brockw.stickwar.campaign.controllers
                     {
                          this.messageOpening.setMessage("Queen Medusa has decided to grace the locals with her presence... let\'s give them something to write home about!","");
                     }
-                    else if(this.currentLevelTitle == "Scouting Party: Unexpected Guests3")
+                    else if(this.currentLevelTitle == "Marrowkai\'s Grudge: Stamp out the Magic")
                     {
-                         this.messageOpening.setMessage("Queen Medusa: Scratch my Medussy!","",0,this.medusaOneLiner);
+                         this.messageOpening.setMessage("Queen Medusa: Honestly I don\'t get the big deal. These old geezers are going to croak soon anyways!","",0,this.medusaOneLiner);
+                    }
+                    else if(this.currentLevelTitle == "Jailbreak: Titans Revolt")
+                    {
+                         this.messageOpening.setMessage("Queen Medusa: My poor babies... they will pay for this!","",0,this.medusaOneLiner);
+                    }
+                    else if(this.currentLevelTitle == "Siege: Titans Revenge")
+                    {
+                         this.messageOpening.setMessage("Queen Medusa: Their precious castle will be no more...","",0,this.medusaOneLiner);
                     }
                     else if(this.difficulty == 1)
                     {
@@ -192,6 +226,7 @@ package com.brockw.stickwar.campaign.controllers
                          gameScreen.game.team.enemyTeam.statue.x += 10000;
                          gameScreen.game.team.enemyTeam.statue.px += 10000;
                          ++gameScreen.team.enemyTeam.population;
+                         gameScreen.team.spawnUnitGroup([Unit.U_SKELATOR,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
                     }
                     if(this.explodingAlbows > 0)
                     {
@@ -542,6 +577,7 @@ package com.brockw.stickwar.campaign.controllers
                     {
                          this.leaderUnit = null;
                          this.spookedBackgroundUnits = false;
+                         gameScreen.team.enemyTeam.removeWallAll();
                          for each(u in gameScreen.team.units)
                          {
                               u.px = 10000;
@@ -570,21 +606,213 @@ package com.brockw.stickwar.campaign.controllers
                          ++gameScreen.team.enemyTeam.population;
                     }
                }
-               else if(this.currentLevelTitle == "Scouting Party: Unexpected Guests3")
+               else if(this.currentLevelTitle == "Marrowkai\'s Grudge: Stamp out the Magic")
                {
-                    CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.1);
-                    if(gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL].length > 2)
+                    if(!this.levelSetupComplete)
                     {
-                         gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL][0].magikillType = "Explosion";
-                         gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL][1].magikillType = "Poison";
-                         gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL][2].magikillType = "Stun";
+                         gameScreen.team.spawnUnitGroup([Unit.U_SKELATOR,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
+                         gameScreen.team.enemyTeam.spawnUnitGroup([Unit.U_MAGIKILL,Unit.U_MAGIKILL,Unit.U_MONK]);
+                         this.levelSetupComplete = true;
+                    }
+                    if(this.marrowResponse == false && this.messageOpening.visible == false)
+                    {
+                         this.marrowResponse = true;
+                         this.messageOpening.setMessage("Marrowkai: This one\'s personal...","");
+                         this.frames = 0;
+                    }
+                    CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.1);
+                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL])
+                    {
+                         if(u.isNormal)
+                         {
+                              randomNumber = Math.floor(Math.random() * 3) + 1;
+                              if(randomNumber == 1)
+                              {
+                                   u.magikillType = "Explosion";
+                              }
+                              else if(randomNumber == 2)
+                              {
+                                   u.magikillType = "Poison";
+                              }
+                              else
+                              {
+                                   u.magikillType = "Stun";
+                              }
+                         }
                     }
                     for each(u in gameScreen.team.enemyTeam.units)
                     {
-                         if(u.px > gameScreen.game.map.width / 2)
+                         if(u.isProtected && u.justDodgedDeath && u.type != Unit.U_MONK)
                          {
-                              u.px = gameScreen.game.map.width / 3;
+                              u.justDodgedDeath = false;
+                              this.messageOpening.setMessage("Take down the Meric to disable her Protection ability on the enemy unit!","");
+                              this.frames = 0;
                          }
+                    }
+               }
+               else if(this.currentLevelTitle == "Jailbreak: Titans Revolt")
+               {
+                    if(!this.levelSetupComplete)
+                    {
+                         gameScreen.team.spawnUnitGroup([Unit.U_GIANT,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
+                         gameScreen.team.enemyTeam.spawnUnitGroup([Unit.U_ENSLAVED_GIANT,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER]);
+                         this.levelSetupComplete = true;
+                    }
+                    CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.1);
+                    if(gameScreen.team.enemyTeam.unitGroups[Unit.U_ENSLAVED_GIANT][0] && !this.lostGiant && !this.foundLostGiant)
+                    {
+                         this.lostGiant = gameScreen.team.enemyTeam.unitGroups[Unit.U_ENSLAVED_GIANT][0];
+                         this.lostGiant.isLostGiant = true;
+                         this.foundLostGiant = true;
+                         this.lostGiant.px = gameScreen.game.map.width / 2;
+                    }
+                    if(gameScreen.team.enemyTeam.unitGroups[Unit.U_ENSLAVED_GIANT][0] && gameScreen.team.enemyTeam.unitGroups[Unit.U_ENSLAVED_GIANT][0].isLostGiant)
+                    {
+                         this.holdUnits = new UnitMove();
+                         this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+                         this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+                         if(gameScreen.team.forwardUnit)
+                         {
+                              this.holdUnits.arg0 = gameScreen.team.forwardUnit.px;
+                         }
+                         else
+                         {
+                              this.holdUnits.arg0 = gameScreen.team.statue.px;
+                         }
+                         this.holdUnits.arg1 = gameScreen.team.statue.py;
+                         this.holdUnits.units.push(gameScreen.team.enemyTeam.unitGroups[Unit.U_ENSLAVED_GIANT][0].id);
+                         this.holdUnits.execute(gameScreen.game);
+                    }
+                    if(this.lostGiant && !this.lostGiantSwitches && this.lostGiant.isSwitched)
+                    {
+                         this.messageOpening.setMessage("Lost Giant: I think... I understand...","");
+                         this.frames = 0;
+                         this.lostGiantSwitches = true;
+                    }
+                    if(this.lostGiant && !this.lostGiantApology && this.lostGiant.health < this.lostGiant.maxHealth / 1.1)
+                    {
+                         this.messageOpening.setMessage("Lost Giant: I\'m sorry Mom...","");
+                         this.frames = 0;
+                         this.lostGiantApology = true;
+                    }
+                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_FLYING_CROSSBOWMAN])
+                    {
+                         u.isExploder = true;
+                    }
+                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_SPEARTON])
+                    {
+                         u.isBasher = true;
+                    }
+               }
+               else if(this.currentLevelTitle == "Siege: Titans Revenge")
+               {
+                    if(!this.levelSetupComplete)
+                    {
+                         gameScreen.team.spawnUnitGroup([Unit.U_ENSLAVED_GIANT,Unit.U_ENSLAVED_GIANT,Unit.U_GIANT,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
+                         gameScreen.team.enemyTeam.spawnUnitGroup([Unit.U_SPEARTON,Unit.U_SPEARTON,Unit.U_SPEARTON,Unit.U_SPEARTON,Unit.U_SPEARTON,Unit.U_SPEARTON,Unit.U_ARCHER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER]);
+                         this.unitGroup1 = [[],[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH,Unit.U_SWORDWRATH,Unit.U_SPEARTON,Unit.U_ARCHER],[Unit.U_SPEARTON,Unit.U_SPEARTON],[Unit.U_ENSLAVED_GIANT],[]];
+                         this.levelSetupComplete = true;
+                    }
+                    if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1 && this.unitGroup1[0])
+                    {
+                         this.unitGroup1RunningAway = gameScreen.team.enemyTeam.spawnUnitGroup(this.unitGroup1[0]);
+                         for each(u in this.unitGroup1RunningAway)
+                         {
+                              u.ai.alwaysAttack = true;
+                         }
+                         this.unitGroup1.shift();
+                    }
+                    for each(u in gameScreen.team.enemyTeam.units)
+                    {
+                         if(u.ai.alwaysAttack)
+                         {
+                              this.holdUnits = new UnitMove();
+                              this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+                              this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+                              this.holdUnits.arg0 = gameScreen.game.map.width / 2;
+                              this.holdUnits.arg1 = u.py;
+                              this.holdUnits.units.push(u.id);
+                              this.holdUnits.execute(gameScreen.game);
+                         }
+                    }
+                    if(this.currentRoyalMessage != this.lastRoyalMessage)
+                    {
+                         this.messageOpening.setMessage("Royal Twin: " + this.currentRoyalMessage,"");
+                         this.lastRoyalMessage = this.currentRoyalMessage;
+                         this.frames = 0;
+                    }
+                    if(!this.leaderUnit || this.leaderUnit.isDead)
+                    {
+                         this.leaderUnit = null;
+                         this.currentRoyalMessage = "You... bastards... *ack*";
+                    }
+                    else if(gameScreen.team.enemyTeam.walls.length == 0)
+                    {
+                         this.currentRoyalMessage = "Wall down! Go on the offensive!";
+                    }
+                    else if(this.leaderUnit.isProtected)
+                    {
+                         this.currentRoyalMessage = "Archidons, behind me!";
+                         this.holdUnits = new UnitMove();
+                         this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+                         this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+                         this.holdUnits.arg0 = this.leaderUnit.px + 250;
+                         this.holdUnits.arg1 = this.leaderUnit.py;
+                         for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_ARCHER])
+                         {
+                              this.holdUnits.units.push(u.id);
+                         }
+                         this.holdUnits.execute(gameScreen.game);
+                    }
+                    else if(gameScreen.team.enemyTeam.walls[0] && this.leaderUnit.px > gameScreen.team.enemyTeam.walls[0].px && gameScreen.team.forwardUnit && gameScreen.team.forwardUnit.px > gameScreen.game.map.width / 2)
+                    {
+                         this.currentRoyalMessage = "Hold the line!";
+                    }
+                    else if(gameScreen.team.forwardUnit && gameScreen.team.forwardUnit.px > gameScreen.game.map.width / 2.25)
+                    {
+                         this.currentRoyalMessage = "Steady!";
+                    }
+                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_SPEARTON])
+                    {
+                         if(u.speartonType == "Royal" || u.ai.alwaysAttack)
+                         {
+                              u.partOfWall = false;
+                              if(!u.isProtected)
+                              {
+                                   u.isBasher = false;
+                              }
+                              else
+                              {
+                                   u.isBasher = true;
+                              }
+                         }
+                         else if(gameScreen.team.enemyTeam.walls[0])
+                         {
+                              u.partOfWall = true;
+                              u.isBasher = false;
+                         }
+                         else
+                         {
+                              u.partOfWall = false;
+                              u.isBasher = true;
+                         }
+                    }
+                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_ARCHER])
+                    {
+                         if(gameScreen.team.enemyTeam.unitGroups[Unit.U_ARCHER].length % 2 == 0 && u.isNormal)
+                         {
+                              u.archerType = "Splash";
+                              u.isNormal = false;
+                         }
+                         else if(u.isNormal)
+                         {
+                              u.archerType = "Fire";
+                              u.isNormal = false;
+                         }
+                    }
+                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL])
+                    {
+                         u.magikillType = "Stun";
                     }
                }
           }

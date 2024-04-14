@@ -6,7 +6,6 @@ package com.brockw.stickwar.engine.units
      import com.brockw.stickwar.engine.Ai.command.UnitCommand;
      import com.brockw.stickwar.engine.StickWar;
      import com.brockw.stickwar.engine.Team.Tech;
-     import com.brockw.stickwar.market.MarketItem;
      import flash.display.MovieClip;
      import flash.geom.Point;
      
@@ -17,6 +16,8 @@ package com.brockw.stickwar.engine.units
            
           
           public var isGay:Boolean = false;
+          
+          public var protecting:com.brockw.stickwar.engine.units.Unit;
           
           private var cureSpellCooldown:com.brockw.stickwar.engine.units.SpellCooldown;
           
@@ -131,6 +132,11 @@ package com.brockw.stickwar.engine.units
                this.cureSpellCooldown.update();
                this.slowSpellCooldown.update();
                updateCommon(game);
+               if(!this.protecting || this.protecting.isDead || this.protecting.team != team)
+               {
+                    isProtected = false;
+                    this.protecting = null;
+               }
                if(!isDieing)
                {
                     if(_isDualing)
@@ -155,6 +161,13 @@ package com.brockw.stickwar.engine.units
                               if(this.healTarget != null)
                               {
                                    this.healTarget.heal(this.healAmount,this.healDuration);
+                                   if(!this.protecting && this.healTarget.isMinion == false && this.healTarget.type != type && this.healTarget.isProtected == false)
+                                   {
+                                        this.protecting = this.healTarget;
+                                        this.healTarget.isProtected = true;
+                                        isProtected = true;
+                                        team.game.soundManager.playSound("HealSpellStart",this.healTarget.px,this.healTarget.py);
+                                   }
                                    team.game.soundManager.playSound("HealSpellFinish",this.healTarget.px,this.healTarget.py);
                               }
                               hasHit = true;
@@ -231,6 +244,11 @@ package com.brockw.stickwar.engine.units
                }
                else if(isDead == false)
                {
+                    isProtected = false;
+                    if(this.protecting)
+                    {
+                         this.protecting.isProtected = false;
+                    }
                     if(_isDualing)
                     {
                          _mc.gotoAndStop(_currentDual.defendLabel);
@@ -262,14 +280,7 @@ package com.brockw.stickwar.engine.units
                     MovieClip(_mc.mc).nextFrame();
                     _mc.mc.stop();
                }
-               if(!hasDefaultLoadout)
-               {
-                    Monk.setItem(_cleric(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
-               }
-               if(this.isGay)
-               {
-                    Monk.setItem(_cleric(mc),"Spellbook","","");
-               }
+               Monk.setItem(_cleric(mc),"Spellbook","","");
           }
           
           override public function setActionInterface(a:ActionInterface) : void

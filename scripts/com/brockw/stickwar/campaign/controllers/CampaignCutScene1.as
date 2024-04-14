@@ -69,6 +69,8 @@ package com.brockw.stickwar.campaign.controllers
           
           internal var attackGiant:UnitMove = null;
           
+          private var lol:Boolean;
+          
           public function CampaignCutScene1(gameScreen:GameScreen)
           {
                super(gameScreen);
@@ -154,6 +156,11 @@ package com.brockw.stickwar.campaign.controllers
                if(this.state == S_BEFORE_CUTSCENE)
                {
                     numGiants = 0;
+                    if(!this.lol)
+                    {
+                         gameScreen.team.spawnUnitGroup([Unit.U_GIANT]);
+                         this.lol = true;
+                    }
                     if(Boolean(gameScreen.team.unitGroups[Unit.U_GIANT]))
                     {
                          giant = gameScreen.team.unitGroups[Unit.U_GIANT][0];
@@ -299,6 +306,7 @@ package com.brockw.stickwar.campaign.controllers
                          game = gameScreen.game;
                          u1 = EnslavedGiant(game.unitFactory.getUnit(Unit.U_ENSLAVED_GIANT));
                          gameScreen.team.enemyTeam.spawn(u1,game);
+                         u1.isLostGiant = true;
                          u1.px = gameScreen.team.enemyTeam.statue.x - 200;
                          u1.py = game.map.height / 2;
                          u1.ai.setCommand(game,new HoldCommand(game));

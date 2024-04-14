@@ -163,11 +163,15 @@ package com.brockw.stickwar.engine.units
                          this.rageSpellGlow.color = 16711832;
                          isNormal = false;
                     }
-                    if(this.spellStacks > 0)
+                    if(this.spellStacks > 0 && isDead == false)
                     {
                          this.rageSpellGlow.blurX = 9 + this.spellStacks * Util.sin((2 + this.spellStacks * this.spellStacks) * Math.PI * team.game.frame / RAGE_EFFECT);
                          this.rageSpellGlow.blurY = 6 + this.spellStacks;
                          this.mc.filters = [this.rageSpellGlow];
+                    }
+                    else
+                    {
+                         this.mc.filters = [];
                     }
                }
                if(!isDieing)

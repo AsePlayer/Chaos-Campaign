@@ -113,7 +113,7 @@ package com.brockw.stickwar.engine.Ai
           
           private function lowestUnit(unit:Unit) : void
           {
-               if(unit.team != this.unit.team || unit.health == unit.maxHealth || unit is Statue)
+               if(unit.team != this.unit.team || unit.health == unit.maxHealth || unit is Statue || unit.isMinion)
                {
                     return;
                }

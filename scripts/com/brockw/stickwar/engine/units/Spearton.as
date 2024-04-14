@@ -38,6 +38,8 @@ package com.brockw.stickwar.engine.units
           
           public var isBasher:Boolean;
           
+          public var partOfWall:Boolean;
+          
           public var speartonType:String = "Default";
           
           public var speartonSetup:Boolean;
@@ -269,6 +271,10 @@ package com.brockw.stickwar.engine.units
                else if(isDead == false)
                {
                     isDead = true;
+                    if(isMinion)
+                    {
+                         isNormal = false;
+                    }
                     if(_isDualing)
                     {
                          _mc.gotoAndStop(_currentDual.defendLabel);

@@ -541,7 +541,7 @@ package com.brockw.stickwar.engine.Ai
                     return closestMedusa;
                }
                var minDistance:* = Number.POSITIVE_INFINITY;
-               if(this.currentTarget != null && (!this.currentTarget.isAlive() || !Unit(this.currentTarget).isTargetable()))
+               if(this.currentTarget != null && (!this.currentTarget.isAlive() || !Unit(this.currentTarget).isTargetable() || this.unit.team == this.currentTarget.team && this.currentTarget.isSwitched))
                {
                     minDistance = Number.POSITIVE_INFINITY;
                     this.currentTarget = null;

@@ -73,6 +73,8 @@ package com.brockw.stickwar
           
           private var _hasMovingBackground:Boolean;
           
+          public var _hasRain:Boolean;
+          
           private var _hasEffects:Boolean;
           
           private var _hasAlphaOnFogOfWar:Boolean;
@@ -103,6 +105,7 @@ package com.brockw.stickwar
           
           public function GameScreen(main:com.brockw.stickwar.BaseMain)
           {
+               this._period = 33.333333333333336;
                this._period = 33.333333333333336;
                this._period = 33.333333333333336;
                this._period = 33.333333333333336;
@@ -207,11 +210,13 @@ package com.brockw.stickwar
                          {
                               this._hasMovingBackground = true;
                               this._hasEffects = true;
+                              this._hasRain = true;
                               stage.quality = "HIGH";
                          }
                          else if(this.quality == S_MEDIUM_QUALITY)
                          {
                               this._hasMovingBackground = true;
+                              this._hasRain = true;
                               stage.quality = "LOW";
                               this._hasEffects = false;
                          }
@@ -220,6 +225,7 @@ package com.brockw.stickwar
                               stage.quality = "LOW";
                               this._hasEffects = false;
                               this._hasMovingBackground = false;
+                              this._hasRain = false;
                          }
                          trace("QUALITY: ",this.quality);
                     }

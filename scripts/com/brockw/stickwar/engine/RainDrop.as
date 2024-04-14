@@ -36,6 +36,14 @@ package com.brockw.stickwar.engine
           
           public function update(game:StickWar) : void
           {
+               if(!game.gameScreen._hasRain)
+               {
+                    this.alpha = 0;
+               }
+               else
+               {
+                    this.alpha = 0.1;
+               }
                if(pz >= 0)
                {
                     pz = 0;
@@ -45,7 +53,7 @@ package com.brockw.stickwar.engine
                          this.init(game,1);
                     }
                }
-               else
+               else if(game.gameScreen._hasRain)
                {
                     pz += RAIN_FALL_VELOCITY;
                     px -= 5;

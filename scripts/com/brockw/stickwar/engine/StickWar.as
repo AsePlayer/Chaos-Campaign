@@ -187,7 +187,18 @@ package com.brockw.stickwar.engine
                ++main.loadingFraction;
                if(!this._rain)
                {
-                    this._rain = new com.brockw.stickwar.engine.Rain(this,0);
+                    if(main.campaign.getCurrentLevel().title == "Jailbreak: Titans Revolt")
+                    {
+                         this._rain = new com.brockw.stickwar.engine.Rain(this,69);
+                    }
+                    else if(main.campaign.getCurrentLevel().title == "Scouting Party: Unexpected Guests")
+                    {
+                         this._rain = new com.brockw.stickwar.engine.Rain(this,25);
+                    }
+                    else
+                    {
+                         this._rain = new com.brockw.stickwar.engine.Rain(this,0);
+                    }
                }
                ++main.loadingFraction;
                this._battlefield = new Sprite();
@@ -277,6 +288,7 @@ package com.brockw.stickwar.engine
                this.unitFactory = null;
                this._mouseOverUnit = null;
                this._tipBox = null;
+               this._rain = null;
                Util.recursiveRemoval(Sprite(this));
           }
           

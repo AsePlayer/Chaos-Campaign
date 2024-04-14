@@ -188,6 +188,8 @@ package com.brockw.stickwar.campaign.controllers
           
           private var bigBoomWarning:Boolean;
           
+          private var lol:Boolean;
+          
           public function CampaignShadow(gameScreen:GameScreen)
           {
                this.bomberFrequencyIncreaseAt = 3;
@@ -331,22 +333,30 @@ package com.brockw.stickwar.campaign.controllers
                          if(this.currentLevelTitle == "Medusa")
                          {
                               this.messageOpening.setMessage("Queen Medusa: I must remind these dissenters of their place...","",0,this.medusaOneLiner);
+                              gameScreen.team.spawnUnitGroup([Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
+                              gameScreen.team.enemyTeam.spawnUnitGroup([Unit.U_KNIGHT,Unit.U_CHAOS_MINER]);
                          }
                          else if(this.currentLevelTitle == "Apex Of The Forest: Crawlers Attack")
                          {
                               this.messageOpening.setMessage("Queen Medusa: Stupid monkeys...","",0,this.medusaOneLiner);
+                              gameScreen.team.spawnUnitGroup([Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
+                              gameScreen.team.enemyTeam.spawnUnitGroup([Unit.U_CAT,Unit.U_CAT,Unit.U_CHAOS_MINER]);
                          }
                          else if(this.currentLevelTitle == "Monstrous Mire: Giants Attack")
                          {
                               this.messageOpening.setMessage("Queen Medusa: So HE\'S the one organizing all of this...","",0,this.medusaOneLiner);
+                              gameScreen.team.spawnUnitGroup([Unit.U_CAT,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
                          }
                          else if(this.currentLevelTitle == "Reach For The Sky: Eclipsors Attack")
                          {
                               this.messageOpening.setMessage("Queen Medusa: Pesky flies...","",0,this.medusaOneLiner);
+                              gameScreen.team.spawnUnitGroup([Unit.U_GIANT,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
+                              gameScreen.team.enemyTeam.spawnUnitGroup([Unit.U_WINGIDON,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
                          }
                          else if(this.currentLevelTitle == "Undead Ambush: Endless Deads Attack")
                          {
                               this.messageOpening.setMessage("Queen Medusa: The Deads shall be my devoted legion, their minds surrendered to my will...","",0,this.medusaOneLiner);
+                              gameScreen.team.spawnUnitGroup([Unit.U_WINGIDON,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
                          }
                          else if(this.currentLevelTitle == "Marrowkai\'s Power Grab: Reclaiming the Throne")
                          {
@@ -923,6 +933,11 @@ package com.brockw.stickwar.campaign.controllers
                     }
                     else if(this.currentLevelTitle == "Marrowkai\'s Power Grab: Reclaiming the Throne")
                     {
+                         if(!this.lol)
+                         {
+                              gameScreen.team.enemyTeam.spawnUnitGroup([Unit.U_SKELATOR,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
+                              this.lol = true;
+                         }
                          for each(u in gameScreen.team.enemyTeam.units)
                          {
                               if(Math.abs(u.px - gameScreen.team.statue.px) < 25)

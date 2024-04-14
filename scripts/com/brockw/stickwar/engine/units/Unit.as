@@ -124,6 +124,8 @@ package com.brockw.stickwar.engine.units
           public static const I_IS_BUILDING:int = 1 << 5;
            
           
+          public var isSwitched:Boolean;
+          
           private var nudgeFrame:int;
           
           protected var hasHit:Boolean;
@@ -274,6 +276,8 @@ package com.brockw.stickwar.engine.units
           
           private var godmodeGlow:GlowFilter;
           
+          private var protectedGlow:GlowFilter;
+          
           private var towerSpawnGlow:GlowFilter;
           
           private var lastHealthAnimation:int;
@@ -307,6 +311,10 @@ package com.brockw.stickwar.engine.units
           public var stunner:Boolean = false;
           
           public var isMinion:Boolean = false;
+          
+          public var isProtected:Boolean = false;
+          
+          public var justDodgedDeath:Boolean = false;
           
           public function Unit(game:StickWar)
           {
@@ -342,6 +350,7 @@ package com.brockw.stickwar.engine.units
                var glowKnockout:Boolean = false;
                this.towerSpawnGlow = new GlowFilter(glowColor,glowAlpha,glowBlurX,glowBlurY,glowStrength,glowQuality,glowInner,glowKnockout);
                this.godmodeGlow = new GlowFilter(16777215,glowAlpha,glowBlurX,glowBlurY,glowStrength,glowQuality,glowInner,glowKnockout);
+               this.protectedGlow = new GlowFilter(65535,glowAlpha,glowBlurX,glowBlurY,glowStrength,glowQuality,glowInner,glowKnockout);
                this.attackStartFrame = 0;
                this.framesInAttack = 0;
                this.arrowDeath = false;
@@ -896,6 +905,24 @@ package com.brockw.stickwar.engine.units
                {
                     this.mc.mc.filters = [this.godmodeGlow];
                }
+               if(this.isProtected && this.isDead == false)
+               {
+                    if(this.health < 0)
+                    {
+                         this.health = 0;
+                         this.justDodgedDeath = true;
+                    }
+                    if(_type == com.brockw.stickwar.engine.units.Unit.U_MONK)
+                    {
+                         this.protectedGlow.blurX = 9 + 6 * Util.sin(20 * Math.PI * game.frame / 320);
+                         this.protectedGlow.blurY = 10;
+                         this.mc.mc.filters = [this.protectedGlow];
+                    }
+                    else
+                    {
+                         this.mc.mc.filters = [this.godmodeGlow];
+                    }
+               }
                else if(this.team.type == Team.T_CHAOS && this.isTowerSpawned)
                {
                     c.greenOffset = 255;
@@ -1402,7 +1429,7 @@ package com.brockw.stickwar.engine.units
                     dmg /= this.team.healthModifier;
                     dmg *= this.team.enemyTeam.damageModifier;
                     this._health -= dmg;
-                    if(this._health <= 0)
+                    if(this._health <= 0 && (this.isProtected == false || this.isProtected && _type == com.brockw.stickwar.engine.units.Unit.U_MONK))
                     {
                          this.arrowDeath = false;
                          this.playDeathSound();

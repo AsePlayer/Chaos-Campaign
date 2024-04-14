@@ -14,6 +14,7 @@ package com.brockw.stickwar.singleplayer
      import com.brockw.stickwar.engine.multiplayer.moves.UnitMove;
      import com.brockw.stickwar.engine.units.Archer;
      import com.brockw.stickwar.engine.units.Magikill;
+     import com.brockw.stickwar.engine.units.Monk;
      import com.brockw.stickwar.engine.units.Ninja;
      import com.brockw.stickwar.engine.units.Spearton;
      import com.brockw.stickwar.engine.units.Unit;
@@ -198,7 +199,18 @@ package com.brockw.stickwar.singleplayer
                this.updateArchers(game);
                this.updateNinjas(game);
                this.updateSpeartons(game);
+               this.updateMiners(game);
                team.tech.isResearchedMap[Tech.SWORDWRATH_RAGE] = true;
+               team.tech.isResearchedMap[Tech.MINER_SPEED] = true;
+               if(game.main.campaign.difficultyLevel != Campaign.D_NORMAL)
+               {
+                    team.tech.isResearchedMap[Tech.TOWER_SPAWN_I] = true;
+                    team.tech.isResearchedMap[Tech.TOWER_SPAWN_II] = true;
+               }
+               else
+               {
+                    team.tech.isResearchedMap[Tech.TOWER_SPAWN_I] = true;
+               }
                team.mana = manaBefore;
           }
           
@@ -239,13 +251,20 @@ package com.brockw.stickwar.singleplayer
                var targetX:Number = NaN;
                var targetY:* = NaN;
                var spearton:Spearton = null;
+               var s:Spearton = null;
                var target:Unit = null;
                var unitToDefend:Unit = null;
                team.tech.isResearchedMap[Tech.BLOCK] = true;
                team.tech.isResearchedMap[Tech.SHIELD_BASH] = true;
-               spearton = team.unitGroups[Unit.U_SPEARTON][0];
-               unitToDefend = team.unitGroups[Unit.U_MAGIKILL][0] || team.unitGroups[Unit.U_ARCHER][0] || team.unitGroups[Unit.U_MONK][0];
-               if(team.unitGroups[Unit.U_SPEARTON].length > 1 && unitToDefend && team.unitGroups[Unit.U_SPEARTON][0].isMinion == false && team.unitGroups[Unit.U_SPEARTON][0].isBasher == false)
+               unitToDefend = team.unitGroups[Unit.U_MONK][0] || team.unitGroups[Unit.U_MAGIKILL][0] || team.unitGroups[Unit.U_ARCHER][0];
+               for each(s in team.unitGroups[Unit.U_SPEARTON])
+               {
+                    if(s.isMinion == false && s.isBasher == false && s.partOfWall == false)
+                    {
+                         spearton = s;
+                    }
+               }
+               if(spearton && unitToDefend)
                {
                     target = spearton.ai.getClosestTarget();
                     targetX = unitToDefend.px - 80;
@@ -281,7 +300,17 @@ package com.brockw.stickwar.singleplayer
                }
                for each(spearton in team.unitGroups[Unit.U_SPEARTON])
                {
-                    if(spearton.isBasher)
+                    if(spearton.isProtected)
+                    {
+                         this.unitMove = new UnitMove();
+                         this.unitMove.owner = team.id;
+                         this.unitMove.moveType = UnitCommand.ATTACK_MOVE;
+                         this.unitMove.arg0 = spearton.px - 100;
+                         this.unitMove.arg1 = spearton.py;
+                         this.unitMove.units.push(spearton.id);
+                         this.unitMove.execute(game);
+                    }
+                    else if(spearton.isBasher)
                     {
                          if(spearton.shieldBashCooldown() <= 0 && spearton.px - spearton.ai.getClosestTarget().px < 50)
                          {
@@ -303,16 +332,49 @@ package com.brockw.stickwar.singleplayer
                               spearton.stopBlocking();
                          }
                     }
+                    else if(spearton.partOfWall && team.walls[0])
+                    {
+                         if(spearton.px <= team.walls[0].px - 10)
+                         {
+                              this.unitMove = new UnitMove();
+                              this.unitMove.owner = team.id;
+                              this.unitMove.moveType = UnitCommand.STAND;
+                              this.unitMove.arg0 = spearton.px;
+                              this.unitMove.arg1 = spearton.py;
+                              this.unitMove.units.push(spearton.id);
+                              this.unitMove.execute(game);
+                              if(!spearton.inBlock)
+                              {
+                                   spearton.startBlocking();
+                              }
+                              else if(Math.abs(spearton.px - spearton.ai.getClosestTarget().px) < 42 && Math.abs(spearton.py - spearton.ai.getClosestTarget().py) < 42 && spearton.shieldBashCooldown() <= 0)
+                              {
+                                   spearton.shieldBash();
+                              }
+                         }
+                         else if(spearton.px < team.statue.px)
+                         {
+                              this.unitMove = new UnitMove();
+                              this.unitMove.owner = team.id;
+                              this.unitMove.moveType = UnitCommand.MOVE;
+                              this.unitMove.arg0 = spearton.px - 100;
+                              this.unitMove.arg1 = spearton.py;
+                              this.unitMove.units.push(spearton.id);
+                              this.unitMove.execute(game);
+                         }
+                    }
                }
           }
           
           private function updateMagikill(game:StickWar) : void
           {
                var magikill:Magikill = null;
+               var monk:Monk = null;
                var target:Unit = null;
                team.tech.isResearchedMap[Tech.MAGIKILL_NUKE] = true;
                team.tech.isResearchedMap[Tech.MAGIKILL_POISON] = true;
                team.tech.isResearchedMap[Tech.MAGIKILL_WALL] = true;
+               team.tech.isResearchedMap[Tech.MONK_CURE] = true;
                for each(magikill in team.unitGroups[Unit.U_MAGIKILL])
                {
                     target = magikill.ai.getClosestTarget();
@@ -345,12 +407,12 @@ package com.brockw.stickwar.singleplayer
                                    magikill.poisonDartSpell(target.px,target.py);
                               }
                          }
-                         else if(Math.abs(magikill.px - target.px) < 200 + 100 * magikill.spellStacks || Math.abs(magikill.px - target.px) < 275 + 100 * magikill.spellStacks)
+                         else if(Math.abs(magikill.px - team.forwardUnit.px) < 200 + 100 * magikill.spellStacks)
                          {
                               this.unitMove = new UnitMove();
                               this.unitMove.owner = team.id;
                               this.unitMove.moveType = UnitCommand.MOVE;
-                              this.unitMove.arg0 = magikill.px + 500;
+                              this.unitMove.arg0 = team.forwardUnit.px + 200 + 100 * magikill.spellStacks;
                               this.unitMove.arg1 = magikill.py;
                               this.unitMove.units.push(magikill.id);
                               this.unitMove.execute(game);
@@ -360,12 +422,47 @@ package com.brockw.stickwar.singleplayer
                               this.unitMove = new UnitMove();
                               this.unitMove.owner = team.id;
                               this.unitMove.moveType = UnitCommand.HOLD;
-                              this.unitMove.arg0 = magikill.px;
+                              this.unitMove.arg0 = target.px + 20;
                               this.unitMove.arg1 = magikill.py;
                               this.unitMove.units.push(magikill.id);
                               this.unitMove.execute(game);
                          }
+                         for each(monk in team.unitGroups[Unit.U_MONK])
+                         {
+                              if(monk.healCooldown() != 0)
+                              {
+                                   this.unitMove = new UnitMove();
+                                   this.unitMove.owner = team.id;
+                                   this.unitMove.moveType = UnitCommand.MOVE;
+                                   this.unitMove.arg0 = team.forwardUnit.px + 169;
+                                   this.unitMove.arg1 = team.forwardUnit.py;
+                                   this.unitMove.units.push(monk.id);
+                                   this.unitMove.execute(game);
+                              }
+                         }
                     }
+               }
+          }
+          
+          private function updateMiners(game:StickWar) : void
+          {
+               if(team.unitGroups[Unit.U_MINER].length <= 0)
+               {
+                    return;
+               }
+               var magikill:Magikill = null;
+               var monk:Monk = null;
+               var target:Unit = null;
+               team.tech.isResearchedMap[Tech.MINER_WALL] = true;
+               if(team.walls.length == 0 && team.unitGroups[Unit.U_MINER][0].constructCooldown() <= 0)
+               {
+                    this.unitMove = new UnitMove();
+                    this.unitMove.owner = team.id;
+                    this.unitMove.moveType = UnitCommand.CONSTRUCT_WALL;
+                    this.unitMove.arg0 = team.homeX - 900;
+                    this.unitMove.arg1 = team.statue.py;
+                    this.unitMove.units.push(team.unitGroups[Unit.U_MINER][0].id);
+                    this.unitMove.execute(game);
                }
           }
      }

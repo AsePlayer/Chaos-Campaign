@@ -23,6 +23,8 @@ package com.brockw.stickwar.engine.units
           
           private var hasGrowled:Boolean;
           
+          public var isLostGiant:Boolean;
+          
           public function EnslavedGiant(game:StickWar)
           {
                super(game);
@@ -97,6 +99,24 @@ package com.brockw.stickwar.engine.units
           {
                var _loc2_:Point = null;
                var _loc3_:Number = NaN;
+               if(isNormal)
+               {
+                    isNormal = false;
+                    this._scale += 0.25 + Math.random() * 1.75;
+                    _damageToNotArmour *= this._scale / 2;
+                    this.maxHealth *= 0.25 + this._scale / 2 * game.main.campaign.difficultyLevel;
+                    this.health = this.maxHealth;
+                    this.healthBar.totalHealth = this._maxHealth;
+               }
+               if(health < maxHealth / 2 && !isTowerSpawned && team != game.teamA)
+               {
+                    if(!isSwitched)
+                    {
+                         team.game.soundManager.playSound("ElectricWallSoundEffect",px,py);
+                         team.game.soundManager.playSoundRandom("GiantDeath",3,px,py);
+                         team.switchTeams(this);
+                    }
+               }
                if(!this.hasGrowled)
                {
                     this.hasGrowled = true;
@@ -209,7 +229,12 @@ package com.brockw.stickwar.engine.units
                }
                MovieClip(_mc.mc).nextFrame();
                _mc.mc.stop();
-               if(!hasDefaultLoadout)
+               if(this.isLostGiant)
+               {
+                    EnslavedGiant.setItem(mc,"Stone Bag","","");
+                    isNormal = false;
+               }
+               else if(!hasDefaultLoadout)
                {
                     EnslavedGiant.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
                }
