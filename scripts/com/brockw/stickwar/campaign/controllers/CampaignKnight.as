@@ -8,6 +8,7 @@ package com.brockw.stickwar.campaign.controllers
      import com.brockw.stickwar.engine.multiplayer.moves.UnitMove;
      import com.brockw.stickwar.engine.units.EnslavedGiant;
      import com.brockw.stickwar.engine.units.FlyingCrossbowman;
+     import com.brockw.stickwar.engine.units.Knight;
      import com.brockw.stickwar.engine.units.Medusa;
      import com.brockw.stickwar.engine.units.Ninja;
      import com.brockw.stickwar.engine.units.Spearton;
@@ -611,7 +612,7 @@ package com.brockw.stickwar.campaign.controllers
                     if(!this.levelSetupComplete)
                     {
                          gameScreen.team.spawnUnitGroup([Unit.U_SKELATOR,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
-                         gameScreen.team.enemyTeam.spawnUnitGroup([Unit.U_MAGIKILL,Unit.U_MAGIKILL,Unit.U_MONK]);
+                         gameScreen.team.enemyTeam.spawnUnitGroup([Unit.U_MAGIKILL,Unit.U_MAGIKILL,Unit.U_MONK,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER]);
                          this.levelSetupComplete = true;
                     }
                     if(this.marrowResponse == false && this.messageOpening.visible == false)
@@ -813,6 +814,19 @@ package com.brockw.stickwar.campaign.controllers
                     for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL])
                     {
                          u.magikillType = "Stun";
+                    }
+               }
+               else if(this.currentLevelTitle == "Final Battle: Order\'s Backyard")
+               {
+                    var matchups:* = ["Crawler vs Spearton","Juggerknight vs Swordwrath","Juggerknight vs Spearton"];
+                    gameScreen.team.gold = gameScreen.game.targetScreenX;
+                    if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1)
+                    {
+                         u = Knight(gameScreen.game.unitFactory.getUnit(Unit.U_KNIGHT));
+                         gameScreen.team.spawn(u,gameScreen.game);
+                         u.px = gameScreen.game.targetScreenX;
+                         u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
+                         u.backgroundFighter = true;
                     }
                }
           }

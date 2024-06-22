@@ -316,6 +316,8 @@ package com.brockw.stickwar.engine.units
           
           public var justDodgedDeath:Boolean = false;
           
+          public var backgroundFighter:Boolean = false;
+          
           public function Unit(game:StickWar)
           {
                this.hasDefaultLoadout = false;

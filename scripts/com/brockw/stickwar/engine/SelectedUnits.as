@@ -101,6 +101,10 @@ package com.brockw.stickwar.engine
                {
                     return;
                }
+               if(unit.backgroundFighter)
+               {
+                    return;
+               }
                this._hasChanged = true;
                if(Boolean(this._interactsWith & Unit.I_IS_BUILDING) || Boolean(unit.interactsWith & Unit.I_IS_BUILDING))
                {

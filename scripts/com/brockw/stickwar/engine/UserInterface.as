@@ -165,6 +165,7 @@ package com.brockw.stickwar.engine
                this._period = 33.333333333333336;
                this._period = 33.333333333333336;
                this._period = 33.333333333333336;
+               this._period = 33.333333333333336;
                this.devHotkeys = [];
                ++main.loadingFraction;
                this.lastButton = null;
@@ -737,6 +738,13 @@ package com.brockw.stickwar.engine
                          this.devMode = false;
                          this.gameScreen.userInterface.helpMessage.showMessage("Dev mode deactivated");
                          this.gameScreen.game.soundManager.playSoundFullVolume("GarrisonExit");
+                    }
+               }
+               for each(_loc5_ in this.team.units)
+               {
+                    if(_loc5_.backgroundFighter)
+                    {
+                         _loc5_.selected = false;
                     }
                }
                if(this.devMode)
