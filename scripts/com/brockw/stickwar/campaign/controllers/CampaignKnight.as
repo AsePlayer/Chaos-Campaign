@@ -833,18 +833,36 @@ package com.brockw.stickwar.campaign.controllers
                          u.px = gameScreen.game.targetScreenX + 1000;
                          u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
                          u.backgroundFighter = true;
-                         for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_SWORDWRATH])
+                         u = Spearton(gameScreen.game.unitFactory.getUnit(Unit.U_SPEARTON));
+                         gameScreen.team.enemyTeam.spawn(u,gameScreen.game);
+                         u.px = gameScreen.game.targetScreenX + 1000;
+                         u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
+                         u.backgroundFighter = true;
+                    }
+                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_SWORDWRATH])
+                    {
+                         if(u.backgroundFighter)
                          {
-                              if(u.backgroundFighter)
-                              {
-                                   this.holdUnits = new UnitMove();
-                                   this.holdUnits.owner = gameScreen.team.enemyTeam.id;
-                                   this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
-                                   this.holdUnits.arg0 = gameScreen.team.statue.px;
-                                   this.holdUnits.arg1 = u.py;
-                                   this.holdUnits.units.push(u.id);
-                                   this.holdUnits.execute(gameScreen.game);
-                              }
+                              this.holdUnits = new UnitMove();
+                              this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+                              this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+                              this.holdUnits.arg0 = gameScreen.team.statue.px;
+                              this.holdUnits.arg1 = u.py;
+                              this.holdUnits.units.push(u.id);
+                              this.holdUnits.execute(gameScreen.game);
+                         }
+                    }
+                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_SPEARTON])
+                    {
+                         if(u.backgroundFighter)
+                         {
+                              this.holdUnits = new UnitMove();
+                              this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+                              this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+                              this.holdUnits.arg0 = gameScreen.team.statue.px;
+                              this.holdUnits.arg1 = u.py;
+                              this.holdUnits.units.push(u.id);
+                              this.holdUnits.execute(gameScreen.game);
                          }
                     }
                }

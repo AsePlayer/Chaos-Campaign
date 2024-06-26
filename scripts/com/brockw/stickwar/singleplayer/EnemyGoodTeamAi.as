@@ -259,7 +259,7 @@ package com.brockw.stickwar.singleplayer
                unitToDefend = team.unitGroups[Unit.U_MONK][0] || team.unitGroups[Unit.U_MAGIKILL][0] || team.unitGroups[Unit.U_ARCHER][0];
                for each(s in team.unitGroups[Unit.U_SPEARTON])
                {
-                    if(s.isMinion == false && s.isBasher == false && s.partOfWall == false)
+                    if(s.isMinion == false && s.isBasher == false && s.partOfWall == false && s.backgroundFighter == false)
                     {
                          spearton = s;
                     }
