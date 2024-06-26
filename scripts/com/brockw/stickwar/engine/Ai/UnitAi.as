@@ -563,7 +563,7 @@ package com.brockw.stickwar.engine.Ai
                     if(!(u.pz != 0 && !this.unit.canAttackAir()))
                     {
                          d = this.unit.sqrDistanceToTarget(u);
-                         if(d * 1.3 < minDistance && Unit(this.unit.team.enemyTeam.units[rIndex]).isTargetable())
+                         if(d * 1.3 < minDistance && Unit(this.unit.team.enemyTeam.units[rIndex]).isTargetable() && Unit(this.unit.team.enemyTeam.units[rIndex]).backgroundFighter == this.unit.backgroundFighter)
                          {
                               minDistance = d;
                               this.currentTarget = this.unit.team.enemyTeam.units[rIndex];
