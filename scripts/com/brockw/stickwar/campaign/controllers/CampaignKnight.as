@@ -12,6 +12,7 @@ package com.brockw.stickwar.campaign.controllers
      import com.brockw.stickwar.engine.units.Medusa;
      import com.brockw.stickwar.engine.units.Ninja;
      import com.brockw.stickwar.engine.units.Spearton;
+     import com.brockw.stickwar.engine.units.Swordwrath;
      import com.brockw.stickwar.engine.units.Unit;
      import com.brockw.stickwar.engine.units.Wall;
      
@@ -824,9 +825,27 @@ package com.brockw.stickwar.campaign.controllers
                     {
                          u = Knight(gameScreen.game.unitFactory.getUnit(Unit.U_KNIGHT));
                          gameScreen.team.spawn(u,gameScreen.game);
-                         u.px = gameScreen.game.targetScreenX;
+                         u.px = gameScreen.game.targetScreenX - 200;
                          u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
                          u.backgroundFighter = true;
+                         u = Swordwrath(gameScreen.game.unitFactory.getUnit(Unit.U_SWORDWRATH));
+                         gameScreen.team.enemyTeam.spawn(u,gameScreen.game);
+                         u.px = gameScreen.game.targetScreenX + 1000;
+                         u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
+                         u.backgroundFighter = true;
+                         for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_SWORDWRATH])
+                         {
+                              if(u.backgroundFighter)
+                              {
+                                   this.holdUnits = new UnitMove();
+                                   this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+                                   this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+                                   this.holdUnits.arg0 = gameScreen.team.statue.px;
+                                   this.holdUnits.arg1 = u.py;
+                                   this.holdUnits.units.push(u.id);
+                                   this.holdUnits.execute(gameScreen.game);
+                              }
+                         }
                     }
                }
           }

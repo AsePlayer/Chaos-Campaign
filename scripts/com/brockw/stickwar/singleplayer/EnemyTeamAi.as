@@ -188,31 +188,34 @@ package com.brockw.stickwar.singleplayer
                for(unit in this.team.units)
                {
                     u = this.team.units[unit];
-                    if((u.type == Unit.U_MINER || u.type == Unit.U_CHAOS_MINER) && MinerAi(u.ai).targetOre != null)
+                    if(!u.backgroundFighter)
                     {
-                         m = new UnitMove();
-                         m.moveType = UnitCommand.MOVE;
-                         m.units.push(u.id);
-                         m.owner = this.team.id;
-                         m.arg4 = MinerAi(u.ai).targetOre.id;
-                         m.arg0 = MinerAi(u.ai).targetOre.x;
-                         m.arg1 = MinerAi(u.ai).targetOre.y;
-                         m.execute(this.team.game);
-                    }
-                    else if(u.isRejoiningFormation && this.team.direction * x <= this.team.direction * u.px)
-                    {
-                         moveUnits.units.push(u.id);
-                         if(Math.abs(u.px - x) < 50)
+                         if((u.type == Unit.U_MINER || u.type == Unit.U_CHAOS_MINER) && MinerAi(u.ai).targetOre != null)
                          {
-                              u.isRejoiningFormation = false;
+                              m = new UnitMove();
+                              m.moveType = UnitCommand.MOVE;
+                              m.units.push(u.id);
+                              m.owner = this.team.id;
+                              m.arg4 = MinerAi(u.ai).targetOre.id;
+                              m.arg0 = MinerAi(u.ai).targetOre.x;
+                              m.arg1 = MinerAi(u.ai).targetOre.y;
+                              m.execute(this.team.game);
                          }
-                    }
-                    else
-                    {
-                         attackMoveUnits.units.push(u.id);
-                         if(Math.abs(u.px - x) > 1000)
+                         else if(u.isRejoiningFormation && this.team.direction * x <= this.team.direction * u.px)
                          {
-                              u.isRejoiningFormation = true;
+                              moveUnits.units.push(u.id);
+                              if(Math.abs(u.px - x) < 50)
+                              {
+                                   u.isRejoiningFormation = false;
+                              }
+                         }
+                         else
+                         {
+                              attackMoveUnits.units.push(u.id);
+                              if(Math.abs(u.px - x) > 1000)
+                              {
+                                   u.isRejoiningFormation = true;
+                              }
                          }
                     }
                }
