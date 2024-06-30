@@ -8,11 +8,9 @@ package com.brockw.stickwar.campaign.controllers
      import com.brockw.stickwar.engine.multiplayer.moves.UnitMove;
      import com.brockw.stickwar.engine.units.EnslavedGiant;
      import com.brockw.stickwar.engine.units.FlyingCrossbowman;
-     import com.brockw.stickwar.engine.units.Knight;
      import com.brockw.stickwar.engine.units.Medusa;
      import com.brockw.stickwar.engine.units.Ninja;
      import com.brockw.stickwar.engine.units.Spearton;
-     import com.brockw.stickwar.engine.units.Swordwrath;
      import com.brockw.stickwar.engine.units.Unit;
      import com.brockw.stickwar.engine.units.Wall;
      
@@ -104,8 +102,14 @@ package com.brockw.stickwar.campaign.controllers
           
           private var currentRoyalMessage:String = "";
           
+          private var playerBackgroundUnits:Array;
+          
+          private var enemyBackgroundUnits:Array;
+          
           public function CampaignKnight(gameScreen:GameScreen)
           {
+               this.playerBackgroundUnits = [];
+               this.enemyBackgroundUnits = [];
                super(gameScreen);
                this.currentLevelTitle = gameScreen.main.campaign.getCurrentLevel().title;
                var randomNumber:int = Math.floor(Math.random() * 7) + 1;
@@ -823,47 +827,87 @@ package com.brockw.stickwar.campaign.controllers
                     gameScreen.team.gold = gameScreen.game.targetScreenX;
                     if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1)
                     {
-                         u = Knight(gameScreen.game.unitFactory.getUnit(Unit.U_KNIGHT));
-                         gameScreen.team.spawn(u,gameScreen.game);
-                         u.px = gameScreen.game.targetScreenX - 200;
-                         u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
-                         u.backgroundFighter = true;
-                         u = Swordwrath(gameScreen.game.unitFactory.getUnit(Unit.U_SWORDWRATH));
-                         gameScreen.team.enemyTeam.spawn(u,gameScreen.game);
-                         u.px = gameScreen.game.targetScreenX + 1000;
-                         u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
-                         u.backgroundFighter = true;
-                         u = Spearton(gameScreen.game.unitFactory.getUnit(Unit.U_SPEARTON));
-                         gameScreen.team.enemyTeam.spawn(u,gameScreen.game);
-                         u.px = gameScreen.game.targetScreenX + 1000;
-                         u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
-                         u.backgroundFighter = true;
-                    }
-                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_SWORDWRATH])
-                    {
-                         if(u.backgroundFighter)
+                         if(playerBackgroundUnits.length < 5)
                          {
-                              this.holdUnits = new UnitMove();
-                              this.holdUnits.owner = gameScreen.team.enemyTeam.id;
-                              this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
-                              this.holdUnits.arg0 = gameScreen.team.statue.px;
-                              this.holdUnits.arg1 = u.py;
-                              this.holdUnits.units.push(u.id);
-                              this.holdUnits.execute(gameScreen.game);
+                              spawnBackgroundUnitsPlayer(gameScreen,[Unit.U_KNIGHT,Unit.U_CAT]);
+                         }
+                         if(enemyBackgroundUnits.length < 5)
+                         {
+                              spawnBackgroundUnitsEnemy(gameScreen,[Unit.U_SWORDWRATH,Unit.U_SPEARTON]);
                          }
                     }
-                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_SPEARTON])
+                    updateBackgroundUnitsArray();
+                    for each(u in this.playerBackgroundUnits)
                     {
-                         if(u.backgroundFighter)
-                         {
-                              this.holdUnits = new UnitMove();
-                              this.holdUnits.owner = gameScreen.team.enemyTeam.id;
-                              this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
-                              this.holdUnits.arg0 = gameScreen.team.statue.px;
-                              this.holdUnits.arg1 = u.py;
-                              this.holdUnits.units.push(u.id);
-                              this.holdUnits.execute(gameScreen.game);
-                         }
+                         this.holdUnits = new UnitMove();
+                         this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+                         this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+                         this.holdUnits.arg0 = gameScreen.team.statue.px;
+                         this.holdUnits.arg1 = u.py;
+                         this.holdUnits.units.push(u.id);
+                         this.holdUnits.execute(gameScreen.game);
+                    }
+                    for each(u in this.enemyBackgroundUnits)
+                    {
+                         this.holdUnits = new UnitMove();
+                         this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+                         this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+                         this.holdUnits.arg0 = gameScreen.team.statue.px;
+                         this.holdUnits.arg1 = u.py;
+                         this.holdUnits.units.push(u.id);
+                         this.holdUnits.execute(gameScreen.game);
+                    }
+               }
+          }
+          
+          public function spawnBackgroundUnitsPlayer(gameScreen:GameScreen, units:Array) : void
+          {
+               var spawnedUnits:Array = gameScreen.team.spawnUnitGroup(units);
+               for each(var u in spawnedUnits)
+               {
+                    u.px = gameScreen.game.targetScreenX - 200;
+                    u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
+                    u.backgroundFighter = true;
+                    this.playerBackgroundUnits.push(u);
+               }
+          }
+          
+          public function spawnBackgroundUnitsEnemy(gameScreen:GameScreen, units:Array) : void
+          {
+               var spawnedUnits:Array = gameScreen.team.enemyTeam.spawnUnitGroup(units);
+               for each(var u in spawnedUnits)
+               {
+                    u.px = gameScreen.game.targetScreenX + 1000;
+                    u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
+                    u.backgroundFighter = true;
+                    this.enemyBackgroundUnits.push(u);
+               }
+          }
+          
+          public function updateBackgroundUnitsArray() : void
+          {
+               var counter:int = 0;
+               for each(var u in playerBackgroundUnits)
+               {
+                    if(u.isDead || u.health == 0)
+                    {
+                         this.playerBackgroundUnits.splice(counter,1);
+                    }
+                    else
+                    {
+                         counter += 1;
+                    }
+               }
+               counter = 0;
+               for each(u in enemyBackgroundUnits)
+               {
+                    if(u.isDead || u.health == 0)
+                    {
+                         this.enemyBackgroundUnits.splice(counter,1);
+                    }
+                    else
+                    {
+                         counter += 1;
                     }
                }
           }
