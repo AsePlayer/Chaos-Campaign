@@ -106,10 +106,15 @@ package com.brockw.stickwar.campaign.controllers
           
           private var enemyBackgroundUnits:Array;
           
+          private var matchups:Array;
+          
+          private var rngMatchup:int = 0;
+          
           public function CampaignKnight(gameScreen:GameScreen)
           {
                this.playerBackgroundUnits = [];
                this.enemyBackgroundUnits = [];
+               this.matchups = [];
                super(gameScreen);
                this.currentLevelTitle = gameScreen.main.campaign.getCurrentLevel().title;
                var randomNumber:int = Math.floor(Math.random() * 7) + 1;
@@ -823,17 +828,21 @@ package com.brockw.stickwar.campaign.controllers
                }
                else if(this.currentLevelTitle == "Final Battle: Order\'s Backyard")
                {
-                    var matchups:* = ["Crawler vs Spearton","Juggerknight vs Swordwrath","Juggerknight vs Spearton"];
                     gameScreen.team.gold = gameScreen.game.targetScreenX;
                     if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1)
                     {
-                         if(playerBackgroundUnits.length < 5)
+                         if(playerBackgroundUnits.length < 5 || enemyBackgroundUnits.length < 5)
                          {
-                              spawnBackgroundUnitsPlayer(gameScreen,[Unit.U_KNIGHT,Unit.U_CAT]);
-                         }
-                         if(enemyBackgroundUnits.length < 5)
-                         {
-                              spawnBackgroundUnitsEnemy(gameScreen,[Unit.U_SWORDWRATH,Unit.U_SPEARTON]);
+                              if(rngMatchup >= this.matchups.length)
+                              {
+                                   this.rngMatchup = this.matchups.length;
+                              }
+                              var backgroundUnitsChoice:int = Math.floor(Math.random() * rngMatchup);
+                              trace(backgroundUnitsChoice);
+                              this.matchups = [[[Unit.U_KNIGHT],[Unit.U_SWORDWRATH]],[[Unit.U_KNIGHT],[Unit.U_SWORDWRATH,Unit.U_SPEARTON]]];
+                              spawnBackgroundUnitsPlayer(gameScreen,this.matchups[backgroundUnitsChoice][0]);
+                              spawnBackgroundUnitsEnemy(gameScreen,this.matchups[backgroundUnitsChoice][1]);
+                              this.rngMatchup += 1;
                          }
                     }
                     updateBackgroundUnitsArray();
@@ -893,10 +902,7 @@ package com.brockw.stickwar.campaign.controllers
                     {
                          this.playerBackgroundUnits.splice(counter,1);
                     }
-                    else
-                    {
-                         counter += 1;
-                    }
+                    counter += 1;
                }
                counter = 0;
                for each(u in enemyBackgroundUnits)
@@ -905,10 +911,7 @@ package com.brockw.stickwar.campaign.controllers
                     {
                          this.enemyBackgroundUnits.splice(counter,1);
                     }
-                    else
-                    {
-                         counter += 1;
-                    }
+                    counter += 1;
                }
           }
      }
