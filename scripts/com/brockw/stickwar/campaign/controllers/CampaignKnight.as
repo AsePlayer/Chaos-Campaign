@@ -839,9 +839,13 @@ package com.brockw.stickwar.campaign.controllers
                               }
                               var backgroundUnitsChoice:int = Math.floor(Math.random() * rngMatchup);
                               trace(backgroundUnitsChoice);
-                              this.matchups = [[[Unit.U_KNIGHT],[Unit.U_SWORDWRATH]],[[Unit.U_KNIGHT],[Unit.U_SWORDWRATH,Unit.U_SPEARTON]]];
+                              this.matchups = [[[Unit.U_GIANT],[Unit.U_ARCHER]],[[Unit.U_KNIGHT],[Unit.U_SWORDWRATH,Unit.U_SPEARTON]]];
                               spawnBackgroundUnitsPlayer(gameScreen,this.matchups[backgroundUnitsChoice][0]);
                               spawnBackgroundUnitsEnemy(gameScreen,this.matchups[backgroundUnitsChoice][1]);
+                              for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL])
+                              {
+                                   u.magikillType = "Explosion";
+                              }
                               this.rngMatchup += 1;
                          }
                     }

@@ -237,10 +237,18 @@ package com.brockw.stickwar.engine.units
                          if(this.targetsHit < this.maxTargetsToHit && mc.mc.currentFrameLabel == "hit" && !this.isBoss)
                          {
                               team.game.spatialHash.mapInArea(px - 225,py - 50,px + 225,py + 50,this.giantHit);
+                              if(backgroundFighter)
+                              {
+                                   ai.getClosestTarget().damage(0,this.damageToDeal,this);
+                              }
                          }
                          else if(this.targetsHit < this.maxTargetsToHit && mc.mc.currentFrameLabel == "hit" && this.isBoss)
                          {
                               team.game.spatialHash.mapInArea(px - 300,py - 50,px + 225,py + 50,this.giantHit);
+                              if(backgroundFighter)
+                              {
+                                   ai.getClosestTarget().damage(0,this.damageToDeal,this);
+                              }
                          }
                          if(MovieClip(_mc.mc).totalFrames == MovieClip(_mc.mc).currentFrame)
                          {

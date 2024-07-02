@@ -207,6 +207,10 @@ package com.brockw.stickwar.engine.units
                          {
                               _state = S_RUN;
                          }
+                         if(backgroundFighter && MovieClip(_mc.mc).totalFrames - 20 == MovieClip(_mc.mc).currentFrame)
+                         {
+                              ai.getClosestTarget().damage(0,this.damageToDeal,this);
+                         }
                     }
                }
                else if(isDead == false)
