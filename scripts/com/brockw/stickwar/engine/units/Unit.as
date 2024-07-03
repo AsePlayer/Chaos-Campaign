@@ -1435,6 +1435,7 @@ package com.brockw.stickwar.engine.units
                     {
                          this.arrowDeath = false;
                          this.playDeathSound();
+                         this.backgroundFighter = false;
                          if(type & D_FIRE && this.isFirable)
                          {
                               this.isOnFire = true;

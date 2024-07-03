@@ -831,23 +831,24 @@ package com.brockw.stickwar.campaign.controllers
                     gameScreen.team.gold = gameScreen.game.targetScreenX;
                     if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1)
                     {
-                         if(playerBackgroundUnits.length < 5 || enemyBackgroundUnits.length < 5)
+                         this.matchups[0] = [[Unit.U_KNIGHT],"vs",[Unit.U_SWORDWRATH]];
+                         this.matchups[1] = [[Unit.U_KNIGHT],"vs",[Unit.U_SPEARTON]];
+                         this.matchups[2] = [[Unit.U_CAT,Unit.U_CAT],"vs",[Unit.U_SPEARTON]];
+                         if(rngMatchup >= this.matchups.length)
                          {
-                              if(rngMatchup >= this.matchups.length)
-                              {
-                                   this.rngMatchup = this.matchups.length;
-                              }
-                              var backgroundUnitsChoice:int = Math.floor(Math.random() * rngMatchup);
-                              trace(backgroundUnitsChoice);
-                              this.matchups = [[[Unit.U_GIANT],[Unit.U_ARCHER]],[[Unit.U_KNIGHT],[Unit.U_SWORDWRATH,Unit.U_SPEARTON]]];
-                              spawnBackgroundUnitsPlayer(gameScreen,this.matchups[backgroundUnitsChoice][0]);
-                              spawnBackgroundUnitsEnemy(gameScreen,this.matchups[backgroundUnitsChoice][1]);
-                              for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL])
-                              {
-                                   u.magikillType = "Explosion";
-                              }
-                              this.rngMatchup += 1;
+                              this.rngMatchup = this.matchups.length;
                          }
+                         if(playerBackgroundUnits.length < 5)
+                         {
+                              var backgroundUnitsChoice:int = Math.floor(Math.random() * rngMatchup);
+                              spawnBackgroundUnitsPlayer(gameScreen,this.matchups[backgroundUnitsChoice][0]);
+                         }
+                         if(enemyBackgroundUnits.length < 5)
+                         {
+                              backgroundUnitsChoice = Math.floor(Math.random() * rngMatchup);
+                              spawnBackgroundUnitsEnemy(gameScreen,this.matchups[backgroundUnitsChoice][2]);
+                         }
+                         this.rngMatchup += 1;
                     }
                     updateBackgroundUnitsArray();
                     for each(u in this.playerBackgroundUnits)
@@ -855,7 +856,7 @@ package com.brockw.stickwar.campaign.controllers
                          this.holdUnits = new UnitMove();
                          this.holdUnits.owner = gameScreen.team.enemyTeam.id;
                          this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
-                         this.holdUnits.arg0 = gameScreen.team.statue.px;
+                         this.holdUnits.arg0 = gameScreen.team.enemyTeam.statue.px;
                          this.holdUnits.arg1 = u.py;
                          this.holdUnits.units.push(u.id);
                          this.holdUnits.execute(gameScreen.game);
