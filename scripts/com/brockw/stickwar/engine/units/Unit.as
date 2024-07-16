@@ -398,6 +398,7 @@ package com.brockw.stickwar.engine.units
                     }
                }
                this._mc = null;
+               this.backgroundFighter = false;
                if(this._ai)
                {
                     this._ai.cleanUp();
@@ -451,7 +452,7 @@ package com.brockw.stickwar.engine.units
           {
                var x:Number = canvas.width * px / game.map.width;
                var y:Number = canvas.height * py / game.map.height;
-               if(this.isDead)
+               if(this.isDead || y < 2)
                {
                     return;
                }
@@ -1171,11 +1172,14 @@ package com.brockw.stickwar.engine.units
                px += this._dx;
                py += this._dy;
                var BUF:int = 7.5;
-               for each(w in this.team.enemyTeam.walls)
+               if(!backgroundFighter)
                {
-                    if(px < w.px + BUF && px > w.px - BUF)
+                    for each(w in this.team.enemyTeam.walls)
                     {
-                         px = Number(w.px - BUF * this.team.direction);
+                         if(px < w.px + BUF && px > w.px - BUF)
+                         {
+                              px = Number(w.px - BUF * this.team.direction);
+                         }
                     }
                }
                if(px < 0 + BUF)
@@ -1435,7 +1439,6 @@ package com.brockw.stickwar.engine.units
                     {
                          this.arrowDeath = false;
                          this.playDeathSound();
-                         this.backgroundFighter = false;
                          if(type & D_FIRE && this.isFirable)
                          {
                               this.isOnFire = true;
