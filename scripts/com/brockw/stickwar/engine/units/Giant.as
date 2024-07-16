@@ -240,6 +240,8 @@ package com.brockw.stickwar.engine.units
                               if(backgroundFighter)
                               {
                                    ai.getClosestTarget().damage(0,this.damageToDeal,this);
+                                   ai.getClosestTarget().stun(this.stunTime);
+                                   ai.getClosestTarget().applyVelocity(7 * Util.sgn(mc.scaleX));
                               }
                          }
                          else if(this.targetsHit < this.maxTargetsToHit && mc.mc.currentFrameLabel == "hit" && this.isBoss)
@@ -269,6 +271,11 @@ package com.brockw.stickwar.engine.units
                               mc.filters = [];
                               this.team.removeUnit(this,game);
                               isDead = true;
+                              if(backgroundFighter)
+                              {
+                                   this.team.population += population;
+                                   backgroundFighter = false;
+                              }
                          }
                     }
                     else
@@ -276,6 +283,11 @@ package com.brockw.stickwar.engine.units
                          _mc.gotoAndStop(getDeathLabel(game));
                          this.team.removeUnit(this,game);
                          isDead = true;
+                         if(backgroundFighter)
+                         {
+                              this.team.population += population;
+                              backgroundFighter = false;
+                         }
                     }
                     _maxVelocity = game.xml.xml.Chaos.Units.giant.maxVelocity;
                     _scale = game.xml.xml.Chaos.Units.giant.scale;

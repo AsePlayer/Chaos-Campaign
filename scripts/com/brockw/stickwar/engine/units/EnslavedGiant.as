@@ -25,6 +25,8 @@ package com.brockw.stickwar.engine.units
           
           public var isLostGiant:Boolean;
           
+          public var stunTime;
+          
           public function EnslavedGiant(game:StickWar)
           {
                super(game);
@@ -69,6 +71,7 @@ package com.brockw.stickwar.engine.units
                _maxVelocity = game.xml.xml.Order.Units.giant.maxVelocity;
                this.scaleI = game.xml.xml.Order.Units.giant.growthIScale;
                this.scaleII = game.xml.xml.Order.Units.giant.growthIIScale;
+               this.stunTime = game.xml.xml.Chaos.Units.giant.stunTime;
                type = com.brockw.stickwar.engine.units.Unit.U_ENSLAVED_GIANT;
                loadDamage(game.xml.xml.Order.Units.giant);
                _mc.stop();
@@ -210,12 +213,19 @@ package com.brockw.stickwar.engine.units
                          if(backgroundFighter && MovieClip(_mc.mc).totalFrames - 20 == MovieClip(_mc.mc).currentFrame)
                          {
                               ai.getClosestTarget().damage(0,this.damageToDeal,this);
+                              ai.getClosestTarget().stun(this.stunTime);
+                              ai.getClosestTarget().applyVelocity(5 * Util.sgn(mc.scaleX));
                          }
                     }
                }
                else if(isDead == false)
                {
                     isDead = true;
+                    if(backgroundFighter)
+                    {
+                         this.team.population += population;
+                         backgroundFighter = false;
+                    }
                     team.game.soundManager.playSoundRandom("GiantDeath",3,px,py);
                     if(_isDualing)
                     {
