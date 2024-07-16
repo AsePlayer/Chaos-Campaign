@@ -243,6 +243,8 @@ package com.brockw.stickwar.engine.units
                          if(backgroundFighter)
                          {
                               ai.getClosestTarget().damage(0,this.explosionDamage,this);
+                              ai.getClosestTarget().stun(100);
+                              ai.getClosestTarget().applyVelocity(2 * Util.sgn(mc.scaleX));
                          }
                          _mc.gotoAndStop(getDeathLabel(game));
                          this.team.removeUnit(this,game);
