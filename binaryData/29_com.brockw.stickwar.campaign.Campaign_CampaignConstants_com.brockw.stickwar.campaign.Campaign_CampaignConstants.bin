@@ -36,6 +36,7 @@
 <unit>Magikill</unit>
 <unit>Swordwrath</unit>
 <unit>Ninja</unit>
+<unit>FlyingCrossbowman</unit>
 <UnitComposition>
 <Spearton>10</Spearton>
 <Swordwrath>2</Swordwrath>

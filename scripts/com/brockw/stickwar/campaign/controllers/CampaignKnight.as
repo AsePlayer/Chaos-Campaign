@@ -830,7 +830,7 @@ package com.brockw.stickwar.campaign.controllers
                {
                     if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1)
                     {
-                         this.matchups[0] = [[Unit.U_KNIGHT],"vs",[Unit.U_SWORDWRATH]];
+                         this.matchups[0] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH,Unit.U_FLYING_CROSSBOWMAN]];
                          this.matchups[1] = [[Unit.U_KNIGHT],"vs",[Unit.U_SPEARTON,Unit.U_SWORDWRATH]];
                          this.matchups[2] = [[Unit.U_CAT,Unit.U_CAT],"vs",[Unit.U_SPEARTON]];
                          this.matchups[3] = [[Unit.U_GIANT],"vs",[Unit.U_ARCHER]];
@@ -928,22 +928,22 @@ package com.brockw.stickwar.campaign.controllers
                     {
                          this.playerBackgroundUnits.splice(counter,1);
                     }
-                    else
+                    else if(u.px > 7945)
+                    {
+                         u.px = 10000;
+                         u.damage(2,u.maxHealth,null);
+                    }
+                    else if(u.ai.currentCommand != UnitCommand.ATTACK_MOVE && u.ai.currentCommand != UnitCommand.ATTACK && u.ai.currentCommand != UnitCommand.MOVE)
                     {
                          this.holdUnits.arg1 = u.py;
                          this.holdUnits.units.push(u.id);
-                         if(u.px > 7945)
-                         {
-                              u.px = 10000;
-                              u.damage(2,u.maxHealth,null);
-                         }
                     }
                     counter += 1;
                }
                this.holdUnits.execute(gameScreen.game);
                counter = 0;
                this.holdUnits = new UnitMove();
-               this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+               this.holdUnits.owner = gameScreen.team.id;
                this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
                this.holdUnits.arg0 = gameScreen.team.statue.px - 2000;
                for each(u in enemyBackgroundUnits)
@@ -952,15 +952,15 @@ package com.brockw.stickwar.campaign.controllers
                     {
                          this.enemyBackgroundUnits.splice(counter,1);
                     }
-                    else
+                    else if(u.px < 1055)
+                    {
+                         u.px = 10000;
+                         u.damage(2,u.maxHealth,null);
+                    }
+                    else if(u.ai.currentCommand != UnitCommand.ATTACK_MOVE && u.ai.currentCommand != UnitCommand.ATTACK && u.ai.currentCommand != UnitCommand.MOVE)
                     {
                          this.holdUnits.arg1 = u.py;
                          this.holdUnits.units.push(u.id);
-                         if(u.px < 1055)
-                         {
-                              u.px = 10000;
-                              u.damage(2,u.maxHealth,null);
-                         }
                     }
                     counter += 1;
                }
