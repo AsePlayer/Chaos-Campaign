@@ -828,12 +828,14 @@ package com.brockw.stickwar.campaign.controllers
                }
                else if(this.currentLevelTitle == "Final Battle: Order\'s Backyard")
                {
-                    gameScreen.team.gold = gameScreen.game.targetScreenX;
                     if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1)
                     {
                          this.matchups[0] = [[Unit.U_KNIGHT],"vs",[Unit.U_SWORDWRATH]];
-                         this.matchups[1] = [[Unit.U_KNIGHT],"vs",[Unit.U_SPEARTON]];
+                         this.matchups[1] = [[Unit.U_KNIGHT],"vs",[Unit.U_SPEARTON,Unit.U_SWORDWRATH]];
                          this.matchups[2] = [[Unit.U_CAT,Unit.U_CAT],"vs",[Unit.U_SPEARTON]];
+                         this.matchups[3] = [[Unit.U_GIANT],"vs",[Unit.U_ARCHER]];
+                         this.matchups[4] = [[Unit.U_CAT],"vs",[Unit.U_ARCHER]];
+                         this.matchups[5] = [[Unit.U_BOMBER,Unit.U_BOMBER],"vs",[Unit.U_ARCHER,Unit.U_SWORDWRATH]];
                          if(rngMatchup >= this.matchups.length)
                          {
                               this.rngMatchup = this.matchups.length;
@@ -850,26 +852,13 @@ package com.brockw.stickwar.campaign.controllers
                          }
                          this.rngMatchup += 1;
                     }
-                    updateBackgroundUnitsArray();
-                    for each(u in this.playerBackgroundUnits)
+                    updateBackgroundUnits(gameScreen);
+                    for each(u in gameScreen.team.enemyTeam.unitGroups[Unit.U_MAGIKILL])
                     {
-                         this.holdUnits = new UnitMove();
-                         this.holdUnits.owner = gameScreen.team.enemyTeam.id;
-                         this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
-                         this.holdUnits.arg0 = gameScreen.team.enemyTeam.statue.px;
-                         this.holdUnits.arg1 = u.py;
-                         this.holdUnits.units.push(u.id);
-                         this.holdUnits.execute(gameScreen.game);
-                    }
-                    for each(u in this.enemyBackgroundUnits)
-                    {
-                         this.holdUnits = new UnitMove();
-                         this.holdUnits.owner = gameScreen.team.enemyTeam.id;
-                         this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
-                         this.holdUnits.arg0 = gameScreen.team.statue.px;
-                         this.holdUnits.arg1 = u.py;
-                         this.holdUnits.units.push(u.id);
-                         this.holdUnits.execute(gameScreen.game);
+                         if(u.magikillType == "")
+                         {
+                              u.magikillType = "Stun";
+                         }
                     }
                }
           }
@@ -877,11 +866,25 @@ package com.brockw.stickwar.campaign.controllers
           public function spawnBackgroundUnitsPlayer(gameScreen:GameScreen, units:Array) : void
           {
                var spawnedUnits:Array = gameScreen.team.spawnUnitGroup(units);
+               var forward_unit_px:int = -1;
+               if(gameScreen.team.forwardUnit)
+               {
+                    forward_unit_px = gameScreen.team.forwardUnit.px;
+               }
+               if(forward_unit_px == -1 || forward_unit_px > gameScreen.game.targetScreenX)
+               {
+                    forward_unit_px = gameScreen.game.targetScreenX - 200;
+               }
+               else if(forward_unit_px != -1 && forward_unit_px < gameScreen.game.targetScreenX)
+               {
+                    forward_unit_px -= 200;
+               }
                for each(var u in spawnedUnits)
                {
-                    u.px = gameScreen.game.targetScreenX - 200;
+                    u.px = forward_unit_px - 200;
                     u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
                     u.backgroundFighter = true;
+                    gameScreen.team.population -= u.population;
                     this.playerBackgroundUnits.push(u);
                }
           }
@@ -889,35 +892,79 @@ package com.brockw.stickwar.campaign.controllers
           public function spawnBackgroundUnitsEnemy(gameScreen:GameScreen, units:Array) : void
           {
                var spawnedUnits:Array = gameScreen.team.enemyTeam.spawnUnitGroup(units);
+               var forward_unit_px:int = -1;
+               if(gameScreen.team.enemyTeam.forwardUnit)
+               {
+                    forward_unit_px = gameScreen.team.enemyTeam.forwardUnit.px;
+               }
+               if(forward_unit_px == -1 || forward_unit_px < gameScreen.game.targetScreenX)
+               {
+                    forward_unit_px = gameScreen.game.targetScreenX + 1000;
+               }
+               else if(forward_unit_px != -1 && forward_unit_px > gameScreen.game.targetScreenX)
+               {
+                    forward_unit_px += 1000;
+               }
                for each(var u in spawnedUnits)
                {
-                    u.px = gameScreen.game.targetScreenX + 1000;
+                    u.px = forward_unit_px;
                     u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
                     u.backgroundFighter = true;
+                    gameScreen.team.enemyTeam.population -= u.population;
                     this.enemyBackgroundUnits.push(u);
                }
           }
           
-          public function updateBackgroundUnitsArray() : void
+          public function updateBackgroundUnits(gameScreen:GameScreen) : void
           {
                var counter:int = 0;
+               this.holdUnits = new UnitMove();
+               this.holdUnits.owner = gameScreen.team.id;
+               this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+               this.holdUnits.arg0 = gameScreen.team.enemyTeam.statue.px + 2000;
                for each(var u in playerBackgroundUnits)
                {
                     if(u.isDead || u.health == 0)
                     {
                          this.playerBackgroundUnits.splice(counter,1);
                     }
+                    else
+                    {
+                         this.holdUnits.arg1 = u.py;
+                         this.holdUnits.units.push(u.id);
+                         if(u.px > 7945)
+                         {
+                              u.px = 10000;
+                              u.damage(2,u.maxHealth,null);
+                         }
+                    }
                     counter += 1;
                }
+               this.holdUnits.execute(gameScreen.game);
                counter = 0;
+               this.holdUnits = new UnitMove();
+               this.holdUnits.owner = gameScreen.team.enemyTeam.id;
+               this.holdUnits.moveType = UnitCommand.ATTACK_MOVE;
+               this.holdUnits.arg0 = gameScreen.team.statue.px - 2000;
                for each(u in enemyBackgroundUnits)
                {
                     if(u.isDead || u.health == 0)
                     {
                          this.enemyBackgroundUnits.splice(counter,1);
                     }
+                    else
+                    {
+                         this.holdUnits.arg1 = u.py;
+                         this.holdUnits.units.push(u.id);
+                         if(u.px < 1055)
+                         {
+                              u.px = 10000;
+                              u.damage(2,u.maxHealth,null);
+                         }
+                    }
                     counter += 1;
                }
+               this.holdUnits.execute(gameScreen.game);
           }
      }
 }
