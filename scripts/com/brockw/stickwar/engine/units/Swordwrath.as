@@ -178,7 +178,7 @@ package com.brockw.stickwar.engine.units
                     }
                     else if(_state == S_RUN)
                     {
-                         if(this.swordType != "Club")
+                         if(this.swordType != "Club" && !backgroundFighter)
                          {
                               if(!this.isMinion && !this.rageSpell.inEffect() && team.tech.isResearched(Tech.SWORDWRATH_RAGE) && this.rageCooldown() <= 0 && this.health <= this.maxHealth / 1.5)
                               {
@@ -211,7 +211,7 @@ package com.brockw.stickwar.engine.units
                     {
                          if(!this.rageSpell.inEffect() && team.tech.isResearched(Tech.SWORDWRATH_RAGE) && this.rageCooldown() <= 0)
                          {
-                              if(this.swordType != "Club")
+                              if(this.swordType != "Club" && !backgroundFighter)
                               {
                                    this.rageSpell.spellActivate(team);
                                    this.heal(5,4);

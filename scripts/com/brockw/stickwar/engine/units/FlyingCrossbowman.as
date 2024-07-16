@@ -306,6 +306,10 @@ package com.brockw.stickwar.engine.units
                     {
                          game.projectileManager.initBolt(p.x,p.y,bowAngle,projectileVelocity,target.py,angleToTargetW(target,projectileVelocity,angleToTarget(target)),this,20,30 * 4,team.tech.isResearched(Tech.CROSSBOW_FIRE));
                     }
+                    if(backgroundFighter && ai.getClosestTarget())
+                    {
+                         ai.getClosestTarget().damage(0,15,null);
+                    }
                }
           }
      }

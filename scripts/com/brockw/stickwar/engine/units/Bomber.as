@@ -237,15 +237,17 @@ package com.brockw.stickwar.engine.units
                     }
                     else
                     {
+                         if(backgroundFighter && ai.getClosestTarget())
+                         {
+                              ai.getClosestTarget().damage(D_FIRE,this.explosionDamage * 2,null);
+                              ai.getClosestTarget().stun(100);
+                              ai.getClosestTarget().applyVelocity(2 * Util.sgn(mc.scaleX));
+                              this.team.population += population;
+                              backgroundFighter = false;
+                         }
                          this.detonate();
                          team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
                          team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
-                         if(backgroundFighter)
-                         {
-                              ai.getClosestTarget().damage(0,this.explosionDamage,this);
-                              ai.getClosestTarget().stun(100);
-                              ai.getClosestTarget().applyVelocity(2 * Util.sgn(mc.scaleX));
-                         }
                          _mc.gotoAndStop(getDeathLabel(game));
                          this.team.removeUnit(this,game);
                          isDead = true;

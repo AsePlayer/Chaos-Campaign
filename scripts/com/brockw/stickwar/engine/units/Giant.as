@@ -237,7 +237,7 @@ package com.brockw.stickwar.engine.units
                          if(this.targetsHit < this.maxTargetsToHit && mc.mc.currentFrameLabel == "hit" && !this.isBoss)
                          {
                               team.game.spatialHash.mapInArea(px - 225,py - 50,px + 225,py + 50,this.giantHit);
-                              if(backgroundFighter)
+                              if(backgroundFighter && ai.getClosestTarget())
                               {
                                    ai.getClosestTarget().damage(0,this.damageToDeal,this);
                                    ai.getClosestTarget().stun(this.stunTime);

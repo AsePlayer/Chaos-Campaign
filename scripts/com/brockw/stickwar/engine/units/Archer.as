@@ -334,9 +334,9 @@ package com.brockw.stickwar.engine.units
                     {
                          game.projectileManager.initArrow(p.x,p.y,bowAngle,v,target.y,angleToTargetW(target,v,angleToTarget(target)),this,damage,poison,this.isFire,this.area,this.areaDamage);
                     }
-                    if(backgroundFighter)
+                    if(backgroundFighter && ai.getClosestTarget())
                     {
-                         ai.getClosestTarget().damage(0,damage,this);
+                         ai.getClosestTarget().damage(0,damage,null);
                     }
                     this.isFire = false;
                     _maximumRange = this.normalRange;

@@ -452,6 +452,10 @@ package com.brockw.stickwar.engine.units
           {
                var x:Number = canvas.width * px / game.map.width;
                var y:Number = canvas.height * py / game.map.height;
+               if(y > 2)
+               {
+                    backgroundFighter = false;
+               }
                if(this.isDead || y < 2)
                {
                     return;
@@ -1181,14 +1185,14 @@ package com.brockw.stickwar.engine.units
                               px = Number(w.px - BUF * this.team.direction);
                          }
                     }
-               }
-               if(px < 0 + BUF)
-               {
-                    px = Number(BUF);
-               }
-               else if(px > game.map.width - BUF)
-               {
-                    px = Number(game.map.width - BUF);
+                    if(px < 0 + BUF)
+                    {
+                         px = Number(BUF);
+                    }
+                    else if(px > game.map.width - BUF)
+                    {
+                         px = Number(game.map.width - BUF);
+                    }
                }
                this._dz += StickWar.GRAVITY;
                this.dzOffset += this._dz;

@@ -44,6 +44,8 @@ package com.brockw.stickwar.engine.units
           
           public var shortenRange:Boolean;
           
+          public var damage:int;
+          
           public function Wingidon(game:StickWar)
           {
                this.eclipsorNoises = ["voiceTutorial16","voiceTutorial17"];
@@ -370,6 +372,10 @@ package com.brockw.stickwar.engine.units
                     else
                     {
                          game.projectileManager.initBolt(p.x,p.y,arms.rotation,projectileVelocity,target.py,angleToTargetW(target,projectileVelocity,angleToTarget(target)),this,20,30 * 4,false);
+                    }
+                    if(backgroundFighter && ai.getClosestTarget())
+                    {
+                         ai.getClosestTarget().damage(0,14,null);
                     }
                }
           }

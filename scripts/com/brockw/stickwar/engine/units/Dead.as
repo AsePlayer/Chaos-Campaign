@@ -264,6 +264,11 @@ package com.brockw.stickwar.engine.units
                               p = game.battlefield.globalToLocal(p);
                               v = projectileVelocity;
                               damage = this.arrowDamage;
+                              if(backgroundFighter && ai.getClosestTarget())
+                              {
+                                   ai.getClosestTarget().damage(0,damage,null);
+                                   ai.getClosestTarget().poison(5);
+                              }
                               if(this.target != null)
                               {
                                    poisonDamage = 0;
