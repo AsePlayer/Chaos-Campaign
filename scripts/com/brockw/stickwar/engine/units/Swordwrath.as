@@ -255,6 +255,11 @@ package com.brockw.stickwar.engine.units
                          _mc.gotoAndStop(this.getDeathLabel(game));
                          this.team.removeUnit(this,game);
                          isDead = true;
+                         if(backgroundFighter)
+                         {
+                              this.team.population += population;
+                              backgroundFighter = false;
+                         }
                     }
                }
                if(isDead || _isDualing)

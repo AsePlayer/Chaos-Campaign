@@ -240,6 +240,10 @@ package com.brockw.stickwar.engine.units
                          this.detonate();
                          team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
                          team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
+                         if(backgroundFighter)
+                         {
+                              ai.getClosestTarget().damage(0,this.explosionDamage,this);
+                         }
                          _mc.gotoAndStop(getDeathLabel(game));
                          this.team.removeUnit(this,game);
                          isDead = true;

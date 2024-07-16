@@ -223,6 +223,11 @@ package com.brockw.stickwar.engine.units
                               mc.filters = [];
                               this.team.removeUnit(this,game);
                               isDead = true;
+                              if(backgroundFighter)
+                              {
+                                   this.team.population += population;
+                                   backgroundFighter = false;
+                              }
                          }
                     }
                     else
@@ -230,6 +235,11 @@ package com.brockw.stickwar.engine.units
                          _mc.gotoAndStop(getDeathLabel(game));
                          this.team.removeUnit(this,game);
                          isDead = true;
+                         if(backgroundFighter)
+                         {
+                              this.team.population += population;
+                              backgroundFighter = false;
+                         }
                     }
                     _maxVelocity = int(game.xml.xml.Chaos.Units.cat.maxVelocity);
                     _scale = int(game.xml.xml.Chaos.Units.cat.scale);

@@ -325,6 +325,11 @@ package com.brockw.stickwar.engine.units
                          team.game.projectileManager.initNuke(px,py,this,50);
                     }
                     isDead = true;
+                    if(backgroundFighter)
+                    {
+                         this.team.population += population;
+                         backgroundFighter = false;
+                    }
                     if(_isDualing)
                     {
                          _mc.gotoAndStop(_currentDual.defendLabel);

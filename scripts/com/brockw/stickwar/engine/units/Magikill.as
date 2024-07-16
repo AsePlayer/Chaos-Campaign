@@ -42,7 +42,7 @@ package com.brockw.stickwar.engine.units
           
           private var maxSpellStacks:int = 5;
           
-          public var magikillType:String;
+          public var magikillType:String = "";
           
           private var speartonMinion:com.brockw.stickwar.engine.units.Spearton;
           

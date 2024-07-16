@@ -271,6 +271,11 @@ package com.brockw.stickwar.engine.units
                else if(isDead == false)
                {
                     isDead = true;
+                    if(backgroundFighter)
+                    {
+                         this.team.population += population;
+                         backgroundFighter = false;
+                    }
                     if(isMinion)
                     {
                          isNormal = false;
