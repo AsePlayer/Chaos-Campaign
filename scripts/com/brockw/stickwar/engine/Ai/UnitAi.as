@@ -571,7 +571,7 @@ package com.brockw.stickwar.engine.Ai
                     }
                     i++;
                }
-               if(this.currentTarget == null)
+               if(this.currentTarget == null && !this.unit.backgroundFighter)
                {
                     return this.unit.team.enemyTeam.statue;
                }
@@ -630,15 +630,18 @@ package com.brockw.stickwar.engine.Ai
                     return this.cachedTarget;
                }
                u = this.getClosestUnitTarget();
-               for each(w in this.unit.team.enemyTeam.walls)
+               if(!this.unit.backgroundFighter)
                {
-                    if(this.unit.px < w.px && w.px < u.px)
+                    for each(w in this.unit.team.enemyTeam.walls)
                     {
-                         u = w;
-                    }
-                    else if(this.unit.px > w.px && w.px > u.px)
-                    {
-                         u = w;
+                         if(this.unit.px < w.px && w.px < u.px)
+                         {
+                              u = w;
+                         }
+                         else if(this.unit.px > w.px && w.px > u.px)
+                         {
+                              u = w;
+                         }
                     }
                }
                this.currentTarget = this.cachedTarget = u;
