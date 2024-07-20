@@ -842,7 +842,7 @@ package com.brockw.stickwar.campaign.controllers
                     }
                     if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1)
                     {
-                         this.matchups[0] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH,Unit.U_FLYING_CROSSBOWMAN]];
+                         this.matchups[0] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH,Unit.U_ARCHER,Unit.U_SPEARTON,Unit.U_ENSLAVED_GIANT,Unit.U_NINJA,Unit.U_FLYING_CROSSBOWMAN]];
                          this.matchups[1] = [[Unit.U_KNIGHT],"vs",[Unit.U_SPEARTON,Unit.U_SWORDWRATH]];
                          this.matchups[2] = [[Unit.U_CAT,Unit.U_CAT],"vs",[Unit.U_SPEARTON]];
                          this.matchups[3] = [[Unit.U_GIANT],"vs",[Unit.U_ARCHER]];
@@ -896,6 +896,7 @@ package com.brockw.stickwar.campaign.controllers
                     u.px = forward_unit_px - 200;
                     u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
                     u.backgroundFighter = true;
+                    u.healthBar.visible = false;
                     u.health = u.maxHealth;
                     gameScreen.team.population -= u.population;
                     this.playerBackgroundUnits.push(u);
@@ -923,6 +924,7 @@ package com.brockw.stickwar.campaign.controllers
                     u.px = forward_unit_px;
                     u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
                     u.backgroundFighter = true;
+                    u.healthBar.visible = false;
                     u.health = u.maxHealth;
                     gameScreen.team.enemyTeam.population -= u.population;
                     this.enemyBackgroundUnits.push(u);
@@ -938,21 +940,31 @@ package com.brockw.stickwar.campaign.controllers
                this.holdUnits.arg0 = gameScreen.team.enemyTeam.statue.px + 2000;
                for each(var u in playerBackgroundUnits)
                {
-                    if(u.px > 7945)
+                    if(u.px < 1055)
                     {
-                         u.px = 10000;
+                         u.ai.currentTarget = null;
+                         u.px += 1;
                     }
-                    else if(u.px > 9000 && !u.isDead)
+                    if(u.px > 7945 && u.px < 8600)
                     {
-                         u.damage(2,99999,null);
+                         u.ai.currentTarget = null;
+                         u.canBeTargeted = false;
+                         u.px += 1;
                     }
-                    else if(u.ai.currentCommand != UnitCommand.ATTACK_MOVE && u.ai.currentCommand != UnitCommand.ATTACK && u.ai.currentCommand != UnitCommand.MOVE)
+                    else if(u.px > 8500 && !u.isDead)
+                    {
+                         u.px = 20000;
+                         u.canBeTargeted = true;
+                         u.isDieing = true;
+                    }
+                    else if(u.ai.currentCommand != UnitCommand.ATTACK_MOVE)
                     {
                          this.holdUnits.arg1 = u.py;
                          this.holdUnits.units.push(u.id);
                     }
                     if(u.isDead || u.health == 0)
                     {
+                         u.healthBar.visible = true;
                          this.playerBackgroundUnits.splice(counter,1);
                     }
                     else
@@ -968,25 +980,36 @@ package com.brockw.stickwar.campaign.controllers
                this.holdUnits.arg0 = gameScreen.team.statue.px - 2000;
                for each(u in enemyBackgroundUnits)
                {
-                    if(u.px < 1055)
+                    if(u.px > 7945)
                     {
-                         u.px = -10000;
+                         u.ai.currentTarget = null;
+                         u.px -= 1;
                     }
-                    else if(u.px < 0 && !u.isDead)
+                    if(u.px < 1055 && u.px > 600)
                     {
-                         u.damage(2,99999,null);
+                         u.ai.currentTarget = null;
+                         u.canBeTargeted = false;
+                         u.px -= 1;
                     }
-                    else if(u.ai.currentCommand != UnitCommand.ATTACK_MOVE && u.ai.currentCommand != UnitCommand.ATTACK && u.ai.currentCommand != UnitCommand.MOVE)
+                    else if(u.px < 600 && !u.isDead)
+                    {
+                         u.px = -20000;
+                         u.canBeTargeted = true;
+                         u.isDieing = true;
+                    }
+                    else if(u.ai.currentCommand != UnitCommand.ATTACK_MOVE)
                     {
                          this.holdUnits.arg1 = u.py;
                          this.holdUnits.units.push(u.id);
                     }
                     if(u.isDead || u.health == 0)
                     {
+                         u.healthBar.visible = true;
                          this.enemyBackgroundUnits.splice(counter,1);
                     }
                     else
                     {
+                         u.canBeTargeted = true;
                          counter += 1;
                     }
                }
