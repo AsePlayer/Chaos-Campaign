@@ -1132,7 +1132,7 @@ package com.brockw.stickwar.engine.units
                     }
                }
                var CASTLE_WIDTH:int = 200;
-               if(!this.isGarrisoned)
+               if(!this.isGarrisoned && !this.backgroundFighter)
                {
                     if(px + this._dx <= game.map.screenWidth + CASTLE_WIDTH && this._dx < 0)
                     {
