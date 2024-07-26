@@ -274,7 +274,14 @@ package com.brockw.stickwar.engine.units
                     }
                     MovieClip(_mc.mc).nextFrame();
                }
-               Swordwrath.setItem(_swordwrath(mc),this.sword,"","");
+               if(dressGeneral)
+               {
+                    Swordwrath.setItem(_swordwrath(mc),"Pirate Sword","","");
+               }
+               else
+               {
+                    Swordwrath.setItem(_swordwrath(mc),this.sword,"","");
+               }
           }
           
           override protected function getDeathLabel(game:StickWar) : String

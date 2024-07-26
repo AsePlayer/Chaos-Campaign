@@ -318,6 +318,8 @@ package com.brockw.stickwar.engine.units
           
           public var backgroundFighter:Boolean = false;
           
+          public var dressGeneral:Boolean = false;
+          
           public function Unit(game:StickWar)
           {
                this.hasDefaultLoadout = false;

@@ -303,7 +303,11 @@ package com.brockw.stickwar.engine.units
                {
                     Util.animateMovieClip(_mc);
                }
-               if(isMinion)
+               if(dressGeneral)
+               {
+                    Spearton.setItem(_speartonMc(mc),"British Spear","British Helmet","British Shield");
+               }
+               else if(isMinion)
                {
                     Spearton.setItem(_speartonMc(mc),"Pitchfork","None","None");
                }

@@ -270,7 +270,11 @@ package com.brockw.stickwar.engine.units
                          }
                     }
                }
-               if(this.archerType == "Splash")
+               if(dressGeneral)
+               {
+                    Archer.setItem(mc,"Default","Sniper Hat","Silver Archidon");
+               }
+               else if(this.archerType == "Splash")
                {
                     Archer.setItem(mc,"Default","Basic Helmet","Silver Archidon");
                }

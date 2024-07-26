@@ -248,7 +248,11 @@ package com.brockw.stickwar.engine.units
                          _mc.mc.arms.gotoAndStop(1);
                     }
                }
-               if(this.isExploder)
+               if(dressGeneral)
+               {
+                    FlyingCrossbowman.setItem(mc,"Leather Quiver","Old Pilot\'s Helmet","Feather Wings");
+               }
+               else if(this.isExploder)
                {
                     _maximumRange = 5 * health;
                     FlyingCrossbowman.setItem(mc,"Exploding Tips","Inferno Helmet","Inferno Wings");

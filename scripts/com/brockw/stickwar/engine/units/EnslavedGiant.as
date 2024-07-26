@@ -212,9 +212,12 @@ package com.brockw.stickwar.engine.units
                          }
                          if(backgroundFighter && MovieClip(_mc.mc).totalFrames - 20 == MovieClip(_mc.mc).currentFrame)
                          {
-                              ai.getClosestTarget().damage(0,this.damageToDeal,this);
-                              ai.getClosestTarget().stun(this.stunTime);
-                              ai.getClosestTarget().applyVelocity(5 * Util.sgn(mc.scaleX));
+                              if(ai.getClosestTarget())
+                              {
+                                   ai.getClosestTarget().damage(0,this.damageToDeal,this);
+                                   ai.getClosestTarget().stun(this.stunTime);
+                                   ai.getClosestTarget().applyVelocity(5 * Util.sgn(mc.scaleX));
+                              }
                          }
                     }
                }
@@ -243,7 +246,11 @@ package com.brockw.stickwar.engine.units
                }
                MovieClip(_mc.mc).nextFrame();
                _mc.mc.stop();
-               if(this.isLostGiant)
+               if(dressGeneral)
+               {
+                    EnslavedGiant.setItem(mc,"Wooden Bag","","");
+               }
+               else if(this.isLostGiant)
                {
                     EnslavedGiant.setItem(mc,"Stone Bag","","");
                     isNormal = false;

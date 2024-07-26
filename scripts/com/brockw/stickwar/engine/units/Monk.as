@@ -280,7 +280,14 @@ package com.brockw.stickwar.engine.units
                     MovieClip(_mc.mc).nextFrame();
                     _mc.mc.stop();
                }
-               Monk.setItem(_cleric(mc),"Spellbook","","");
+               if(dressGeneral)
+               {
+                    Monk.setItem(_cleric(mc),"Golden Staff","","");
+               }
+               else
+               {
+                    Monk.setItem(_cleric(mc),"Spellbook","","");
+               }
           }
           
           override public function setActionInterface(a:ActionInterface) : void

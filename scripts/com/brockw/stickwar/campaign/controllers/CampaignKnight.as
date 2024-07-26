@@ -117,7 +117,7 @@ package com.brockw.stickwar.campaign.controllers
                this.playerBackgroundUnits = [];
                this.enemyBackgroundUnits = [];
                this.matchups = [];
-               this.generals = [Unit.U_SWORDWRATH,Unit.U_ARCHER,Unit.U_SPEARTON,Unit.U_FLYING_CROSSBOWMAN,Unit.U_ENSLAVED_GIANT];
+               this.generals = [Unit.U_SWORDWRATH,Unit.U_ARCHER,Unit.U_SPEARTON,Unit.U_FLYING_CROSSBOWMAN,Unit.U_MONK,Unit.U_ENSLAVED_GIANT];
                super(gameScreen);
                this.currentLevelTitle = gameScreen.main.campaign.getCurrentLevel().title;
                var randomNumber:int = Math.floor(Math.random() * 7) + 1;
@@ -834,11 +834,13 @@ package com.brockw.stickwar.campaign.controllers
                     if(this.generals.length > 0 && (this.leaderUnit == null || this.leaderUnit.isDead))
                     {
                          this.leaderUnit = gameScreen.team.enemyTeam.spawnUnitGroup([this.generals.shift()])[0];
-                         this.leaderUnit.scale *= 1.2;
+                         this.leaderUnit.scale *= 1.5;
                          this.leaderUnit.maxHealth *= 2.5;
                          this.leaderUnit.healthBar.totalHealth = this.leaderUnit.maxHealth;
                          this.leaderUnit.health = this.leaderUnit.maxHealth;
                          this.leaderUnit.isMiniBoss = true;
+                         this.leaderUnit.dressGeneral = true;
+                         this.leaderUnit.isNormal = false;
                     }
                     if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1)
                     {
