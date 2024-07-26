@@ -237,11 +237,14 @@ package com.brockw.stickwar.engine.units
                     }
                     else
                     {
-                         if(backgroundFighter && ai.getClosestTarget())
+                         if(backgroundFighter)
                          {
-                              ai.getClosestTarget().damage(D_FIRE,this.explosionDamage * 2,null);
-                              ai.getClosestTarget().stun(100);
-                              ai.getClosestTarget().applyVelocity(2 * Util.sgn(mc.scaleX));
+                              if(ai.getClosestTarget() && mayAttack(ai.getClosestTarget()))
+                              {
+                                   ai.getClosestTarget().damage(D_FIRE,this.explosionDamage * 2,null);
+                                   ai.getClosestTarget().stun(100);
+                                   ai.getClosestTarget().applyVelocity(2 * Util.sgn(mc.scaleX));
+                              }
                               this.team.population += population;
                               backgroundFighter = false;
                          }

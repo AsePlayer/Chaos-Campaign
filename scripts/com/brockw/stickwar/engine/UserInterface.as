@@ -166,6 +166,7 @@ package com.brockw.stickwar.engine
                this._period = 33.333333333333336;
                this._period = 33.333333333333336;
                this._period = 33.333333333333336;
+               this._period = 33.333333333333336;
                this.devHotkeys = [];
                ++main.loadingFraction;
                this.lastButton = null;
@@ -806,7 +807,7 @@ package com.brockw.stickwar.engine
                          this.devHotkeyQueued = this.devHotkeys[this.i][0];
                          this.gameScreen.userInterface.helpMessage.showMessage(this.devHotkeys[this.i][1]);
                          this.gameScreen.game.soundManager.playSoundFullVolume(this.devHotkeys[this.i][4]);
-                         this.team.trace(this.devHotkeyQueued + " called.");
+                         trace(this.devHotkeyQueued + " called.");
                     }
                     ++this.i;
                     if(this.keyBoardState.isShift && this.devHotkeys[this.i][2] && this.keyBoardState.isPressed(this.devHotkeys[this.i][3]))
