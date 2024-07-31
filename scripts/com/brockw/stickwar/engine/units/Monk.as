@@ -132,7 +132,7 @@ package com.brockw.stickwar.engine.units
                this.cureSpellCooldown.update();
                this.slowSpellCooldown.update();
                updateCommon(game);
-               if(!this.protecting || this.protecting.isDead || this.protecting.team != team)
+               if(!this.protecting || this.protecting.isDead || this.protecting.team != team || this.protecting.backgroundFighter)
                {
                     isProtected = false;
                     this.protecting = null;
