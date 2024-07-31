@@ -833,23 +833,13 @@ package com.brockw.stickwar.campaign.controllers
                {
                     if(this.generals.length > 0 && (this.leaderUnit == null || this.leaderUnit.isDead))
                     {
+                         unlockEnemyQueues(gameScreen);
                          this.leaderUnit = gameScreen.team.enemyTeam.spawnUnitGroup([this.generals.shift()])[0];
-                         this.leaderUnit.scale *= 1.5;
-                         this.leaderUnit.maxHealth *= 2.5;
-                         this.leaderUnit.healthBar.totalHealth = this.leaderUnit.maxHealth;
-                         this.leaderUnit.health = this.leaderUnit.maxHealth;
-                         this.leaderUnit.isMiniBoss = true;
-                         this.leaderUnit.dressGeneral = true;
-                         this.leaderUnit.isNormal = false;
+                         updateEnemyGeneral(gameScreen);
                     }
                     if(gameScreen.game.frame % 300 == 0 || gameScreen.isFastForward && gameScreen.game.frame % 300 == 1)
                     {
-                         this.matchups[0] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH,Unit.U_ARCHER,Unit.U_SPEARTON,Unit.U_ENSLAVED_GIANT,Unit.U_NINJA,Unit.U_FLYING_CROSSBOWMAN]];
-                         this.matchups[1] = [[Unit.U_KNIGHT],"vs",[Unit.U_SPEARTON,Unit.U_SWORDWRATH]];
-                         this.matchups[2] = [[Unit.U_CAT,Unit.U_CAT],"vs",[Unit.U_SPEARTON]];
-                         this.matchups[3] = [[Unit.U_GIANT],"vs",[Unit.U_ARCHER]];
-                         this.matchups[4] = [[Unit.U_CAT],"vs",[Unit.U_ARCHER]];
-                         this.matchups[5] = [[Unit.U_BOMBER,Unit.U_BOMBER],"vs",[Unit.U_ARCHER,Unit.U_SWORDWRATH]];
+                         setMatchups();
                          if(rngMatchup >= this.matchups.length)
                          {
                               this.rngMatchup = this.matchups.length;
@@ -1016,6 +1006,66 @@ package com.brockw.stickwar.campaign.controllers
                     }
                }
                this.holdUnits.execute(gameScreen.game);
+          }
+          
+          public function updateEnemyGeneral(gameScreen:GameScreen) : void
+          {
+               var everyUnit:Array = [Unit.U_SWORDWRATH,Unit.U_ARCHER,Unit.U_MONK,Unit.U_MAGIKILL,Unit.U_SPEARTON,Unit.U_NINJA,Unit.U_FLYING_CROSSBOWMAN,Unit.U_ENSLAVED_GIANT];
+               this.leaderUnit.scale *= 1.5;
+               this.leaderUnit.maxHealth *= 2.5;
+               this.leaderUnit.healthBar.totalHealth = this.leaderUnit.maxHealth;
+               this.leaderUnit.health = this.leaderUnit.maxHealth;
+               this.leaderUnit.isMiniBoss = true;
+               this.leaderUnit.dressGeneral = true;
+               this.leaderUnit.isNormal = false;
+               for each(u in everyUnit)
+               {
+                    if(u == this.leaderUnit.type)
+                    {
+                         gameScreen.team.enemyTeam.unitsAvailable[u] = 1;
+                    }
+                    else
+                    {
+                         delete gameScreen.team.enemyTeam.unitsAvailable[u];
+                    }
+               }
+               if(this.leaderUnit.type == Unit.U_SWORDWRATH)
+               {
+                    gameScreen.team.enemyTeam.unitsAvailable[Unit.U_SWORDWRATH] = 1;
+               }
+               if(this.leaderUnit.type == Unit.U_ARCHER)
+               {
+                    gameScreen.team.enemyTeam.unitsAvailable[Unit.U_SWORDWRATH] = 1;
+                    gameScreen.team.enemyTeam.unitsAvailable[Unit.U_ARCHER] = 1;
+               }
+          }
+          
+          public function setMatchups() : void
+          {
+               this.matchups[0] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH,Unit.U_ARCHER,Unit.U_SPEARTON,Unit.U_ENSLAVED_GIANT,Unit.U_NINJA,Unit.U_FLYING_CROSSBOWMAN]];
+               if(this.leaderUnit.type == Unit.U_SWORDWRATH)
+               {
+                    this.matchups[0] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH]];
+                    this.matchups[1] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH]];
+                    this.matchups[2] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH,Unit.U_SWORDWRATH]];
+                    this.matchups[3] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH,Unit.U_SWORDWRATH,Unit.U_SWORDWRATH]];
+               }
+               else if(this.leaderUnit.type == Unit.U_ARCHER)
+               {
+                    this.matchups[0] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_ARCHER]];
+                    this.matchups[1] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_ARCHER,Unit.U_SWORDWRATH]];
+                    this.matchups[2] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH]];
+                    this.matchups[3] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_WINGIDON],"vs",[Unit.U_ARCHER,Unit.U_ARCHER,Unit.U_SWORDWRATH]];
+               }
+          }
+          
+          public function unlockEnemyQueues(gameScreen:GameScreen) : void
+          {
+               var everyUnit:Array = [Unit.U_SWORDWRATH,Unit.U_ARCHER,Unit.U_MONK,Unit.U_MAGIKILL,Unit.U_SPEARTON,Unit.U_NINJA,Unit.U_FLYING_CROSSBOWMAN,Unit.U_ENSLAVED_GIANT];
+               for each(u in everyUnit)
+               {
+                    gameScreen.team.enemyTeam.unitsAvailable[u] = 1;
+               }
           }
      }
 }
