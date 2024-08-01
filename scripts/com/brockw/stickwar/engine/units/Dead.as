@@ -198,7 +198,7 @@ package com.brockw.stickwar.engine.units
                     this.setupComplete = true;
                     isNormal = false;
                }
-               else if(this.shortenRange && this.deadType != "Bomber")
+               else if(this.shortenRange && this.deadType != "Bomber" || backgroundFighter)
                {
                     if(this.deadType != "Toxic")
                     {

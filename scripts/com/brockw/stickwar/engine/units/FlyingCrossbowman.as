@@ -119,7 +119,7 @@ package com.brockw.stickwar.engine.units
           {
                var bow:MovieClip = null;
                super.update(game);
-               if(this.shortenRange)
+               if(this.shortenRange || backgroundFighter)
                {
                     this._maximumRange = 400;
                     isNormal = false;

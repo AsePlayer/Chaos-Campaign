@@ -156,7 +156,7 @@ package com.brockw.stickwar.engine.units
                this.wingidonSpeedSpell.update();
                super.update(game);
                updateCommon(game);
-               if(this.shortenRange)
+               if(this.shortenRange || backgroundFighter)
                {
                     this._maximumRange = 350;
                     isNormal = false;
