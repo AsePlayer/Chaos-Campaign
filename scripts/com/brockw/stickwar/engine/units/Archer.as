@@ -157,7 +157,7 @@ package com.brockw.stickwar.engine.units
                super.update(game);
                this.archerFireSpellCooldown.update();
                updateCommon(game);
-               if(this.shortenRange)
+               if(this.shortenRange || backgroundFighter)
                {
                     this._maximumRange = 400;
                     isNormal = false;
