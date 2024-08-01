@@ -141,7 +141,7 @@ package com.brockw.stickwar.engine.units
                          this.setupComplete = true;
                     }
                }
-               else
+               else if(!backgroundFighter)
                {
                     isNormal = false;
                }
@@ -277,6 +277,7 @@ package com.brockw.stickwar.engine.units
                if(dressGeneral)
                {
                     Swordwrath.setItem(_swordwrath(mc),"Pirate Sword","","");
+                    this.swordType = "Pirate Sword";
                }
                else
                {
