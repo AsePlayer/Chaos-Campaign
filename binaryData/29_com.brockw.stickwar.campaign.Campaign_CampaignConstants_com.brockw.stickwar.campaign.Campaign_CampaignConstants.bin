@@ -24,8 +24,8 @@
 </player>
 
 <oponent race="Order" statueHealth="1500">
-<gold>3000</gold>
-<mana>500</mana>
+<gold>0</gold>
+<mana>0</mana>
 <raceName>Order Empire</raceName> 
 <statue>default</statue>
 <unit>Miner</unit>
@@ -39,10 +39,12 @@
 <unit>FlyingCrossbowman</unit>
 <UnitComposition>
 <Spearton>10</Spearton>
-<Swordwrath>2</Swordwrath>
-<Archidon>5</Archidon>
-<Magikill>1</Magikill>
+<Swordwrath>15</Swordwrath>
+<Archidon>7</Archidon>
+<FlyingCrossbowman>3</FlyingCrossbowman>
+<Magikill>3</Magikill>
 <Monk>2</Monk>
+<EnslavedGiant>3</EnslavedGiant>
 <Miner>16</Miner>
 </UnitComposition>
 </oponent>
