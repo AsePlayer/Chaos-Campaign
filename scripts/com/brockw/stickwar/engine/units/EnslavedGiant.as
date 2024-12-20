@@ -224,7 +224,7 @@ package com.brockw.stickwar.engine.units
                else if(isDead == false)
                {
                     isDead = true;
-                    if(backgroundFighter)
+                    if(backgroundFighter || isSwitched)
                     {
                          this.team.population += population;
                          backgroundFighter = false;

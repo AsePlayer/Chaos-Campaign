@@ -214,6 +214,11 @@ package com.brockw.stickwar.engine.units
                }
                else if(isDead == false)
                {
+                    if(backgroundFighter)
+                    {
+                         this.team.population += population;
+                         backgroundFighter = false;
+                    }
                     if(_isDualing)
                     {
                          _mc.gotoAndStop(_currentDual.defendLabel);
@@ -223,11 +228,6 @@ package com.brockw.stickwar.engine.units
                               mc.filters = [];
                               this.team.removeUnit(this,game);
                               isDead = true;
-                              if(backgroundFighter)
-                              {
-                                   this.team.population += population;
-                                   backgroundFighter = false;
-                              }
                          }
                     }
                     else
