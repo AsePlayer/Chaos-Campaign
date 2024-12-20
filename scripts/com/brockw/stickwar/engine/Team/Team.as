@@ -1514,7 +1514,7 @@ package com.brockw.stickwar.engine.Team
           
           private function isMilitaryFilter(unit:Unit, i:int, a:Array) : Boolean
           {
-               return unit.type != Unit.U_MINER && unit.type != Unit.U_CHAOS_MINER && unit.isAlive();
+               return unit.type != Unit.U_MINER && unit.type != Unit.U_CHAOS_MINER && unit.isAlive() && !unit.backgroundFighter;
           }
           
           public function calculateStatistics() : void
@@ -1526,7 +1526,7 @@ package com.brockw.stickwar.engine.Team
                var n:int = 0;
                for each(unit in this.units)
                {
-                    if(unit.type != Unit.U_MINER && unit.type != Unit.U_CHAOS_MINER && unit.isAlive())
+                    if(unit.type != Unit.U_MINER && unit.type != Unit.U_CHAOS_MINER && unit.isAlive() && !unit.backgroundFighter)
                     {
                          n += unit.population;
                          this.averagePosition += unit.px * unit.population;
