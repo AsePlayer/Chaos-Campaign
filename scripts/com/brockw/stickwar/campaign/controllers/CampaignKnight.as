@@ -197,6 +197,10 @@ package com.brockw.stickwar.campaign.controllers
                     {
                          this.messageOpening.setMessage("Queen Medusa: Their precious castle will be no more...","",0,this.medusaOneLiner);
                     }
+                    else if(this.currentLevelTitle == "Final Battle: Order\'s Backyard")
+                    {
+                         this.messageOpening.setMessage("Queen Medusa: This is it, their last stand... Show them what you are made of!","",0,this.medusaOneLiner);
+                    }
                     else if(this.difficulty == 1)
                     {
                          this.messageOpening.setMessage("That\'s all the levels for now! Replay on HARD Mode for a tougher challenge.","",0,"Pain14");
@@ -831,6 +835,11 @@ package com.brockw.stickwar.campaign.controllers
                }
                else if(this.currentLevelTitle == "Final Battle: Order\'s Backyard")
                {
+                    if(!this.levelSetupComplete)
+                    {
+                         gameScreen.team.spawnUnitGroup([Unit.U_GIANT,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER,Unit.U_CHAOS_MINER]);
+                         this.levelSetupComplete = true;
+                    }
                     if(gameScreen.team.techAllowed != null)
                     {
                          gameScreen.team.techAllowed = null;
@@ -838,7 +847,6 @@ package com.brockw.stickwar.campaign.controllers
                     if(this.generals.length > 0 && (this.leaderUnit == null || this.leaderUnit.isDead))
                     {
                          CampaignGameScreen(gameScreen).enemyTeamAi.setRespectForEnemy(0.1);
-                         unlockEnemyQueues(gameScreen);
                          this.leaderUnit = gameScreen.team.enemyTeam.spawnUnitGroup([this.generals.shift()])[0];
                          updateEnemyGeneral(gameScreen);
                     }
@@ -918,7 +926,7 @@ package com.brockw.stickwar.campaign.controllers
                     u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
                     u.backgroundFighter = true;
                     u.healthBar.visible = false;
-                    u.health = u.maxHealth;
+                    u.health = u.maxHealth * 0.5;
                     gameScreen.team.population -= u.population;
                     this.playerBackgroundUnits.push(u);
                }
@@ -946,7 +954,7 @@ package com.brockw.stickwar.campaign.controllers
                     u.py = gameScreen.game.map.height / 2 - 150 + Math.floor(Math.random() * 25) - 60;
                     u.backgroundFighter = true;
                     u.healthBar.visible = false;
-                    u.health = u.maxHealth * 0.5;
+                    u.health = u.maxHealth;
                     if(u.type == Unit.U_SWORDWRATH)
                     {
                          u.swordType = "Random";
@@ -1045,12 +1053,12 @@ package com.brockw.stickwar.campaign.controllers
           {
                if(this.leaderUnit.type == Unit.U_SWORDWRATH)
                {
-                    gameScreen.team.enemyTeam.gold = 250;
+                    gameScreen.team.enemyTeam.gold = 200;
                     gameScreen.team.enemyTeam.mana = 0;
                }
                else if(this.leaderUnit.type == Unit.U_ARCHER)
                {
-                    gameScreen.team.enemyTeam.gold = 350;
+                    gameScreen.team.enemyTeam.gold = 500;
                     gameScreen.team.enemyTeam.mana = 0;
                }
                else if(this.leaderUnit.type == Unit.U_SPEARTON)
@@ -1060,18 +1068,23 @@ package com.brockw.stickwar.campaign.controllers
                }
                else if(this.leaderUnit.type == Unit.U_FLYING_CROSSBOWMAN)
                {
-                    gameScreen.team.enemyTeam.gold = 500;
-                    gameScreen.team.enemyTeam.mana = 200;
+                    gameScreen.team.enemyTeam.gold = 1000;
+                    gameScreen.team.enemyTeam.mana = 350;
                }
                else if(this.leaderUnit.type == Unit.U_MONK)
                {
                     gameScreen.team.enemyTeam.gold = 500;
-                    gameScreen.team.enemyTeam.mana = 500;
+                    gameScreen.team.enemyTeam.mana = 400;
                }
                else if(this.leaderUnit.type == Unit.U_ENSLAVED_GIANT)
                {
-                    gameScreen.team.enemyTeam.gold += 2;
-                    gameScreen.team.enemyTeam.mana += 1;
+                    gameScreen.team.enemyTeam.gold = 2000;
+                    gameScreen.team.enemyTeam.mana = 1000;
+               }
+               else
+               {
+                    gameScreen.team.enemyTeam.gold += 2 + 2 * gameScreen.isFastForward;
+                    gameScreen.team.enemyTeam.mana += 1 + 1 * gameScreen.isFastForward;
                }
           }
           
@@ -1100,9 +1113,13 @@ package com.brockw.stickwar.campaign.controllers
                     if(this.leaderUnit.type == Unit.U_SWORDWRATH)
                     {
                          this.matchups[0] = [[Unit.U_KNIGHT],"vs",[Unit.U_SWORDWRATH]];
-                         this.matchups[1] = [[Unit.U_CAT,Unit.U_CAT,Unit.U_DEAD],"vs",[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH]];
-                         this.matchups[2] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_DEAD],"vs",[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH,Unit.U_SWORDWRATH]];
-                         this.matchups[3] = [[Unit.U_KNIGHT,Unit.U_BOMBER,Unit.U_KNIGHT],"vs",[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH,Unit.U_SWORDWRATH,Unit.U_SWORDWRATH]];
+                         this.matchups[1] = [[Unit.U_CAT],"vs",[Unit.U_SWORDWRATH]];
+                         this.matchups[2] = [[Unit.U_CAT,Unit.U_CAT],"vs",[Unit.U_SWORDWRATH]];
+                         this.matchups[3] = [[Unit.U_BOMBER],"vs",[Unit.U_SWORDWRATH]];
+                         this.matchups[5] = [[Unit.U_CAT,Unit.U_BOMBER],"vs",[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH]];
+                         this.matchups[6] = [[Unit.U_BOMBER,Unit.U_CAT],"vs",[Unit.U_SWORDWRATH,Unit.U_SWORDWRATH]];
+                         this.matchups[7] = [[Unit.U_CAT],"vs",[Unit.U_SWORDWRATH]];
+                         this.matchups[8] = [[Unit.U_CAT],"vs",[Unit.U_SWORDWRATH]];
                     }
                     else if(this.leaderUnit.type == Unit.U_ARCHER)
                     {
@@ -1151,15 +1168,6 @@ package com.brockw.stickwar.campaign.controllers
                          this.matchups[5] = [[Unit.U_DEAD],"vs",[Unit.U_SWORDWRATH,Unit.U_FLYING_CROSSBOWMAN]];
                          this.matchups[6] = [[Unit.U_CAT,Unit.U_CAT,Unit.U_KNIGHT,Unit.U_BOMBER],"vs",[Unit.U_SPEARTON,Unit.U_ARCHER,Unit.U_FLYING_CROSSBOWMAN]];
                     }
-               }
-          }
-          
-          public function unlockEnemyQueues(gameScreen:GameScreen) : void
-          {
-               var everyUnit:Array = [Unit.U_SWORDWRATH,Unit.U_ARCHER,Unit.U_MONK,Unit.U_MAGIKILL,Unit.U_SPEARTON,Unit.U_NINJA,Unit.U_FLYING_CROSSBOWMAN,Unit.U_ENSLAVED_GIANT];
-               for each(u in everyUnit)
-               {
-                    gameScreen.team.enemyTeam.unitsAvailable[u] = 1;
                }
           }
      }

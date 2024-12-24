@@ -1501,6 +1501,10 @@ package com.brockw.stickwar.engine.units
                     return false;
                }
                var array:Array = this.team.game.dualFactory.getDuals(this.type,target.type);
+               if(target.isMiniBoss)
+               {
+                    return false;
+               }
                if(array == null)
                {
                     return false;
