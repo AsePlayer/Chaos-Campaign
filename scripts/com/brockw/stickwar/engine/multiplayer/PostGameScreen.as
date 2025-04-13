@@ -396,13 +396,13 @@ package com.brockw.stickwar.engine.multiplayer
                var url:URLRequest = null;
                if(this.mode == PostGameScreen.M_CAMPAIGN)
                {
-                    url = new URLRequest("https://www.aseplayer.com/sw2-mods");
+                    url = new URLRequest("https://aseplayer.github.io/sw-mods/");
                     navigateToURL(url,"_blank");
                     this.main.soundManager.playSoundFullVolume("clickButton");
                }
                else if(this.mode == PostGameScreen.M_SINGLEPLAYER)
                {
-                    url = new URLRequest("https://www.aseplayer.com/sw2-mods");
+                    url = new URLRequest("https://aseplayer.github.io/sw-mods/");
                     navigateToURL(url,"_blank");
                }
                else

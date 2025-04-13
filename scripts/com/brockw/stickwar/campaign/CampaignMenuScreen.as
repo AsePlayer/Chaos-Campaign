@@ -469,7 +469,7 @@ package com.brockw.stickwar.campaign
           
           private function stickWarButton(e:Event) : void
           {
-               var url:URLRequest = new URLRequest("https://www.aseplayer.com/sw2-mods");
+               var url:URLRequest = new URLRequest("https://aseplayer.github.io/sw-mods/");
                navigateToURL(url,"_blank");
                if(this.main.tracker != null)
                {
