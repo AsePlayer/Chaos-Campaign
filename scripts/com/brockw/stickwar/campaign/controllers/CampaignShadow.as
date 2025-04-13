@@ -1006,7 +1006,7 @@ package com.brockw.stickwar.campaign.controllers
                               this.message3.scaleX *= 1.3;
                               this.message3.scaleY *= 1.3;
                               gameScreen.addChild(this.message3);
-                              this.message3.setMessage("Marrowkai: While I possess the mastery of necromancy, you are but a sack of flesh... It\'s clear who reigns supreme, Medusa.","");
+                              this.message3.setMessage("Marrowkai: I mastered the power of necromancy... you have nothing...","");
                               this.frames = 30;
                               this.messageCounter = 1;
                          }
@@ -1018,7 +1018,7 @@ package com.brockw.stickwar.campaign.controllers
                               this.message3.scaleX *= 1.3;
                               this.message3.scaleY *= 1.3;
                               gameScreen.addChild(this.message3);
-                              this.message3.setMessage("Queen Medusa: Skills mean nothing without leadership. I will prove myself and take my rightful place as Queen of the Chaos Empire!","");
+                              this.message3.setMessage("Medusa: Traitor... I\'ll show you who\'s in charge...","");
                               this.frames = 30;
                               this.messageCounter = 2;
                          }
@@ -1030,7 +1030,7 @@ package com.brockw.stickwar.campaign.controllers
                               this.message3.scaleX *= 1.3;
                               this.message3.scaleY *= 1.3;
                               gameScreen.addChild(this.message3);
-                              this.message3.setMessage("Marrowkai: Your fate is sealed, but very well! Best me in combat and I shall become your loyal servant once more!","");
+                              this.message3.setMessage("Marrowkai: We\'ll see about that.","");
                               this.frames = 30;
                               this.messageCounter = 3;
                               this.cutsceneDone = true;
