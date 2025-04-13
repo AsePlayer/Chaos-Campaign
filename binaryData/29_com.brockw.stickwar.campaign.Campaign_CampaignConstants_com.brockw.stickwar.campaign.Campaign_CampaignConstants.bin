@@ -1,55 +1,4 @@
 <Campaign>
-<level title="Final Battle: Order's Backyard" number="1" map="1" story="Final level!" controller="CampaignKnight" points="1">
-<hasInsaneWall>true</hasInsaneWall>
-<normal>1.65</normal>
-<hard>1.25</hard>
-<insane>.85</insane>
-<normalHealthScale>.8</normalHealthScale>
-<normalDamageScale>.7</normalDamageScale>
-<tip>Tip: Marrowkai's Reap ability can draw out units from their strong defensive position!</tip>
-<player race="Chaos" statueHealth="1200">
-<gold>2000</gold>
-<mana>1000</mana>
-<raceName>Chaos Empire</raceName>
-<statue>chaos</statue>
-<unit>Medusa</unit>
-<unit>Knight</unit>
-<unit>Bomber</unit>
-<unit>Cat</unit>
-<unit>Giant</unit>
-<unit>Wingadon</unit>
-<unit>Dead</unit>
-<unit>SkelatalMage</unit>
-<unit>EnslavedGiant</unit>
-</player>
-
-<oponent race="Order" statueHealth="1500">
-<gold>0</gold>
-<mana>0</mana>
-<raceName>Order Empire</raceName> 
-<statue>default</statue>
-<unit>Miner</unit>
-<unit>EnslavedGiant</unit>
-<unit>Spearton</unit>
-<unit>Archidon</unit>
-<unit>Monk</unit>
-<unit>Magikill</unit>
-<unit>Swordwrath</unit>
-<unit>Ninja</unit>
-<unit>FlyingCrossbowman</unit>
-<UnitComposition>
-<Spearton>10</Spearton>
-<Swordwrath>15</Swordwrath>
-<Archidon>7</Archidon>
-<FlyingCrossbowman>3</FlyingCrossbowman>
-<Magikill>3</Magikill>
-<Monk>2</Monk>
-<EnslavedGiant>3</EnslavedGiant>
-<Miner>16</Miner>
-</UnitComposition>
-</oponent>
-</level>
-
 
 <level title="Medusa" number="1" map="3" story="" controller="CampaignShadow" points="1">
 <normal>1.5</normal>
@@ -529,7 +478,7 @@
 
 
 
-<level title="Siege: Titans Revenge" number="13" map="7" story="Having liberated the giants from their enslavement, Queen Medusa now rallies them for a siege on the royal castle!" controller="CampaignKnight" points="1">
+<level title="Siege: Titans Revenge" number="13" map="7" story="Having liberated the Giants from their enslavement, Queen Medusa now rallies them for a final siege on the royal castle!" controller="CampaignKnight" points="1">
 <hasInsaneWall>true</hasInsaneWall>
 <normal>1.65</normal>
 <hard>1.25</hard>
@@ -579,19 +528,19 @@
 
 
 
-<level title="Final level coming soon..." number="14" map="8" story="Who knows what awaits..." controller="CampaignShadow" points="1">
+<level title="Final Battle: Order's Backyard" number="14" map="1" story="With Chaos knocking on their doorstep, Order retreats to the Grass Hills for a last-ditch effort. It's all come down to this..." controller="CampaignKnight" points="0">
 <hasInsaneWall>true</hasInsaneWall>
-<normal>1.65</normal>
-<hard>1.5</hard>
+<normal>1.25</normal>
+<hard>1</hard>
 <insane>.85</insane>
 <normalHealthScale>.8</normalHealthScale>
 <normalDamageScale>.7</normalDamageScale>
-<tip>Tip: Take out the rouge Marrowkai to put an end to this madness once and for all!</tip>
-<player race="Chaos" statueHealth="1500">
+<tip>Tip: Destroy Order's Generals to bring Chaos to their ranks!</tip>
+<player race="Chaos" statueHealth="1200">
 <gold>3000</gold>
-<mana>500</mana>
-<raceName>Medusa's Army</raceName>
-<statue>medusa</statue>
+<mana>2000</mana>
+<raceName>Chaos Empire</raceName>
+<statue>chaos</statue>
 <unit>Medusa</unit>
 <unit>Knight</unit>
 <unit>Bomber</unit>
@@ -599,36 +548,33 @@
 <unit>Giant</unit>
 <unit>Wingadon</unit>
 <unit>Dead</unit>
-
+<unit>SkelatalMage</unit>
+<unit>EnslavedGiant</unit>
 </player>
 
-<oponent race="Chaos" statueHealth="1500">
-<gold>500</gold>
-<mana>500</mana>
-<raceName>The Mod So Far</raceName> 
-<statue>chaos</statue>
-<unit>Knight</unit>
-<unit>Bomber</unit>
-<unit>Cat</unit>
-<unit>Giant</unit>
-<unit>Wingadon</unit>
-<unit>Dead</unit>
-<unit>SkelatalMage</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>SkelatalMage</startingUnit>
+<oponent race="Order" statueHealth="1500">
+<gold>0</gold>
+<mana>0</mana>
+<raceName>Order Empire</raceName> 
+<statue>default</statue>
+<unit>Miner</unit>
+<unit>EnslavedGiant</unit>
+<unit>Spearton</unit>
+<unit>Archidon</unit>
+<unit>Monk</unit>
+<unit>Magikill</unit>
+<unit>Swordwrath</unit>
+<unit>Ninja</unit>
+<unit>FlyingCrossbowman</unit>
 <UnitComposition>
-<Bomber>2</Bomber>
-<Knight>5</Knight>
-<Wingadon>2</Wingadon>
-<Dead>3</Dead>
-<Giant>2</Giant>
-<Cat>5</Cat>
-<SkelatalMage>0</SkelatalMage>
+<Spearton>10</Spearton>
+<Swordwrath>15</Swordwrath>
+<Archidon>7</Archidon>
+<FlyingCrossbowman>3</FlyingCrossbowman>
+<Magikill>3</Magikill>
+<Monk>2</Monk>
+<EnslavedGiant>3</EnslavedGiant>
+<Miner>16</Miner>
 </UnitComposition>
 </oponent>
 </level>
